@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
+	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/internal/version"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/joho/godotenv"
@@ -35,10 +36,11 @@ type config struct {
 }
 
 type Application struct {
-	config  config
-	logger  *slog.Logger
-	Queries *sqldb.Queries
-	wg      sync.WaitGroup
+	config      config
+	logger      *slog.Logger
+	Queries     *sqldb.Queries
+	wg          sync.WaitGroup
+	eventRouter *socket.HandlerMap
 }
 
 func run(logger *slog.Logger) error {

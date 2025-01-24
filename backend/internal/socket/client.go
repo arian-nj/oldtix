@@ -13,9 +13,10 @@ var (
 )
 
 type Client struct {
-	conn     *websocket.Conn
-	Handlers *HandlerMap
-	Egres    chan Event
+	conn           *websocket.Conn
+	Egres          chan Event
+	Handlers       *HandlerMap
+	DefaultHandler WsEventHandler
 }
 
 type HandlerMap map[EventType]WsEventHandler
@@ -24,7 +25,9 @@ type WsEventHandler func(event *Event, client *Client) error
 func (h HandlerMap) RegisterEventHandler(eventType EventType, handler WsEventHandler) {
 	h[eventType] = handler
 }
-
+func NewHandlerMap() *HandlerMap {
+	return &HandlerMap{}
+}
 func NewClient(conn *websocket.Conn, Handlers *HandlerMap) *Client {
 	return &Client{
 		conn:     conn,
