@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2rvktqkwuq7c"]
+
+[ext_resource type="Script" uid="uid://cjpxwox0wo052" path="res://Scenes/ErrorBoard/error_row_container.gd" id="1_4r33y"]
+
+[node name="ErrorRowContainer" type="PanelContainer" node_paths=PackedStringArray("label", "color_rect")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+script = ExtResource("1_4r33y")
+label = NodePath("Label")
+color_rect = NodePath("ColorRect")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0.395889, 0, 0.102571, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "hello my name is Arian "
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1

@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://2hbpasghk6l6"]
+
+[ext_resource type="Script" uid="uid://bjug2ifqas7qu" path="res://Scenes/GameTic2/canvas_game_tic_2.gd" id="1_olj4w"]
+
+[node name="GameTic2" type="CanvasLayer"]
+script = ExtResource("1_olj4w")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.251306, 0.324953, 0.538267, 1)
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.0
+offset_top = -11.5
+offset_right = 81.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Tic 2 Player Game"
+
+[node name="MainButton" type="Button" parent="."]
+offset_left = 156.0
+offset_top = 459.0
+offset_right = 272.0
+offset_bottom = 490.0
+text = "Back to Home"
+
+[connection signal="pressed" from="MainButton" to="." method="_on_main_button_pressed"]

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://0t55dgj7g3jk"]
+
+[ext_resource type="Script" uid="uid://ngp4jpdx1yiy" path="res://Scenes/ErrorBoard/error_board.gd" id="1_v1w4m"]
+[ext_resource type="PackedScene" uid="uid://d2rvktqkwuq7c" path="res://Scenes/ErrorBoard/error_row_container.tscn" id="2_v1w4m"]
+
+[node name="ErrorBoard" type="CanvasLayer" node_paths=PackedStringArray("VContainer")]
+layer = 9
+script = ExtResource("1_v1w4m")
+VContainer = NodePath("VBoxContainer")
+ErrorRowScene = ExtResource("2_v1w4m")
+ErrorLevelColor = Color(0.487756, 7.03912e-07, 4.81308e-08, 1)
+InfoLevelColor = Color(0.537255, 0.541176, 0, 1)
+SuccessLevelColor = Color(0, 0.413466, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 570.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2

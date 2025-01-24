@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqn77wpg3cj3y"]
+
+[ext_resource type="Script" uid="uid://d2bfr6gllekoj" path="res://Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
+[ext_resource type="Script" uid="uid://8dq6emictvqr" path="res://Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
+[ext_resource type="PackedScene" uid="uid://ce0yc13k6n5f0" path="res://Scenes/LoginPanel/LoginPanel.tscn" id="3_sg7ab"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_c7oo3")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.254544, 0.361311, 0.221748, 1)
+
+[node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("StatusLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cdkru")
+StatusLabel = NodePath("StatusLable")
+
+[node name="StatusLable" type="Label" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="PlayTic2Button" type="Button" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -78.5
+offset_top = 68.0
+offset_right = 78.5
+offset_bottom = 99.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Play 2 Player Tic"
+
+[node name="LoginPanel" parent="." instance=ExtResource("3_sg7ab")]
+offset_left = -124.0
+offset_top = -278.0
+offset_right = 131.0
+offset_bottom = -105.0
+
+[connection signal="pressed" from="MainMenu/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]
