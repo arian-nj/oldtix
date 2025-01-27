@@ -18,6 +18,5 @@ func AddAuthHeader(headers:PackedStringArray)->PackedStringArray:
 	return headers
 
 func set_token(token:String)->void:
-	print("token is: ",token)
 	Auth_Token = token
 # func _on_status_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, _body: PackedByteArray)->void:

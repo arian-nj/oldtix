@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://bjug2ifqas7qu" path="res://Scenes/GameTic2/canvas_game_tic_2.gd" id="1_pliwl"]
-[ext_resource type="Script" uid="uid://btkdj2ui38yhk" path="res://Netw/web_socket.gd" id="2_ypqr6"]
-[ext_resource type="Script" uid="uid://drg28mo0a83ha" path="res://Scenes/States/state_machine.gd" id="3_qd3xt"]
-[ext_resource type="Script" uid="uid://dc6osfkqys1l0" path="res://Scenes/GameTic2/States/ConnectingState.gd" id="4_qd3xt"]
-[ext_resource type="Script" uid="uid://cxrmnwc7yfkjd" path="res://Scenes/GameTic2/States/MatchMaking.gd" id="5_ggr80"]
+[ext_resource type="Script" path="res://Netw/KatanaSocket.gd" id="2_h2yx3"]
+[ext_resource type="Script" path="res://Scenes/States/state_machine.gd" id="3_qd3xt"]
+[ext_resource type="Script" path="res://Scenes/GameTic2/States/ConnectingState.gd" id="4_qd3xt"]
+[ext_resource type="Script" path="res://Scenes/GameTic2/States/MatchMaking.gd" id="5_ggr80"]
 
 [node name="GameTic2" type="CanvasLayer"]
 script = ExtResource("1_pliwl")
@@ -42,7 +42,7 @@ offset_bottom = 490.0
 text = "Back to Home"
 
 [node name="WebSocket" type="Node" parent="."]
-script = ExtResource("2_ypqr6")
+script = ExtResource("2_h2yx3")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_qd3xt")

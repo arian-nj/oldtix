@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://0t55dgj7g3jk"]
 
-[ext_resource type="Script" uid="uid://ngp4jpdx1yiy" path="res://Scenes/ErrorBoard/error_board.gd" id="1_v1w4m"]
+[ext_resource type="Script" path="res://Scenes/ErrorBoard/error_board.gd" id="1_v1w4m"]
 [ext_resource type="PackedScene" uid="uid://d2rvktqkwuq7c" path="res://Scenes/ErrorBoard/error_row_container.tscn" id="2_v1w4m"]
 
 [node name="ErrorBoard" type="CanvasLayer" node_paths=PackedStringArray("VContainer")]

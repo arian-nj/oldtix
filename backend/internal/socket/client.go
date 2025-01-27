@@ -2,13 +2,14 @@ package socket
 
 import (
 	"log"
+	"log/slog"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
 
 var (
-	pongWait     = 10 * time.Second
+	pongWait     = 1 * time.Second
 	pingInterval = pongWait * 9 / 10
 )
 
@@ -36,15 +37,16 @@ func NewClient(conn *websocket.Conn, Handlers *HandlerMap) *Client {
 	}
 }
 
-func (c *Client) ReadMessage() {
+func (c *Client) ReadMessage(l *slog.Logger) {
 	// defer func() {
 	// 	c.manager.removeClient(c)
 	// }()
 	for {
 		_, payload, err := c.conn.ReadMessage()
 		if err != nil {
-			log.Println(err)
+			l.Debug(err.Error())
 			return
+			// continue
 		}
 
 		event, err := EventUnmarshal(payload)
@@ -65,10 +67,14 @@ func (c *Client) WriteMessage() {
 	// }()
 
 	pingTicker := time.NewTicker(pingInterval)
+	defer pingTicker.Stop()
+
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(appData string) error {
-		// log.Println("pong")
-		return c.conn.SetReadDeadline(time.Now().Add(pongWait))
+		err := c.conn.SetReadDeadline(time.Now().Add(pongWait))
+		log.Println("pong")
+
+		return err
 	})
 
 	for {
@@ -88,7 +94,7 @@ func (c *Client) WriteMessage() {
 			if err != nil {
 				log.Println("error in writing ping msg: ", err)
 			}
-			// log.Println("ping")
+			log.Println("ping")
 		}
 	}
 }

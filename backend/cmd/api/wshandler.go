@@ -25,7 +25,8 @@ func (app *Application) WsStartHandler(w http.ResponseWriter, r *http.Request) {
 	client := socket.NewClient(conn, app.eventRouter)
 	client.DefaultHandler = app.WsDefaultHandler
 	app.logger.Debug("new ws connection established")
-	go client.ReadMessage()
+
+	go client.ReadMessage(app.logger)
 	go client.WriteMessage()
 
 	//		p := Player{
