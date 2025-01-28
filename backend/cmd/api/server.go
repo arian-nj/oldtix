@@ -10,8 +10,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
 const (
@@ -22,8 +20,6 @@ const (
 )
 
 func (app *Application) serveHTTP() error {
-	app.eventRouter = socket.NewHandlerMap()
-	app.eventRoutes()
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", app.config.httpPort),

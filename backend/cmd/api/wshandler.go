@@ -7,7 +7,8 @@ import (
 )
 
 func (app *Application) eventRoutes() {
-	app.eventRouter.RegisterEventHandler(socket.EventTypeStatus, app.BroadCastChatToAll)
+	app.eventRouter.RegisterEventHandler(socket.TypeStatus, app.BroadCastChatToAll)
+	app.eventRouter.RegisterEventHandler(socket.TypeMakeMatch, app.AddUserToMatchMaking)
 }
 
 func (app *Application) WsStartHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +42,10 @@ func (app *Application) WsStartHandler(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) WsDefaultHandler(event *socket.Event, client *socket.Client) error {
 	app.logger.Info(string(event.Type) + " " + string(*event.Data))
+	return nil
+}
+
+func (app *Application) AddUserToMatchMaking(event *socket.Event, client *socket.Client) error {
 	return nil
 }
 

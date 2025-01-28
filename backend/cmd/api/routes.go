@@ -1,10 +1,16 @@
 package main
 
 import (
+	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/go-chi/chi/v5"
 )
 
 func (app *Application) routes() *chi.Mux {
+	// socket router
+	app.eventRouter = socket.NewHandlerMap()
+	app.eventRoutes()
+
+	// http router
 	mux := chi.NewRouter()
 
 	mux.NotFound(app.NotFound)
