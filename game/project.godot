@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 ErrorBoard="*res://Scenes/ErrorBoard/error_board.tscn"
 Katana="*res://Netw/Katana.gd"
+KAccount="*res://Netw/KAccount.gd"
 
 [debug]
 

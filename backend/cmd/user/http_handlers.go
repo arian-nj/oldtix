@@ -10,6 +10,7 @@ import (
 	"github.com/arian-nj/master-card/back/internal/password"
 	"github.com/arian-nj/master-card/back/internal/request"
 	"github.com/arian-nj/master-card/back/internal/response"
+	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/validator"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5"
@@ -28,9 +29,9 @@ func (app *Application) status(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
-	user := contextGetAuthenticatedUser(r)
+	user := server.ContextGetAuthenticatedUser(r)
 	if user == nil {
-		app.authenticationRequired(w, r)
+		app.AuthenticationRequired(w, r)
 		return
 	}
 
@@ -53,9 +54,9 @@ func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
-	user := contextGetAuthenticatedUser(r)
+	user := server.ContextGetAuthenticatedUser(r)
 	if user == nil {
-		app.authenticationRequired(w, r)
+		app.AuthenticationRequired(w, r)
 		return
 	}
 
@@ -206,10 +207,10 @@ func (app *Application) createAuthenticationToken(w http.ResponseWriter, r *http
 	claims.NotBefore = jwt.NewNumericTime(time.Now())
 	claims.Expires = jwt.NewNumericTime(expiry)
 
-	claims.Issuer = app.config.baseURL
-	claims.Audiences = []string{app.config.baseURL}
+	claims.Issuer = app.Config.BaseURL
+	claims.Audiences = []string{app.Config.BaseURL}
 
-	jwtBytes, err := claims.HMACSign(jwt.HS256, []byte(app.config.jwt.secretKey))
+	jwtBytes, err := claims.HMACSign(jwt.HS256, []byte(app.Config.Jwt.SecretKey))
 	if err != nil {
 		app.ServerError(w, r, err)
 		return

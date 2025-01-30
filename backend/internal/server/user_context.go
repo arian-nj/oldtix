@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -13,12 +13,12 @@ const (
 	authenticatedUserContextKey = contextKey("authenticatedUser")
 )
 
-func contextSetAuthenticatedUser(r *http.Request, user *sqldb.User) *http.Request {
+func ContextSetAuthenticatedUser(r *http.Request, user *sqldb.User) *http.Request {
 	ctx := context.WithValue(r.Context(), authenticatedUserContextKey, user)
 	return r.WithContext(ctx)
 }
 
-func contextGetAuthenticatedUser(r *http.Request) *sqldb.User {
+func ContextGetAuthenticatedUser(r *http.Request) *sqldb.User {
 	user, ok := r.Context().Value(authenticatedUserContextKey).(*sqldb.User)
 	if !ok {
 		return nil

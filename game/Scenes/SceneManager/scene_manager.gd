@@ -9,10 +9,12 @@ enum Levels{
 }
 
 func _ready() -> void:
-	current_level.manager_change_scene.connect(_handle_level_change)
-	current_level.on_loaded()
+	current_level.manager_change_scene.connect(handle_level_change)
+	current_level.OnLoaded()
 
-func _handle_level_change(change_level_to:Levels) -> void:
+
+func handle_level_change(change_level_to:Levels)->void:
+	# var start_time:float = Time.get_unix_time_from_system() 
 	var next_level_name:String = ""
 	
 	match change_level_to:
@@ -43,10 +45,12 @@ func _handle_level_change(change_level_to:Levels) -> void:
 	await anim.animation_finished
 	
 	 
-	current_level.cleanup()
+	current_level.CleanUp()
 	current_level = next_level
-	current_level.manager_change_scene.connect(_handle_level_change)
-	current_level.on_loaded()
+	current_level.manager_change_scene.connect(handle_level_change)
+	current_level.OnLoaded()
+	# var end_time:float = Time.get_unix_time_from_system() 
+	# print(end_time-start_time - 1)
 
 	
 

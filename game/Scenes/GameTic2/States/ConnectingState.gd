@@ -7,6 +7,7 @@ extends State
 func Enter()->void:
 	status_label.text = "Connecting..."
 	var state:int = ws.socket.get_ready_state()
-	if state != WebSocketPeer.STATE_OPEN:
+	while state != WebSocketPeer.STATE_OPEN:
 		await get_tree().create_timer(.2).timeout
+		state = ws.socket.get_ready_state()
 	Transition.emit(self,"match_making")

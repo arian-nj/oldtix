@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -10,6 +10,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
 const (
@@ -19,12 +21,12 @@ const (
 	defaultShutdownPeriod = 30 * time.Second
 )
 
-func (app *Application) serveHTTP() error {
+func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 
 	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%s", app.config.httpPort),
-		Handler:      app.routes(),
-		ErrorLog:     slog.NewLogLogger(app.logger.Handler(), slog.LevelWarn),
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      router,
+		ErrorLog:     slog.NewLogLogger(Glob.Logger.Handler(), slog.LevelWarn),
 		IdleTimeout:  defaultIdleTimeout,
 		ReadTimeout:  defaultReadTimeout,
 		WriteTimeout: defaultWriteTimeout,
@@ -43,7 +45,7 @@ func (app *Application) serveHTTP() error {
 		shutdownErrorChan <- srv.Shutdown(ctx)
 	}()
 
-	app.logger.Info("starting server", slog.Group("server", "addr", srv.Addr))
+	Glob.Logger.Info("starting server", slog.Group("server", "addr", srv.Addr))
 
 	err := srv.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
@@ -55,8 +57,8 @@ func (app *Application) serveHTTP() error {
 		return err
 	}
 
-	app.logger.Info("stopped server", slog.Group("server", "addr", srv.Addr))
+	Glob.Logger.Info("stopped server", slog.Group("server", "addr", srv.Addr))
 
-	app.wg.Wait()
+	Glob.wg.Wait()
 	return nil
 }

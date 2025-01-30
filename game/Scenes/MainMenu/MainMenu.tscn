@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" path="res://Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
-[ext_resource type="PackedScene" uid="uid://ce0yc13k6n5f0" path="res://Scenes/LoginPanel/LoginPanel.tscn" id="3_sg7ab"]
+[ext_resource type="Script" path="res://Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource("1_c7oo3")
@@ -50,10 +50,36 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Play 2 Player Tic"
 
-[node name="LoginPanel" parent="." instance=ExtResource("3_sg7ab")]
-offset_left = -124.0
-offset_top = -278.0
-offset_right = 131.0
-offset_bottom = -105.0
+[node name="UserData" type="Control" parent="." node_paths=PackedStringArray("UsernameLabel")]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("4_1k8vq")
+UsernameLabel = NodePath("Username")
+
+[node name="Username" type="Label" parent="UserData"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -55.0
+offset_right = 40.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Username"
 
 [connection signal="pressed" from="MainMenu/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]

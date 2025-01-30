@@ -8,8 +8,9 @@ var level_parameters:Dictionary = {
 func load_level_parameters(new_level_parameters:Dictionary) -> void:
 	level_parameters = new_level_parameters
 
-func on_loaded() -> void:
+func OnLoaded() -> void:
+	manager_change_scene.is_null()
 	pass
 	
-func cleanup() -> void:
+func CleanUp() -> void:
 	queue_free()

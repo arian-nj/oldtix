@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://diswtcr1glloo"]
+
+[ext_resource type="Script" path="res://Scenes/Loading/loading_canvas.gd" id="1_f2nl5"]
+[ext_resource type="PackedScene" uid="uid://ce0yc13k6n5f0" path="res://Scenes/LoginPanel/LoginPanel.tscn" id="2_cb7xp"]
+
+[node name="Loading" type="CanvasLayer"]
+script = ExtResource("1_f2nl5")
+
+[node name="LoginPanel" parent="." instance=ExtResource("2_cb7xp")]

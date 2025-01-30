@@ -4,6 +4,8 @@ extends PanelContainer
 @export var passwordField:LineEdit
 
 func _ready()->void:
+	var r:int = randi()%10
+	usernameField.text += str(r)
 	_on_login_button_pressed()
 
 func _on_register_button_pressed() -> void:
@@ -20,7 +22,7 @@ func _on_register_button_pressed() -> void:
 	add_child(http_req)
 	http_req.request_completed.connect(_on_register_request_completed)
 
-	var err:int = http_req.request(Katana.RegisterUrl,[],HTTPClient.METHOD_POST,json_data_strin)
+	var err:int = http_req.request(KAccount.RegisterUrl,[],HTTPClient.METHOD_POST,json_data_strin)
 	if err != OK:
 		print_debug(err)
 		ErrorBoard.new_error("error sending register request",ErrorClass.ErrorLevel)
@@ -56,7 +58,7 @@ func _on_login_button_pressed() -> void:
 	add_child(http_req)
 	http_req.request_completed.connect(_on_token_request_completed)
 
-	var err:int = http_req.request(Katana.TokenUrl,[],HTTPClient.METHOD_POST,json_data_strin)
+	var err:int = http_req.request(KAccount.TokenUrl,[],HTTPClient.METHOD_POST,json_data_strin)
 	if err != OK:
 		print_debug(err)
 		ErrorBoard.new_error("error sending login request",ErrorClass.ErrorLevel)
@@ -71,7 +73,7 @@ func _on_token_request_completed(_result: int, response_code: int, _headers: Pac
 		ErrorBoard.new_error("You're In",ErrorClass.SuccessLevel)
 		var tokenBodyJson :Variant = JSON.parse_string(body.get_string_from_utf8())
 		var new_token:String = tokenBodyJson["AuthenticationToken"]	
-		Katana.set_token(new_token)
+		KAccount.set_token(new_token)
 		self.visible = false
 
 	elif response_code == HTTPClient.RESPONSE_UNPROCESSABLE_ENTITY:

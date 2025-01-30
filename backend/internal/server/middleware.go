@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/pascaldekloe/jwt"
 )
 
-func (app *Application) recoverPanic(next http.Handler) http.Handler {
+func (app *CommonGlobals) RecoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			err := recover()
@@ -24,8 +24,8 @@ func (app *Application) recoverPanic(next http.Handler) http.Handler {
 	})
 }
 
-func (app *Application) validateToken(w http.ResponseWriter, r *http.Request, token string) *http.Request {
-	claims, err := jwt.HMACCheck([]byte(token), []byte(app.config.jwt.secretKey))
+func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, token string) *http.Request {
+	claims, err := jwt.HMACCheck([]byte(token), []byte(app.Config.Jwt.SecretKey))
 	if err != nil {
 		app.invalidAuthenticationToken(w, r)
 		return nil
@@ -36,12 +36,12 @@ func (app *Application) validateToken(w http.ResponseWriter, r *http.Request, to
 		return nil
 	}
 
-	if claims.Issuer != app.config.baseURL {
+	if claims.Issuer != app.Config.BaseURL {
 		app.invalidAuthenticationToken(w, r)
 		return nil
 	}
 
-	if !claims.AcceptAudience(app.config.baseURL) {
+	if !claims.AcceptAudience(app.Config.BaseURL) {
 		app.invalidAuthenticationToken(w, r)
 		return nil
 	}
@@ -59,12 +59,12 @@ func (app *Application) validateToken(w http.ResponseWriter, r *http.Request, to
 	}
 
 	if user.ID != 0 {
-		return contextSetAuthenticatedUser(r, &user)
+		return ContextSetAuthenticatedUser(r, &user)
 	}
 	return nil
 }
 
-func (app *Application) authenticate(next http.Handler) http.Handler {
+func (app *CommonGlobals) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Vary", "Authorization")
 
@@ -75,7 +75,7 @@ func (app *Application) authenticate(next http.Handler) http.Handler {
 
 			if len(headerParts) == 2 && headerParts[0] == "Bearer" {
 				token := headerParts[1]
-				new_request := app.validateToken(w, r, token)
+				new_request := app.ValidateToken(w, r, token)
 				if new_request == nil {
 					return
 				}
@@ -86,11 +86,11 @@ func (app *Application) authenticate(next http.Handler) http.Handler {
 	})
 }
 
-func (app *Application) authenticateQuery(next http.Handler) http.Handler {
+func (app *CommonGlobals) AuthenticateQuery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.URL.Query().Get("auth_token")
 		if token != "" {
-			new_request := app.validateToken(w, r, token)
+			new_request := app.ValidateToken(w, r, token)
 			if new_request == nil {
 				return
 			}
@@ -100,12 +100,12 @@ func (app *Application) authenticateQuery(next http.Handler) http.Handler {
 	})
 }
 
-func (app *Application) requireAuthenticatedUser(next http.Handler) http.Handler {
+func (app *CommonGlobals) RequireAuthenticatedUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authenticatedUser := contextGetAuthenticatedUser(r)
+		authenticatedUser := ContextGetAuthenticatedUser(r)
 
 		if authenticatedUser == nil {
-			app.authenticationRequired(w, r)
+			app.AuthenticationRequired(w, r)
 			return
 		}
 

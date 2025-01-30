@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c6gfbvcn354fp"]
 
 [ext_resource type="Script" path="res://Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
-[ext_resource type="PackedScene" uid="uid://bqn77wpg3cj3y" path="res://Scenes/MainMenu/MainMenu.tscn" id="2_qoiuy"]
+[ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://Scenes/Loading/loading.tscn" id="2_2qq82"]
 
 [sub_resource type="Animation" id="Animation_qoiuy"]
 resource_name = "fade_in"
@@ -43,10 +43,10 @@ _data = {
 
 [node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim")]
 script = ExtResource("1_bwd3w")
-current_level = NodePath("MainMenu")
+current_level = NodePath("Loading")
 anim = NodePath("AnimationPlayer")
 
-[node name="MainMenu" parent="." instance=ExtResource("2_qoiuy")]
+[node name="Loading" parent="." instance=ExtResource("2_2qq82")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
