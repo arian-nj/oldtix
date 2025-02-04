@@ -1,4 +1,4 @@
-class_name SceneLevel extends CanvasLayer
+class_name SceneLevel extends Control
 
 signal manager_change_scene(to_level:SceneManger.Levels)
 

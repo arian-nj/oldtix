@@ -26,11 +26,21 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 
 	app.BackgroundTask(
 		func() error {
-			return client.ReadMessage(app.Logger, ctx, cancel)
+			defer cancel()
+			return client.ReadMessage(app.Logger, ctx)
 		})
 
 	app.BackgroundTask(func() error {
-		return client.WriteMessage(app.Logger, ctx, cancel)
+		defer cancel()
+		defer func() {
+			err := client.Conn.Close()
+			if err != nil {
+				app.Logger.Error(err.Error())
+			} else {
+				app.Logger.Error("closed")
+			}
+		}()
+		return client.WriteMessage(app.Logger, ctx)
 	})
 
 	app.BackgroundTask(func() error {

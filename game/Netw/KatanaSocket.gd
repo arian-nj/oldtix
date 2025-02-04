@@ -9,7 +9,7 @@ var socket:WebSocketPeer = WebSocketPeer.new()
 
 
 # Sends an event through the WebSocket
-func send_event(event_type: String, event_data: String) -> void:
+func send_event(event_type: String, event_data: String="") -> void:
 	var event:KEvent.Event = KEvent.Event.new()
 	event.type = event_type
 	event.data = event_data

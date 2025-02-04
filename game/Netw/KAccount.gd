@@ -27,6 +27,7 @@ class Account:
 		if body_content == null:
 			print_debug("failed")
 			return
+		self.id = body_content["id"]
 		self.username = body_content["username"]
 		self.display_name = body_content["display_name"]
 		self.bio = body_content["bio"]

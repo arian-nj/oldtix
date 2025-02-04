@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=15 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" path="res://Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
 [ext_resource type="Script" path="res://Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
 [ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
 [ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/ChooseHokm.gd" id="9_uajja"]
+[ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://Scenes/Game/ChooseHokm/choose_hokm.tscn" id="11_amrdn"]
 
 [sub_resource type="Gradient" id="Gradient_5kdxn"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
@@ -23,26 +24,20 @@ fill_to = Vector2(0.507123, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q6toe"]
 size = Vector2(94, 137)
 
-[node name="Hokm4Player" type="CanvasLayer"]
-script = ExtResource("1_i0n3b")
-
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Hokm4Player" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("GradientTexture2D_ftlon")
+script = ExtResource("1_i0n3b")
 
-[node name="DrawCards" type="Node" parent="." node_paths=PackedStringArray("from", "hand")]
-script = ExtResource("2_22pf8")
-from = NodePath("../Table/from")
-hand = NodePath("../Table/hand")
-card_scene = ExtResource("3_8tgkb")
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
 
 [node name="Table" type="Control" parent="."]
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -50,6 +45,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
+
+[node name="TextureRect" type="TextureRect" parent="Table"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_ftlon")
 
 [node name="from" type="Control" parent="Table"]
 layout_mode = 1
@@ -89,11 +94,20 @@ collision_layer = 2
 position = Vector2(8, -37)
 shape = SubResource("RectangleShape2D_q6toe")
 
+[node name="DrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from", "hand")]
+anchors_preset = 0
+script = ExtResource("2_22pf8")
+from = NodePath("../from")
+hand = NodePath("../hand")
+card_scene = ExtResource("3_8tgkb")
+
 [node name="UI" type="Control" parent="."]
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -119,9 +133,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -81.0
-offset_top = -11.5
+offset_top = -153.0
 offset_right = 81.0
-offset_bottom = 11.5
+offset_bottom = -130.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Loading..."
@@ -139,16 +153,18 @@ script = ExtResource("7_uxde4")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 
-[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label")]
+[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table", "card_drawer")]
 script = ExtResource("8_ix53e")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
+game_table = NodePath("../../Table")
+card_drawer = NodePath("../../Table/DrawCards")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "card_drawer", "game_table")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
-card_drawer = NodePath("../../DrawCards")
 game_table = NodePath("../../Table")
+choose_hokm_scene = ExtResource("11_amrdn")
 
 [connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]
