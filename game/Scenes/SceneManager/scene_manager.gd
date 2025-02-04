@@ -4,7 +4,7 @@ class_name SceneManger extends Node
 @export var anim :AnimationPlayer
 
 enum Levels{
-	GameTic2,
+	GameHokm4,
 	MainMenu,
 }
 
@@ -18,8 +18,8 @@ func handle_level_change(change_level_to:Levels)->void:
 	var next_level_name:String = ""
 	
 	match change_level_to:
-		Levels.GameTic2:
-			next_level_name = "GameTic2/GameTic2"
+		Levels.GameHokm4:
+			next_level_name = "Game/Hokm4/GameHokm4"
 		Levels.MainMenu:
 			next_level_name = "MainMenu/MainMenu"
 		_:

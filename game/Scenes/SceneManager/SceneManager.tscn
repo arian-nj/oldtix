@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6gfbvcn354fp"]
+[gd_scene load_steps=7 format=3 uid="uid://c6gfbvcn354fp"]
 
+[ext_resource type="Script" path="res://Scenes/SceneManager/CheckErrors.gd" id="1_8htr5"]
 [ext_resource type="Script" path="res://Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
 [ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://Scenes/Loading/loading.tscn" id="2_2qq82"]
 
@@ -64,3 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("1_8htr5")

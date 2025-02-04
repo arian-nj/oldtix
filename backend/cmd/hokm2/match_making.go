@@ -8,9 +8,9 @@ func (app *ApplicationH2) MatchUsers() error {
 	for {
 		p1 := <-app.lobby.Queue
 		p2 := <-app.lobby.Queue
-		game := Game{
+		game := GameState{
 			ID:      utils.GenerateRandomString(16),
-			Players: [2]*Player{p1, p2},
+			Players: []*Player{p1, p2},
 			Current: 0,
 		}
 		app.lobby.Mu.Lock()

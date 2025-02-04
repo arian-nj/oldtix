@@ -1,0 +1,153 @@
+[gd_scene load_steps=14 format=3 uid="uid://2hbpasghk6l6"]
+
+[ext_resource type="Script" path="res://Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
+[ext_resource type="Script" path="res://Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
+[ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://Scenes/Game/Card/card.tscn" id="3_8tgkb"]
+[ext_resource type="Script" path="res://Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
+[ext_resource type="Texture2D" uid="uid://dk5ucuiithtbc" path="res://assets/icons/home.png" id="4_youex"]
+[ext_resource type="Script" path="res://Netw/KatanaSocket.gd" id="5_48k1w"]
+[ext_resource type="Script" path="res://Scenes/States/state_machine.gd" id="6_rcy6w"]
+[ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
+[ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
+[ext_resource type="Script" path="res://Scenes/Game/Hokm4/States/ChooseHokm.gd" id="9_uajja"]
+
+[sub_resource type="Gradient" id="Gradient_5kdxn"]
+offsets = PackedFloat32Array(0, 0.540084, 1)
+colors = PackedColorArray(0, 0.329412, 0, 1, 1.23335e-07, 0.196067, 0, 1, 0, 0.328236, 2.40654e-07, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ftlon"]
+gradient = SubResource("Gradient_5kdxn")
+fill_from = Vector2(0.478632, 0)
+fill_to = Vector2(0.507123, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6toe"]
+size = Vector2(94, 137)
+
+[node name="Hokm4Player" type="CanvasLayer"]
+script = ExtResource("1_i0n3b")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_ftlon")
+
+[node name="DrawCards" type="Node" parent="." node_paths=PackedStringArray("from", "hand")]
+script = ExtResource("2_22pf8")
+from = NodePath("../Table/from")
+hand = NodePath("../Table/hand")
+card_scene = ExtResource("3_8tgkb")
+
+[node name="Table" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("4_qoslj")
+
+[node name="from" type="Control" parent="Table"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="hand" type="Control" parent="Table"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -120.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="Table/hand"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Table"]
+position = Vector2(219, 411)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table/StaticBody2D"]
+position = Vector2(8, -37)
+shape = SubResource("RectangleShape2D_q6toe")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HomeButton" type="Button" parent="UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -58.0
+offset_bottom = 58.0
+grow_horizontal = 0
+pivot_offset = Vector2(54, 54)
+size_flags_horizontal = 4
+icon = ExtResource("4_youex")
+flat = true
+
+[node name="StatusLabel" type="Label" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.0
+offset_top = -11.5
+offset_right = 81.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="WebSocket" type="Node" parent="."]
+script = ExtResource("5_48k1w")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("6_rcy6w")
+initial_state = NodePath("connecting")
+
+[node name="connecting" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label")]
+script = ExtResource("7_uxde4")
+ws = NodePath("../../WebSocket")
+status_label = NodePath("../../UI/StatusLabel")
+
+[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label")]
+script = ExtResource("8_ix53e")
+ws = NodePath("../../WebSocket")
+status_label = NodePath("../../UI/StatusLabel")
+
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "card_drawer")]
+script = ExtResource("9_uajja")
+ws = NodePath("../../WebSocket")
+status_label = NodePath("../../UI/StatusLabel")
+card_drawer = NodePath("../../DrawCards")
+
+[connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]

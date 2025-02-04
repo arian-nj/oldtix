@@ -26,7 +26,8 @@ func (app *Application) profileRoutes() *chi.Mux {
 		r.Group(func(r2 chi.Router) {
 			r2.Use(app.RequireAuthenticatedUser)
 			r2.Put("/user/update", app.updateUserData)
-			r2.Get("/user/me", app.getUserData)
+			r2.Get("/user/me", app.getMeData)
+			r2.Get("/user/{user_id}", app.getUserData)
 		})
 	})
 

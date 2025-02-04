@@ -53,7 +53,7 @@ func _handle_open_state() -> void:
 
 # Handles incoming events (to be extended)
 func _handle_event(event: KEvent.Event) -> void:
-	print("Event received: ", event.type, " - ", event.data)
+	# print("Event received: ", event.type, " - ", event.data)
 	new_event.emit(event)
 
 # Handles the closed state
@@ -71,5 +71,6 @@ func _handle_closed_state() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		print("out")
+		# print("out")
+		pass
 	

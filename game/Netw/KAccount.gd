@@ -12,7 +12,7 @@ signal GotMe
 const RegisterUrl:String = Katana.HttpBaseUrl + "/user/register"
 const TokenUrl:String = Katana.HttpBaseUrl + "/user/token"
 
-const MeUrl:String = Katana.HttpBaseUrl + "/user/me"
+const UserUrl:String = Katana.HttpBaseUrl + "/user/"
 
 
 class Account:
@@ -21,6 +21,16 @@ class Account:
 	var display_name:String
 	var bio:String
 	var coin:int
+
+	func parse_from_json_string(json_string:String)->void:
+		var body_content:Variant = JSON.parse_string(json_string)
+		if body_content == null:
+			print_debug("failed")
+			return
+		self.username = body_content["username"]
+		self.display_name = body_content["display_name"]
+		self.bio = body_content["bio"]
+		self.coin = body_content["coin"]
 
 func _ready() -> void:
 	await LoggedIn
@@ -38,18 +48,22 @@ func AddAuthHeader(headers:PackedStringArray = [])->PackedStringArray:
 	return headers
 
 func RefetchME()->Account:
-	var me:Account = await _get_me()
+	var me:Account = await _get_user("me")
 	if me == null:
 		print_debug("can't get user data")
 		return
 	MyAccount = me
 	return MyAccount
 
-func _get_me()->Account:
+func GetUser(user_id:String)->Account:
+	var user:Account = await _get_user(user_id)
+	return user
+
+func _get_user(user_id:String)->Account:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	Katana.add_child(http_req_node)
 
-	var err :int = http_req_node.request(MeUrl,AddAuthHeader(),HTTPClient.METHOD_GET)
+	var err :int = http_req_node.request(UserUrl+user_id,AddAuthHeader(),HTTPClient.METHOD_GET)
 	if err != OK:
 		print_debug("here1")
 		return null
@@ -69,11 +83,7 @@ func _get_me()->Account:
 	# var _headers = response[2] # <-- not used
 	
 	var body_byte:PackedByteArray = response[3]
-	var body_content:Variant = JSON.parse_string(body_byte.get_string_from_utf8())
 
 	var me :Account = Account.new()
-	me.username = body_content["username"]
-	me.display_name = body_content["display_name"]
-	me.bio = body_content["bio"]
-	me.coin = body_content["coin"]
+	me.parse_from_json_string(body_byte.get_string_from_utf8())
 	return me

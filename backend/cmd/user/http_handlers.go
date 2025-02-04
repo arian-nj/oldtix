@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,6 +14,7 @@ import (
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/validator"
 	"github.com/arian-nj/master-card/back/sqldb"
+	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
 	"github.com/pascaldekloe/jwt"
 )
@@ -28,12 +30,44 @@ func (app *Application) status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+var userIsNotValidErr error = fmt.Errorf("user id is not valid")
+
 func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
-	user := server.ContextGetAuthenticatedUser(r)
-	if user == nil {
-		app.AuthenticationRequired(w, r)
+	user_param := chi.URLParam(r, "user_id")
+	userid_int, err := strconv.Atoi(user_param)
+	if err != nil {
+		app.BadRequest(w, r, userIsNotValidErr)
 		return
 	}
+	userId := int32(userid_int)
+
+	user, err := app.Queries.GetUser(context.Background(), userId)
+	if err != nil {
+		app.BadRequest(w, r, userIsNotValidErr)
+		return
+	}
+
+	var output struct {
+		Username    string `json:"username"`
+		DisplayName string `json:"display_name"`
+		Bio         string `json:"bio"`
+		Coin        int    `json:"coin"`
+	}
+
+	output.Username = user.Username
+	output.DisplayName = user.DisplayName.String
+	output.Bio = user.Bio.String
+	output.Coin = int(user.Coin.Int32)
+
+	err = response.JSON(w, http.StatusOK, output)
+	if err != nil {
+		app.ServerError(w, r, err)
+		return
+	}
+}
+
+func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
+	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
 		Username    string `json:"username"`
@@ -96,6 +130,8 @@ func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// Auth
 
 func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 	var input struct {

@@ -5,12 +5,17 @@ import (
 	"math/rand"
 )
 
-const (
-	HEART  = "H"
-	SPADE  = "S"
-	DIMOND = "D"
-	CLUBS  = "C"
+type Suite int
+type CardValue int
+
+const ( // sync it with card/card.gd
+	HEART  Suite = iota
+	CLUB         = 1
+	DIMOND       = 2
+	SPADE        = 3
 )
+
+// const
 const (
 	ACE = iota + 1
 	N2
@@ -27,26 +32,24 @@ const (
 	FK
 )
 
-type Suite string
-type CardValue int
-
-var Suits = []Suite{HEART, SPADE, DIMOND, CLUBS}
+var Suits = []Suite{HEART, SPADE, DIMOND, CLUB}
 var Values = []CardValue{ACE, FK, FQ, FJ, N10, N9, N8, N7, N6, N5, N4, N3, N2}
 
 type Card struct {
-	Suit  Suite
-	Value CardValue
+	Suit  Suite     `json:"suit"`
+	Value CardValue `json:"value"`
 }
 
-var AllCards = []Card{}
+// var allCards = []Card{}
 
-func init() {
+func NewAllCards() []Card {
+	var allCards = []Card{}
 	for _, s := range Suits {
 		for _, v := range Values {
-			AllCards = append(AllCards, Card{Suit: s, Value: v})
+			allCards = append(allCards, Card{Suit: s, Value: v})
 		}
 	}
-
+	return allCards
 }
 
 func GiveRandomCards(numberOfCards int, availableCards []Card) (randomCards []Card, remaningCards []Card, err error) {

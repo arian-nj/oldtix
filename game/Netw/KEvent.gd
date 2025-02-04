@@ -29,5 +29,8 @@ const TYPE_CHAT:String = "chat"
 const TYPE_STATUS:String = "status"
 const TYPE_MAKE_MATCH:String = "make_match"
 const TYPE_MATCH_FOUND:String = "match_found"
+const TYPE_GAME_DATA:String = "game_data"
+const TYPE_GET_DATA:String = "get_data"
+const TYPE_NEW_CARD:String = "new_card"
 
 const MESSAGE_CONNECTED:String = "connected"
