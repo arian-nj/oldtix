@@ -24,8 +24,8 @@ type Player struct {
 type GameState struct {
 	ID      string    `json:"id"`
 	Players []*Player `json:"players"`
-	Current int       `json:"Current"`
-	Hakem   int32     `json:"Hakem"`
+	Current int       `json:"current"`
+	Hakem   int32     `json:"hakem"`
 }
 
 type Lobby struct {

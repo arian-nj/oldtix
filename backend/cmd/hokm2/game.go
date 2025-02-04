@@ -20,13 +20,13 @@ func (app *ApplicationH2) RunGame(game *GameState) {
 	game.Current = int(game.Hakem)
 
 	// send game data
-	// game_data, err := json.Marshal(game)
-	// if err != nil {
-	// 	app.Logger.Error(err.Error())
-	// }
-	// for _, p := range game.Players {
-	// 	p.Client.Egres <- *socket.NewEvent(socket.TypeGameData, socket.EventMessage(game_data))
-	// }
+	game_data, err := json.Marshal(game)
+	if err != nil {
+		app.Logger.Error(err.Error())
+	}
+	for _, p := range game.Players {
+		p.Client.Egres <- *socket.NewEvent(socket.TypeGameData, socket.EventMessage(game_data))
+	}
 
 	// all_cards := cards.NewAllCards()
 

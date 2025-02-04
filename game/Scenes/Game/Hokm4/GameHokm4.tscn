@@ -144,10 +144,11 @@ script = ExtResource("8_ix53e")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "card_drawer")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "card_drawer", "game_table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 card_drawer = NodePath("../../DrawCards")
+game_table = NodePath("../../Table")
 
 [connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]
