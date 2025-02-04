@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://1bin4853i1m6"]
+[gd_scene load_steps=2 format=3 uid="uid://1bin4853i1m6"]
+
+[ext_resource type="Script" path="res://Scenes/Game/ChooseHokm/choose_hokm.gd" id="1_exb6w"]
 
 [node name="ChooseHokm" type="PanelContainer"]
 anchors_preset = 8
@@ -12,31 +14,37 @@ offset_right = 88.0
 offset_bottom = 45.5
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_exb6w")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 2
 color = Color(0.299547, 0.299547, 0.299547, 1)
 
-[node name="Button" type="Button" parent="."]
+[node name="SpadesButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Spades"
 
-[node name="Button2" type="Button" parent="."]
+[node name="HeartButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Heart"
 
-[node name="Button3" type="Button" parent="."]
+[node name="ClubButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Clubs"
 
-[node name="Button4" type="Button" parent="."]
+[node name="DimondButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "Dimond"
+
+[connection signal="pressed" from="SpadesButton" to="." method="_on_spades_button_pressed"]
+[connection signal="pressed" from="HeartButton" to="." method="_on_heart_button_pressed"]
+[connection signal="pressed" from="ClubButton" to="." method="_on_club_button_pressed"]
+[connection signal="pressed" from="DimondButton" to="." method="_on_dimond_button_pressed"]

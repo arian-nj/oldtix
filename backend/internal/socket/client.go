@@ -30,8 +30,7 @@ func NewClient(conn *websocket.Conn, user *sqldb.User) *Client {
 	}
 }
 
-func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context, cancel context.CancelFunc) error {
-	defer cancel()
+func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context) error {
 
 	for {
 		select {
@@ -55,16 +54,7 @@ func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context, cancel context
 	}
 }
 
-func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context, cancel context.CancelFunc) error {
-	defer cancel()
-	defer func() {
-		err := c.Conn.Close()
-		if err != nil {
-			l.Error(err.Error())
-		} else {
-			l.Error("closed")
-		}
-	}()
+func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context) error {
 
 	// defer func() {
 	// 	c.manager.removeClient(c)
@@ -79,7 +69,7 @@ func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context, cancel contex
 		if err != nil {
 			l.Debug(err.Error())
 		}
-		l.Debug("pong")
+		// l.Debug("pong")
 		return err
 	})
 
@@ -88,7 +78,7 @@ func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context, cancel contex
 		case event := <-c.Egres:
 			payload, err := event.GetJsonByte()
 			if err != nil {
-				l.Debug("err in marshalling event: ", err.Error())
+				l.Debug("err in marshalling event: " + err.Error())
 			}
 			err = c.Conn.WriteMessage(websocket.TextMessage, payload)
 			if err != nil {
@@ -98,9 +88,9 @@ func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context, cancel contex
 		case <-pingTicker.C:
 			err := c.Conn.WriteMessage(websocket.PingMessage, []byte(""))
 			if err != nil {
-				l.Debug("error in writing ping msg: ", err.Error())
+				l.Debug("error in writing ping msg: " + err.Error())
 			}
-			l.Debug("ping")
+			// l.Debug("ping")
 		case <-ctx.Done():
 			return nil
 		}

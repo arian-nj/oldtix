@@ -1,4 +1,4 @@
-class_name CardDrawer extends Node
+class_name CardDrawer extends Control
 
 @export var from: Control
 @export var hand: Control

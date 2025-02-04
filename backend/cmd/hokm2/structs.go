@@ -21,11 +21,25 @@ type Player struct {
 	Cards  []cards.Card   `json:"-"`
 }
 
+type GameEvent struct {
+	Player *Player
+	event  *socket.Event
+}
+
+func NewGameEvent(event *socket.Event, player *Player) *GameEvent {
+	return &GameEvent{
+		event:  event,
+		Player: player,
+	}
+}
+
 type GameState struct {
-	ID      string    `json:"id"`
-	Players []*Player `json:"players"`
-	Current int       `json:"current"`
-	Hakem   int32     `json:"hakem"`
+	ID           string          `json:"id"`
+	Players      []*Player       `json:"players"`
+	Current      int             `json:"current"`
+	Hakem        int             `json:"hakem"`
+	Hokm         cards.Suite     `json:"hokm"`
+	GameEventsCh chan *GameEvent `json:"-"`
 }
 
 type Lobby struct {

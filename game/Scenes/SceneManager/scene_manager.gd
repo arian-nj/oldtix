@@ -34,13 +34,13 @@ func handle_level_change(change_level_to:Levels)->void:
 	var next_level:SceneLevel = next_level_packed.instantiate()
 
 	
-	next_level.layer = -1
+	current_level.visible = false
 	anim.play("fade_in")
 	await anim.animation_finished
 	add_child(next_level)
 	transfer_data_between_scenes(current_level,next_level)
-	
-	next_level.layer = 1
+	next_level.visible = true
+
 	anim.play("fade_out")
 	await anim.animation_finished
 	

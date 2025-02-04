@@ -4,10 +4,17 @@
 [ext_resource type="Script" path="res://Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
 [ext_resource type="Script" path="res://Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_c7oo3")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,7 +23,7 @@ grow_vertical = 2
 color = Color(0.254544, 0.361311, 0.221748, 1)
 
 [node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("StatusLabel")]
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -51,7 +58,7 @@ grow_vertical = 2
 text = "Play 2 Player Tic"
 
 [node name="UserData" type="Control" parent="." node_paths=PackedStringArray("UsernameLabel")]
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

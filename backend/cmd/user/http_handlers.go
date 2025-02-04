@@ -70,11 +70,13 @@ func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
+		ID          int32  `json:"id"`
 		Username    string `json:"username"`
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
 		Coin        int    `json:"coin"`
 	}
+	output.ID = user.ID
 	output.Username = user.Username
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String

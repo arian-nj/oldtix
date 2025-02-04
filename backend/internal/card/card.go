@@ -32,8 +32,8 @@ const (
 	FK
 )
 
-var Suits = []Suite{HEART, SPADE, DIMOND, CLUB}
-var Values = []CardValue{ACE, FK, FQ, FJ, N10, N9, N8, N7, N6, N5, N4, N3, N2}
+var AllSuits = []Suite{HEART, SPADE, DIMOND, CLUB}
+var AllValues = []CardValue{ACE, FK, FQ, FJ, N10, N9, N8, N7, N6, N5, N4, N3, N2}
 
 type Card struct {
 	Suit  Suite     `json:"suit"`
@@ -44,23 +44,23 @@ type Card struct {
 
 func NewAllCards() []Card {
 	var allCards = []Card{}
-	for _, s := range Suits {
-		for _, v := range Values {
+	for _, s := range AllSuits {
+		for _, v := range AllValues {
 			allCards = append(allCards, Card{Suit: s, Value: v})
 		}
 	}
 	return allCards
 }
 
-func GiveRandomCards(numberOfCards int, availableCards []Card) (randomCards []Card, remaningCards []Card, err error) {
+func GiveRandomCards(numberOfCards int, availableCards []Card) (allRandomCards []Card, remaningCards []Card, err error) {
 	for range numberOfCards {
 		if len(availableCards) <= 0 {
-			return randomCards, availableCards, fmt.Errorf("available cards is %d cant give more", len(availableCards))
+			return allRandomCards, availableCards, fmt.Errorf("available cards is %d cant give more", len(availableCards))
 		}
 		random_index := rand.Intn(len(availableCards))
 		random_card := availableCards[random_index]
 		availableCards = append(availableCards[:random_index], availableCards[random_index+1:]...)
-		randomCards = append(randomCards, random_card)
+		allRandomCards = append(allRandomCards, random_card)
 	}
-	return randomCards, availableCards, nil
+	return allRandomCards, availableCards, nil
 }
