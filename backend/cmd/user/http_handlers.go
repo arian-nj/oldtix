@@ -151,7 +151,7 @@ func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 	input.Validator.CheckField(input.Password != "", "password", "Password is required")
 	input.Validator.CheckField(len(input.Password) >= 8, "password", "Password is too short")
 	input.Validator.CheckField(len(input.Password) <= 72, "password", "Password is too long")
-	input.Validator.CheckField(validator.NotIn(input.Password, password.CommonPasswords...), "password", "Password is too common")
+	// input.Validator.CheckField(validator.NotIn(input.Password, password.CommonPasswords...), "password", "Password is too common")
 
 	if input.Validator.HasErrors() {
 		app.FailedValidation(w, r, input.Validator)
