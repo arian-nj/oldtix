@@ -11,6 +11,18 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
+// events come here if not used go to GameEventCh
+func (app *ApplicationH2) socketHandlers(game *GameState, p *Player) {
+	for {
+		new_event := <-p.Client.NewEvents
+		if new_event.Type == socket.TypeGetData {
+			app.SendGameData(game, p)
+		} else {
+			game.GameEventsCh <- NewGameEvent(&new_event, p)
+		}
+	}
+}
+
 func (app *ApplicationH2) RunGame(game *GameState) {
 	// choose hakem
 	game.Hakem = rand.Intn(len(game.Players))
@@ -71,17 +83,11 @@ OuterLoop:
 	for _, p := range game.Players {
 		app.SendGameData(game, p)
 	}
+	// give rest of cards
+	all_cards = app.giveCards(4, all_cards, game.Players)
 
-}
-func (app *ApplicationH2) socketHandlers(game *GameState, p *Player) {
-	for {
-		new_event := <-p.Client.NewEvents
-		if new_event.Type == socket.TypeGetData {
-			app.SendGameData(game, p)
-		} else {
-			game.GameEventsCh <- NewGameEvent(&new_event, p)
-		}
-	}
+	app.giveCards(4, all_cards, game.Players)
+
 }
 
 func (app *ApplicationH2) SendGameData(game *GameState, p *Player) {

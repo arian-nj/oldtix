@@ -15,6 +15,13 @@ var drawn:bool
 
 var isDrawn:bool = false
 
+func new_cards_event(e:KEvent.Event)->void:
+	var json_data:Variant = JSON.parse_string(e.data)
+	var cards_json:Variant = json_data["cards"]
+	for card_json:Variant in cards_json:
+		create_card(card_json["suit"],card_json["value"])
+	draw_cards(from.global_position)
+
 func create_card(suit:Card.CardSuites,value:int)->void:
 	var c:Card = card_scene.instantiate()
 	c.suit = suit

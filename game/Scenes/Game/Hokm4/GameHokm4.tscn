@@ -160,11 +160,12 @@ status_label = NodePath("../../UI/StatusLabel")
 game_table = NodePath("../../Table")
 card_drawer = NodePath("../../Table/DrawCards")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table", "card_drawer")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 game_table = NodePath("../../Table")
 choose_hokm_scene = ExtResource("11_amrdn")
+card_drawer = NodePath("../../Table/DrawCards")
 
 [connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]

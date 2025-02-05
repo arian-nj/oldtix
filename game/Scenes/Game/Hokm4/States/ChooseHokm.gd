@@ -4,6 +4,8 @@ extends State
 @export var status_label:Label
 @export var game_table:Game4Table
 @export var choose_hokm_scene:PackedScene
+@export var card_drawer:CardDrawer
+
 
 var choose_hokm_instance:ChooseHokmPanel = null
 
@@ -11,15 +13,21 @@ func Enter()->void:
 	status_label.text = "Choose Hokm"
 	ws.new_event.connect(_on_new_event)
 	
-	var hakem_player :=game_table.game_data.players[game_table.game_data.hakem]
+	var hakem_player := game_table.game_data.players[game_table.game_data.hakem]
 	print("my account ",KAccount.MyAccount.id," hakem account id ",hakem_player.UserId)
 	if KAccount.MyAccount.id == hakem_player.UserId:
 		choose_hokm_instance = choose_hokm_scene.instantiate()
 		game_table.add_child(choose_hokm_instance)
 		choose_hokm_instance.HokmChoosed.connect(_on_hokm_choosed)
 
+func Exit()->void:
+	ws.new_event.disconnect(_on_new_event)
+
 func _on_new_event(e:KEvent.Event)->void:
-	if e.type == KEvent.TYPE_GAME_DATA:
+	if e.type == KEvent.TYPE_NEW_CARD:
+		card_drawer.new_cards_event(e)
+		Transition.emit(self,"choose_hokm")
+	elif e.type == KEvent.TYPE_GAME_DATA:
 		game_table.parse_game_data(e.data)
 		print("parsed game_data from choose hokm")
 		status_label.text = "Hokm Choosed"
