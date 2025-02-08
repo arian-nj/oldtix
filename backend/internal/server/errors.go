@@ -24,6 +24,17 @@ func (app *CommonGlobals) ReportServerError(r *http.Request, err error) {
 	log.Println(message, method, url)
 	log.Println(trace)
 }
+func (app *CommonGlobals) ReportError(err error) {
+	var (
+		message = err.Error()
+		trace   = string(debug.Stack())
+	)
+
+	// requestAttrs := slog.Group("request", "method", method, "url", url)
+	// app.Logger.Error(message, requestAttrs, "trace", trace)
+	log.Println(message)
+	log.Println(trace)
+}
 
 func (app *CommonGlobals) errorMessage(w http.ResponseWriter, r *http.Request, status int, message string, headers http.Header) {
 	message = strings.ToUpper(message[:1]) + message[1:]

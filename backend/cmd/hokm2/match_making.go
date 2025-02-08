@@ -11,9 +11,9 @@ func (app *ApplicationH2) MatchUsers() error {
 		p1 := <-app.lobby.Queue
 		p2 := <-app.lobby.Queue
 		game := GameState{
-			ID:           utils.GenerateRandomString(16),
-			Players:      []*Player{p1, p2},
-			Current:      0,
+			ID:      utils.GenerateRandomString(16),
+			Players: []*Player{p1, p2},
+			// Current:      0,
 			GameEventsCh: make(chan *GameEvent),
 		}
 		app.lobby.Mu.Lock()
@@ -21,8 +21,10 @@ func (app *ApplicationH2) MatchUsers() error {
 		app.lobby.Mu.Unlock()
 
 		app.BackgroundTask(func() error {
-			app.RunGame(&game)
-			return nil
+			err := app.RunGame(&game)
+			app.Logger.Error("Error in Game Loop")
+			app.ReportError(err)
+			return err
 		})
 	}
 }
