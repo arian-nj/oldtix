@@ -59,6 +59,4 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 		}
 	})
 
-	client.Egres <- *socket.NewEvent(socket.TypeStatus, socket.StatusConnected)
-
 }

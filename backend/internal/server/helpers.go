@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -13,7 +14,7 @@ func (app *CommonGlobals) BackgroundTask(fn func() error) {
 		defer func() {
 			err := recover()
 			if err != nil {
-				log.Println(err)
+				app.ReportError(fmt.Errorf("%s", err))
 			}
 		}()
 

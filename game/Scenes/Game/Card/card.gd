@@ -1,6 +1,7 @@
 class_name Card extends Button
 
 signal card_played(card:Card)
+signal card_unplayed(card:Card)
 
 @export var cardTexture:TextureRect
 @export var cardArea:Area2D
@@ -44,7 +45,7 @@ func value_name() -> String:
 		11:return "J"
 		12:return "Q"
 		13:return "K"
-		1:return "A."
+		14:return "A."
 		_:return str(value)+"."
 
 func get_assets_path() -> String:
@@ -55,21 +56,24 @@ func _ready()->void:
 	set_process(false)
 	default_scale = scale
 
-	# load assets
-	var file_name:String = get_assets_path()
-	var img:CompressedTexture2D = load(file_name)
-	cardTexture.texture = img
-
 	cardArea.body_entered.connect(_body_entered)
+	cardArea.body_exited.connect(_body_exited)
 	button_up.connect(_on_button_up)
 	button_down.connect(_on_button_down)	
 	set_process(true)
 
+func load_assets()->void:
+	var file_name:String = get_assets_path()
+	var img:CompressedTexture2D = load(file_name)
+	cardTexture.texture = img
 
 
 
 func _body_entered(_body:Node2D)->void:
 	card_played.emit(self)
+
+func _body_exited(_body:Node2D)->void:
+	card_unplayed.emit(self)
 
 func _process(delta:float)->void:
 	if button_pressed:
@@ -93,6 +97,7 @@ func _on_button_up() -> void:
 	# pivot_offset = Vector2(0.0,0.0)
 
 func _on_button_down() -> void:
+	in_hand = false
 	start_choosed_pos = global_position
 	local_pos_on_press = self.get_local_mouse_position()
 	var old_z_index:int = self.z_index

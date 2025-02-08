@@ -17,8 +17,7 @@ const ( // sync it with card/card.gd
 
 // const
 const (
-	ACE = iota + 1
-	N2
+	N2 = iota + 2
 	N3
 	N4
 	N5
@@ -30,6 +29,7 @@ const (
 	FJ
 	FQ
 	FK
+	ACE
 )
 
 var AllSuits = []Suite{HEART, SPADE, DIMOND, CLUB}

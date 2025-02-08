@@ -4,17 +4,19 @@ type EventType string
 
 const (
 	TypeChat        EventType = "chat"
-	TypeStatus      EventType = "status"
 	TypeMakeMatch   EventType = "make_match"
 	TypeGameData    EventType = "game_data"
 	TypeGetData     EventType = "get_data"
 	TypeNewCard     EventType = "new_card"
 	TypeHokmChoosed EventType = "hokm_choosed"
+
+	// Game Turn Stuff
+	TypeTurnStart   EventType = "turn_start"
+	TypeYourTurn    EventType = "your_turn"
+	TypePlayTurn    EventType = "play_turn"
+	TypeValidPlay   EventType = "valid_play"
+	TypeInvalidPlay EventType = "invalid_play"
+	TypeTurnPlayed  EventType = "turn_played"
 )
 
 type EventMessage string
-
-// status messages
-var (
-	StatusConnected EventMessage = "connected"
-)

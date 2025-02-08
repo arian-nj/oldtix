@@ -22,4 +22,3 @@ func _on_new_event(e:KEvent.Event)->void:
 
 func Exit()->void:
 	ws.new_event.disconnect(_on_new_event)
-
