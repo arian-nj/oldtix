@@ -37,21 +37,27 @@ type GameState struct {
 	ID           string          `json:"id"`
 	Players      []*Player       `json:"players"`
 	GameEventsCh chan *GameEvent `json:"-"`
+	CurrentTrick *Trick          `json:"current_trick"`
+	Tricks       []*Trick        `json:"-"`
+}
 
-	HakemIndex int `json:"hakem"`
-	// Current     int         `json:"current"`
-	CurrentTurn *Turn `json:"turn,omitempty"`
+type Trick struct {
+	Hokm        cards.Suite `json:"hokm"`
+	HakemIndex  int         `json:"hakem_index"`
+	CurrentTurn *Turn       `json:"current_turn"`
+	Turns       []*Turn     `json:"-"`
 }
 
 type Turn struct {
-	PlayerIndex int          `json:"player_index"`
 	CardsPlayed []cards.Card `json:"cards"`
-	Hokm        cards.Suite  `json:"hokm"`
 }
 
-func NewTurn(player_index int) *Turn {
+func NewTrick() *Trick {
+	return &Trick{}
+}
+
+func NewTurn() *Turn {
 	return &Turn{
-		PlayerIndex: player_index,
 		CardsPlayed: []cards.Card{},
 	}
 }

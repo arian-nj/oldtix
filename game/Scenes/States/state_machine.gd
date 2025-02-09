@@ -32,8 +32,8 @@ func on_child_transition(state:State,new_state_name:String)->void:
 	
 	var new_state:State = states.get(new_state_name.to_lower())
 	if !new_state:
+		print_debug("no state named: ",new_state_name)
 		return
-	
 	
 	if current_state:
 		current_state.Exit()

@@ -53,7 +53,7 @@ func _handle_open_state() -> void:
 
 # Handles incoming events (to be extended)
 func _handle_event(event: KEvent.Event) -> void:
-	# print("Event received: ", event.type, " - ", event.data)
+	# print("Event received: ", event.type)
 	new_event.emit(event)
 
 # Handles the closed state

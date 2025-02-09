@@ -11,48 +11,61 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
-// events come here if not used go to GameEventCh
-func (app *ApplicationH2) socketHandlers(game *GameState, p *Player) {
-	for {
-		new_event := <-p.Client.NewEvents
-		if new_event.Type == socket.TypeGetData {
-			app.SendGameData(game, p)
-		} else {
-			game.GameEventsCh <- NewGameEvent(&new_event, p)
-		}
-	}
-}
-
 func (app *ApplicationH2) RunGame(game *GameState) error {
 	// choose hakem
-	game.HakemIndex = rand.Intn(len(game.Players))
-	// game.Current = int(game.Hakem)
+	err := app.GameInitialize(game)
+	if err != nil {
+		return err
+	}
+	for range 1 {
+		new_trick := NewTrick()
+		game.CurrentTrick = new_trick
+		game.Tricks = append(game.Tricks, game.CurrentTrick)
 
+		new_trick.HakemIndex = rand.Intn(len(game.Players))
+		for _, p := range game.Players {
+			err := app.SendGameData(game, p)
+			if err != nil {
+				return err
+			}
+		}
+
+		all_cards := cards.NewAllCards()
+		all_cards = app.sendCards(5, all_cards, game.Players)
+
+		app.WaitToChooseHokm(game)       // put hokm in game.CurrentTurn.Hokm
+		for _, p := range game.Players { // update hokm data
+			app.SendGameData(game, p)
+		}
+
+		// send rest of cards
+		all_cards = app.sendCards(4, all_cards, game.Players)
+		app.sendCards(4, all_cards, game.Players)
+
+		err = app.RunTurn(game)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (app *ApplicationH2) GameInitialize(game *GameState) error {
 	for _, p := range game.Players {
 		app.BackgroundTask(func() error {
 			app.socketHandlers(game, p)
 			return nil
 		})
 	}
-	for _, p := range game.Players {
-		err := app.SendGameData(game, p)
-		if err != nil {
-			return err
-		}
-	}
 
-	all_cards := cards.NewAllCards()
+	return nil
+}
 
-	// give 5 car to all players
-	all_cards = app.giveCards(5, all_cards, game.Players)
-	_ = all_cards
+func (app *ApplicationH2) WaitToChooseHokm(game *GameState) {
 
 	choose_hokm_ticker := time.NewTicker(10 * time.Second)
+	defer choose_hokm_ticker.Stop()
 
-	// new Turn
-	game.CurrentTurn = NewTurn(game.HakemIndex)
-
-OuterLoop:
 	for {
 
 		select {
@@ -60,7 +73,7 @@ OuterLoop:
 			if new_game_event.event.Type != socket.TypeHokmChoosed {
 				continue
 			}
-			if new_game_event.Player != game.Players[game.HakemIndex] {
+			if new_game_event.Player != game.Players[game.CurrentTrick.HakemIndex] {
 				continue
 			}
 			hokm_data := new_game_event.event.Data
@@ -72,27 +85,25 @@ OuterLoop:
 			hokm_int, err := strconv.Atoi(string(*hokm_data))
 			if err != nil {
 				app.Logger.Error(fmt.Sprintf("trying to set %s as hokm", string(*hokm_data)))
+				continue
 			}
 			new_hokm := cards.Suite(hokm_int)
-			game.CurrentTurn.Hokm = new_hokm
+			game.CurrentTrick.Hokm = new_hokm
 			app.Logger.Info(fmt.Sprintf("new hokm is choosed by hakem %d ", hokm_int))
-			break OuterLoop
+			return
 		case <-choose_hokm_ticker.C:
-			choose_hokm_ticker.Stop()
 			rand_index := rand.Intn(4)
 			new_hokm := cards.AllSuits[rand_index]
-			game.CurrentTurn.Hokm = new_hokm
+			game.CurrentTrick.Hokm = new_hokm
 			app.Logger.Info(fmt.Sprintf("new hokm is choosed by server %d ", int(new_hokm)))
-			break OuterLoop
+			return
 		}
 	}
-	for _, p := range game.Players {
-		app.SendGameData(game, p)
-	}
+}
 
-	// give rest of cards
-	all_cards = app.giveCards(4, all_cards, game.Players)
-	app.giveCards(4, all_cards, game.Players)
+func (app *ApplicationH2) RunTurn(game *GameState) error {
+	// new Turn
+	game.CurrentTrick.CurrentTurn = NewTurn()
 	time.Sleep(time.Second * 1)
 
 	// game starts
@@ -105,7 +116,7 @@ OuterLoop:
 	}
 
 	to_play_order := []*Player{}
-	starter_player_index := game.HakemIndex
+	starter_player_index := game.CurrentTrick.HakemIndex
 	after_ward := []*Player{}
 	for ind, p := range game.Players {
 		if ind != starter_player_index {
@@ -122,14 +133,41 @@ OuterLoop:
 		for {
 			select {
 			case new_game_event := <-game.GameEventsCh:
-				_ = new_game_event
+				if new_game_event.event.Type != socket.TypePlayTurn {
+					continue
+				}
+				if new_game_event.Player.UserId != p.UserId {
+					continue
+				}
+				if new_game_event.event.Data == nil {
+					continue
+				}
+
+				var card_played cards.Card
+				err := json.Unmarshal([]byte(*new_game_event.event.Data), &card_played)
+				if err != nil {
+					continue
+				}
+
 			case <-NewTicker.C:
 				NewTicker.Stop()
+
 			}
 		}
 	}
-
 	return nil
+}
+
+// events come here if not used go to GameEventCh
+func (app *ApplicationH2) socketHandlers(game *GameState, p *Player) {
+	for {
+		new_event := <-p.Client.NewEvents
+		if new_event.Type == socket.TypeGetData {
+			app.SendGameData(game, p)
+		} else {
+			game.GameEventsCh <- NewGameEvent(&new_event, p)
+		}
+	}
 }
 
 func (app *ApplicationH2) SendGameData(game *GameState, p *Player) error {
@@ -142,7 +180,7 @@ func (app *ApplicationH2) SendGameData(game *GameState, p *Player) error {
 	return nil
 }
 
-func (app *ApplicationH2) giveCards(number int, all_cards []cards.Card, players []*Player) []cards.Card {
+func (app *ApplicationH2) sendCards(number int, all_cards []cards.Card, players []*Player) []cards.Card {
 	for _, p := range players {
 		var randomCards []cards.Card
 		var err error
