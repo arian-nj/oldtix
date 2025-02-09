@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ce0yc13k6n5f0"]
 
-[ext_resource type="Script" path="res://Scenes/LoginPanel/login_panel.gd" id="1_3igu7"]
+[ext_resource type="Script" uid="uid://b8dqsn5uy01ae" path="res://Scenes/LoginPanel/login_panel.gd" id="1_3igu7"]
 
 [node name="LoginPanel" type="PanelContainer" node_paths=PackedStringArray("usernameField", "passwordField")]
 anchors_preset = 8

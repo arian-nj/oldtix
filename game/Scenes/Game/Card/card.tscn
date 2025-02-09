@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://bd5brlxcojtaw"]
 
-[ext_resource type="Script" path="res://Scenes/Game/Card/card.gd" id="1_tdtid"]
+[ext_resource type="Script" uid="uid://do4kwe8wpei4i" path="res://Scenes/Game/Card/card.gd" id="1_tdtid"]
 [ext_resource type="Texture2D" uid="uid://gkgo5ogqcuii" path="res://assets/cards/Back1.png" id="2_0cob8"]
-[ext_resource type="Script" path="res://Componets/ShadowTextureComponent.gd" id="3_5ropr"]
-[ext_resource type="Shader" path="res://Scenes/Game/Card/2d_prespective.gdshader" id="3_bvmjh"]
-[ext_resource type="Script" path="res://Scenes/Game/Card/shader_script.gd" id="5_8njo5"]
-[ext_resource type="Script" path="res://Componets/SwingComponent.gd" id="5_t00ys"]
+[ext_resource type="Script" uid="uid://dcfkky1f6i0pk" path="res://Componets/ShadowTextureComponent.gd" id="3_5ropr"]
+[ext_resource type="Shader" uid="uid://bub16xh8gpro7" path="res://Scenes/Game/Card/2d_prespective.gdshader" id="3_bvmjh"]
+[ext_resource type="Script" uid="uid://bt78as30bdywo" path="res://Scenes/Game/Card/shader_script.gd" id="5_8njo5"]
+[ext_resource type="Script" uid="uid://bj58o5831fivg" path="res://Componets/SwingComponent.gd" id="5_t00ys"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r5psd"]
 

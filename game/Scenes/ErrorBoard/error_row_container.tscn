@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d2rvktqkwuq7c"]
 
-[ext_resource type="Script" uid="uid://cjpxwox0wo052" path="res://Scenes/ErrorBoard/error_row_container.gd" id="1_4r33y"]
+[ext_resource type="Script" uid="uid://dpph16kbagsby" path="res://Scenes/ErrorBoard/error_row_container.gd" id="1_4r33y"]
 
 [node name="ErrorRowContainer" type="PanelContainer" node_paths=PackedStringArray("label", "color_rect")]
 anchors_preset = 12

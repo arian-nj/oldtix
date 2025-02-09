@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bqn77wpg3cj3y"]
 
-[ext_resource type="Script" path="res://Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
-[ext_resource type="Script" path="res://Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
-[ext_resource type="Script" path="res://Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
+[ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
+[ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
+[ext_resource type="Script" uid="uid://dxdp0uldpe775" path="res://Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
