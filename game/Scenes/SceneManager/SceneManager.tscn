@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://c6gfbvcn354fp"]
 
-[ext_resource type="Script" path="res://Scenes/SceneManager/CheckErrors.gd" id="1_8htr5"]
-[ext_resource type="Script" path="res://Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
+[ext_resource type="Script" uid="uid://cp42g4to36wr" path="res://Scenes/SceneManager/CheckErrors.gd" id="1_8htr5"]
+[ext_resource type="Script" uid="uid://doc3jv3q07w3o" path="res://Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
 [ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://Scenes/Loading/loading.tscn" id="2_2qq82"]
 
 [sub_resource type="Animation" id="Animation_qoiuy"]
@@ -38,8 +38,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6fa2m"]
 _data = {
-"fade_in": SubResource("Animation_qoiuy"),
-"fade_out": SubResource("Animation_kgchd")
+&"fade_in": SubResource("Animation_qoiuy"),
+&"fade_out": SubResource("Animation_kgchd")
 }
 
 [node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim")]
@@ -51,7 +51,7 @@ anim = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_6fa2m")
+&"": SubResource("AnimationLibrary_6fa2m")
 }
 
 [node name="OverlayLayer" type="CanvasLayer" parent="."]

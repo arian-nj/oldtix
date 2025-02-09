@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cmt3jemho5vyb"]
 
-[ext_resource type="Script" path="res://Scenes/Game/Card/drawn_cards.gd" id="1_0mwao"]
+[ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://Scenes/Game/Card/drawn_cards.gd" id="1_0mwao"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://Scenes/Game/Card/card.tscn" id="2_kp8tw"]
 [ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://Scenes/Game/ChooseHokm/choose_hokm.tscn" id="3_y8ftj"]
 
