@@ -6,9 +6,12 @@ class_name CardDrawer extends Control
 @export var rot_max: float = 10.0
 @export var card_offset_x: float = 30.0
 @export var card_scene: PackedScene
+
 @export var card_movment_dur:float = .3
 @export var two_card_movment_dur:float = .075
+
 @export var flip_card_dur:float = .075
+@export var two_card_dur:float = .075
 
 var cards:Array[Card] = []
 var tween:Tween
@@ -97,7 +100,7 @@ func draw_cards(from_pos: Vector2 = Vector2.ZERO) -> void:
 			not_sorted_counter += 1
 			if from_pos == from_middle.global_position:
 				tween.finished.connect(func ()->void:
-					instance.prespective3DShader.flip_y(flip_card_dur,dur+delay,instance.load_assets)
+					instance.prespective3DShader.flip_y(flip_card_dur,not_sorted_counter*two_card_dur,instance.load_assets)
 				)
 			instance.in_hand = true
 			tween.parallel().tween_property(instance, "global_position", final_pos, dur).set_delay(delay)

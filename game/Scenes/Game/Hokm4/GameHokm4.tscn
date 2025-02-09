@@ -108,6 +108,7 @@ card_scene = ExtResource("3_8tgkb")
 card_movment_dur = 0.25
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
+two_card_dur = 0.1
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 1
@@ -176,9 +177,10 @@ game_table = NodePath("../../Table")
 choose_hokm_scene = ExtResource("11_amrdn")
 card_drawer = NodePath("../../Table/DrawCards")
 
-[node name="game_turn_start" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "game_table")]
+[node name="game_turn_start" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "game_table", "status_label")]
 script = ExtResource("12_d5oqf")
 ws = NodePath("../../WebSocket")
 game_table = NodePath("../../Table")
+status_label = NodePath("../../UI/StatusLabel")
 
 [connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]
