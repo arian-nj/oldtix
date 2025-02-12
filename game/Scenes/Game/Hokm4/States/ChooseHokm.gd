@@ -2,9 +2,8 @@ extends State
 
 @export var ws:KatanaSocket
 @export var status_label:Label
-@export var game_table:Game4Table
+@export var table:Game4Table
 @export var choose_hokm_scene:PackedScene
-@export var card_drawer:CardDrawer
 
 
 var choose_hokm_instance:ChooseHokmPanel = null
@@ -15,11 +14,11 @@ func Enter()->void:
 	status_label.text = "Choose Hokm"
 	ws.new_event.connect(_on_new_event)
 	
-	var hakem_player := game_table.game_data.players[game_table.game_data.current_trick.hakem_index]
+	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
 	# print("my account ",KAccount.MyAccount.id," hakem account id ",hakem_player.UserId)
 	if KAccount.MyAccount.id == hakem_player.user_id:
 		choose_hokm_instance = choose_hokm_scene.instantiate()
-		game_table.add_child(choose_hokm_instance)
+		table.add_child(choose_hokm_instance)
 		choose_hokm_instance.HokmChoosed.connect(_on_hokm_choosed)
 
 func Exit()->void:
@@ -27,13 +26,13 @@ func Exit()->void:
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_NEW_CARD:
-		card_drawer.new_cards_event(e)
+		table.drawer.new_cards_event(e)
 		got_cards_time += 1
 		if got_cards_time == 2:
 			Transition.emit(self,"game_turn_start")
 
 	elif e.type == KEvent.TYPE_GAME_DATA:
-		game_table.parse_game_data(e.data)
+		table.parse_game_data(e.data)
 		status_label.text = "Hokm Choosed"
 		if choose_hokm_instance != null:
 			choose_hokm_instance.queue_free()
@@ -43,5 +42,5 @@ func _on_new_event(e:KEvent.Event)->void:
 
 
 # only runs if 
-func _on_hokm_choosed(Hokm:Card.CardSuites)->void:
+func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
 	ws.send_event(KEvent.TYPE_HOKM_CHOOSED,str(Hokm))

@@ -42,7 +42,6 @@ cardTexture = NodePath("TextureRect")
 cardArea = NodePath("Area2D")
 prespective3DShader = NodePath("TextureRect")
 swingComponent = NodePath("SwingComponent")
-value = 1
 metadata/_edit_group_ = true
 
 [node name="ShadowRect" type="TextureRect" parent="." node_paths=PackedStringArray("MainObject")]

@@ -12,11 +12,18 @@ import (
 )
 
 func (app *ApplicationH2) RunGame(game *GameState) error {
+	defer func() {
+		for _, p := range game.Players {
+			p.Client.Conn.Close()
+		}
+	}()
+
 	// choose hakem
 	err := app.GameInitialize(game)
 	if err != nil {
 		return err
 	}
+
 	for range 1 {
 		new_trick := NewTrick()
 		game.CurrentTrick = new_trick
@@ -42,10 +49,13 @@ func (app *ApplicationH2) RunGame(game *GameState) error {
 		all_cards = app.sendCards(4, all_cards, game.Players)
 		app.sendCards(4, all_cards, game.Players)
 
-		err = app.RunTurn(game)
-		if err != nil {
-			return err
+		for range 10 {
+			err = app.RunTurn(game)
+			if err != nil {
+				return err
+			}
 		}
+
 	}
 	return nil
 }
@@ -128,49 +138,88 @@ func (app *ApplicationH2) RunTurn(game *GameState) error {
 	to_play_order = append(to_play_order, after_ward...)
 
 	for _, p := range to_play_order {
-		err := PlayerDoMove(game, p)
+		err := app.PlayerDoMove(game, p)
 		if err != nil {
 			return err
 		}
 	}
 
+	for _, p := range to_play_order {
+		app.SendGameData(game, p)
+	}
+
 	return nil
 }
-func PlayerDoMove(game *GameState, p *Player) error {
-	p.Client.Egres <- *socket.NewEvent(socket.TypeYourTurn, socket.EventMessage(""))
-	NewTicker := time.NewTicker(time.Second * 10)
+func (app *ApplicationH2) PlayerDoMove(game *GameState, player *Player) error {
+	player.Client.Egres <- *socket.NewEvent(socket.TypeYourTurn, socket.EventMessage(""))
+	NewTicker := time.NewTicker(time.Second * 60)
+	var card_played cards.Card
+	var cardIndex int
+
+OuterLoop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
 			if new_game_event.event.Type != socket.TypePlayTurn {
+				// app.Logger.Debug("not same type")
 				continue
 			}
-			if new_game_event.Player.UserId != p.UserId {
+			if new_game_event.Player.UserId != player.UserId {
+				// app.Logger.Debug("not same user")
 				continue
 			}
 			if new_game_event.event.Data == nil {
+				// app.Logger.Debug("data is nil")
 				continue
 			}
 
-			var card_played cards.Card
 			err := json.Unmarshal([]byte(*new_game_event.event.Data), &card_played)
 			if err != nil {
+				// app.Logger.Debug("can't marshal")
+				app.Logger.Debug(err.Error())
 				continue
 			}
-			isValid := game.isMoveValid(new_game_event.Player, &card_played)
-			if isValid {
-				new_game_event.Player.Client.Egres <- *socket.NewEvent(socket.TypeValidPlay, socket.EventMessage(""))
-				return nil
-			} else {
+
+			var isValid bool
+			cardIndex, isValid = game.ValidateAndDoMove(new_game_event.Player, &card_played)
+
+			app.Logger.Debug(card_played.String())
+			if !isValid {
 				new_game_event.Player.Client.Egres <- *socket.NewEvent(socket.TypeInvalidPlay, socket.EventMessage(""))
+				// app.Logger.Debug("move not valid")
 				continue
 			}
+
+			new_game_event.Player.Client.Egres <- *socket.NewEvent(socket.TypeValidPlay, socket.EventMessage(""))
+			break OuterLoop
 
 		case <-NewTicker.C:
 			NewTicker.Stop()
+			choosen_card_by_bot := ""
+			player.Client.Egres <- *socket.NewEvent(socket.TypePlayTimeout, socket.EventMessage(choosen_card_by_bot))
 			return fmt.Errorf("time out")
 		}
 	}
+
+	currentTurn := game.CurrentTrick.CurrentTurn
+	new_card_player := &PlayerCardPlayed{
+		Player: player,
+		Card:   &player.Cards[cardIndex],
+	}
+	currentTurn.CardsPlayed = append(currentTurn.CardsPlayed, new_card_player)
+	player.Cards = append(player.Cards[:cardIndex], player.Cards[cardIndex+1:]...)
+
+	played_data_byte, err := json.Marshal(new_card_player)
+	if err != nil {
+		return err
+	}
+
+	for _, otherp := range game.Players {
+		if otherp.UserId != player.UserId {
+			player.Client.Egres <- *socket.NewEvent(socket.TypeTurnPlayed, socket.EventMessage(played_data_byte))
+		}
+	}
+	return nil
 }
 
 // events come here if not used go to GameEventCh
@@ -196,14 +245,19 @@ func (app *ApplicationH2) SendGameData(game *GameState, p *Player) error {
 }
 
 func (app *ApplicationH2) sendCards(number int, all_cards []cards.Card, players []*Player) []cards.Card {
+	var remaining_cards []cards.Card = all_cards
+	fmt.Println(remaining_cards)
+	fmt.Println(" ")
 	for _, p := range players {
 		var randomCards []cards.Card
 		var err error
-		randomCards, all_cards, err = cards.GiveRandomCards(number, all_cards)
+		randomCards, remaining_cards, err = cards.GiveRandomCards(number, remaining_cards)
+		fmt.Println(remaining_cards)
+		// fmt.Println(randomCards)
 		if err != nil {
 			app.Logger.Error(err.Error())
 		}
-		p.Cards = append(p.Cards, randomCards...)
+		fmt.Println(" ")
 
 		var output struct {
 			NewCards []cards.Card `json:"cards"`
@@ -214,7 +268,8 @@ func (app *ApplicationH2) sendCards(number int, all_cards []cards.Card, players 
 			app.Logger.Error(err.Error())
 		}
 		p.Client.Egres <- *socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte))
+		p.Cards = append(p.Cards, randomCards...)
 	}
-	return all_cards
+	return remaining_cards
 
 }

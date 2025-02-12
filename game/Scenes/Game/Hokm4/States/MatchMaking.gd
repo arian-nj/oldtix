@@ -2,8 +2,7 @@ extends State
 
 @export var ws:KatanaSocket
 @export var status_label:Label
-@export var game_table:Game4Table
-@export var card_drawer:CardDrawer
+@export var table:Game4Table
 
 
 func Enter()->void:
@@ -13,11 +12,11 @@ func Enter()->void:
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_GAME_DATA:
-		game_table.parse_game_data(e.data)
+		table.parse_game_data(e.data)
 		# print("parsed game_data in match making")
 	
 	elif e.type == KEvent.TYPE_NEW_CARD:
-		card_drawer.new_cards_event(e)
+		table.drawer.new_cards_event(e)
 		Transition.emit(self,"choose_hokm")
 
 func Exit()->void:

@@ -10,6 +10,10 @@ func (app *ApplicationH2) MatchUsers() error {
 	for {
 		p1 := <-app.lobby.Queue
 		p2 := <-app.lobby.Queue
+
+		p1.TeamId = TeamOne
+		p2.TeamId = TeamTwo
+
 		game := GameState{
 			ID:      utils.GenerateRandomString(16),
 			Players: []*Player{p1, p2},
@@ -22,8 +26,10 @@ func (app *ApplicationH2) MatchUsers() error {
 
 		app.BackgroundTask(func() error {
 			err := app.RunGame(&game)
-			app.Logger.Error("Error in Game Loop")
-			app.ReportError(err)
+			app.Logger.Error("Game Loop Ended")
+			if err != nil {
+				app.ReportError(err)
+			}
 			return err
 		})
 	}

@@ -1,5 +1,11 @@
 class_name CardDrawer extends Control
 
+signal CardPlayed(card:Card)
+
+func _card_played(card:Card)->void:
+	if isDrawn:
+		CardPlayed.emit(card)
+
 @export var from_middle: Control
 @export var hand: Control
 
@@ -19,6 +25,10 @@ var drawn:bool
 
 var isDrawn:bool = true
 
+@export var IsDrawnLabel: Label
+func _process(_delta: float) -> void:
+	IsDrawnLabel.text = str(isDrawn)
+
 func _ready() -> void:
 	get_window().size_changed.connect(draw_cards)
 
@@ -34,23 +44,19 @@ func new_cards_event(e:KEvent.Event)->void:
 	draw_cards(from_middle.global_position)
 	
 
-func create_card(suit:Card.CardSuites,value:int)->void:
+func create_card(suite:CardData.CardSuites,value:int)->void:
 	var c:Card = card_scene.instantiate()
-	c.suit = suit
-	c.value = value
+	c.card_data = CardData.new()
+	c.card_data.suit = suite
+	c.card_data.value = value
 	add_child(c)
 	cards.append(c)
 	c.card_played.connect(_card_played)
+	c.not_inplace.connect(draw_cards)
 	# c.card_unplayed.connect(_card_unplayed)
-	c.button_up.connect(func()->void:
-		draw_cards()
-	)
-
-func _card_played(card:Card)->void:
-	if isDrawn:
-		print(card.suite_name()+"--"+card.value_name())
-		cards.erase(card)
-		draw_cards.call_deferred()
+	# c.button_up.connect(func()->void:
+	# 	draw_cards()
+	# )
 
 # func _card_unplayed(card:Card)->void:
 # 	if card.in_hand:
@@ -58,74 +64,88 @@ func _card_played(card:Card)->void:
 # 		cards.append(card)
 # 		draw_cards.call_deferred()
 
-
 func draw_cards(from_pos: Vector2 = Vector2.ZERO) -> void:
-	if len(cards) <= 0:
+	if cards.is_empty():
 		return
-	
-	isDrawn = false
 
+	isDrawn = false
 	sort_cards()
+
+	# Kill any running tween and create a new one with easing settings.
 	if tween and tween.is_running():
 		tween.kill()
-	
 	tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	var deck_x_length:float = card_offset_x * (len(cards)) + cards[0].size.x
-	var x_offset:float = deck_x_length/2 
-	
-	var not_sorted_counter:int = 0
-	for i:int in len(cards):
-		var instance: Card = cards[i]
-		# if instance.button_pressed:
-		# 	continue
 
-		# in tree order to handle input hiarchy correctly + Render Order
-		remove_child(instance)
-		add_child(instance)
+	# Calculate deck width and centering offset.
+	var deck_x_length: float = card_offset_x * cards.size() + cards[0].size.x
+	var x_offset: float = deck_x_length / 2.0
 
-		if from_pos == from_middle.global_position and !instance.in_hand:
-			instance.global_position = from_pos
-			instance.global_position -= instance.size
-		
+	var notSortedCounter: int = 0
 
-		var final_pos: Vector2 = Vector2(card_offset_x * i , 0.0)
-		final_pos.y -= instance.size.y/2 # center y
-		final_pos.x -= x_offset 
-		final_pos += hand.global_position
-			
-		var dur := card_movment_dur
-		var delay :float = 0
-		if !instance.in_hand:
-			delay= (not_sorted_counter * two_card_movment_dur)
-			not_sorted_counter += 1
+	for i in range(cards.size()):
+		var card: Card = cards[i]
+
+		# Update tree order to correctly handle input and render order.
+		remove_child(card)
+		add_child(card)
+
+		# If drawing from the middle and the card isn't already in hand,
+		# set its starting position.
+		if from_pos == from_middle.global_position and not card.in_hand:
+			card.global_position = from_pos - card.size
+
+		# Compute the final position for this card.
+		var final_pos: Vector2 = _calculate_final_position(i, card, x_offset)
+
+		# Set up movement parameters.
+		var movementDuration: float = card_movment_dur
+		var delay: float = 0.0
+
+		# If the card is new to the hand, animate it in with a delay.
+		if not card.in_hand:
+			delay = notSortedCounter * two_card_movment_dur
+			# Capture the current counter value for the tween callback.
+			var currentCounter: int = notSortedCounter
+			notSortedCounter += 1
+
 			if from_pos == from_middle.global_position:
-				tween.finished.connect(func ()->void:
-					instance.prespective3DShader.flip_y(flip_card_dur,not_sorted_counter*two_card_dur,instance.load_assets)
+				tween.finished.connect(func() -> void:
+					card.prespective3DShader.flip_y(flip_card_dur, currentCounter * two_card_dur, card.load_assets)
 				)
-			instance.in_hand = true
-			tween.parallel().tween_property(instance, "global_position", final_pos, dur).set_delay(delay)
-
-		elif final_pos != instance.global_position:
-			if final_pos.distance_to(instance.global_position) < 2:
-				instance.global_position = final_pos
+			card.in_hand = true
+			tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
+		
+		# If the card is already in hand and its final position has changed…
+		elif final_pos != card.global_position:
+			# Snap to final position if very close.
+			if final_pos.distance_to(card.global_position) < 2.0:
+				card.global_position = final_pos
 			else:
-				dur += (i * two_card_movment_dur/4)
-				tween.parallel().tween_property(instance, "global_position", final_pos, dur).set_delay(delay)
+				movementDuration += i * (two_card_movment_dur / 4.0)
+				tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 
-
-	
 	await tween.finished
 	isDrawn = true
 
 
-var in_deck_suites:Array[Card.CardSuites] = []
+# Helper function to calculate a card's final position.
+func _calculate_final_position(index: int, card: Card, x_offset: float) -> Vector2:
+	var pos: Vector2 = Vector2(card_offset_x * index, 0.0)
+	pos.y -= card.size.y / 2.0  # Center vertically.
+	pos.x -= x_offset       # Center horizontally.
+	pos += hand.global_position
+	return pos
+
+
+
+var in_deck_suites:Array[CardData.CardSuites] = []
 
 func sort_cards()->void:
 	in_deck_suites = []
 
 	for card:Card in cards:
-		if in_deck_suites.has(card.suit) == false:
-			in_deck_suites.append(card.suit)
+		if in_deck_suites.has(card.card_data.suit) == false:
+			in_deck_suites.append(card.card_data.suit)
 	
 	if len(cards) <= 2:
 		return
@@ -139,31 +159,31 @@ func sort_cards()->void:
 
 # sort filters
 func suite_sort(a:Card,b:Card)->bool:
-	var a_suite_index:int = in_deck_suites.find(a.suit)
-	var b_suite_index :int = in_deck_suites.find(b.suit)
+	var a_suite_index:int = in_deck_suites.find(a.card_data.suit)
+	var b_suite_index :int = in_deck_suites.find(b.card_data.suit)
 
 	if a_suite_index < b_suite_index:
 		return true
 	return false
 
 func value_sort(a:Card,b:Card)->bool:
-	if a.value < b.value:
+	if a.card_data.value < b.card_data.value:
 		return true
 	return false
 
-func sort_deck_suits(suits: Array[Card.CardSuites]) -> Array[Card.CardSuites]:
-	var red_suits: Array[Card.CardSuites] = []
-	var black_suits: Array[Card.CardSuites] = []
+func sort_deck_suits(suits: Array[CardData.CardSuites]) -> Array[CardData.CardSuites]:
+	var red_suits: Array[CardData.CardSuites] = []
+	var black_suits: Array[CardData.CardSuites] = []
 	
 	# Separate red and black suits
-	for suit:Card.CardSuites in suits:
-		if suit == Card.CardSuites.Diamond or suit == Card.CardSuites.Heart:
+	for suit:CardData.CardSuites in suits:
+		if suit == CardData.CardSuites.Diamond or suit == CardData.CardSuites.Heart:
 			red_suits.append(suit)
 		else:
 			black_suits.append(suit)
 
 	# Create a new array to hold the sorted suits
-	var sorted_array: Array[Card.CardSuites] = []
+	var sorted_array: Array[CardData.CardSuites] = []
 	
 	# Determine the maximum length for interleaving
 	var max_length:int = max(red_suits.size(), black_suits.size())
