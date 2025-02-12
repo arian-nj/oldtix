@@ -16,6 +16,7 @@ const (
 	TypePlayTurn    EventType = "play_turn"
 	TypeValidPlay   EventType = "valid_play"
 	TypeInvalidPlay EventType = "invalid_play"
+	TypePlayTimeout EventType = "play_timeout"
 	TypeTurnPlayed  EventType = "turn_played"
 )
 

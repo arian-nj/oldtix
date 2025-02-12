@@ -3,6 +3,8 @@ class_name Card extends Button
 signal card_played(card:Card)
 signal card_unplayed(card:Card)
 
+signal not_inplace()
+
 @export var cardTexture:TextureRect
 @export var cardArea:Area2D
 @export var prespective3DShader:Prescpective3DShader
@@ -11,42 +13,36 @@ signal card_unplayed(card:Card)
 var local_pos_on_press:Vector2 
 var start_choosed_pos:Vector2 
 
-@export var suit :CardSuites
-@export var value:int
+@export var card_data:CardData
+
 
 var default_scale:Vector2
 var in_hand:bool
-
-enum CardSuites { # sync it with internal/card/card.go
-	Heart = 0,
-	Club = 1,
-	Diamond = 2,
-	Spade = 3
-}
+var is_touching_area:bool
 
 
 func suite_name() -> String:
 	var sname:String = ""
 
-	match suit:
-		CardSuites.Club:
+	match card_data.suit:
+		CardData.CardSuites.Club:
 			sname ="7"
-		CardSuites.Diamond:
+		CardData.CardSuites.Diamond:
 			sname ="4"
-		CardSuites.Heart:
+		CardData.CardSuites.Heart:
 			sname ="2"
-		CardSuites.Spade:
+		CardData.CardSuites.Spade:
 			sname ="5"
 	
 	return sname
 
 func value_name() -> String:
-	match value:
+	match card_data.value:
 		11:return "J"
 		12:return "Q"
 		13:return "K"
 		14:return "A."
-		_:return str(value)+"."
+		_:return str(card_data.value)+"."
 
 func get_assets_path() -> String:
 	return "res://assets/cards/"+value_name()+suite_name()+".png"
@@ -70,10 +66,12 @@ func load_assets()->void:
 
 
 func _body_entered(_body:Node2D)->void:
+	is_touching_area = true
 	card_played.emit(self)
 
 func _body_exited(_body:Node2D)->void:
 	card_unplayed.emit(self)
+	is_touching_area = false
 
 func _process(delta:float)->void:
 	if button_pressed:
@@ -88,6 +86,8 @@ func set_card_position() -> void:
 	global_position = mouse_pos-(local_pos_on_press * scale)
 
 func _on_button_up() -> void:
+	if !is_touching_area:
+		not_inplace.emit()
 	prespective3DShader.set_shader(0,0)
 
 	change_scale(default_scale)

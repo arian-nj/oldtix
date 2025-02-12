@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	cards "github.com/arian-nj/master-card/back/internal/card"
 )
 
@@ -10,7 +12,7 @@ func isCardInCards(card *cards.Card, cards *[]cards.Card) (int, bool) {
 			return index, true
 		}
 	}
-	return 0, false
+	return -1, false
 }
 
 func hasSuit(wanted_suite cards.Suite, cards *[]cards.Card) bool {
@@ -24,20 +26,28 @@ func hasSuit(wanted_suite cards.Suite, cards *[]cards.Card) bool {
 
 // have card
 // same suite as first card if not first move
-func (game *GameState) isMoveValid(player *Player, card *cards.Card) bool {
+func (game *GameState) ValidateAndDoMove(player *Player, card *cards.Card) (int, bool) {
 	cardIndex, haveCard := isCardInCards(card, &player.Cards)
 	if !haveCard {
-		return false
+		fmt.Println("not in hand")
+		return 0, false
 	}
 	currentTurn := game.CurrentTrick.CurrentTurn
 	if len(currentTurn.CardsPlayed) > 0 { // if not first move
-		if hasSuit(currentTurn.CardsPlayed[0].Suit, &player.Cards) {
-			if card.Suit != currentTurn.CardsPlayed[0].Suit {
-				return false
+		if hasSuit(currentTurn.CardsPlayed[0].Card.Suit, &player.Cards) {
+			if card.Suit != currentTurn.CardsPlayed[0].Card.Suit {
+				fmt.Println("no allowed")
+				return 0, false
 			}
 		}
 	}
-	currentTurn.CardsPlayed = append(currentTurn.CardsPlayed, player.Cards[cardIndex])
-	player.Cards = append(player.Cards[:cardIndex], player.Cards[cardIndex+1:]...)
-	return true
+
+	return cardIndex, true
 }
+
+// func (game *GameState) WhoWins() {
+// 	effective_playing_cards := []PlayerCardPlayed{}
+// 	for _, pc := range game.CurrentTrick.CurrentTurn.CardsPlayed {
+
+// 	}
+// }

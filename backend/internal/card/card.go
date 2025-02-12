@@ -40,6 +40,10 @@ type Card struct {
 	Value CardValue `json:"value"`
 }
 
+func (c *Card) String() string {
+	return fmt.Sprintf("%d %d", c.Suit, c.Value)
+}
+
 // var allCards = []Card{}
 
 func NewAllCards() []Card {

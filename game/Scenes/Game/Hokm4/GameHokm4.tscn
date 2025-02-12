@@ -30,6 +30,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_i0n3b")
@@ -37,7 +39,7 @@ script = ExtResource("1_i0n3b")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Table" type="Control" parent="."]
+[node name="Table" type="Control" parent="." node_paths=PackedStringArray("drawer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,6 +48,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
+drawer = NodePath("DrawCards")
 
 [node name="TextureRect" type="TextureRect" parent="Table"]
 layout_mode = 1
@@ -95,7 +98,7 @@ collision_layer = 2
 position = Vector2(8, -37)
 shape = SubResource("RectangleShape2D_q6toe")
 
-[node name="DrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand")]
+[node name="DrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
 anchors_preset = 0
 offset_left = -7.0
 offset_top = -13.0
@@ -109,6 +112,12 @@ card_movment_dur = 0.25
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
+IsDrawnLabel = NodePath("../IsDrawnLabel")
+
+[node name="IsDrawnLabel" type="Label" parent="Table"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 1
@@ -162,25 +171,23 @@ script = ExtResource("7_uxde4")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 
-[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table", "card_drawer")]
+[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("8_ix53e")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
-game_table = NodePath("../../Table")
-card_drawer = NodePath("../../Table/DrawCards")
+table = NodePath("../../Table")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "game_table", "card_drawer")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
-game_table = NodePath("../../Table")
+table = NodePath("../../Table")
 choose_hokm_scene = ExtResource("11_amrdn")
-card_drawer = NodePath("../../Table/DrawCards")
 
-[node name="game_turn_start" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "game_table", "status_label")]
+[node name="game_turn_start" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
 script = ExtResource("12_d5oqf")
 ws = NodePath("../../WebSocket")
-game_table = NodePath("../../Table")
+table = NodePath("../../Table")
 status_label = NodePath("../../UI/StatusLabel")
 
 [connection signal="pressed" from="UI/HomeButton" to="." method="_on_home_button_pressed"]

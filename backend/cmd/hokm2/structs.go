@@ -39,17 +39,24 @@ type GameState struct {
 	GameEventsCh chan *GameEvent `json:"-"`
 	CurrentTrick *Trick          `json:"current_trick"`
 	Tricks       []*Trick        `json:"-"`
+
+	TeamOneTricksScore int `json:"team_one_trick_score"`
+	TeamTwoTricksScore int `json:"team_two_trick_score"`
 }
 
 type Trick struct {
-	Hokm        cards.Suite `json:"hokm"`
-	HakemIndex  int         `json:"hakem_index"`
-	CurrentTurn *Turn       `json:"current_turn"`
-	Turns       []*Turn     `json:"-"`
+	Hokm       cards.Suite `json:"hokm"`
+	HakemIndex int         `json:"hakem_index"`
+
+	CurrentTurn *Turn   `json:"current_turn"`
+	Turns       []*Turn `json:"-"`
+
+	TeamOneTurnScore int `json:"team_one_turn_score"`
+	TeamTwoTurnScore int `json:"team_two_turn_score"`
 }
 
 type Turn struct {
-	CardsPlayed []cards.Card `json:"cards"`
+	CardsPlayed []*PlayerCardPlayed `json:"cards"`
 }
 
 func NewTrick() *Trick {
@@ -58,7 +65,7 @@ func NewTrick() *Trick {
 
 func NewTurn() *Turn {
 	return &Turn{
-		CardsPlayed: []cards.Card{},
+		CardsPlayed: []*PlayerCardPlayed{},
 	}
 }
 
@@ -66,6 +73,11 @@ type Lobby struct {
 	Queue chan *Player
 	Games map[string]*GameState
 	Mu    sync.Mutex
+}
+
+type PlayerCardPlayed struct {
+	Player *Player     `json:"player_id"`
+	Card   *cards.Card `json:"card"`
 }
 
 // type CurrentPlayer int

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -27,6 +29,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 	app.BackgroundTask(
 		func() error {
 			defer cancel()
+			defer fmt.Println("read disconnect ", user.ID)
 			return client.ReadMessage(app.Logger, ctx)
 		})
 
@@ -37,14 +40,14 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 			if err != nil {
 				app.Logger.Error(err.Error())
 			} else {
-				app.Logger.Error("closed")
+				app.Logger.Error("write closed " + strconv.Itoa(int(user.ID)))
 			}
 		}()
 		return client.WriteMessage(app.Logger, ctx)
 	})
 
 	app.BackgroundTask(func() error {
-		defer app.Logger.Info("Make Match Waiter Ended")
+		// defer app.Logger.Info("Make Match Waiter Ended")
 
 		for {
 			select {

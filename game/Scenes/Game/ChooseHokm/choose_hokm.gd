@@ -1,19 +1,19 @@
 class_name ChooseHokmPanel extends PanelContainer
 
-signal HokmChoosed(Hokm:Card.CardSuites)
+signal HokmChoosed(Hokm:CardData.CardSuites)
 
 
 func _on_heart_button_pressed() -> void:
-	HokmChoosed.emit(Card.CardSuites.Heart)
+	HokmChoosed.emit(CardData.CardSuites.Heart)
 
 
 func _on_spades_button_pressed() -> void:
-	HokmChoosed.emit(Card.CardSuites.Spade)
+	HokmChoosed.emit(CardData.CardSuites.Spade)
 
 
 func _on_club_button_pressed() -> void:
-	HokmChoosed.emit(Card.CardSuites.Club)
+	HokmChoosed.emit(CardData.CardSuites.Club)
 
 
 func _on_dimond_button_pressed() -> void:
-	HokmChoosed.emit(Card.CardSuites.Diamond)
+	HokmChoosed.emit(CardData.CardSuites.Diamond)
