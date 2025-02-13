@@ -11,6 +11,17 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
+func (game *GameState) GameInitialize() error {
+	for _, p := range game.Players {
+		game.BackgroundTask(func() error {
+			game.socketHandlers(p)
+			return nil
+		})
+	}
+
+	return nil
+}
+
 func (game *GameState) RunGame() error {
 	defer func() {
 		for _, p := range game.Players {
@@ -24,7 +35,7 @@ func (game *GameState) RunGame() error {
 		return err
 	}
 
-	for range 1 {
+	for range 3 {
 		new_trick := NewTrick()
 		game.CurrentTrick = new_trick
 		game.Tricks = append(game.Tricks, game.CurrentTrick)
@@ -49,25 +60,22 @@ func (game *GameState) RunGame() error {
 		all_cards = game.sendCards(4, all_cards, game.Players)
 		game.sendCards(4, all_cards, game.Players)
 
-		for range 10 {
+		for range 13 {
 			err = game.RunTurn(game)
 			if err != nil {
 				return err
 			}
+			if game.CurrentTrick.TeamOneTurnScore >= 7 || game.CurrentTrick.TeamTwoTurnScore >= 7 {
+				if game.CurrentTrick.TeamOneTurnScore >= 7 {
+					game.TeamOneTricksScore += 1
+				} else {
+					game.TeamTwoTricksScore += 1
+				}
+				break
+			}
 		}
 
 	}
-	return nil
-}
-
-func (game *GameState) GameInitialize() error {
-	for _, p := range game.Players {
-		game.BackgroundTask(func() error {
-			game.socketHandlers(p)
-			return nil
-		})
-	}
-
 	return nil
 }
 
@@ -118,11 +126,10 @@ func (app *ApplicationH2) RunTurn(game *GameState) error {
 
 	// game starts
 	for _, p := range game.Players {
-		game_data, err := json.Marshal(game)
+		err := game.SendGameData(p)
 		if err != nil {
-			return err
+			app.Logger.Debug(err.Error())
 		}
-		p.Client.Egres <- *socket.NewEvent(socket.TypeTurnStart, socket.EventMessage(game_data))
 	}
 
 	to_play_order := []*Player{}
@@ -138,25 +145,30 @@ func (app *ApplicationH2) RunTurn(game *GameState) error {
 	to_play_order = append(to_play_order, after_ward...)
 
 	for _, p := range to_play_order {
-		err := app.PlayerDoMove(game, p)
+		err := app.PlayerPlayCard(game, p)
 		if err != nil {
 			return err
 		}
 	}
-	// Winner := game.WhoWins()
-	// if Winner.Player.TeamId == TeamOne {
-	// 	game.CurrentTrick.TeamOneTurnScore += 1
-	// } else {
-	// 	game.CurrentTrick.TeamTwoTurnScore += 1
-	// }
 
-	for _, p := range to_play_order {
-		game.SendGameData(p)
+	// Decide who wins Turn
+	Winner := game.WhoWins()
+	if Winner.Player.TeamId == TeamOne {
+		game.CurrentTrick.TeamOneTurnScore += 1
+	} else {
+		game.CurrentTrick.TeamTwoTurnScore += 1
+	}
+
+	for _, p := range game.Players {
+		err := game.SendGameData(p)
+		if err != nil {
+			app.Logger.Debug(err.Error())
+		}
 	}
 
 	return nil
 }
-func (app *ApplicationH2) PlayerDoMove(game *GameState, player *Player) error {
+func (app *ApplicationH2) PlayerPlayCard(game *GameState, player *Player) error {
 	player.Client.Egres <- *socket.NewEvent(socket.TypeYourTurn, socket.EventMessage(""))
 	NewTicker := time.NewTicker(time.Second * 60)
 	var card_played cards.Card
@@ -237,40 +249,4 @@ func (game *GameState) socketHandlers(p *Player) {
 			game.GameEventsCh <- NewGameEvent(&new_event, p)
 		}
 	}
-}
-
-func (game *GameState) SendGameData(p *Player) error {
-	// send game data
-	game_data, err := json.Marshal(game)
-	if err != nil {
-		return err
-	}
-	p.Client.Egres <- *socket.NewEvent(socket.TypeGameData, socket.EventMessage(game_data))
-	return nil
-}
-
-func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*Player) []cards.Card {
-	var remaining_cards []cards.Card = all_cards
-
-	for _, p := range players {
-		var randomCards []cards.Card
-		var err error
-		randomCards, remaining_cards, err = cards.GiveRandomCards(number, remaining_cards)
-		if err != nil {
-			game.Logger.Error(err.Error())
-		}
-
-		var output struct {
-			NewCards []cards.Card `json:"cards"`
-		}
-		output.NewCards = randomCards
-		data_byte, err := json.Marshal(output)
-		if err != nil {
-			game.Logger.Error(err.Error())
-		}
-		p.Client.Egres <- *socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte))
-		p.Cards = append(p.Cards, randomCards...)
-	}
-	return remaining_cards
-
 }
