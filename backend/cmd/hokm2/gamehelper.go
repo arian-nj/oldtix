@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	cards "github.com/arian-nj/master-card/back/internal/card"
 )
 
@@ -27,16 +25,18 @@ func hasSuit(wanted_suite cards.Suite, cards *[]cards.Card) bool {
 // have card
 // same suite as first card if not first move
 func (game *GameState) ValidateAndDoMove(player *Player, card *cards.Card) (int, bool) {
+	// game.Logger.Debug("new card " + card.String())
 	cardIndex, haveCard := isCardInCards(card, &player.Cards)
 	if !haveCard {
-		fmt.Println("not in hand")
+		game.Logger.Debug("not in hand")
 		return 0, false
 	}
 	currentTurn := game.CurrentTrick.CurrentTurn
 	if len(currentTurn.CardsPlayed) > 0 { // if not first move
+		// game.Logger.Debug("first card " + currentTurn.CardsPlayed[0].Card.String())
 		if hasSuit(currentTurn.CardsPlayed[0].Card.Suit, &player.Cards) {
 			if card.Suit != currentTurn.CardsPlayed[0].Card.Suit {
-				fmt.Println("no allowed")
+				game.Logger.Debug("no allowed")
 				return 0, false
 			}
 		}
@@ -45,9 +45,29 @@ func (game *GameState) ValidateAndDoMove(player *Player, card *cards.Card) (int,
 	return cardIndex, true
 }
 
-// func (game *GameState) WhoWins() {
-// 	effective_playing_cards := []PlayerCardPlayed{}
-// 	for _, pc := range game.CurrentTrick.CurrentTurn.CardsPlayed {
+// func (game *GameState) WhoWins() *PlayerCardPlayed {
 
+// 	HokmSuite := game.CurrentTrick.Hokm
+
+// 	Winner := game.CurrentTrick.CurrentTurn.CardsPlayed[0]
+
+// 	for _, pc := range game.CurrentTrick.CurrentTurn.CardsPlayed {
+// 		if Winner.Card.Suit == HokmSuite {
+// 			if pc.Card.Suit == HokmSuite && pc.Card.Value >= Winner.Card.Value {
+// 				Winner = pc
+// 			}
+// 		} else {
+// 			if pc.Card.Suit == HokmSuite {
+// 				Winner = pc
+// 			} else if pc.Card.Suit == Winner.Card.Suit && pc.Card.Value > Winner.Card.Value {
+// 				Winner = pc
+// 			}
+// 		}
 // 	}
+// 	return Winner
+
 // }
+
+// hokm
+// zamineh
+// number

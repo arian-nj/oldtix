@@ -15,8 +15,9 @@ func (app *ApplicationH2) MatchUsers() error {
 		p2.TeamId = TeamTwo
 
 		game := GameState{
-			ID:      utils.GenerateRandomString(16),
-			Players: []*Player{p1, p2},
+			ApplicationH2: app,
+			ID:            utils.GenerateRandomString(16),
+			Players:       []*Player{p1, p2},
 			// Current:      0,
 			GameEventsCh: make(chan *GameEvent),
 		}
@@ -25,7 +26,7 @@ func (app *ApplicationH2) MatchUsers() error {
 		app.lobby.Mu.Unlock()
 
 		app.BackgroundTask(func() error {
-			err := app.RunGame(&game)
+			err := game.RunGame()
 			app.Logger.Error("Game Loop Ended")
 			if err != nil {
 				app.ReportError(err)

@@ -34,11 +34,12 @@ func NewGameEvent(event *socket.Event, player *Player) *GameEvent {
 }
 
 type GameState struct {
-	ID           string          `json:"id"`
-	Players      []*Player       `json:"players"`
-	GameEventsCh chan *GameEvent `json:"-"`
-	CurrentTrick *Trick          `json:"current_trick"`
-	Tricks       []*Trick        `json:"-"`
+	*ApplicationH2 `json:"-"`
+	ID             string          `json:"id"`
+	Players        []*Player       `json:"players"`
+	GameEventsCh   chan *GameEvent `json:"-"`
+	CurrentTrick   *Trick          `json:"current_trick"`
+	Tricks         []*Trick        `json:"-"`
 
 	TeamOneTricksScore int `json:"team_one_trick_score"`
 	TeamTwoTricksScore int `json:"team_two_trick_score"`
@@ -56,7 +57,7 @@ type Trick struct {
 }
 
 type Turn struct {
-	CardsPlayed []*PlayerCardPlayed `json:"cards"`
+	CardsPlayed []*PlayerCardPlayed `json:"played_cards"`
 }
 
 func NewTrick() *Trick {
@@ -76,8 +77,8 @@ type Lobby struct {
 }
 
 type PlayerCardPlayed struct {
-	Player *Player     `json:"player_id"`
-	Card   *cards.Card `json:"card"`
+	Player *Player    `json:"player_id"`
+	Card   cards.Card `json:"card"`
 }
 
 // type CurrentPlayer int
