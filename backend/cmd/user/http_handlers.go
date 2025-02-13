@@ -183,7 +183,6 @@ func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 	_, err = app.Queries.InsertUser(context.Background(),
 		sqldb.InsertUserParams{Username: input.Username, HashedPassword: hashedPassword},
 	)
-	// fmt.Println(user)
 	if err != nil {
 		app.ServerError(w, r, err)
 		return
