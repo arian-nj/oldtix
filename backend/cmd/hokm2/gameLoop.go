@@ -60,6 +60,7 @@ func (game *GameState) RunGame() error {
 		all_cards = game.sendCards(4, all_cards, game.Players)
 		game.sendCards(4, all_cards, game.Players)
 
+		game.CurrentTrick.StarterPlayerIndex = game.CurrentTrick.HakemIndex
 		for range 13 {
 			err = game.RunTurn(game)
 			if err != nil {
@@ -133,10 +134,10 @@ func (app *ApplicationH2) RunTurn(game *GameState) error {
 	}
 
 	to_play_order := []*Player{}
-	starter_player_index := game.CurrentTrick.HakemIndex
+
 	after_ward := []*Player{}
 	for ind, p := range game.Players {
-		if ind != starter_player_index {
+		if ind != game.CurrentTrick.StarterPlayerIndex {
 			after_ward = append(after_ward, p)
 		} else {
 			to_play_order = append(to_play_order, p)
@@ -163,6 +164,11 @@ func (app *ApplicationH2) RunTurn(game *GameState) error {
 		err := game.SendGameData(p)
 		if err != nil {
 			app.Logger.Debug(err.Error())
+		}
+	}
+	for winnerIndex, winnerPlayer := range game.Players {
+		if winnerPlayer.UserId == Winner.Player.UserId {
+			game.CurrentTrick.StarterPlayerIndex = winnerIndex
 		}
 	}
 
