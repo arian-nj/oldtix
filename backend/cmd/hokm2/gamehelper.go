@@ -68,7 +68,6 @@ func (game *GameState) WhoWins() *PlayerCardPlayed {
 	}
 
 	return Winner
-
 }
 
 // hokm

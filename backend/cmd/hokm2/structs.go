@@ -46,8 +46,9 @@ type GameState struct {
 }
 
 type Trick struct {
-	Hokm       cards.Suite `json:"hokm"`
-	HakemIndex int         `json:"hakem_index"`
+	Hokm               cards.Suite `json:"hokm"`
+	HakemIndex         int         `json:"hakem_index"`
+	StarterPlayerIndex int         `json:"-"`
 
 	CurrentTurn *Turn   `json:"current_turn"`
 	Turns       []*Turn `json:"-"`
