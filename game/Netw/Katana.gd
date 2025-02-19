@@ -1,7 +1,7 @@
 extends Node
 
 
-const IPAddr:String = "192.168.211.205"
+const IPAddr:String = "192.168.1.230"
 const PortAddr:String = "4444"
 const BaseUrl:String = IPAddr
 const HttpBaseUrl:String = "http://"+BaseUrl +":4444"

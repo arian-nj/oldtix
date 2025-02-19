@@ -1,0 +1,56 @@
+version: '3'
+
+env:
+  ENV: testing
+
+tasks:
+  run_profile:
+    desc: run profile service
+    deps: [docker,gsqlc]
+    dir: ./backend
+    watch: true
+    sources:
+     - '**/*.go'
+     - exclude: sqldb/*.go
+    cmds:
+      - go run ./cmd/user/.
+      
+  
+  run_hokm_4:
+    desc: run hokm 4 player service
+    deps: [docker,gsqlc]
+    dir: ./backend
+    watch: true
+    sources:
+     - '**/*.go'
+     - exclude: sqldb/*.go
+    cmds:
+      - go run ./cmd/hokm4/.
+  
+  kill:
+    desc: kills process using 5432 port
+    cmds:
+      - sudo kill $(sudo lsof -t -i:5432)
+
+  docker:
+    desc: docker up
+    dir: ./backend
+    cmds:
+      - sudo docker compose up -d
+  
+  gsqlc:
+    desc: generate sqlc files
+    dir: ./backend
+    cmds:
+      - sqlc generate
+  
+  release:
+      prompt:
+       - This is a dangerous command Do You Know what are you doing ???
+       - Are you sure?
+      cmds:
+      - echo 'dangerous command'
+
+dotenv: ['backend/.env']
+
+  
