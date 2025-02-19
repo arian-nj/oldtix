@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Master Card"
-run/main_scene="res://Scenes/SceneManager/SceneManager.tscn"
+run/main_scene="uid://c6gfbvcn354fp"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 

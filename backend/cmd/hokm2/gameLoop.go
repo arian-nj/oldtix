@@ -35,7 +35,10 @@ func (game *GameState) RunGame() error {
 		return err
 	}
 
-	for range 3 {
+	for range 5 {
+		if game.TeamOneTricksScore >= 3 || game.TeamTwoTricksScore >= 3 {
+			break
+		}
 		new_trick := NewTrick()
 		game.CurrentTrick = new_trick
 		game.Tricks = append(game.Tricks, game.CurrentTrick)
@@ -66,17 +69,17 @@ func (game *GameState) RunGame() error {
 			if err != nil {
 				return err
 			}
-			if game.CurrentTrick.TeamOneTurnScore >= 7 || game.CurrentTrick.TeamTwoTurnScore >= 7 {
-				if game.CurrentTrick.TeamOneTurnScore >= 7 {
+			if game.CurrentTrick.TeamOneTurnScore >= 2 || game.CurrentTrick.TeamTwoTurnScore >= 2 {
+				if game.CurrentTrick.TeamOneTurnScore >= 2 {
 					game.TeamOneTricksScore += 1
 				} else {
 					game.TeamTwoTricksScore += 1
 				}
-				break
 			}
 		}
 
 	}
+	// notify winners and end the game
 	return nil
 }
 

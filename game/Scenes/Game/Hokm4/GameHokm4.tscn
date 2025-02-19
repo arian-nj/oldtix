@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=18 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://c2hac1kxc4hd1" path="res://Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
 [ext_resource type="Texture2D" uid="uid://dk5ucuiithtbc" path="res://assets/icons/home.png" id="4_youex"]
 [ext_resource type="Script" uid="uid://ea2nqkryih34" path="res://Netw/KatanaSocket.gd" id="5_48k1w"]
+[ext_resource type="Script" uid="uid://saluitmh1llq" path="res://Scenes/Game/Hokm4/TurnScores.gd" id="5_bwnrb"]
+[ext_resource type="Script" uid="uid://ggywgqynjdcr" path="res://Scenes/Game/Hokm4/TrickScore.gd" id="6_do6i4"]
 [ext_resource type="Script" uid="uid://coue7g2pwtieo" path="res://Scenes/States/state_machine.gd" id="6_rcy6w"]
 [ext_resource type="Script" uid="uid://c3iw070iycfax" path="res://Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
@@ -30,8 +32,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_bottom = 1.0
+offset_top = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_i0n3b")
@@ -118,6 +120,94 @@ IsDrawnLabel = NodePath("../IsDrawnLabel")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="TurnScores" type="Control" parent="Table" node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "table")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_default_cursor_shape = 3
+script = ExtResource("5_bwnrb")
+MyTeamLabel = NodePath("MyTeamLabel")
+OtherTeamLabel = NodePath("OtherTeamLabel")
+table = NodePath("..")
+
+[node name="MyTeamLabel" type="Label" parent="Table/TurnScores"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -211.0
+offset_right = 20.0
+offset_bottom = -188.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OtherTeamLabel" type="Label" parent="Table/TurnScores"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -11.5
+offset_right = 104.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TrickScore" type="Control" parent="Table" node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "table")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -83.0
+offset_right = 83.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("6_do6i4")
+MyTeamLabel = NodePath("MyTeamLabel")
+OtherTeamLabel = NodePath("OtherTeamLabel")
+table = NodePath("..")
+
+[node name="MyTeamLabel" type="Label" parent="Table/TrickScore"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OtherTeamLabel" type="Label" parent="Table/TrickScore"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 1

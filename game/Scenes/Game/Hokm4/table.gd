@@ -1,5 +1,7 @@
 class_name Game4Table extends Control
 
+signal GameDataUpdated(game_data:GameData)
+
 var isMyTurn:bool = false
 
 func set_turn(b:bool)->void:
@@ -24,5 +26,6 @@ func parse_game_data(json_string:String)->void:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
 		return
 	
-	# print(json.data)
+	print(json.data)
 	game_data = JsonClassConverter.json_to_class(GameData,json.data)
+	GameDataUpdated.emit(game_data)

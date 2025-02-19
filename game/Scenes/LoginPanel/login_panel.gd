@@ -68,7 +68,6 @@ func _on_login_button_pressed() -> void:
 
 
 func _on_token_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
-
 	if response_code == HTTPClient.RESPONSE_OK:
 		ErrorBoard.new_error("You're In",ErrorClass.SuccessLevel)
 		var tokenBodyJson :Variant = JSON.parse_string(body.get_string_from_utf8())
