@@ -46,11 +46,10 @@ func _on_new_event(e:KEvent.Event)->void:
 	
 	elif e.type == KEvent.TYPE_GAME_DATA:
 		status_label.text = "Turn Ended"
+		table.parse_game_data(e.data)
 		if last_card_played != null:
-			print("not null")
 			last_card_played.queue_free()
-		else:
-			print("null")
+			table.drawer.draw_cards()
 
 
 func _card_played(card:Card)->void:
