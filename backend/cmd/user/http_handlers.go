@@ -30,20 +30,20 @@ func (app *Application) status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-var userIsNotValidErr error = fmt.Errorf("user id is not valid")
+var errUserIsNotValidErr error = fmt.Errorf("user id is not valid")
 
 func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
 	user_param := chi.URLParam(r, "user_id")
 	userid_int, err := strconv.Atoi(user_param)
 	if err != nil {
-		app.BadRequest(w, r, userIsNotValidErr)
+		app.BadRequest(w, r, errUserIsNotValidErr)
 		return
 	}
 	userId := int32(userid_int)
 
 	user, err := app.Queries.GetUser(context.Background(), userId)
 	if err != nil {
-		app.BadRequest(w, r, userIsNotValidErr)
+		app.BadRequest(w, r, errUserIsNotValidErr)
 		return
 	}
 
