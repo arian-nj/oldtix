@@ -1,12 +1,12 @@
 # tix
 
-Hokm Game
+## Hokm Game
 
 GG Stack:
     Godot
     Golang
 
-Deps:
+## Deps:
 - Sqlc: Sql Compiler
 - Taskfile: Autmating some stuff
 - Chi: routing only
@@ -14,20 +14,24 @@ Deps:
 - joho/godotenv: reading  .env files
 - pascaldekloe/jwt
 
-Backend:
+## Backend:
 contains two service User & Hokm4
--User:
+### User:
 - profiles
 - authentication & authorization
--Hokm4:
+### Hokm4:
 - websocket and game logic
 
-Requierments:
+# Run on your machine
+
+### Requierments:
 - install sqlc
 - install task
 - install docker
 
-Running:
-- task caddy
-- task run_user
-- task run_hokm_4
+## Running:
+```bash
+task caddy
+task run_user
+task run_hokm_4
+```
