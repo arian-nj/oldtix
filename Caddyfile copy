@@ -1,0 +1,10 @@
+localhost {
+	encode zstd gzip
+	templates
+	file_server browse
+	
+	reverse_proxy /user/* 127.0.0.1:4444
+	reverse_proxy /hokm4/* 127.0.0.1:4445
+
+}
+

@@ -69,7 +69,6 @@ func (app *CommonGlobals) Authenticate(next http.Handler) http.Handler {
 		w.Header().Add("Vary", "Authorization")
 
 		authorizationHeader := r.Header.Get("Authorization")
-
 		if authorizationHeader != "" {
 			headerParts := strings.Split(authorizationHeader, " ")
 
@@ -82,6 +81,7 @@ func (app *CommonGlobals) Authenticate(next http.Handler) http.Handler {
 				r = new_request
 			}
 		}
+
 		next.ServeHTTP(w, r)
 	})
 }

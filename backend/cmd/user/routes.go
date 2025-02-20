@@ -19,15 +19,15 @@ func (app *Application) profileRoutes() *chi.Mux {
 
 		// All routes
 		r.Get("/status", app.status)
-		r.Post("/user/register", app.register)
-		r.Post("/user/token", app.createAuthenticationToken)
+		r.Post("/register", app.register)
+		r.Post("/token", app.createAuthenticationToken)
 
 		// Authenticated REST routes
 		r.Group(func(r2 chi.Router) {
 			r2.Use(app.RequireAuthenticatedUser)
-			r2.Put("/user/update", app.updateUserData)
-			r2.Get("/user/me", app.getMeData)
-			r2.Get("/user/{user_id}", app.getUserData)
+			r2.Put("/update", app.updateUserData)
+			r2.Get("/me", app.getMeData)
+			r2.Get("/get/{user_id}", app.getUserData)
 		})
 	})
 

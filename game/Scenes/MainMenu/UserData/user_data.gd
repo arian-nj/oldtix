@@ -4,4 +4,3 @@ extends Control
 
 func _ready() -> void:
 	UsernameLabel.text = KAccount.MyAccount.username
-	
