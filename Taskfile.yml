@@ -51,6 +51,12 @@ tasks:
     cmds:
       - sqlc generate
   
+  export_pck:
+    desc: export game content as pck
+    dir: ./game
+    cmds:
+    - ~/Godot_v4.4-beta4_linux.x86_64 --headless --export-pack AndroidPck ../system.pck
+  
   release:
       prompt:
        - This is a dangerous command Do You Know what are you doing ???

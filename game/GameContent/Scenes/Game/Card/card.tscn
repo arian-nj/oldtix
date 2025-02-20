@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://bd5brlxcojtaw"]
+
+[ext_resource type="Script" uid="uid://do4kwe8wpei4i" path="res://GameContent/Scenes/Game/Card/card.gd" id="1_tdtid"]
+[ext_resource type="Texture2D" uid="uid://gkgo5ogqcuii" path="res://GameContent/assets/cards/Back1.png" id="2_0cob8"]
+[ext_resource type="Script" uid="uid://dcfkky1f6i0pk" path="res://GameContent/Componets/ShadowTextureComponent.gd" id="3_5ropr"]
+[ext_resource type="Shader" uid="uid://bub16xh8gpro7" path="res://GameContent/Scenes/Game/Card/2d_prespective.gdshader" id="3_bvmjh"]
+[ext_resource type="Script" uid="uid://bt78as30bdywo" path="res://GameContent/Scenes/Game/Card/shader_script.gd" id="5_8njo5"]
+[ext_resource type="Script" uid="uid://bj58o5831fivg" path="res://GameContent/Componets/SwingComponent.gd" id="5_t00ys"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r5psd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkoc7"]
+resource_local_to_scene = true
+shader = ExtResource("3_bvmjh")
+shader_parameter/fov = 35.0
+shader_parameter/cull_back = true
+shader_parameter/y_rot = 0.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sqh4b"]
+size = Vector2(54, 84)
+
+[node name="Card" type="Button" node_paths=PackedStringArray("cardTexture", "cardArea", "prespective3DShader", "swingComponent")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -199.0
+offset_top = 25.0
+offset_right = -131.0
+offset_bottom = 125.0
+grow_horizontal = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(34, 50)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_default_cursor_shape = 6
+theme_override_styles/focus = SubResource("StyleBoxEmpty_r5psd")
+flat = true
+script = ExtResource("1_tdtid")
+cardTexture = NodePath("TextureRect")
+cardArea = NodePath("Area2D")
+prespective3DShader = NodePath("TextureRect")
+swingComponent = NodePath("SwingComponent")
+metadata/_edit_group_ = true
+
+[node name="ShadowRect" type="TextureRect" parent="." node_paths=PackedStringArray("MainObject")]
+modulate = Color(0, 0, 0, 1)
+self_modulate = Color(1, 1, 1, 0.184314)
+layout_mode = 0
+offset_top = 12.0
+offset_right = 68.0
+offset_bottom = 112.0
+mouse_filter = 2
+texture = ExtResource("2_0cob8")
+script = ExtResource("3_5ropr")
+MainObject = NodePath("..")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_vkoc7")
+layout_mode = 0
+offset_top = 0.666666
+offset_right = 68.0
+offset_bottom = 100.667
+mouse_filter = 2
+texture = ExtResource("2_0cob8")
+script = ExtResource("5_8njo5")
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(34, 50)
+shape = SubResource("RectangleShape2D_sqh4b")
+
+[node name="SwingComponent" type="Node" parent="." node_paths=PackedStringArray("CardButton")]
+script = ExtResource("5_t00ys")
+CardButton = NodePath("..")
+spring = null
+damp = null
