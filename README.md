@@ -15,19 +15,19 @@ Deps:
 - pascaldekloe/jwt
 
 Backend:
-    contains two service User & Hokm4
-    User:
-        - profiles
-        - authentication & authorization
-    Hokm4:
-        - websocket and game logic
+contains two service User & Hokm4
+-User:
+- profiles
+- authentication & authorization
+-Hokm4:
+- websocket and game logic
 
 Requierments:
-install sqlc
-install task
-install docker
+- install sqlc
+- install task
+- install docker
 
 Running:
-task caddy
-task run_user
-task run_hokm_4
+- task caddy
+- task run_user
+- task run_hokm_4
