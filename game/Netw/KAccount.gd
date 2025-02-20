@@ -9,10 +9,13 @@ signal LoggedIn
 signal GotMe
 
 ## Consts
-const RegisterUrl:String = Katana.HttpBaseUrl + "/user/register"
-const TokenUrl:String = Katana.HttpBaseUrl + "/user/token"
+const RegisterUrl:String = Katana.UserBaseUrl + "/register"
+const TokenUrl:String = Katana.UserBaseUrl + "/token"
 
-const UserUrl:String = Katana.HttpBaseUrl + "/user/"
+const UserUrl:String = Katana.UserBaseUrl + "/get/"
+const MeUrl:String = Katana.UserBaseUrl + "/me"
+const StatusUrl:String = Katana.UserBaseUrl + "/status"
+
 
 
 class Account:
@@ -63,8 +66,12 @@ func GetUser(user_id:String)->Account:
 func _get_user(user_id:String)->Account:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	Katana.add_child(http_req_node)
-
-	var err :int = http_req_node.request(UserUrl+user_id,AddAuthHeader(),HTTPClient.METHOD_GET)
+	var req_url:= UserUrl+user_id
+	if user_id == "me":
+		req_url = MeUrl
+	
+	var err :int =http_req_node.request(req_url,AddAuthHeader(),HTTPClient.METHOD_GET)
+	
 	if err != OK:
 		print_debug("here1")
 		return null

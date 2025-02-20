@@ -1,11 +1,8 @@
 version: '3'
 
-env:
-  ENV: testing
-
 tasks:
-  run_profile:
-    desc: run profile service
+  run_user:
+    desc: run user service
     deps: [docker,gsqlc]
     dir: ./backend
     watch: true
@@ -27,10 +24,20 @@ tasks:
     cmds:
       - go run ./cmd/hokm4/.
   
+  clean_task:
+    desc: clear task cache
+    cmds:
+      - rm -r .task
+
   kill:
     desc: kills process using 5432 port
     cmds:
       - sudo kill $(sudo lsof -t -i:5432)
+  
+  caddy:
+    desc: run caddy 
+    cmds:
+      - caddy run
 
   docker:
     desc: docker up

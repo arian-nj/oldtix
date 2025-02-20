@@ -40,7 +40,7 @@ func _on_register_request_completed(_result: int, response_code: int, _headers: 
 				ErrorBoard.new_error(body_content["FieldErrors"][k],ErrorClass.InfoLevel)
 
 	else:
-		ErrorBoard.new_error("failed",ErrorClass.ErrorLevel)
+		ErrorBoard.new_error("failed register",ErrorClass.ErrorLevel)
 		print_debug(str(_result)+" " + str(response_code)," ",body.get_string_from_utf8())
 
 
@@ -82,7 +82,7 @@ func _on_token_request_completed(_result: int, response_code: int, _headers: Pac
 				ErrorBoard.new_error(body_content["FieldErrors"][k],ErrorClass.InfoLevel)
 
 	else:
-		ErrorBoard.new_error("failed",ErrorClass.ErrorLevel)
+		ErrorBoard.new_error("failed login",ErrorClass.ErrorLevel)
 		print_debug(str(_result)+" " + str(response_code)," ",body.get_string_from_utf8())
 	
 

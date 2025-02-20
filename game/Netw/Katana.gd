@@ -1,16 +1,7 @@
 extends Node
 
 
-const IPAddr:String = "192.168.1.230"
-const PortAddr:String = "4444"
-const BaseUrl:String = IPAddr
-const HttpBaseUrl:String = "http://"+BaseUrl +":4444"
-const WsBaseUrl:String = "ws://"+BaseUrl +":4445"
+const BaseUrl:String = "localhost"
+const UserBaseUrl:String = "https://user."+BaseUrl
 
-const StatusUrl:String = HttpBaseUrl + "/status"
-
-
-
-
-
-
+const WsBaseUrl:String = "wss://hokm4."+BaseUrl
