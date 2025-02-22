@@ -28,7 +28,7 @@ func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_NEW_CARD:
 		table.drawer.new_cards_event(e)
 		got_cards_time += 1
-		if got_cards_time == 2:
+		if got_cards_time == 3:
 			Transition.emit(self,"game_turn")
 
 	elif e.type == KEvent.TYPE_GAME_DATA:
