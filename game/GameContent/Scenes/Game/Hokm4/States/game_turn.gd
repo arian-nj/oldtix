@@ -54,6 +54,7 @@ func _on_new_event(e:KEvent.Event)->void:
 	elif e.type == KEvent.TYPE_END_TRICK:
 		status_label.text = "Trick Ended"
 		table.parse_game_data(e.data)
+		table.drawer.clear_cards()
 		Transition.emit(self,"new_trick")
 
 

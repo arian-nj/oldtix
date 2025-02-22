@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
 [ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokm.gd" id="9_uajja"]
 [ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/ChooseHokm/choose_hokm.tscn" id="11_amrdn"]
-[ext_resource type="Script" uid="uid://drvg5850tgcv7" path="res://GameContent/Scenes/Game/Hokm4/States/new_trick.gd" id="12_cf8qb"]
+[ext_resource type="Script" path="res://GameContent/Scenes/Game/Hokm4/States/NewTrickState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 
 [sub_resource type="Gradient" id="Gradient_5kdxn"]

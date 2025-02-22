@@ -32,6 +32,11 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	get_window().size_changed.connect(draw_cards)
 
+func clear_cards()->void:
+	for c:Card in cards:
+		c.queue_free()
+	cards = []
+
 func new_cards_event(e:KEvent.Event)->void:
 	var json_data:Variant = JSON.parse_string(e.data)
 	var cards_json:Variant = json_data["cards"]

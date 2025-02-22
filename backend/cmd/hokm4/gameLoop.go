@@ -42,22 +42,25 @@ func (game *GameState) RunGame() error {
 		}
 	}
 
-	game.CurrentTrick = NewTrick()
-	game.Tricks = append(game.Tricks, game.CurrentTrick)
-
-	game.CurrentTrick.HakemIndex = rand.Intn(len(game.Players))
-
-	err = game.RunTrick()
-	if err != nil {
-		return err
-	}
-
-	for range 4 {
+	for i := range 5 { // run tricks
 		if game.TeamOneTricksScore >= 3 || game.TeamTwoTricksScore >= 3 {
 			break
 		}
 		game.CurrentTrick = NewTrick()
 		game.Tricks = append(game.Tricks, game.CurrentTrick)
+
+		if i == 0 { // if first trick
+			game.CurrentTrick.HakemIndex = rand.Intn(len(game.Players))
+		}
+
+		game.CurrentTrick.StarterPlayerIndex = game.CurrentTrick.HakemIndex
+
+		for _, p := range game.Players {
+			err := game.SendGameData(socket.TypeNewTrick, p)
+			if err != nil {
+				return err
+			}
+		}
 
 		err = game.RunTrick()
 		if err != nil {
@@ -80,8 +83,6 @@ func (game *GameState) RunTrick() error {
 	all_cards = game.sendCards(4, all_cards, game.Players)
 	game.sendCards(4, all_cards, game.Players)
 
-	game.CurrentTrick.StarterPlayerIndex = game.CurrentTrick.HakemIndex
-
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
@@ -93,6 +94,7 @@ func (game *GameState) RunTrick() error {
 			} else {
 				game.TeamTwoTricksScore += 1
 			}
+			break
 		}
 	}
 
