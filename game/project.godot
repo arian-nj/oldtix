@@ -11,15 +11,9 @@ config_version=5
 [application]
 
 config/name="Master Card"
-run/main_scene="uid://c6gfbvcn354fp"
+run/main_scene="uid://b5crye8ert6gb"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://GameContent/icon.svg"
-
-[autoload]
-
-ErrorBoard="*res://GameContent/Scenes/ErrorBoard/error_board.tscn"
-Katana="*res://GameContent/Netw/Katana.gd"
-KAccount="*res://GameContent/Netw/KAccount.gd"
 
 [debug]
 

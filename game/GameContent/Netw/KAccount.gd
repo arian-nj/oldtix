@@ -1,12 +1,18 @@
-class_name KAccountClass extends Node
+class_name KAccount extends Node
+
+static var _instance:KAccount
+
+static func inst()->KAccount:
+	if _instance == null:
+		_instance = KAccount.new()
+	return _instance
 
 # Global value
-@onready var MyAccount:Account
-@onready var Auth_Token:String = ""
+var MyAccount:Account
+var Auth_Token:String = ""
 
 ## Signals
 signal LoggedIn
-signal GotMe
 
 ## Consts
 const RegisterUrl:String = Katana.UserBaseUrl + "/register"
@@ -38,8 +44,7 @@ class Account:
 
 func _ready() -> void:
 	await LoggedIn
-	await RefetchME()
-	GotMe.emit()
+	
 
 # token
 func set_token(token:String)->void:
@@ -51,13 +56,13 @@ func AddAuthHeader(headers:PackedStringArray = [])->PackedStringArray:
 	headers.append("Authorization: Bearer "+Auth_Token)
 	return headers
 
-func RefetchME()->Account:
+func RefetchME()->bool:
 	var me:Account = await _get_user("me")
 	if me == null:
 		print_debug("can't get user data")
-		return
+		return false
 	MyAccount = me
-	return MyAccount
+	return true
 
 func GetUser(user_id:String)->Account:
 	var user:Account = await _get_user(user_id)
@@ -65,12 +70,12 @@ func GetUser(user_id:String)->Account:
 
 func _get_user(user_id:String)->Account:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
-	Katana.add_child(http_req_node)
+	add_child(http_req_node)
 	var req_url:= UserUrl+user_id
 	if user_id == "me":
 		req_url = MeUrl
 	
-	var err :int =http_req_node.request(req_url,AddAuthHeader(),HTTPClient.METHOD_GET)
+	var err :int = http_req_node.request(req_url,AddAuthHeader(),HTTPClient.METHOD_GET)
 	
 	if err != OK:
 		print_debug("here1")

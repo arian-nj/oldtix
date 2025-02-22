@@ -1,9 +1,9 @@
-class_name SceneLevel extends Control
+class_name SceneLevel
+extends Control
 
 signal manager_change_scene(to_level:SceneManger.Levels)
 
-var level_parameters:Dictionary = {
-}
+var level_parameters:Dictionary = {}
 
 func load_level_parameters(new_level_parameters:Dictionary) -> void:
 	level_parameters = new_level_parameters

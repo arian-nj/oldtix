@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=19 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
 [ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokm.gd" id="9_uajja"]
 [ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/ChooseHokm/choose_hokm.tscn" id="11_amrdn"]
+[ext_resource type="Script" uid="uid://drvg5850tgcv7" path="res://GameContent/Scenes/Game/Hokm4/States/new_trick.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 
 [sub_resource type="Gradient" id="Gradient_5kdxn"]
@@ -267,6 +268,12 @@ ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UI/StatusLabel")
 table = NodePath("../../Table")
 
+[node name="new_trick" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
+script = ExtResource("12_cf8qb")
+ws = NodePath("../../WebSocket")
+status_label = NodePath("../../UI/StatusLabel")
+table = NodePath("../../Table")
+
 [node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
@@ -274,7 +281,7 @@ status_label = NodePath("../../UI/StatusLabel")
 table = NodePath("../../Table")
 choose_hokm_scene = ExtResource("11_amrdn")
 
-[node name="game_turn_start" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
+[node name="game_turn" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
 script = ExtResource("12_d5oqf")
 ws = NodePath("../../WebSocket")
 table = NodePath("../../Table")

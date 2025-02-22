@@ -11,13 +11,13 @@ import (
 )
 
 // UploadUsingS3 uploads a file to the specified S3-compatible storage.
-func (app *Application) UploadUsingS3(fileContent *bytes.Reader, fileName string) (string, error) {
+func (app *s3Client) UploadUsingS3(fileContent *bytes.Reader, filePath string) (string, error) {
 
 	// Specify the destination key in the bucket
-	destinationKey := "uploads/" + fileName
+	destinationKey := filePath
 
 	// Use the S3 client to upload the file
-	_, err := app.client.PutObject(context.TODO(), &s3.PutObjectInput{
+	_, err := app.Client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(app.BucketName),
 		Key:    aws.String(destinationKey),
 		Body:   fileContent,
@@ -33,9 +33,9 @@ func (app *Application) UploadUsingS3(fileContent *bytes.Reader, fileName string
 }
 
 // GetTemporaryLink generates a temporary signed URL for the given object in the bucket.
-func (app *Application) GetTemporaryLink(bucketName, objectKey string, expiration time.Duration) (string, error) {
+func (app *s3Client) GetTemporaryLink(bucketName, objectKey string, expiration time.Duration) (string, error) {
 	// Generate a pre-signed URL for the object
-	presignClient := s3.NewPresignClient(app.client)
+	presignClient := s3.NewPresignClient(app.Client)
 	presignedReq, err := presignClient.PresignGetObject(context.TODO(), &s3.GetObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(objectKey),
@@ -48,9 +48,9 @@ func (app *Application) GetTemporaryLink(bucketName, objectKey string, expiratio
 }
 
 // ListFiles lists all files in the specified bucket and prefix.
-func (app *Application) ListFiles(bucketName, prefix string) ([]string, error) {
+func (app *s3Client) ListFiles(bucketName, prefix string) ([]string, error) {
 	// List objects in the bucket
-	result, err := app.client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+	result, err := app.Client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucketName),
 		Prefix: aws.String(prefix),
 	})
@@ -67,9 +67,9 @@ func (app *Application) ListFiles(bucketName, prefix string) ([]string, error) {
 }
 
 // DeleteFile deletes a file from the specified bucket.
-func (app *Application) DeleteFile(bucketName, objectKey string) error {
+func (app *s3Client) DeleteFile(bucketName, objectKey string) error {
 	// Delete the object
-	_, err := app.client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+	_, err := app.Client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(objectKey),
 	})

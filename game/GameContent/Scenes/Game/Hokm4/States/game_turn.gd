@@ -44,12 +44,17 @@ func _on_new_event(e:KEvent.Event)->void:
 		status_label.text = "Timeout"
 		table.isMyTurn = false
 	
-	elif e.type == KEvent.TYPE_GAME_DATA:
+	elif e.type == KEvent.TYPE_END_TURN:
 		status_label.text = "Turn Ended"
 		table.parse_game_data(e.data)
 		if last_card_played != null:
 			last_card_played.queue_free()
 			table.drawer.draw_cards()
+
+	elif e.type == KEvent.TYPE_END_TRICK:
+		status_label.text = "Trick Ended"
+		table.parse_game_data(e.data)
+		Transition.emit(self,"new_trick")
 
 
 func _card_played(card:Card)->void:

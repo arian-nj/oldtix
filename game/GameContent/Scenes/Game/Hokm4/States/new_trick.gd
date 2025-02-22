@@ -6,14 +6,13 @@ extends State
 
 
 func Enter()->void:
-	status_label.text = "looking for opponent"
+	status_label.text = "waiting for new trick"
 	ws.new_event.connect(_on_new_event)
-	ws.send_event(KEvent.TYPE_MAKE_MATCH,"me")
 
 func _on_new_event(e:KEvent.Event)->void:
-	if e.type == KEvent.TYPE_MATCH_FOUND:
-		table.parse_game_data(e.data)
-		Transition.emit(self,"new_trick")	
+	if e.type == KEvent.TYPE_NEW_CARD:
+		table.drawer.new_cards_event(e)
+		Transition.emit(self,"choose_hokm")
 
 func Exit()->void:
 	ws.new_event.disconnect(_on_new_event)

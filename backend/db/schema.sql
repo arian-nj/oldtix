@@ -9,4 +9,9 @@ CREATE TABLE users (
   coin integer DEFAULT 0
 );
 
+-- CREATE TABLE patch_version (
+--   id SERIAL NOT NULL PRIMARY KEY,
+--   version_number TEXT NOT NULL
+-- );
+
 -- DROP TABLE users;
