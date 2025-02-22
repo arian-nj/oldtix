@@ -3,7 +3,7 @@ version: '3'
 tasks:
   run_user:
     desc: run user service
-    deps: [docker,gsqlc]
+    deps: [clean_task,gsqlc]
     dir: ./backend
     watch: true
     sources:
@@ -15,7 +15,7 @@ tasks:
   
   run_hokm_4:
     desc: run hokm 4 player service
-    deps: [docker,gsqlc]
+    deps: [clean_task,gsqlc]
     dir: ./backend
     watch: true
     sources:
@@ -27,7 +27,7 @@ tasks:
   clean_task:
     desc: clear task cache
     cmds:
-      - rm -r .task
+      - rm -rf .task
 
   kill:
     desc: kills process using 5432 port
@@ -55,8 +55,15 @@ tasks:
     desc: export game content as pck
     dir: ./game
     cmds:
-    - ~/Godot_v4.4-beta4_linux.x86_64 --headless --export-pack AndroidPck ../system.pck
-  
+      - rm -f ./files/patches/*.pck
+      - ~/Godot_v4.4-beta4_linux.x86_64 --headless --export-pack AndroidPck ../files/patches/system.pck
+
+  upload_s3:
+    desc: upload new version to s3
+    dir: ./backend/tools/gos3
+    cmds:
+      - go run .
+
   release:
       prompt:
        - This is a dangerous command Do You Know what are you doing ???

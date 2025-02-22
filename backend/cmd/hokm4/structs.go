@@ -62,7 +62,10 @@ type Turn struct {
 }
 
 func NewTrick() *Trick {
-	return &Trick{}
+	return &Trick{
+		TeamOneTurnScore: 0,
+		TeamTwoTurnScore: 0,
+	}
 }
 
 func NewTurn() *Turn {

@@ -9,6 +9,10 @@ enum Levels{
 }
 
 func _ready() -> void:
+	KAccount.inst()
+	self.add_child(KAccount._instance)
+	
+
 	current_level.manager_change_scene.connect(handle_level_change)
 	current_level.OnLoaded()
 

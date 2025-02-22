@@ -18,7 +18,7 @@ func send_event(event_type: String, event_data: String="") -> void:
 # Initializes the WebSocket connection
 func _ready() -> void:
 	print("Starting connection...")
-	var ws_url:String = Katana.WsBaseUrl + "/ws?auth_token=" + KAccount.Auth_Token
+	var ws_url:String = Katana.WsBaseUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect")
@@ -61,7 +61,7 @@ func _handle_closed_state() -> void:
 	var code:int = socket.get_close_code()
 	var reason:String = socket.get_close_reason()
 	print("WebSocket closed with code: %d, reason: %s" % [code, reason])
-	ErrorBoard.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorClass.ErrorLevel)
+	ErrorBoard._instance.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorBoard.ErrorLevel)
 	set_process(false)
 	var node_parent:Node = get_parent()
 	if node_parent is SceneLevel:

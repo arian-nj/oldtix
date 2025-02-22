@@ -6,6 +6,7 @@
 #   Load all the .gd files it can find (recursively)
 # You get all the warnings you want in the Debugger tab
 # ------------------------------------------------------------------------------
+class_name ErrorChecker
 extends Node
 var include_subdirectories := true
 

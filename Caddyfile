@@ -1,3 +1,9 @@
+:2015 {
+	respond "Hello, world!"
+	reverse_proxy 192.168.174.205
+}
+
+
 user.localhost {
 	reverse_proxy :4444
 }

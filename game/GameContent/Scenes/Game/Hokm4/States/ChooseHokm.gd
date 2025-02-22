@@ -16,7 +16,7 @@ func Enter()->void:
 	
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
 	# print("my account ",KAccount.MyAccount.id," hakem account id ",hakem_player.UserId)
-	if KAccount.MyAccount.id == hakem_player.user_id:
+	if KAccount._instance.MyAccount.id == hakem_player.user_id:
 		choose_hokm_instance = choose_hokm_scene.instantiate()
 		table.add_child(choose_hokm_instance)
 		choose_hokm_instance.HokmChoosed.connect(_on_hokm_choosed)
@@ -29,7 +29,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		table.drawer.new_cards_event(e)
 		got_cards_time += 1
 		if got_cards_time == 2:
-			Transition.emit(self,"game_turn_start")
+			Transition.emit(self,"game_turn")
 
 	elif e.type == KEvent.TYPE_GAME_DATA:
 		table.parse_game_data(e.data)

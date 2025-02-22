@@ -1,14 +1,12 @@
 package server
 
 import (
-	"flag"
 	"fmt"
 	"log/slog"
 	"os"
 	"sync"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
-	"github.com/arian-nj/master-card/back/internal/version"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
@@ -60,15 +58,6 @@ func NewCommonGlobals() (*CommonGlobals, error) {
 		return nil, err
 	}
 
-	// flags
-	showVersion := flag.Bool("version", false, "display version and exit")
-	flag.Parse()
-
-	if *showVersion {
-		fmt.Printf("version: %s\n", version.Get())
-		return nil, nil
-	}
-
 	queries, poll, err := dbconf.SetupDB()
 	if err != nil {
 		return nil, err
@@ -104,8 +93,6 @@ func readConfigs(cfg *config) error {
 		return fmt.Errorf("can't read database url from .env : %s", database_url)
 	}
 	cfg.DatabaseUrl = database_url
-
-	// databaseUrl
 
 	return nil
 }

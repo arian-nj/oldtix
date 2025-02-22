@@ -79,7 +79,7 @@ type GameStateOut struct {
 	YourTeam Team `json:"your_team"`
 }
 
-func (game *GameState) SendGameData(p *Player) error {
+func (game *GameState) SendGameData(MessageTurn socket.EventType, p *Player) error {
 	gsOut := GameStateOut{
 		GameState: game,
 		YourTeam:  p.TeamId,
@@ -89,7 +89,7 @@ func (game *GameState) SendGameData(p *Player) error {
 	if err != nil {
 		return err
 	}
-	p.Client.Egres <- *socket.NewEvent(socket.TypeGameData, socket.EventMessage(game_data))
+	p.Client.Egres <- *socket.NewEvent(MessageTurn, socket.EventMessage(game_data))
 	return nil
 }
 

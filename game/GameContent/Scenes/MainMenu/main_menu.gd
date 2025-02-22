@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func _on_status_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
 	if response_code != HTTPClient.RESPONSE_OK:
-		ErrorBoard.new_error("somthing went wrong.",ErrorClass.ErrorLevel)
+		ErrorBoard._instance.new_error("somthing went wrong.",ErrorBoard.ErrorLevel)
 		print_debug(str(response_code) +" response code ")
 		return
 	var json_data:Variant = JSON.parse_string(body.get_string_from_utf8())

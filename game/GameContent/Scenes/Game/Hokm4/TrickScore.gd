@@ -10,6 +10,9 @@ func _ready() -> void:
 
 
 func _game_data_updated(game_data:GameData)->void:
+	if table.game_data.current_trick == null:
+		return
+	
 	var my_score:int
 	var opp_score:int
 	if table.game_data.your_team == GameData.TeamOne:
