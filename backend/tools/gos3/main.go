@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
 	"github.com/arian-nj/master-card/back/internal/version"
@@ -90,16 +91,36 @@ func run() error {
 	if err != nil {
 		return err
 	}
+
 	_, err = s3Cl.UploadUsingS3(bytes.NewReader(fb), FilePathFromVersion(pvRow.VersionNumber, version.ReleasModes(release_mode)))
 	if err != nil {
 		return err
 	}
 
+	result, err := s3Cl.ListFiles(s3Cl.BucketName, FolderPathFromVersion(version.ReleasModes(release_mode)))
+	if err != nil {
+		return err
+	}
+
+	time_now := time.Now().UTC()
+	for _, item := range result {
+		if time_now.Sub(item.LastModified.UTC()).Hours() > 1 {
+			err := s3Cl.DeleteFile(s3Cl.BucketName, *item.Key)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }
 
+func FolderPathFromVersion(mode version.ReleasModes) string {
+	return fmt.Sprintf("patches/%s/", mode)
+}
+
 func FilePathFromVersion(v string, mode version.ReleasModes) string {
-	return fmt.Sprintf("patches/%s/GameContentV_%s.pck", mode, v)
+	return fmt.Sprintf("%sGameContentV_%s.pck", FolderPathFromVersion(mode), v)
 }
 
 type S3Config struct {
