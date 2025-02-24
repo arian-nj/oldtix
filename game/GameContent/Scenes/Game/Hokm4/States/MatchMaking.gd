@@ -8,12 +8,14 @@ extends State
 func Enter()->void:
 	status_label.text = "looking for opponent"
 	ws.new_event.connect(_on_new_event)
+	ws.open_events()
 	ws.send_event(KEvent.TYPE_MAKE_MATCH,"me")
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_MATCH_FOUND:
 		table.parse_game_data(e.data)
 		status_label.text = "waiting new trick"
+		ws.hold_events()
 		Transition.emit(self,"new_trick")
 
 

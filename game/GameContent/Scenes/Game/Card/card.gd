@@ -97,7 +97,6 @@ func _on_button_up() -> void:
 	# pivot_offset = Vector2(0.0,0.0)
 
 func _on_button_down() -> void:
-	in_hand = false
 	start_choosed_pos = global_position
 	local_pos_on_press = self.get_local_mouse_position()
 	var old_z_index:int = self.z_index

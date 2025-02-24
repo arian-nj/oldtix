@@ -12,10 +12,12 @@ type ApplicationH2 struct {
 }
 
 func main() {
-	gb, err := server.NewCommonGlobals()
+	gb, poll, err := server.NewCommonGlobals()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer poll.Close()
+
 	app := ApplicationH2{
 		CommonGlobals: gb,
 		lobby: &Lobby{

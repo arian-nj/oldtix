@@ -5,4 +5,4 @@ func OnLoaded()->void:
 
 	if await KAccount._instance.RefetchME() == false:
 		print("can't get me")
-	manager_change_scene.emit(SceneManger.Levels.MainMenu)
+	manager_change_scene.emit(SceneManager.Levels.MainMenu)

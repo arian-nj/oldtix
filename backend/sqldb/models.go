@@ -8,6 +8,12 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type PatchVersion struct {
+	ID            int32  `db:"id" json:"id"`
+	Rmode         string `db:"rmode" json:"rmode"`
+	VersionNumber string `db:"version_number" json:"version_number"`
+}
+
 type User struct {
 	ID             int32              `db:"id" json:"id"`
 	Created        pgtype.Timestamptz `db:"created" json:"created"`

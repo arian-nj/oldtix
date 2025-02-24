@@ -3,48 +3,103 @@ package main
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
 
+	"github.com/arian-nj/master-card/back/internal/dbconf"
+	"github.com/arian-nj/master-card/back/internal/version"
+	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	s3Cl, err := NewS3Client()
+	err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
-	// dbconf.SetupDB()
+}
+
+func run() error {
+	s3Cl, err := NewS3Client()
+	if err != nil {
+		return err
+	}
+
+	release_mode := os.Getenv("RELEASE_MODE")
+	if release_mode == "" {
+		log.Fatal("RELEASE_MODE is empty")
+	}
+
+	queries, poll, err := dbconf.SetupDB()
+	if err != nil {
+		return err
+	}
+	defer poll.Close()
+
+	pvRow, err := queries.GetVersion(context.Background(), release_mode)
+	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+		return err
+	}
+
+	if pvRow.ID == 0 { // if no verson exist
+		v, err := version.NewVersion("0.2.0")
+		if err != nil {
+			return err
+		}
+		pvRow, err = queries.InsertVersion(context.Background(), sqldb.InsertVersionParams{
+			Rmode:         release_mode,
+			VersionNumber: v.String(),
+		})
+		if err != nil {
+			return err
+		}
+	} else { // if a version already exist
+		v, err := version.NewVersion(pvRow.VersionNumber)
+		if err != nil {
+			return err
+		}
+		v.Patch = v.Patch + 1
+		pvRow, err = queries.UpdateVersion(context.Background(), sqldb.UpdateVersionParams{
+			Rmode:         release_mode,
+			VersionNumber: v.String(),
+		})
+		if err != nil {
+			return err
+		}
+	}
 
 	patchesPath := "../../../files/patches/"
 	dirEntries, err := os.ReadDir(patchesPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if len(dirEntries) == 0 {
-		log.Fatal("dirEntities len is 0")
+		return fmt.Errorf("dirEntities len is 0")
 	}
 
 	entery := dirEntries[0]
 	fmt.Println(entery.Name())
 	fb, err := os.ReadFile(patchesPath + entery.Name())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	_, err = s3Cl.UploadUsingS3(bytes.NewReader(fb), FilePathFromVersion("0.2.0"))
+	_, err = s3Cl.UploadUsingS3(bytes.NewReader(fb), FilePathFromVersion(pvRow.VersionNumber, version.ReleasModes(release_mode)))
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
+	return nil
 }
 
-func FilePathFromVersion(v string) string {
-	return fmt.Sprintf("patches/GameContentV_%s.pck", v)
+func FilePathFromVersion(v string, mode version.ReleasModes) string {
+	return fmt.Sprintf("patches/%s/GameContentV_%s.pck", mode, v)
 }
 
 type S3Config struct {
@@ -60,6 +115,7 @@ type s3Client struct {
 }
 
 func NewS3Client() (*s3Client, error) {
+
 	cl := &s3Client{}
 	err := godotenv.Load("../../.env")
 	if err != nil {

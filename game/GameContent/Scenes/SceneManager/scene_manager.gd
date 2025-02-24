@@ -1,4 +1,5 @@
-class_name SceneManger extends Node
+extends Node
+class_name SceneManager
 
 @export var current_level:SceneLevel
 @export var anim :AnimationPlayer

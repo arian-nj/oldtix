@@ -21,13 +21,31 @@ import (
 
 func (app *Application) status(w http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
-		"status":  "ok",
-		"version": app.Version.String(),
+		"status": "ok",
 	}
 
 	err := response.JSON(w, http.StatusOK, data)
 	if err != nil {
 		app.ServerError(w, r, err)
+	}
+}
+
+func (app *Application) getLatestVersion(w http.ResponseWriter, r *http.Request) {
+	pwRow, err := app.Queries.GetVersion(context.Background(), app.ReleaseMode)
+	if err != nil {
+		app.ServerError(w, r, err)
+		return
+
+	}
+
+	data := map[string]string{
+		"version": pwRow.VersionNumber,
+	}
+
+	err = response.JSON(w, http.StatusOK, data)
+	if err != nil {
+		app.ServerError(w, r, err)
+		return
 	}
 }
 

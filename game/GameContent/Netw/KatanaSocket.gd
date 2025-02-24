@@ -1,19 +1,41 @@
 class_name KatanaSocket extends Node
 
 signal new_event(e:KEvent.Event)
+var pause :bool = true
+
+var events_queue:Array[KEvent.Event] = []
+
 # func _on_new_event(e:KEvent.Event)->void:
 # 	pass
 
 # WebSocket instance
 var socket:WebSocketPeer = WebSocketPeer.new()
 
+func hold_events()->void:
+	pause = true
 
+func open_events()->void:
+	pause = false
+	for e:KEvent.Event in events_queue:
+		_handle_event(e)
+	
 # Sends an event through the WebSocket
 func send_event(event_type: String, event_data: String="") -> void:
 	var event:KEvent.Event = KEvent.Event.new()
 	event.type = event_type
 	event.data = event_data
 	socket.send_text(event.to_json())
+
+
+# Handles incoming events (to be extended)
+func _handle_event(event: KEvent.Event) -> void:
+	# print(event.type + " -- "+ KAccount._instance.MyAccount.username  + " -- " + event.data)
+	# print(" ")
+	if pause == true:
+		events_queue.append(event)
+	else:
+		new_event.emit(event)
+
 
 # Initializes the WebSocket connection
 func _ready() -> void:
@@ -51,12 +73,6 @@ func _handle_open_state() -> void:
 		else:
 			_handle_event(event)
 
-# Handles incoming events (to be extended)
-func _handle_event(event: KEvent.Event) -> void:
-	print(event.type + " -- " + event.data)
-	print(" ")
-	new_event.emit(event)
-
 # Handles the closed state
 func _handle_closed_state() -> void:
 	var code:int = socket.get_close_code()
@@ -68,7 +84,7 @@ func _handle_closed_state() -> void:
 	if node_parent is SceneLevel:
 		var scene_parent:SceneLevel = node_parent
 		await  get_tree().create_timer(1).timeout
-		scene_parent.manager_change_scene.emit(SceneManger.Levels.MainMenu)
+		scene_parent.manager_change_scene.emit(SceneManager.Levels.MainMenu)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
