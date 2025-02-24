@@ -9,12 +9,15 @@ var last_card_played:Card = null
 
 func Enter()->void:
 	ws.new_event.connect(_on_new_event)
+	ws.open_events()
 	table.CardPlayed.connect(_card_played)
 
 
 
 func Exit()->void:
+	ws.hold_events()
 	ws.new_event.disconnect(_on_new_event)
+	table.CardPlayed.disconnect(_card_played)
 
 
 
@@ -48,8 +51,8 @@ func _on_new_event(e:KEvent.Event)->void:
 		status_label.text = "Turn Ended"
 		table.parse_game_data(e.data)
 		if last_card_played != null:
-			last_card_played.queue_free()
-			table.drawer.draw_cards()
+			table.drawer.remove_one_card(last_card_played)
+
 
 	elif e.type == KEvent.TYPE_END_TRICK:
 		status_label.text = "Trick Ended"

@@ -13,6 +13,7 @@ func Enter()->void:
 	got_cards_time = 0
 	status_label.text = "Choose Hokm"
 	ws.new_event.connect(_on_new_event)
+	ws.open_events()
 	
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
 	# print("my account ",KAccount.MyAccount.id," hakem account id ",hakem_player.UserId)
@@ -31,6 +32,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		if got_cards_time == 3:
 			Transition.emit(self,"game_turn")
 
+
 	elif e.type == KEvent.TYPE_GAME_DATA:
 		table.parse_game_data(e.data)
 		status_label.text = "Hokm Choosed"
@@ -41,6 +43,7 @@ func _on_new_event(e:KEvent.Event)->void:
 
 
 
-# only runs if 
+# only runs if hakem panel is shown and hakem choosed hokm
 func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
 	ws.send_event(KEvent.TYPE_HOKM_CHOOSED,str(Hokm))
+

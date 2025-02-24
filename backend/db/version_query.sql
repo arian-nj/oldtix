@@ -1,9 +1,10 @@
--- -- name: GetVersion :one
--- SELECT * FROM patch_version LIMIT 1;
+-- name: GetVersion :one
+SELECT * FROM patch_version WHERE rmode = $1 LIMIT 1;
 
--- -- name: InsertVersion :one
--- INSERT INTO patch_version (version_number) VALUES ($1)
--- RETURNING *;
+-- name: InsertVersion :one
+INSERT INTO patch_version (version_number,rmode) VALUES ($1,$2)
+RETURNING *;
 
--- -- name: UpdateVersion :exec
--- UPDATE patch_version SET version_number = $1 WHERE id = $2;
+-- name: UpdateVersion :one
+UPDATE patch_version SET version_number = $1 WHERE rmode = $2 
+RETURNING *;

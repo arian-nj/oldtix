@@ -6,6 +6,13 @@ import (
 	"strings"
 )
 
+type ReleasModes string
+
+const (
+	Release ReleasModes = "release"
+	Dev     ReleasModes = "dev"
+)
+
 type Version struct {
 	Major int
 	Minor int
@@ -15,6 +22,7 @@ type Version struct {
 func (v *Version) String() string {
 	return fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
 }
+
 func NewVersion(versionString string) (*Version, error) {
 	if versionString == "" {
 		return nil, fmt.Errorf("back version is empty")

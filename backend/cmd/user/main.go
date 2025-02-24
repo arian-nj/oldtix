@@ -5,30 +5,28 @@ import (
 	"os"
 
 	"github.com/arian-nj/master-card/back/internal/server"
-	"github.com/arian-nj/master-card/back/internal/version"
 )
 
 type Application struct {
 	*server.CommonGlobals
-	Version *version.Version
+	ReleaseMode string
 }
 
 func main() {
-	gb, err := server.NewCommonGlobals()
+	gb, poll, err := server.NewCommonGlobals()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer poll.Close()
 
 	app := Application{
 		CommonGlobals: gb,
 	}
-
-	v, err := version.NewVersion(os.Getenv("VERSION"))
-	if err != nil {
-		app.Logger.Error(err.Error())
-		return
+	release_mode := os.Getenv("RELEASE_MODE")
+	if release_mode == "" {
+		log.Fatal("RELEASE_MODE is empty")
 	}
-	app.Version = v
+	app.ReleaseMode = release_mode
 
 	chiM := app.profileRoutes()
 	err = gb.ServeHTTP(chiM, 4444)

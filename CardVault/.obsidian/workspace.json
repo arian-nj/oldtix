@@ -11,10 +11,36 @@
             "id": "19ad8d2d323a102f",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "CardGame/V 1.0.0.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "V 1.0.0"
+            }
+          },
+          {
+            "id": "bd398f10267491da",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "CardGame/Game Flow Chart.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Game Flow Chart"
             }
           }
         ]
@@ -160,9 +186,11 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "eee9258bbadc09e9",
+  "active": "19ad8d2d323a102f",
   "lastOpenFiles": [
     "CardGame/Game Flow Chart.md",
+    "CardGame/V 1.0.0.md",
+    "CardGame/TO DO Card.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
     "Sherry.md",
     "CardGame/Self Notes.md",
@@ -174,9 +202,7 @@
     "6 - Main Notes/card-game.md",
     "6 - Main Notes/Game biz.md",
     "6 - Main Notes/turn based game.md",
-    "CardGame/TO DO Card.md",
     "FileManager.md",
-    "CardGame/V 1.0.0.md",
     "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
     "CardGame/Version.md",
     "exicle_lib/basic-shapes.excalidrawlib",

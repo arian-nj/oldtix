@@ -19,6 +19,7 @@ func (app *Application) profileRoutes() *chi.Mux {
 
 		// All routes
 		r.Get("/status", app.status)
+		r.Get("/version", app.getLatestVersion)
 		r.Post("/register", app.register)
 		r.Post("/token", app.createAuthenticationToken)
 

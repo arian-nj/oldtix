@@ -2,11 +2,16 @@ extends CanvasLayer
 
 @export var status_label:Label
 
-var server_status_url := "http://192.168.174.205:4444"
+var server_url := "http://192.168.174.205:4444"
 
-var DownloadLnk := "https://cgame.storage.c2.liara.space/patches/GameContentV_0.2.0.pck"
 func _ready() -> void:
-	download(DownloadLnk)
+	var version_string:String = await check_version()
+	if version_string == "":
+		print_debug("version is empty")
+		return
+	print(version_string)
+	
+	download("https://cgame.storage.c2.liara.space/patches/dev/GameContentV_"+version_string+".pck")
 
 func download(link:String)->void:
 	var http := HTTPRequest.new()
@@ -36,15 +41,15 @@ func _download_completed(result: int, response_code: int, _headers: PackedString
 		print_debug("failed to load scene")
 	
 
-func check_version() -> void:
+func check_version() -> String:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	self.add_child(http_req_node)
 	
-	var err := http_req_node.request(server_status_url,PackedStringArray(),HTTPClient.METHOD_GET)
+	var err := http_req_node.request(server_url+"/version",PackedStringArray(),HTTPClient.METHOD_GET)
 	
 	if err != OK:
 		print_debug("here1")
-		return
+		return ""
 	
 	var response:Variant = await http_req_node.request_completed
 	http_req_node.queue_free()
@@ -57,7 +62,7 @@ func check_version() -> void:
 	if response_code != HTTPClient.RESPONSE_OK:
 		print_debug(response_code)
 		print_debug("here2")
-		return
+		return ""
 	
 	# var _headers = response[2] # <-- not used
 	
@@ -66,6 +71,7 @@ func check_version() -> void:
 	var nj := JSON.new()
 	if nj.parse(body_string) != OK:
 		print_debug("can't parse")
-		return
-	# var version_string:String =  nj.data.get("version")
+		return ""
+	var version_string:String =  nj.data.get("version")
+	return version_string
 	

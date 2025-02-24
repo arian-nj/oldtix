@@ -34,11 +34,10 @@ type CommonGlobals struct {
 	Config  *config
 	Logger  *slog.Logger
 	Queries *sqldb.Queries
-	Poll    *pgxpool.Pool
 	wg      sync.WaitGroup
 }
 
-func NewCommonGlobals() (*CommonGlobals, error) {
+func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	// read configs
 	Glob := &CommonGlobals{}
 
@@ -50,22 +49,21 @@ func NewCommonGlobals() (*CommonGlobals, error) {
 
 	err := godotenv.Load()
 	if err != nil {
-		return nil, fmt.Errorf("error loading .env file")
+		return nil, nil, fmt.Errorf("error loading .env file")
 	}
 
 	err = readConfigs(cfg)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	queries, poll, err := dbconf.SetupDB()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	Glob.Queries = queries
-	Glob.Poll = poll
 
-	return Glob, nil
+	return Glob, poll, nil
 }
 
 func readConfigs(cfg *config) error {
