@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
 // UploadUsingS3 uploads a file to the specified S3-compatible storage.
@@ -48,7 +49,7 @@ func (app *s3Client) GetTemporaryLink(bucketName, objectKey string, expiration t
 }
 
 // ListFiles lists all files in the specified bucket and prefix.
-func (app *s3Client) ListFiles(bucketName, prefix string) ([]string, error) {
+func (app *s3Client) ListFiles(bucketName, prefix string) ([]types.Object, error) {
 	// List objects in the bucket
 	result, err := app.Client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
 		Bucket: aws.String(bucketName),
@@ -58,12 +59,8 @@ func (app *s3Client) ListFiles(bucketName, prefix string) ([]string, error) {
 		return nil, err
 	}
 
-	var files []string
-	for _, item := range result.Contents {
-		files = append(files, aws.ToString(item.Key))
-	}
+	return result.Contents, nil
 
-	return files, nil
 }
 
 // DeleteFile deletes a file from the specified bucket.
