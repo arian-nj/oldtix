@@ -7,29 +7,11 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
-func isCardInCards(card *cards.Card, cards *[]cards.Card) (int, bool) {
-	for index, inHandCard := range *cards {
-		if inHandCard.Suit == card.Suit && inHandCard.Value == card.Value {
-			return index, true
-		}
-	}
-	return -1, false
-}
-
-func hasSuit(wanted_suite cards.Suite, cards *[]cards.Card) bool {
-	for _, inHandCard := range *cards {
-		if inHandCard.Suit == wanted_suite {
-			return true
-		}
-	}
-	return false
-}
-
 // have card
 // same suite as first card if not first move
-func (game *GameState) ValidateAndDoMove(player *Player, card *cards.Card) (int, bool) {
+func (game *GameState) ValidateAndDoMove(player *Player, played_card *cards.Card) (int, bool) {
 	// game.Logger.Debug("new card " + card.String())
-	cardIndex, haveCard := isCardInCards(card, &player.Cards)
+	cardIndex, haveCard := cards.IsCardInCards(played_card, &player.Cards)
 	if !haveCard {
 		game.Logger.Debug("not in hand")
 		return 0, false
@@ -37,8 +19,9 @@ func (game *GameState) ValidateAndDoMove(player *Player, card *cards.Card) (int,
 	currentTurn := game.CurrentTrick.CurrentTurn
 	if len(currentTurn.CardsPlayed) > 0 { // if not first move
 		// game.Logger.Debug("first card " + currentTurn.CardsPlayed[0].Card.String())
-		if hasSuit(currentTurn.CardsPlayed[0].Card.Suit, &player.Cards) {
-			if card.Suit != currentTurn.CardsPlayed[0].Card.Suit {
+		first_card_played_suite := currentTurn.CardsPlayed[0].Card.Suit
+		if cards.HasSuit(first_card_played_suite, &player.Cards) {
+			if played_card.Suit != first_card_played_suite {
 				game.Logger.Debug("no allowed")
 				return 0, false
 			}
@@ -89,7 +72,7 @@ func (game *GameState) SendGameData(MessageTurn socket.EventType, p *Player) err
 	if err != nil {
 		return err
 	}
-	p.Client.Egres <- *socket.NewEvent(MessageTurn, socket.EventMessage(game_data))
+	p.AddToEgress(socket.NewEvent(MessageTurn, socket.EventMessage(game_data)))
 	return nil
 }
 
@@ -112,7 +95,7 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*
 		if err != nil {
 			game.Logger.Error(err.Error())
 		}
-		p.Client.Egres <- *socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte))
+		p.AddToEgress(socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte)))
 		p.Cards = append(p.Cards, randomCards...)
 	}
 	return remaining_cards

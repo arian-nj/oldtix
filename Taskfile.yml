@@ -44,7 +44,12 @@ tasks:
     dir: ./backend
     cmds:
       - sudo docker compose up -d
-  
+  docker_down:
+    desc: docker down
+    dir: ./backend
+    cmds:
+      - sudo docker compose down
+    
   gsqlc:
     desc: generate sqlc files
     dir: ./backend

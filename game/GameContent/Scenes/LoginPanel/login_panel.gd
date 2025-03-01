@@ -85,6 +85,3 @@ func _on_token_request_completed(_result: int, response_code: int, _headers: Pac
 	else:
 		ErrorBoard._instance.new_error("failed login",ErrorBoard.ErrorLevel)
 		print_debug(str(_result)+" " + str(response_code)," ",body.get_string_from_utf8())
-	
-
-	

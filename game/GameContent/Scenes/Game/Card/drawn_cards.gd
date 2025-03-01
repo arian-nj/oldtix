@@ -6,6 +6,7 @@ func _card_played(card:Card)->void:
 	if isDrawn:
 		CardPlayed.emit(card)
 
+@export var show_cards_value:bool
 @export var from_middle: Control
 @export var hand: Control
 

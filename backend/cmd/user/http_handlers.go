@@ -58,9 +58,8 @@ func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
 		app.BadRequest(w, r, errUserIsNotValidErr)
 		return
 	}
-	userId := int32(userid_int)
 
-	user, err := app.Queries.GetUser(context.Background(), userId)
+	user, err := app.Queries.GetPerson(context.Background(), int64(userid_int))
 	if err != nil {
 		app.BadRequest(w, r, errUserIsNotValidErr)
 		return
@@ -89,7 +88,7 @@ func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
-		ID          int32  `json:"id"`
+		ID          int64  `json:"id"`
 		Username    string `json:"username"`
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
@@ -139,7 +138,7 @@ func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = app.Queries.UpdateUser(context.Background(), sqldb.UpdateUserParams{
+	err = app.Queries.UpdatePerson(context.Background(), sqldb.UpdatePersonParams{
 		DisplayName: user.DisplayName,
 		Bio:         user.Bio,
 		ID:          user.ID,
@@ -178,7 +177,7 @@ func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 		app.FailedValidation(w, r, input.Validator)
 		return
 	}
-	userRow, err := app.Queries.GetUserByUsername(context.Background(), input.Username)
+	userRow, err := app.Queries.GetPersonByUsername(context.Background(), input.Username)
 	if err != nil {
 		if !errors.Is(err, pgx.ErrNoRows) {
 			app.ServerError(w, r, err)
@@ -199,8 +198,8 @@ func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 		app.ServerError(w, r, err)
 		return
 	}
-	_, err = app.Queries.InsertUser(context.Background(),
-		sqldb.InsertUserParams{Username: input.Username, HashedPassword: hashedPassword},
+	_, err = app.Queries.InsertPerson(context.Background(),
+		sqldb.InsertPersonParams{Username: input.Username, HashedPassword: hashedPassword},
 	)
 	if err != nil {
 		app.ServerError(w, r, err)
@@ -225,7 +224,7 @@ func (app *Application) createAuthenticationToken(w http.ResponseWriter, r *http
 		return
 	}
 
-	user, err := app.Queries.GetUserByUsername(context.Background(), input.Username)
+	user, err := app.Queries.GetPersonByUsername(context.Background(), input.Username)
 	username_found := true
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
