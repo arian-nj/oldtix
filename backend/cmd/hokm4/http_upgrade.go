@@ -21,7 +21,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 		app.Logger.Error(err.Error())
 		return
 	}
-	client := socket.NewClient(conn, user)
+	client := socket.NewClient(conn)
 	app.Logger.Debug("new ws connection established")
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -36,7 +36,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 	app.BackgroundTask(func() error {
 		defer cancel()
 		defer func() {
-			err := client.Conn.Close()
+			err := client.Close()
 			if err != nil {
 				app.Logger.Error(err.Error())
 			} else {

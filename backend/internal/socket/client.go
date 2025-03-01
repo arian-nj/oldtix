@@ -5,7 +5,6 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/gorilla/websocket"
 )
 
@@ -15,15 +14,20 @@ var (
 )
 
 type Client struct {
-	User      *sqldb.User
 	Conn      *websocket.Conn
 	Egres     chan Event
 	NewEvents chan Event
 }
 
-func NewClient(conn *websocket.Conn, user *sqldb.User) *Client {
+func (c *Client) Close() error {
+	if c.Conn != nil {
+		return c.Conn.Close()
+	}
+	return nil
+}
+
+func NewClient(conn *websocket.Conn) *Client {
 	return &Client{
-		User:      user,
 		Conn:      conn,
 		Egres:     make(chan Event),
 		NewEvents: make(chan Event),
@@ -45,7 +49,7 @@ func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context) error {
 
 			event, err := EventUnmarshal(payload)
 			if err != nil {
-				l.Debug("err in unmarshalling event: ", err.Error())
+				l.Debug("err in unmarshalling event: " + err.Error())
 				continue
 			}
 			c.NewEvents <- *event

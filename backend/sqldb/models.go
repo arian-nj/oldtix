@@ -8,18 +8,45 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type PatchVersion struct {
-	ID            int32  `db:"id" json:"id"`
-	Rmode         string `db:"rmode" json:"rmode"`
-	VersionNumber string `db:"version_number" json:"version_number"`
+type GamePlayer struct {
+	PlayerID int64
+	GameID   int64
+	Team     int16
 }
 
-type User struct {
-	ID             int32              `db:"id" json:"id"`
-	Created        pgtype.Timestamptz `db:"created" json:"created"`
-	Username       string             `db:"username" json:"username"`
-	DisplayName    pgtype.Text        `db:"display_name" json:"display_name"`
-	HashedPassword string             `db:"hashed_password" json:"hashed_password"`
-	Bio            pgtype.Text        `db:"bio" json:"bio"`
-	Coin           pgtype.Int4        `db:"coin" json:"coin"`
+type Hokm4Game struct {
+	ID                 int64
+	TeamOneTricksScore int32
+	TeamTwoTricksScore int32
+}
+
+type PatchVersion struct {
+	ID            int64
+	Rmode         string
+	VersionNumber string
+}
+
+type Person struct {
+	ID             int64
+	Created        pgtype.Timestamptz
+	Username       string
+	DisplayName    pgtype.Text
+	HashedPassword string
+	Bio            pgtype.Text
+	Coin           pgtype.Int4
+}
+
+type Trick struct {
+	TrickID          int64
+	GameID           int64
+	Hokm             pgtype.Int4
+	HakemIndex       int32
+	TeamOneTurnScore int32
+	TeamTwoTurnScore int32
+}
+
+type Turn struct {
+	TurnID  int64
+	TrickID int64
+	Moves   string
 }

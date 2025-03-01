@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "906356feeb1b2bc6",
+        "id": "40b807ef32a9733a",
         "type": "tabs",
         "children": [
           {
-            "id": "19ad8d2d323a102f",
+            "id": "d6ed58d6ec7b0dc4",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -29,18 +29,6 @@
               },
               "icon": "lucide-file",
               "title": "V 1.0.0"
-            }
-          },
-          {
-            "id": "bd398f10267491da",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "CardGame/Game Flow Chart.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
             }
           }
         ]
@@ -186,14 +174,16 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "19ad8d2d323a102f",
+  "active": "d6ed58d6ec7b0dc4",
   "lastOpenFiles": [
+    "CardGame/Self Notes.md",
     "CardGame/Game Flow Chart.md",
+    "CardGame/Version.md",
     "CardGame/V 1.0.0.md",
     "CardGame/TO DO Card.md",
+    "CardGame/Authentication.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
     "Sherry.md",
-    "CardGame/Self Notes.md",
     "7 - Daily/2024-12-22.md",
     "6 - Main Notes/online tic-toc-toe.md",
     "6 - Main Notes/Static Godot.md",
@@ -204,7 +194,6 @@
     "6 - Main Notes/turn based game.md",
     "FileManager.md",
     "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
-    "CardGame/Version.md",
     "exicle_lib/basic-shapes.excalidrawlib",
     "exicle_lib/icons.excalidrawlib",
     "exicle_lib/google-icons.excalidrawlib",
@@ -212,7 +201,6 @@
     "exicle_lib/awesome-icons.excalidrawlib",
     "exicle_lib/forms.excalidrawlib",
     "exicle_lib",
-    "CardGame/Authentication.md",
     "CardGame",
     "6 - Main Notes/Untitled 1.md",
     "6 - Main Notes/Untitled 2.md",

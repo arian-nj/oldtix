@@ -26,8 +26,8 @@ RETURNING id, rmode, version_number
 `
 
 type InsertVersionParams struct {
-	VersionNumber string `db:"version_number" json:"version_number"`
-	Rmode         string `db:"rmode" json:"rmode"`
+	VersionNumber string
+	Rmode         string
 }
 
 func (q *Queries) InsertVersion(ctx context.Context, arg InsertVersionParams) (PatchVersion, error) {
@@ -43,8 +43,8 @@ RETURNING id, rmode, version_number
 `
 
 type UpdateVersionParams struct {
-	VersionNumber string `db:"version_number" json:"version_number"`
-	Rmode         string `db:"rmode" json:"rmode"`
+	VersionNumber string
+	Rmode         string
 }
 
 func (q *Queries) UpdateVersion(ctx context.Context, arg UpdateVersionParams) (PatchVersion, error) {
