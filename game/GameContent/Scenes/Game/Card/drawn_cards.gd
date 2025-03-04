@@ -2,16 +2,16 @@ class_name CardDrawer extends Control
 
 signal CardPlayed(card:Card)
 
-func _card_played(card:Card)->void:
-	if isDrawn:
-		CardPlayed.emit(card)
 
+@export var selectable:bool = false
+@export var is_horizontal:bool
 @export var show_cards_value:bool
+
 @export var from_middle: Control
 @export var hand: Control
 
 @export var rot_max: float = 10.0
-@export var card_offset_x: float = 30.0
+@export var card_offset: float = 20.0
 @export var card_scene: PackedScene
 
 @export var card_movment_dur:float = .3
@@ -20,39 +20,32 @@ func _card_played(card:Card)->void:
 @export var flip_card_dur:float = .075
 @export var two_card_dur:float = .075
 
+@export var final_degree:float = 0
+
 
 var cards:Array[Card] = []
 var tween:Tween
-var drawn:bool
 
-var isDrawn:bool = true
+var isDrawn:bool = false
 
+var draw_queue :Array[Callable] = []
+
+func _card_played(card:Card)->void:
+	if isDrawn:
+		CardPlayed.emit(card)
 
 
 @export var IsDrawnLabel: Label
 func _process(_delta: float) -> void:
 	IsDrawnLabel.text = str(isDrawn)
 
-var draw_queue :Array[Callable] = []
 
-@onready var timer := Timer.new()
 
 func _ready() -> void:
 	get_window().size_changed.connect(draw_cards)
-	timer.wait_time = .1
-	timer.timeout.connect(run_actions)
-	add_child(timer)
-	timer.start()
 
 
-func run_actions()->void:
-	# print("running action")
-	timer.timeout.disconnect(run_actions)
-	while draw_queue.size() > 0:
-		var action:Callable = draw_queue.pop_front()
-		# print("action => ",action)
-		action.call()
-	timer.timeout.connect(run_actions)
+
 
 func clear_cards()->void:
 	push_callback(
@@ -74,12 +67,13 @@ func remove_one_card(card:Card) -> void:
 	)
 
 func push_callback(c:Callable)->void:
+	while draw_queue.size() > 0:
+		await get_tree().create_timer(.5).timeout
 	draw_queue.push_back(c)
 	
 
 func new_cards_event(e:KEvent.Event)->void:
-	push_callback(_new_cards_event.bind(e))
-
+	self.push_callback(self._new_cards_event.bind(e))
 
 func _new_cards_event(e:KEvent.Event)->void:
 	var json_data:Variant = JSON.parse_string(e.data)
@@ -95,6 +89,7 @@ func create_card(suite:CardData.CardSuites,value:int)->void:
 	c.card_data = CardData.new()
 	c.card_data.suit = suite
 	c.card_data.value = value
+	c.disabled = !selectable
 
 	add_child(c)
 	cards.append(c)
@@ -118,15 +113,20 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 
 	if tween and tween.is_running(): # Kill any running tween and create a new one with easing settings.
 		tween.kill()
-	tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
 	# Calculate deck width and centering offset.
-	var deck_x_length: float = card_offset_x * cards.size() + cards[0].size.x
-	var x_offset: float = deck_x_length / 2.0
+	var deck_length: float = card_offset * cards.size()
+	if is_horizontal:
+		deck_length += cards[0].size.x
+	else:
+		deck_length += cards[0].size.y
+
+	var x_offset: float = deck_length / 2.0
 
 	var newCardsCounter: int = 0
 
 	for i in range(cards.size()):
+
 		var card: Card = cards[i]
 
 		# Update tree order to correctly handle input and render order.
@@ -148,11 +148,13 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 			delay = newCardsCounter * two_card_movment_dur
 			
 			# Capture the current counter value for the tween callback.
-			var currentCounter: int = newCardsCounter
 			newCardsCounter += 1
 
-			card.prespective3DShader.flip_y(flip_card_dur, currentCounter * two_card_dur, card.load_assets)
+			if show_cards_value:
+				card.prespective3DShader.flip_y(flip_card_dur, movementDuration + delay, card.load_assets)
+			tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 			tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
+			tween.parallel().tween_property(card, "rotation_degrees", final_degree, movementDuration).set_delay(delay)
 		
 		# If the card is already in hand and its final position has changed…
 		elif final_pos != card.global_position: 
@@ -161,6 +163,7 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 				card.global_position = final_pos
 			else:
 				movementDuration += i * (two_card_movment_dur / 4.0)
+				tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 				tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 
 	await tween.finished
@@ -169,9 +172,17 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 
 # Helper function to calculate a card's final position.
 func _calculate_final_position(index: int, card: Card, x_offset: float) -> Vector2:
-	var pos: Vector2 = Vector2(card_offset_x * index, 0.0)
-	pos.y -= card.size.y / 2.0 # Center the card vertically.
-	pos.x -= x_offset # Center horizontally.
+	var pos: Vector2
+	if is_horizontal:
+		pos = Vector2(card_offset * index, 0.0)
+		pos.y -= card.size.y / 2.0 # Center the card vertically.
+		pos.x -= x_offset # Center horizontally.
+	else :
+		pos = Vector2(0.0,card_offset * index)
+		pos.x -= card.size.x / 2.0 # Center the card vertically.
+		pos.y -= x_offset # Center horizontally.
+	
+
 	pos += hand.global_position # Offset by the hand's global position.
 	return pos
 

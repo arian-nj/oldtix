@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
@@ -27,10 +26,8 @@ type Player struct {
 
 func (p *Player) AddToEgress(e *socket.Event) {
 	if !p.IsPlayng {
-		fmt.Println("reject")
 		return
 	}
-	fmt.Println("pass")
 	p.Client.Egres <- *e
 
 }

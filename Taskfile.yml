@@ -61,7 +61,7 @@ tasks:
     dir: ./game
     cmds:
       - rm -f ./files/patches/*.pck
-      - ~/Godot_v4.4-beta4_linux.x86_64 --headless --export-pack AndroidPck ../files/patches/system.pck
+      - ~/Godot_v4.4-stable_linux.x86_64 --headless --export-pack AndroidPck ../files/patches/system.pck
 
   upload_s3:
     desc: upload new version to s3

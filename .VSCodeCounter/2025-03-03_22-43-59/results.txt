@@ -1,0 +1,353 @@
+Date : 2025-03-03 22:43:59
+Directory : /home/arian/w/real-deal/master-card
+Total : 254 files,  21923 codes, 444 comments, 2600 blanks, all 24967 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JSON             |         13 |     11,850 |          0 |          2 |     11,852 |
+| GDResource       |        119 |      3,446 |          7 |        720 |      4,173 |
+| Go               |         36 |      2,273 |        124 |        536 |      2,933 |
+| GDScript         |         40 |      1,353 |        133 |        474 |      1,960 |
+| GDScene          |         12 |      1,273 |          0 |        172 |      1,445 |
+| Markdown         |         18 |        736 |          0 |        572 |      1,308 |
+| Properties       |          1 |        467 |          0 |         12 |        479 |
+| JavaScript       |          2 |        217 |        157 |         52 |        426 |
+| YAML             |          3 |         94 |          0 |         16 |        110 |
+| Go Checksum File |          1 |         72 |          0 |          1 |         73 |
+| MS SQL           |          4 |         68 |         15 |         26 |        109 |
+| gdshader         |          1 |         36 |          8 |         12 |         56 |
+| Go Module File   |          1 |         35 |          0 |          4 |         39 |
+| CSS              |          2 |          2 |          0 |          1 |          3 |
+| XML              |          1 |          1 |          0 |          0 |          1 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                        | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                           |        254 |     21,923 |        444 |      2,600 |     24,967 |
+| . (Files)                                                                                                                   |          2 |         97 |          0 |         22 |        119 |
+| CardVault                                                                                                                   |         34 |     12,775 |        157 |        619 |     13,551 |
+| CardVault/.obsidian                                                                                                         |         17 |     12,069 |        157 |         55 |     12,281 |
+| CardVault/.obsidian (Files)                                                                                                 |         10 |        335 |          0 |          0 |        335 |
+| CardVault/.obsidian/plugins                                                                                                 |          7 |     11,734 |        157 |         55 |     11,946 |
+| CardVault/.obsidian/plugins/obsidian-excalidraw-plugin                                                                      |          4 |     11,512 |          1 |          2 |     11,515 |
+| CardVault/.obsidian/plugins/obsidian-tasks-plugin                                                                           |          3 |        222 |        156 |         53 |        431 |
+| CardVault/2 - Source Materials                                                                                              |          2 |         54 |          0 |         27 |         81 |
+| CardVault/2 - Source Materials/Articles                                                                                     |          1 |         43 |          0 |         19 |         62 |
+| CardVault/2 - Source Materials/Videos                                                                                       |          1 |         11 |          0 |          8 |         19 |
+| CardVault/3 - Tags                                                                                                          |          2 |          0 |          0 |          2 |          2 |
+| CardVault/5 - Templates                                                                                                     |          1 |          5 |          0 |          6 |         11 |
+| CardVault/6 - Main Notes                                                                                                    |          6 |         18 |          0 |         20 |         38 |
+| CardVault/CardGame                                                                                                          |          6 |        629 |          0 |        509 |      1,138 |
+| backend                                                                                                                     |         44 |      2,475 |        139 |        569 |      3,183 |
+| backend (Files)                                                                                                             |          4 |        134 |          0 |          7 |        141 |
+| backend/cmd                                                                                                                 |         10 |        949 |         42 |        206 |      1,197 |
+| backend/cmd/hokm4                                                                                                           |          7 |        662 |         36 |        140 |        838 |
+| backend/cmd/user                                                                                                            |          3 |        287 |          6 |         66 |        359 |
+| backend/db                                                                                                                  |          4 |         68 |         15 |         26 |        109 |
+| backend/internal                                                                                                            |         19 |        848 |         24 |        218 |      1,090 |
+| backend/internal/card                                                                                                       |          1 |        114 |          2 |         16 |        132 |
+| backend/internal/dbconf                                                                                                     |          1 |         19 |          0 |          7 |         26 |
+| backend/internal/password                                                                                                   |          1 |         24 |          0 |          7 |         31 |
+| backend/internal/request                                                                                                    |          1 |         56 |          0 |         18 |         74 |
+| backend/internal/response                                                                                                   |          1 |         22 |          0 |          8 |         30 |
+| backend/internal/server                                                                                                     |          6 |        321 |         13 |         85 |        419 |
+| backend/internal/socket                                                                                                     |          4 |        142 |          6 |         35 |        183 |
+| backend/internal/utils                                                                                                      |          1 |         10 |          0 |          4 |         14 |
+| backend/internal/validator                                                                                                  |          2 |         98 |          3 |         27 |        128 |
+| backend/internal/version                                                                                                    |          1 |         42 |          0 |         11 |         53 |
+| backend/sqldb                                                                                                               |          5 |        282 |         18 |         66 |        366 |
+| backend/tools                                                                                                               |          2 |        194 |         40 |         46 |        280 |
+| backend/tools/gos3                                                                                                          |          2 |        194 |         40 |         46 |        280 |
+| game                                                                                                                        |        174 |      6,576 |        148 |      1,390 |      8,114 |
+| game (Files)                                                                                                                |          2 |        488 |          7 |         24 |        519 |
+| game/GameContent                                                                                                            |        170 |      5,992 |        139 |      1,339 |      7,470 |
+| game/GameContent (Files)                                                                                                    |          2 |         33 |          0 |          6 |         39 |
+| game/GameContent/Componets                                                                                                  |          2 |         29 |          0 |         13 |         42 |
+| game/GameContent/Netw                                                                                                       |          5 |        426 |         81 |         97 |        604 |
+| game/GameContent/Scenes                                                                                                     |         44 |      2,111 |         58 |        521 |      2,690 |
+| game/GameContent/Scenes/ErrorBoard                                                                                          |          4 |         76 |          0 |         21 |         97 |
+| game/GameContent/Scenes/Game                                                                                                |         26 |      1,595 |         36 |        370 |      2,001 |
+| game/GameContent/Scenes/Game/Card                                                                                           |          6 |        488 |         28 |        155 |        671 |
+| game/GameContent/Scenes/Game/ChooseHokm                                                                                     |          2 |         52 |          0 |         19 |         71 |
+| game/GameContent/Scenes/Game/Hokm4                                                                                          |         12 |      1,021 |          8 |        177 |      1,206 |
+| game/GameContent/Scenes/Game/Hokm4 (Files)                                                                                  |          7 |        892 |          5 |        123 |      1,020 |
+| game/GameContent/Scenes/Game/Hokm4/States                                                                                   |          5 |        129 |          3 |         54 |        186 |
+| game/GameContent/Scenes/Game/Types                                                                                          |          6 |         34 |          0 |         19 |         53 |
+| game/GameContent/Scenes/Loading                                                                                             |          2 |         21 |          0 |          7 |         28 |
+| game/GameContent/Scenes/LoginPanel                                                                                          |          2 |        112 |          0 |         32 |        144 |
+| game/GameContent/Scenes/MainMenu                                                                                            |          4 |        108 |          0 |         22 |        130 |
+| game/GameContent/Scenes/MainMenu (Files)                                                                                    |          3 |        104 |          0 |         19 |        123 |
+| game/GameContent/Scenes/MainMenu/UserData                                                                                   |          1 |          4 |          0 |          3 |          7 |
+| game/GameContent/Scenes/SceneManager                                                                                        |          4 |        156 |         22 |         51 |        229 |
+| game/GameContent/Scenes/States                                                                                              |          2 |         43 |          0 |         18 |         61 |
+| game/GameContent/assets                                                                                                     |        117 |      3,393 |          0 |        702 |      4,095 |
+| game/GameContent/assets/card-assets                                                                                         |          4 |        116 |          0 |         24 |        140 |
+| game/GameContent/assets/cards                                                                                               |        112 |      3,248 |          0 |        672 |      3,920 |
+| game/GameContent/assets/icons                                                                                               |          1 |         29 |          0 |          6 |         35 |
+| game/PatchSystem                                                                                                            |          2 |         96 |          2 |         27 |        125 |
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                                    | language         | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/app.json                                                            | JSON             |          4 |          0 |          0 |          4 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/appearance.json                                                     | JSON             |          1 |          0 |          0 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/backlink.json                                                       | JSON             |          3 |          0 |          0 |          3 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/community-plugins.json                                              | JSON             |          4 |          0 |          0 |          4 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/core-plugins.json                                                   | JSON             |         31 |          0 |          0 |         31 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/graph.json                                                          | JSON             |         22 |          0 |          0 |         22 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/hotkeys.json                                                        | JSON             |         16 |          0 |          0 |         16 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-excalidraw-plugin/data.json                        | JSON             |     11,491 |          0 |          0 |     11,491 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-excalidraw-plugin/main.js                          | JavaScript       |          8 |          1 |          1 |         10 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-excalidraw-plugin/manifest.json                    | JSON             |         12 |          0 |          1 |         13 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-excalidraw-plugin/styles.css                       | CSS              |          1 |          0 |          0 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-tasks-plugin/main.js                               | JavaScript       |        209 |        156 |         51 |        416 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-tasks-plugin/manifest.json                         | JSON             |         12 |          0 |          1 |         13 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/plugins/obsidian-tasks-plugin/styles.css                            | CSS              |          1 |          0 |          1 |          2 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/templates.json                                                      | JSON             |          3 |          0 |          0 |          3 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/types.json                                                          | JSON             |         27 |          0 |          0 |         27 |
+| /home/arian/w/real-deal/master-card/CardVault/.obsidian/workspace.json                                                      | JSON             |        224 |          0 |          0 |        224 |
+| /home/arian/w/real-deal/master-card/CardVault/2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md | Markdown         |         43 |          0 |         19 |         62 |
+| /home/arian/w/real-deal/master-card/CardVault/2 - Source Materials/Videos/Obsidian The King of Learning Tools.md            | Markdown         |         11 |          0 |          8 |         19 |
+| /home/arian/w/real-deal/master-card/CardVault/3 - Tags/obsidian.md                                                          | Markdown         |          0 |          0 |          1 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/3 - Tags/organize.md                                                          | Markdown         |          0 |          0 |          1 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/5 - Templates/Full Note.md                                                    | Markdown         |          5 |          0 |          6 |         11 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/How to use Obsidian.md                                         | Markdown         |          6 |          0 |          8 |         14 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/Static Godot.md                                                | Markdown         |          0 |          0 |          1 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/card-game.md                                                   | Markdown         |          0 |          0 |          1 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/multiplayer.md                                                 | Markdown         |          0 |          0 |          1 |          1 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/online tic-toc-toe.md                                          | Markdown         |          7 |          0 |          2 |          9 |
+| /home/arian/w/real-deal/master-card/CardVault/6 - Main Notes/turn based game.md                                             | Markdown         |          5 |          0 |          7 |         12 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/Authentication.md                                                    | Markdown         |          9 |          0 |          9 |         18 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/Game Flow Chart.md                                                   | Markdown         |        489 |          0 |        476 |        965 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/Self Notes.md                                                        | Markdown         |          4 |          0 |          0 |          4 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/TO DO Card.md                                                        | Markdown         |         13 |          0 |          5 |         18 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/V 1.0.0.md                                                           | Markdown         |        104 |          0 |         13 |        117 |
+| /home/arian/w/real-deal/master-card/CardVault/CardGame/Version.md                                                           | Markdown         |         10 |          0 |          6 |         16 |
+| /home/arian/w/real-deal/master-card/README.md                                                                               | Markdown         |         30 |          0 |          8 |         38 |
+| /home/arian/w/real-deal/master-card/Taskfile.yml                                                                            | YAML             |         67 |          0 |         14 |         81 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/botplay.go                                                            | Go               |         36 |          0 |         10 |         46 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/gameLoop.go                                                           | Go               |        331 |         15 |         54 |        400 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/gamehelper.go                                                         | Go               |         80 |          8 |         16 |        104 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/http_upgrade.go                                                       | Go               |         55 |          1 |         10 |         66 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/main.go                                                               | Go               |         29 |          0 |          9 |         38 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/routes.go                                                             | Go               |         16 |          2 |          8 |         26 |
+| /home/arian/w/real-deal/master-card/backend/cmd/hokm4/structs.go                                                            | Go               |        115 |         10 |         33 |        158 |
+| /home/arian/w/real-deal/master-card/backend/cmd/user/http_handlers.go                                                       | Go               |        233 |          3 |         48 |        284 |
+| /home/arian/w/real-deal/master-card/backend/cmd/user/main.go                                                                | Go               |         30 |          0 |          8 |         38 |
+| /home/arian/w/real-deal/master-card/backend/cmd/user/routes.go                                                              | Go               |         24 |          3 |         10 |         37 |
+| /home/arian/w/real-deal/master-card/backend/db/hokm4_query.sql                                                              | MS SQL           |          7 |          7 |          7 |         21 |
+| /home/arian/w/real-deal/master-card/backend/db/person_query.sql                                                             | MS SQL           |         14 |          4 |          5 |         23 |
+| /home/arian/w/real-deal/master-card/backend/db/schema.sql                                                                   | MS SQL           |         42 |          1 |         12 |         55 |
+| /home/arian/w/real-deal/master-card/backend/db/version_query.sql                                                            | MS SQL           |          5 |          3 |          2 |         10 |
+| /home/arian/w/real-deal/master-card/backend/docker-compose.yml                                                              | YAML             |         13 |          0 |          2 |         15 |
+| /home/arian/w/real-deal/master-card/backend/go.mod                                                                          | Go Module File   |         35 |          0 |          4 |         39 |
+| /home/arian/w/real-deal/master-card/backend/go.sum                                                                          | Go Checksum File |         72 |          0 |          1 |         73 |
+| /home/arian/w/real-deal/master-card/backend/internal/card/card.go                                                           | Go               |        114 |          2 |         16 |        132 |
+| /home/arian/w/real-deal/master-card/backend/internal/dbconf/dbconf.go                                                       | Go               |         19 |          0 |          7 |         26 |
+| /home/arian/w/real-deal/master-card/backend/internal/password/hash.go                                                       | Go               |         24 |          0 |          7 |         31 |
+| /home/arian/w/real-deal/master-card/backend/internal/request/json.go                                                        | Go               |         56 |          0 |         18 |         74 |
+| /home/arian/w/real-deal/master-card/backend/internal/response/json.go                                                       | Go               |         22 |          0 |          8 |         30 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/CommonGlobal.go                                                 | Go               |         71 |          7 |         19 |         97 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/errors.go                                                       | Go               |         66 |          4 |         17 |         87 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/helpers.go                                                      | Go               |         18 |          2 |          6 |         26 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/middleware.go                                                   | Go               |         95 |          0 |         20 |        115 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/server.go                                                       | Go               |         50 |          0 |         15 |         65 |
+| /home/arian/w/real-deal/master-card/backend/internal/server/user_context.go                                                 | Go               |         21 |          0 |          8 |         29 |
+| /home/arian/w/real-deal/master-card/backend/internal/socket/client.go                                                       | Go               |         81 |          5 |         18 |        104 |
+| /home/arian/w/real-deal/master-card/backend/internal/socket/event.go                                                        | Go               |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/backend/internal/socket/types.go                                                        | Go               |         22 |          1 |          7 |         30 |
+| /home/arian/w/real-deal/master-card/backend/internal/socket/upgrader.go                                                     | Go               |         10 |          0 |          4 |         14 |
+| /home/arian/w/real-deal/master-card/backend/internal/utils/rand.go                                                          | Go               |         10 |          0 |          4 |         14 |
+| /home/arian/w/real-deal/master-card/backend/internal/validator/helpers.go                                                   | Go               |         66 |          3 |         18 |         87 |
+| /home/arian/w/real-deal/master-card/backend/internal/validator/validator.go                                                 | Go               |         32 |          0 |          9 |         41 |
+| /home/arian/w/real-deal/master-card/backend/internal/version/version.go                                                     | Go               |         42 |          0 |         11 |         53 |
+| /home/arian/w/real-deal/master-card/backend/sqlc.yaml                                                                       | YAML             |         14 |          0 |          0 |         14 |
+| /home/arian/w/real-deal/master-card/backend/sqldb/db.go                                                                     | Go               |         22 |          3 |          8 |         33 |
+| /home/arian/w/real-deal/master-card/backend/sqldb/hokm4_query.sql.go                                                        | Go               |         96 |          4 |         24 |        124 |
+| /home/arian/w/real-deal/master-card/backend/sqldb/models.go                                                                 | Go               |         41 |          3 |          9 |         53 |
+| /home/arian/w/real-deal/master-card/backend/sqldb/person_query.sql.go                                                       | Go               |         82 |          4 |         14 |        100 |
+| /home/arian/w/real-deal/master-card/backend/sqldb/version_query.sql.go                                                      | Go               |         41 |          4 |         11 |         56 |
+| /home/arian/w/real-deal/master-card/backend/tools/gos3/main.go                                                              | Go               |        143 |         30 |         32 |        205 |
+| /home/arian/w/real-deal/master-card/backend/tools/gos3/s3_helpers.go                                                        | Go               |         51 |         10 |         14 |         75 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Componets/ShadowTextureComponent.gd                                    | GDScript         |         11 |          0 |          5 |         16 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Componets/SwingComponent.gd                                            | GDScript         |         18 |          0 |          8 |         26 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Netw/JsonClassConverter.gd                                             | GDScript         |        254 |         60 |         33 |        347 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Netw/KAccount.gd                                                       | GDScript         |         72 |          6 |         25 |        103 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Netw/KEvent.gd                                                         | GDScript         |         35 |          1 |         12 |         48 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Netw/Katana.gd                                                         | GDScript         |          4 |          2 |          6 |         12 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Netw/KatanaSocket.gd                                                   | GDScript         |         61 |         12 |         21 |         94 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/ErrorBoard/error_board.gd                                       | GDScript         |         31 |          0 |         11 |         42 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/ErrorBoard/error_board.tscn                                     | GDScene          |         19 |          0 |          4 |         23 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/ErrorBoard/error_row_container.gd                               | GDScript         |          3 |          0 |          1 |          4 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/ErrorBoard/error_row_container.tscn                             | GDScene          |         23 |          0 |          5 |         28 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/2d_prespective.gdshader                               | gdshader         |         36 |          8 |         12 |         56 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/card.gd                                               | GDScript         |         86 |          3 |         32 |        121 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/card.tscn                                             | GDScene          |         71 |          0 |         11 |         82 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/drawn_cards.gd                                        | GDScript         |        164 |         16 |         75 |        255 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/game_test.tscn                                        | GDScene          |        106 |          0 |         17 |        123 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Card/shader_script.gd                                      | GDScript         |         25 |          1 |          8 |         34 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/ChooseHokm/choose_hokm.gd                                  | GDScript         |         10 |          0 |         10 |         20 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/ChooseHokm/choose_hokm.tscn                                | GDScene          |         42 |          0 |          9 |         51 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/OfflineHokm4.tscn                                    | GDScene          |        375 |          0 |         39 |        414 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn                                     | GDScene          |        411 |          0 |         46 |        457 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/States/ChooseHokm.gd                                 | GDScript         |         34 |          3 |         13 |         50 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/States/ConnectingState.gd                            | GDScript         |         10 |          0 |          4 |         14 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd                                | GDScript         |         17 |          0 |          7 |         24 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/States/NewTrickState.gd                              | GDScript         |         17 |          0 |          7 |         24 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/States/game_turn.gd                                  | GDScript         |         51 |          0 |         23 |         74 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/TrickScore.gd                                        | GDScript         |         19 |          0 |          8 |         27 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/TurnScores.gd                                        | GDScript         |         19 |          0 |          8 |         27 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/canvas_game_tic_2.gd                                 | GDScript         |          3 |          0 |          2 |          5 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/offline_hokm_4.gd                                    | GDScript         |          8 |          0 |          3 |         11 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Hokm4/table.gd                                             | GDScript         |         57 |          5 |         17 |         79 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/CardData.gd                                          | GDScript         |          9 |          0 |          3 |         12 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/CardPlayed.gd                                        | GDScript         |          3 |          0 |          2 |          5 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/GameData.gd                                          | GDScript         |         11 |          0 |          5 |         16 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/PlayerData.gd                                        | GDScript         |          3 |          0 |          4 |          7 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/TrickData.gd                                         | GDScript         |          6 |          0 |          4 |         10 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Game/Types/TurnData.gd                                          | GDScript         |          2 |          0 |          1 |          3 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Loading/loading.tscn                                            | GDScene          |         15 |          0 |          4 |         19 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/Loading/loading_canvas.gd                                       | GDScript         |          6 |          0 |          3 |          9 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/LoginPanel/LoginPanel.tscn                                      | GDScene          |         45 |          0 |         11 |         56 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/LoginPanel/login_panel.gd                                       | GDScript         |         67 |          0 |         21 |         88 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/MainMenu/MainMenu.tscn                                          | GDScene          |         84 |          0 |         10 |         94 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/MainMenu/UserData/user_data.gd                                  | GDScript         |          4 |          0 |          3 |          7 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/MainMenu/main_menu.gd                                           | GDScript         |         17 |          0 |          6 |         23 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/MainMenu/main_menu_canvas.gd                                    | GDScript         |          3 |          0 |          3 |          6 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/SceneManager/CheckErrors.gd                                     | GDScript         |         40 |         19 |         14 |         73 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/SceneManager/SceneManager.tscn                                  | GDScene          |         64 |          0 |         12 |         76 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/SceneManager/scene_level_base.gd                                | GDScript         |         10 |          0 |          6 |         16 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/SceneManager/scene_manager.gd                                   | GDScript         |         42 |          3 |         19 |         64 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/States/State.gd                                                 | GDScript         |         12 |          0 |          6 |         18 |
+| /home/arian/w/real-deal/master-card/game/GameContent/Scenes/States/state_machine.gd                                         | GDScript         |         31 |          0 |         12 |         43 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/card-assets/1.2 Poker cards.png.import                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/card-assets/Deck of cards ( full cards ).png.import             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/card-assets/fiches addon (Poker Cards).png.import               | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/card-assets/minicards.png.import                                | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.1.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.2.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.3.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.4.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.5.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.6.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.7.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/10.8.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/2.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/3.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/4.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/5.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/6.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/7.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/8.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/9.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.1.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.2.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.3.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.4.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.5.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.6.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.7.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/A.8.png.import                                            | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back1.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back2.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back3.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back4.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back5.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back6.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back7.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Back8.png.import                                          | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J1.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J2.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J3.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J4.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J5.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J6.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J7.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/J8.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K1.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K2.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K3.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K4.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K5.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K6.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K7.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/K8.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q1.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q2.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q3.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q4.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q5.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q6.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q7.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/cards/Q8.png.import                                             | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/assets/icons/home.png.import                                           | GDResource       |         29 |          0 |          6 |         35 |
+| /home/arian/w/real-deal/master-card/game/GameContent/icon.svg                                                               | XML              |          1 |          0 |          0 |          1 |
+| /home/arian/w/real-deal/master-card/game/GameContent/icon.svg.import                                                        | GDResource       |         32 |          0 |          6 |         38 |
+| /home/arian/w/real-deal/master-card/game/PatchSystem/LoadPatchesScript.gd                                                   | GDScript         |         78 |          2 |         23 |        103 |
+| /home/arian/w/real-deal/master-card/game/PatchSystem/loader.tscn                                                            | GDScene          |         18 |          0 |          4 |         22 |
+| /home/arian/w/real-deal/master-card/game/export_presets.cfg                                                                 | Properties       |        467 |          0 |         12 |        479 |
+| /home/arian/w/real-deal/master-card/game/project.godot                                                                      | GDResource       |         21 |          7 |         12 |         40 |
+| Total                                                                                                                       |                  |     21,923 |        444 |      2,600 |     24,967 |
++-----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

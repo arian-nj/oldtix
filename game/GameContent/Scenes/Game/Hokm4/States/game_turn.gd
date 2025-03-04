@@ -37,7 +37,6 @@ func _on_new_event(e:KEvent.Event)->void:
 		table.isMyTurn = false
 		table.drawer.cards.erase(last_card_played)
 
-
 	elif e.type == KEvent.TYPE_INVALID_PLAY:
 		status_label.text = "Invalid"
 		last_card_played = null
