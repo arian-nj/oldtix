@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/V 1.0.0.md",
+                "file": "CardGame/TO DO Card.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "V 1.0.0"
+              "title": "TO DO Card"
             }
           }
         ]
@@ -176,10 +176,10 @@
   },
   "active": "d6ed58d6ec7b0dc4",
   "lastOpenFiles": [
-    "CardGame/Self Notes.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/Version.md",
     "CardGame/V 1.0.0.md",
+    "CardGame/Game Flow Chart.md",
+    "CardGame/Self Notes.md",
+    "CardGame/Version.md",
     "CardGame/TO DO Card.md",
     "CardGame/Authentication.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",

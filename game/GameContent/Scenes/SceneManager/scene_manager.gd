@@ -24,7 +24,7 @@ func handle_level_change(change_level_to:Levels)->void:
 	
 	match change_level_to:
 		Levels.GameHokm4:
-			next_level_name = "Game/Hokm4/GameHokm4"
+			next_level_name = "Game/Hokm4/OnlineHokm4"
 		Levels.MainMenu:
 			next_level_name = "MainMenu/MainMenu"
 		_:

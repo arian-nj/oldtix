@@ -1,3 +1,4 @@
+### DONT TOUCH THIS IF YOU DON'T KNOW HOW IT'S WORKING i don't have no clue
 extends State
 
 @export var ws:KatanaSocket
@@ -27,7 +28,7 @@ func Exit()->void:
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_NEW_CARD:
-		table.drawer.new_cards_event(e)
+		table.new_cards_event(e)
 		got_cards_time += 1
 		if got_cards_time == 3:
 			Transition.emit(self,"game_turn")
@@ -46,4 +47,3 @@ func _on_new_event(e:KEvent.Event)->void:
 # only runs if hakem panel is shown and hakem choosed hokm
 func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
 	ws.send_event(KEvent.TYPE_HOKM_CHOOSED,str(Hokm))
-
