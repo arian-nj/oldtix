@@ -10,6 +10,7 @@ class_name GameData extends Resource
 
 @export var current_trick:TrickData
 
+
 enum {
 	TeamOne = 0,
 	TeamTwo = 1

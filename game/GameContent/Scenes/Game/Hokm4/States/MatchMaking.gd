@@ -14,6 +14,8 @@ func Enter()->void:
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_MATCH_FOUND:
 		table.parse_game_data(e.data)
+		table.set_player_to_hand()
+
 		status_label.text = "waiting new trick"
 		ws.hold_events()
 		Transition.emit(self,"new_trick")

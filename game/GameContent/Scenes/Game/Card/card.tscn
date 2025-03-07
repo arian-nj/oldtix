@@ -77,5 +77,3 @@ shape = SubResource("RectangleShape2D_sqh4b")
 [node name="SwingComponent" type="Node" parent="." node_paths=PackedStringArray("CardButton")]
 script = ExtResource("5_t00ys")
 CardButton = NodePath("..")
-spring = null
-damp = null

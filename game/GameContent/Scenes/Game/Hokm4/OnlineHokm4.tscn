@@ -16,17 +16,17 @@
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/NewTrickState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 
-[sub_resource type="Gradient" id="Gradient_5kdxn"]
+[sub_resource type="Gradient" id="Gradient_wqsup"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
 colors = PackedColorArray(0, 0.329412, 0, 1, 1.23335e-07, 0.196067, 0, 1, 0, 0.328236, 2.40654e-07, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2hoqw"]
-gradient = SubResource("Gradient_5kdxn")
+gradient = SubResource("Gradient_wqsup")
 fill_from = Vector2(0.478632, 0)
 fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsoy"]
-size = Vector2(94, 137)
+size = Vector2(182, 115)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcw6q"]
 bg_color = Color(0.145098, 0.72549, 0.352941, 1)
@@ -71,10 +71,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
-drawer = NodePath("MeDrawCards")
-right_drawer = NodePath("RightDrawCards")
-top_drawer = NodePath("TopDrawCards")
-left_drawer = NodePath("LeftDrawCards")
+drawer = NodePath("Hands/MeDrawCards")
+right_drawer = NodePath("Hands/RightDrawCards")
+top_drawer = NodePath("Hands/TopDrawCards")
+left_drawer = NodePath("Hands/LeftDrawCards")
 
 [node name="TextureRect" type="TextureRect" parent="Table"]
 layout_mode = 1
@@ -100,80 +100,100 @@ offset_right = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Table"]
-position = Vector2(219, 411)
+[node name="PlayZone" type="StaticBody2D" parent="Table"]
+position = Vector2(219, 457)
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Table/StaticBody2D"]
-position = Vector2(8, -37)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table/PlayZone"]
+position = Vector2(4, 9.5)
 shape = SubResource("RectangleShape2D_tmsoy")
 
-[node name="MeDrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
+[node name="Hands" type="Control" parent="Table"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "uniqueLabel", "isDrawnLabel")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = 196.0
+offset_top = 728.0
+offset_right = 196.0
+offset_bottom = 728.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("2_22pf8")
 selectable = true
 is_horizontal = true
 show_cards_value = true
-from_middle = NodePath("../from_middle")
+from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
 card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.25
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
-IsDrawnLabel = NodePath("../IsDrawnLabel")
+uniqueLabel = NodePath("hand/Label")
+isDrawnLabel = NodePath("../../IsDrawnLabel")
 
-[node name="hand" type="Control" parent="Table/MeDrawCards"]
+[node name="hand" type="Control" parent="Table/Hands/MeDrawCards"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = 10.0
 offset_top = -106.0
+offset_right = 10.0
 offset_bottom = -106.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ColorRect" type="ColorRect" parent="Table/MeDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="Table/Hands/MeDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="RightDrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
+[node name="Label" type="Label" parent="Table/Hands/MeDrawCards/hand"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = -123.0
+offset_right = 38.0
+offset_bottom = -100.0
+text = " ttttk"
+
+[node name="RightDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = 66.0
-offset_right = -2.0
-offset_bottom = 66.0
+offset_left = 390.0
+offset_top = 430.0
+offset_right = 390.0
+offset_bottom = 430.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_22pf8")
-from_middle = NodePath("../from_middle")
+from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
+play_place = NodePath("PlayPlace")
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.25
-two_card_movment_dur = 0.3
+card_movment_dur = 0.2
+two_card_movment_dur = 0.15
 flip_card_dur = 0.09
 two_card_dur = 0.1
 final_degree = -90.0
-IsDrawnLabel = NodePath("../IsDrawnLabel")
+uniqueLabel = NodePath("hand/Label2")
 
-[node name="hand" type="Control" parent="Table/RightDrawCards"]
+[node name="hand" type="Control" parent="Table/Hands/RightDrawCards"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -187,75 +207,56 @@ offset_bottom = -57.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ColorRect" type="ColorRect" parent="Table/RightDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="Table/Hands/RightDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="LeftDrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = 66.0
-offset_right = -40.0
-offset_bottom = 66.0
-grow_vertical = 2
-script = ExtResource("2_22pf8")
-from_middle = NodePath("../from_middle")
-hand = NodePath("hand")
-card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.25
-two_card_movment_dur = 0.3
-flip_card_dur = 0.09
-two_card_dur = 0.1
-final_degree = -90.0
-IsDrawnLabel = NodePath("../IsDrawnLabel")
+[node name="Label2" type="Label" parent="Table/Hands/RightDrawCards/hand"]
+layout_mode = 0
+offset_left = -141.0
+offset_top = -29.0
+offset_right = -101.0
+offset_bottom = -6.0
+text = " "
 
-[node name="hand" type="Control" parent="Table/LeftDrawCards"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -57.0
-offset_right = -20.0
-offset_bottom = -57.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="PlayPlace" type="Control" parent="Table/Hands/RightDrawCards"]
+anchors_preset = 0
+offset_left = -158.0
+offset_top = -195.0
+offset_right = -118.0
+offset_bottom = -155.0
 
-[node name="ColorRect" type="ColorRect" parent="Table/LeftDrawCards/hand"]
+[node name="ColorRect3" type="ColorRect" parent="Table/Hands/RightDrawCards/PlayPlace"]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-color = Color(0, 0, 0, 1)
 
-[node name="TopDrawCards" type="Control" parent="Table" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
+[node name="TopDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 4.0
+offset_left = 200.0
 offset_top = 26.0
-offset_right = 4.0
+offset_right = 200.0
 offset_bottom = 26.0
 grow_horizontal = 2
 script = ExtResource("2_22pf8")
 is_horizontal = true
-from_middle = NodePath("../from_middle")
+from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
+play_place = NodePath("PlayPlace")
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.25
-two_card_movment_dur = 0.3
+card_movment_dur = 0.2
+two_card_movment_dur = 0.15
 flip_card_dur = 0.09
 two_card_dur = 0.1
-IsDrawnLabel = NodePath("../IsDrawnLabel")
+uniqueLabel = NodePath("hand/Label3")
 
-[node name="hand" type="Control" parent="Table/TopDrawCards"]
+[node name="hand" type="Control" parent="Table/Hands/TopDrawCards"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -269,11 +270,97 @@ offset_bottom = -57.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ColorRect" type="ColorRect" parent="Table/TopDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="Table/Hands/TopDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
+
+[node name="Label3" type="Label" parent="Table/Hands/TopDrawCards/hand"]
+layout_mode = 0
+offset_left = -24.0
+offset_top = 131.0
+offset_right = 16.0
+offset_bottom = 154.0
+text = " "
+
+[node name="PlayPlace" type="Control" parent="Table/Hands/TopDrawCards"]
+anchors_preset = 0
+offset_left = -20.0
+offset_top = 126.0
+offset_right = 20.0
+offset_bottom = 166.0
+metadata/_edit_group_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="Table/Hands/TopDrawCards/PlayPlace"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LeftDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = 430.0
+offset_right = -40.0
+offset_bottom = 430.0
+grow_vertical = 2
+script = ExtResource("2_22pf8")
+from_middle = NodePath("../../from_middle")
+hand = NodePath("hand")
+play_place = NodePath("PlayPlace")
+card_scene = ExtResource("3_8tgkb")
+card_movment_dur = 0.2
+two_card_movment_dur = 0.15
+flip_card_dur = 0.09
+two_card_dur = 0.1
+final_degree = -90.0
+uniqueLabel = NodePath("hand/Label4")
+
+[node name="hand" type="Control" parent="Table/Hands/LeftDrawCards"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -57.0
+offset_right = -20.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="Table/Hands/LeftDrawCards/hand"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label4" type="Label" parent="Table/Hands/LeftDrawCards/hand"]
+layout_mode = 0
+offset_left = 142.0
+offset_top = -57.0
+offset_right = 182.0
+offset_bottom = -34.0
+text = " "
+
+[node name="PlayPlace" type="Control" parent="Table/Hands/LeftDrawCards"]
+anchors_preset = 0
+offset_left = 149.0
+offset_top = -190.0
+offset_right = 189.0
+offset_bottom = -150.0
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="Table/Hands/LeftDrawCards/PlayPlace"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="IsDrawnLabel" type="Label" parent="Table"]
 layout_mode = 0
@@ -409,9 +496,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -81.0
-offset_top = -339.0
+offset_top = -261.0
 offset_right = 81.0
-offset_bottom = -316.0
+offset_bottom = -238.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Loading..."

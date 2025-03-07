@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "40b807ef32a9733a",
+        "id": "1008f44122f374dc",
         "type": "tabs",
         "children": [
           {
-            "id": "d6ed58d6ec7b0dc4",
+            "id": "5a3caa5d95798a37",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/TO DO Card.md",
+                "file": "CardGame/V 1.0.0.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "TO DO Card"
+              "title": "V 1.0.0"
             }
           }
         ]
@@ -174,13 +174,15 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "d6ed58d6ec7b0dc4",
+  "active": "5a3caa5d95798a37",
   "lastOpenFiles": [
-    "CardGame/V 1.0.0.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/Self Notes.md",
-    "CardGame/Version.md",
     "CardGame/TO DO Card.md",
+    "CardGame/Name.md",
+    "CardGame/V 1.0.0.md",
+    "CardGame/Self Notes.md",
+    "CardGame/Game Flow Chart.md",
+    "6 - Main Notes/2025-03-06.md",
+    "CardGame/Version.md",
     "CardGame/Authentication.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
     "Sherry.md",
@@ -216,8 +218,6 @@
     "6 - Main Notes/me.md",
     "6 - Main Notes/Gizmondo Story.md",
     "2 - Source Materials/Videos/Obsidian The King of Learning Tools.md",
-    "6 - Main Notes/2024-12-16.md",
-    "5 - Templates/Full Note.md",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]

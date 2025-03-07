@@ -40,7 +40,7 @@ const TYPE_END_TRICK:String = "end_trick"
 
 const TYPE_TURN_START:String = "turn_start"
 const TYPE_YOUR_TURN:String = "your_turn"
-const TYPE_PLAY_TURN:String = "play_turn"
+const TYPE_PLAY_TURN_ORDER:String = "play_turn"
 const TYPE_VALID_PLAY:String = "valid_play"
 const TYPE_INVALID_PLAY:String = "invalid_play"
 const TYPE_PLAY_TIMEOUT:String = "play_timeout"

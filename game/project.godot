@@ -17,6 +17,7 @@ config/icon="res://GameContent/icon.svg"
 
 [debug]
 
+gdscript/warnings/unused_variable=2
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/unsafe_property_access=2
 

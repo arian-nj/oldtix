@@ -1,7 +1,13 @@
 class_name CardDrawer extends Control
 
-signal CardPlayed(card:Card)
+signal MyCardPlayed(card:Card)
+signal OtherCardPlayed(card:Card)
+signal AddToQueue(call:Callable)
 
+var unique_string:String :
+	set(value):
+		unique_string = value
+		uniqueLabel.text = value
 
 @export var selectable:bool = false
 @export var is_horizontal:bool
@@ -9,6 +15,7 @@ signal CardPlayed(card:Card)
 
 @export var from_middle: Control
 @export var hand: Control
+@export var play_place: Control
 
 @export var rot_max: float = 10.0
 @export var card_offset: float = 20.0
@@ -22,30 +29,28 @@ signal CardPlayed(card:Card)
 
 @export var final_degree:float = 0
 
+@export var uniqueLabel: Label
+@export var isDrawnLabel: Label
+
+var isDrawn:bool = false :
+	set(v):
+		isDrawn = v
+		if isDrawnLabel != null:
+			isDrawnLabel.text = str(v)
+
+var draw_queue :Array[Callable] = []
 
 var cards:Array[Card] = []
 var tween:Tween
 
-var isDrawn:bool = false
-
-var draw_queue :Array[Callable] = []
-
-func _card_played(card:Card)->void:
-	if isDrawn:
-		CardPlayed.emit(card)
-
-
-@export var IsDrawnLabel: Label
-func _process(_delta: float) -> void:
-	IsDrawnLabel.text = str(isDrawn)
-
-
+func new_tween()->Tween:
+	return create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
 func _ready() -> void:
 	get_window().size_changed.connect(draw_cards)
 
-
-
+func push_callback(c:Callable)->void:
+	AddToQueue.emit(c)
 
 func clear_cards()->void:
 	push_callback(
@@ -53,27 +58,20 @@ func clear_cards()->void:
 	)
 
 func _clear_cards()->void:
+	print_debug(cards.size())
 	for c:Card in cards:
 		c.queue_free()
+	
 	cards = []
 
+func break_action()->void:
+	self.push_callback(_break_action)
 
-func remove_one_card(card:Card) -> void:
-	push_callback(
-		card.queue_free.bind()
-	)
-	push_callback(
-		draw_cards.bind()
-	)
-
-func push_callback(c:Callable)->void:
-	while draw_queue.size() > 0:
-		await get_tree().create_timer(.5).timeout
-	draw_queue.push_back(c)
-	
+func _break_action()->String:
+	return "break"
 
 func new_cards_event(e:KEvent.Event)->void:
-	self.push_callback(self._new_cards_event.bind(e))
+	self.push_callback(_new_cards_event.bind(e))
 
 func _new_cards_event(e:KEvent.Event)->void:
 	var json_data:Variant = JSON.parse_string(e.data)
@@ -81,10 +79,13 @@ func _new_cards_event(e:KEvent.Event)->void:
 	for card_json:Variant in cards_json:
 		create_card(card_json["suit"],card_json["value"])
 	draw_cards()
-	print("cards size is : ",cards.size())
+	# print("cards size is : ",cards.size())
 
 
 func create_card(suite:CardData.CardSuites,value:int)->void:
+	self.push_callback(_create_card.bind(suite,value))
+
+func _create_card(suite:CardData.CardSuites,value:int)->void:
 	var c:Card = card_scene.instantiate()
 	c.card_data = CardData.new()
 	c.card_data.suit = suite
@@ -97,16 +98,42 @@ func create_card(suite:CardData.CardSuites,value:int)->void:
 	c.card_played.connect(_card_played)
 	c.not_inplace.connect(draw_cards)
 
+func _card_played(card:Card)->void:
+	if isDrawn:
+		cards.erase(card)
+		MyCardPlayed.emit(card)
+
+# play card
+
+func play_others_card(card_data:CardData) -> void:
+	push_callback(_play_others_card.bind(card_data))
+	push_callback(draw_cards)
+
+func _play_others_card(card_data:CardData) -> void:
+	var rand_card_variant :Variant = cards.pick_random()
+	if rand_card_variant == null:
+		return
+	var rand_card:Card = rand_card_variant
+	cards.erase(rand_card)
+	rand_card.card_data = card_data
+
+	OtherCardPlayed.emit(rand_card)
+	tween = new_tween()
+	tween.parallel().tween_property(rand_card,"global_position",play_place.global_position,card_movment_dur)
+	tween.parallel().tween_property(rand_card,"rotation_degrees",0,card_movment_dur)
+	rand_card.prespective3DShader.flip_y(flip_card_dur, card_movment_dur/2, rand_card.load_assets)
+	await tween.finished
+	return
+
 
 # func draw_cards(from_pos: Vector2 = Vector2.ZERO) -> void:
 func draw_cards() -> void:
-	push_callback(
-		_draw_cards.bind()
-	)
+	push_callback(_draw_cards.bind())
 
 func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 	if cards.is_empty():
 		return
+	# print(cards.size())
 
 	isDrawn = false
 	sort_cards()
@@ -152,7 +179,7 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 
 			if show_cards_value:
 				card.prespective3DShader.flip_y(flip_card_dur, movementDuration + delay, card.load_assets)
-			tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+			tween = new_tween()
 			tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 			tween.parallel().tween_property(card, "rotation_degrees", final_degree, movementDuration).set_delay(delay)
 		
@@ -163,7 +190,7 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 				card.global_position = final_pos
 			else:
 				movementDuration += i * (two_card_movment_dur / 4.0)
-				tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+				tween = new_tween()
 				tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 
 	await tween.finished
