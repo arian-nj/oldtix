@@ -7,6 +7,7 @@ var patch_user_config_address := "user://score.cfg"
 var config := ConfigFile.new()
 
 func _ready() -> void:
+	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 	var err := config.load(patch_user_config_address)
 	if err != OK:
 		err = config.save(patch_user_config_address)

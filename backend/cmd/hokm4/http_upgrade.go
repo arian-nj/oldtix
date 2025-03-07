@@ -53,7 +53,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 			select {
 			case new_event := <-client.NewEvents:
 				if new_event.Type == socket.TypeMakeMatch {
-					app.AddUserToMatchMaking(&new_event, client)
+					app.AddUserToMatchMaking(&new_event, client, user.ID)
 					return nil
 				}
 			case <-ctx.Done():

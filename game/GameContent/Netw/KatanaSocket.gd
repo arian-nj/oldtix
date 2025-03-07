@@ -1,4 +1,5 @@
-class_name KatanaSocket extends Node
+class_name KatanaSocket
+extends Node
 
 signal new_event(e:KEvent.Event)
 var pause :bool = true
@@ -29,8 +30,6 @@ func send_event(event_type: String, event_data: String="") -> void:
 
 # Handles incoming events (to be extended)
 func _handle_event(event: KEvent.Event) -> void:
-	# print(event.type + " -- "+ KAccount._instance.MyAccount.username  + " -- " + event.data)
-	# print(" ")
 	if pause == true:
 		events_queue.append(event)
 	else:

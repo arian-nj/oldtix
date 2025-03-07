@@ -21,18 +21,8 @@ func (app *ApplicationH2) MatchUsers() error {
 		p1.IsPlayng = true
 		p2.IsPlayng = true
 
-		p3 := Player{
-			UserId:   0,
-			Client:   socket.NewClient(nil),
-			Cards:    []cards.Card{},
-			IsPlayng: false,
-		}
-		p4 := Player{
-			UserId:   0,
-			Client:   socket.NewClient(nil),
-			Cards:    []cards.Card{},
-			IsPlayng: false,
-		}
+		p3 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
+		p4 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
 
 		p1.TeamId = TeamOne
 		p2.TeamId = TeamTwo
@@ -40,7 +30,7 @@ func (app *ApplicationH2) MatchUsers() error {
 		p3.TeamId = TeamOne
 		p4.TeamId = TeamTwo
 
-		players := []*Player{p1, p2, &p3, &p4}
+		players := []*Player{p1, p2, p3, p4}
 
 		game, err := app.NewGameState(players)
 		if err != nil {
@@ -62,12 +52,9 @@ func (app *ApplicationH2) MatchUsers() error {
 	}
 }
 
-func (app *ApplicationH2) AddUserToMatchMaking(event *socket.Event, client *socket.Client) error {
-	p := Player{
-		Client: client,
-		Cards:  []cards.Card{},
-	}
-	app.lobby.Queue <- &p
+func (app *ApplicationH2) AddUserToMatchMaking(event *socket.Event, client *socket.Client, userId int64) error {
+	p := NewPlayer(userId, client, []cards.Card{}, false)
+	app.lobby.Queue <- p
 	return nil
 }
 
@@ -82,7 +69,6 @@ func (game *GameState) GameInitialize() error {
 }
 
 func (game *GameState) RunGame() error {
-	defer game.SaveGameState()
 	defer func() {
 		for _, p := range game.Players {
 			p.Client.Close()
@@ -93,6 +79,10 @@ func (game *GameState) RunGame() error {
 	err := game.GameInitialize()
 	if err != nil {
 		return err
+	}
+
+	for _, p := range game.Players {
+		game.Logger.Info(p.PlayerUnique)
 	}
 
 	for _, p := range game.Players {
@@ -158,6 +148,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	all_cards = game.sendCards(4, all_cards, game.Players)
 	game.sendCards(4, all_cards, game.Players)
 
+	// time.Sleep(1 * time.Second)
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
@@ -195,7 +186,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 func (game *GameState) WaitToChooseHokm() {
 
 	hakem := game.Players[game.CurrentTrick.HakemIndex]
-	game.Logger.Info(fmt.Sprintln("hakem is ", hakem.UserId, game.CurrentTrick.HakemIndex))
+	game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
 	var choose_hokm_ticker *time.Ticker
 	choose_hokm_ticker = time.NewTicker(1 * time.Second)
 	if hakem.IsPlayng {
@@ -271,19 +262,21 @@ func (game *GameState) RunTurn() error {
 		currentTurn := game.CurrentTrick.CurrentTurn
 		new_card_player := NewPlayerCardPlayed(playing_player, playing_player.Cards[cardIndex])
 
-		currentTurn.CardsPlayed = append(currentTurn.CardsPlayed, new_card_player)
-		playing_player.Cards = append(playing_player.Cards[:cardIndex], playing_player.Cards[cardIndex+1:]...)
-
-		played_data_byte, err := json.Marshal(new_card_player)
+		// Brodcast played card
+		b_data, err := json.Marshal(new_card_player)
 		if err != nil {
 			return err
 		}
 
-		for _, otherp := range game.Players {
-			if otherp.UserId != playing_player.UserId {
-				playing_player.AddToEgress(socket.NewEvent(socket.TypeTurnPlayed, socket.EventMessage(played_data_byte)))
+		turn_played_event := socket.NewEvent(socket.TypeTurnPlayed, socket.EventMessage(b_data))
+		for _, player := range game.Players {
+			if player != playing_player {
+				player.AddToEgress(turn_played_event)
 			}
 		}
+
+		currentTurn.CardsPlayed = append(currentTurn.CardsPlayed, new_card_player)
+		playing_player.Cards = append(playing_player.Cards[:cardIndex], playing_player.Cards[cardIndex+1:]...)
 	}
 
 	// Decide who wins Turn
@@ -334,7 +327,7 @@ func (game *GameState) WaitForPlayerToPlayCard(playing_player *Player) (cardInde
 
 	NewTicker = time.NewTicker(time.Millisecond * 1)
 	if playing_player.IsPlayng {
-		NewTicker = time.NewTicker(time.Second * 15)
+		NewTicker = time.NewTicker(time.Second * 30)
 	}
 	var card_played cards.Card
 	cardIndex = -1
@@ -343,7 +336,7 @@ OuterLoop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypePlayTurn {
+			if new_game_event.event.Type != socket.TypePlayTurnOrder {
 				// app.Logger.Debug("not same type")
 				continue
 			}

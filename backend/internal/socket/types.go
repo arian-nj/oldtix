@@ -16,14 +16,14 @@ const (
 	TypeEndTrick EventType = "end_trick"
 
 	// Game Turn Stuff
-	TypeTurnStart   EventType = "turn_start"
-	TypeYourTurn    EventType = "your_turn"
-	TypePlayTurn    EventType = "play_turn"
-	TypeValidPlay   EventType = "valid_play"
-	TypeInvalidPlay EventType = "invalid_play"
-	TypePlayTimeout EventType = "play_timeout"
-	TypeTurnPlayed  EventType = "turn_played"
-	TypeTurnEnd     EventType = "turn_end"
+	TypeTurnStart     EventType = "turn_start"
+	TypeYourTurn      EventType = "your_turn"
+	TypePlayTurnOrder EventType = "play_turn"
+	TypeValidPlay     EventType = "valid_play"
+	TypeInvalidPlay   EventType = "invalid_play"
+	TypePlayTimeout   EventType = "play_timeout"
+	TypeTurnPlayed    EventType = "turn_played"
+	TypeTurnEnd       EventType = "turn_end"
 )
 
 type EventMessage string

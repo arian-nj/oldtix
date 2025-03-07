@@ -69,5 +69,5 @@ func load_all_scripts() -> void:
 
 
 func _ready() -> void:
-	set_all_gdscript_warnings_to_warning()
+	# set_all_gdscript_warnings_to_warning()
 	load_all_scripts()

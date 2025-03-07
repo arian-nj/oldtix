@@ -15,11 +15,9 @@ var start_choosed_pos:Vector2
 
 @export var card_data:CardData
 
-
 var default_scale:Vector2
 var in_hand:bool
 var is_touching_area:bool
-
 
 func suite_name() -> String:
 	var sname:String = ""
@@ -63,14 +61,10 @@ func load_assets()->void:
 	var img:CompressedTexture2D = load(file_name)
 	cardTexture.texture = img
 
-
-
 func _body_entered(_body:Node2D)->void:
 	is_touching_area = true
-	card_played.emit(self)
 
 func _body_exited(_body:Node2D)->void:
-	card_unplayed.emit(self)
 	is_touching_area = false
 
 func _process(delta:float)->void:
@@ -86,14 +80,17 @@ func set_card_position() -> void:
 	global_position = mouse_pos-(local_pos_on_press * scale)
 
 func _on_button_up() -> void:
-	if !is_touching_area:
+	if is_touching_area:
+		card_played.emit(self)
+	else :
 		not_inplace.emit()
+	
 	prespective3DShader.set_shader(0,0)
 
 	change_scale(default_scale)
 	
 	rotation = 0
-	
+
 	# pivot_offset = Vector2(0.0,0.0)
 
 func _on_button_down() -> void:
@@ -110,6 +107,7 @@ func _on_button_down() -> void:
 	prespective3DShader.calcute_shader()
 	change_scale(default_scale*1.1)
 	swingComponent.last_position = global_position
+
 
 ### scale stuff
 var scale_tween:Tween

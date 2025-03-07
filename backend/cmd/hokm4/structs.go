@@ -6,6 +6,7 @@ import (
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/internal/utils"
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
@@ -17,11 +18,24 @@ const (
 )
 
 type Player struct {
-	UserId   int64          `json:"user_id"`
-	TeamId   Team           `json:"team"`
-	Client   *socket.Client `json:"-"`
-	Cards    []cards.Card   `json:"-"`
-	IsPlayng bool           `json:"is_playing"`
+	UserId       int64          `json:"user_id"`
+	PlayerUnique string         `json:"player_unique"`
+	TeamId       Team           `json:"team"`
+	Client       *socket.Client `json:"-"`
+	Cards        []cards.Card   `json:"-"`
+	IsPlayng     bool           `json:"is_playing"`
+}
+
+func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *Player {
+	randString := utils.GenerateRandomString(16)
+
+	return &Player{
+		UserId:       UserId,
+		PlayerUnique: randString,
+		Client:       Client,
+		Cards:        Cards,
+		IsPlayng:     IsPlayng,
+	}
 }
 
 func (p *Player) AddToEgress(e *socket.Event) {
@@ -79,15 +93,11 @@ func (app *ApplicationH2) NewGameState(players []*Player) (*GameState, error) {
 	}, nil
 }
 
-func (game *GameState) SaveGameState() {
-
-}
-
 type Trick struct {
 	id               int64
 	Hokm             cards.Suite `json:"hokm"`
 	HakemIndex       int         `json:"hakem_index"`
-	TurnStarterIndex int         `json:"-"`
+	TurnStarterIndex int         `json:"turn_starter_index"`
 
 	CurrentTurn *Turn   `json:"current_turn"`
 	Turns       []*Turn `json:"-"`
@@ -127,7 +137,7 @@ func NewTurn() *Turn {
 }
 
 type PlayerCardPlayed struct {
-	Player *Player    `json:"player_id"`
+	Player *Player    `json:"player"`
 	Card   cards.Card `json:"card"`
 }
 
