@@ -17,8 +17,6 @@ func hold_events()->void:
 
 func open_events()->void:
 	pause = false
-	for e:KEvent.Event in events_queue:
-		_handle_event(e)
 	
 # Sends an event through the WebSocket
 func send_event(event_type: String, event_data: String="") -> void:
@@ -27,14 +25,9 @@ func send_event(event_type: String, event_data: String="") -> void:
 	event.data = event_data
 	socket.send_text(event.to_json())
 
-
 # Handles incoming events (to be extended)
 func _handle_event(event: KEvent.Event) -> void:
-	if pause == true:
-		events_queue.append(event)
-	else:
-		new_event.emit(event)
-
+	events_queue.append(event)
 
 # Initializes the WebSocket connection
 func _ready() -> void:
@@ -61,6 +54,23 @@ func _process(_delta: float) -> void:
 
 		WebSocketPeer.STATE_CLOSED:
 			_handle_closed_state()
+	
+	process_events(_delta)
+
+var time_passed:float
+func process_events(_delta: float) -> void:
+	time_passed += _delta
+	if pause:
+		return
+	if time_passed >= 2:
+		return
+	time_passed = 0	
+
+	var event : KEvent.Event = events_queue.pop_front()
+	if event == null:
+		return
+	print(KAccount._instance.MyAccount.username + " " +event.type)
+	new_event.emit(event)	
 
 # Handles the open state and processes incoming messages
 func _handle_open_state() -> void:

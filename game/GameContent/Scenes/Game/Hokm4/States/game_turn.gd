@@ -16,7 +16,7 @@ func Enter()->void:
 		drawer.OtherCardPlayed.connect(_other_played_card)
 
 func _other_played_card(card:Card)->void:
-
+	print("other card played")
 	others_card_played.append(card)
 
 func Exit()->void:
@@ -45,8 +45,9 @@ func _on_new_event(e:KEvent.Event)->void:
 
 	elif e.type == KEvent.TYPE_INVALID_PLAY:
 		status_label.text = "Invalid"
-		table.drawer.cards.append(last_card_played)
-		#table.drawer.draw_cards()
+		if last_card_played != null:
+			table.drawer.cards.append(last_card_played)
+			#table.drawer.draw_cards()
 		last_card_played = null
 		table.drawer.draw_cards()
 
@@ -70,7 +71,7 @@ func _on_new_event(e:KEvent.Event)->void:
 	elif e.type == KEvent.TYPE_END_TRICK:
 		status_label.text = "Trick Ended"
 		table.parse_game_data(e.data)
-		table.drawer.clear_cards()
+		table.clear_cards()
 		Transition.emit(self,"new_trick")
 
 
@@ -84,10 +85,10 @@ func _card_played(card:Card)->void:
 
 func send_card_playend_event(card:Card)->void:
 	var card_played_string := JsonClassConverter.class_to_json_string(card.card_data)
-	ws.send_event(KEvent.TYPE_PLAY_TURN_ORDER,card_played_string)
+	ws.send_event(KEvent.TYPE_TURN_PLAYED,card_played_string)
 
 func other_turn_played_logic(data:String)->void:
-	print(KAccount._instance.MyAccount.username," ==> ",data)
+	# print(KAccount._instance.MyAccount.username," ==> ",data)
 	var card_played :CardPlayedData= JsonClassConverter.json_string_to_class(CardPlayedData,data)
 	# card_played.card
 	for drawer in table.all_drawers:

@@ -148,7 +148,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	all_cards = game.sendCards(4, all_cards, game.Players)
 	game.sendCards(4, all_cards, game.Players)
 
-	// time.Sleep(1 * time.Second)
+	// time.Sleep(5 * time.Second)
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
@@ -188,7 +188,7 @@ func (game *GameState) WaitToChooseHokm() {
 	hakem := game.Players[game.CurrentTrick.HakemIndex]
 	game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
 	var choose_hokm_ticker *time.Ticker
-	choose_hokm_ticker = time.NewTicker(1 * time.Second)
+	choose_hokm_ticker = time.NewTicker(5 * time.Second)
 	if hakem.IsPlayng {
 		choose_hokm_ticker = time.NewTicker(10 * time.Second)
 	}
@@ -243,16 +243,35 @@ func (game *GameState) RunTurn() error {
 
 	// actual game
 	to_play_order := []*Player{}
-
+	before_ward := []*Player{}
 	after_ward := []*Player{}
+	var starterFound = false
+
+	game.Logger.Info(fmt.Sprintln(game.CurrentTrick.TurnStarterIndex))
 	for player_index, p := range game.Players {
-		if player_index != game.CurrentTrick.TurnStarterIndex {
-			after_ward = append(after_ward, p)
-		} else {
+		game.Logger.Info(p.PlayerUnique)
+		if player_index == game.CurrentTrick.TurnStarterIndex {
+			starterFound = true
 			to_play_order = append(to_play_order, p)
+			continue
+		}
+
+		if starterFound {
+			after_ward = append(after_ward, p)
+
+		} else {
+			before_ward = append(before_ward, p)
+
 		}
 	}
 	to_play_order = append(to_play_order, after_ward...)
+	to_play_order = append(to_play_order, before_ward...)
+
+	game.Logger.Info(fmt.Sprintln("len of players", len(game.Players)))
+	game.Logger.Info(fmt.Sprintln("len of to play", len(to_play_order)))
+	for _, play_order := range to_play_order {
+		game.Logger.Info(play_order.PlayerUnique)
+	}
 
 	for _, playing_player := range to_play_order {
 		cardIndex, err := game.WaitForPlayerToPlayCard(playing_player)
@@ -336,7 +355,7 @@ OuterLoop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypePlayTurnOrder {
+			if new_game_event.event.Type != socket.TypeTurnPlayed {
 				// app.Logger.Debug("not same type")
 				continue
 			}

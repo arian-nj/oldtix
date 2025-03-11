@@ -22,6 +22,18 @@ var game_data:GameData
 
 @onready var timer := Timer.new()
 
+func clear_cards()->void:
+	push_callback(
+		_clear_cards.bind()
+	)
+
+func _clear_cards()->void:
+	for drawer_queue in all_drawers:
+		for c:Card in drawer_queue.cards:
+			c.queue_free()
+		drawer_queue.cards = []
+		
+
 func remove_one_card(card:Card) -> void:
 	push_callback(
 		card.queue_free.bind()
@@ -29,7 +41,6 @@ func remove_one_card(card:Card) -> void:
 
 func push_callback(c:Callable)->void:
 	table_draw_queue.push_back(c)
-
 
 func _on_card_played(card:Card)->void:
 	MyCardPlayed.emit(card)
@@ -94,9 +105,6 @@ func run_actions()->void:
 		var action:Callable = action_variant
 
 		await action.call()
-		# if result is String and result == "break":
-		# 	print("break")
-		# 	break
 	timer.timeout.connect(run_actions)
 	timer.start()
 
