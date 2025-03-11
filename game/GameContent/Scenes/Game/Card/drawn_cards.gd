@@ -52,17 +52,6 @@ func _ready() -> void:
 func push_callback(c:Callable)->void:
 	AddToQueue.emit(c)
 
-func clear_cards()->void:
-	push_callback(
-		_clear_cards.bind()
-	)
-
-func _clear_cards()->void:
-	print_debug(cards.size())
-	for c:Card in cards:
-		c.queue_free()
-	
-	cards = []
 
 func break_action()->void:
 	self.push_callback(_break_action)
@@ -114,10 +103,11 @@ func _play_others_card(card_data:CardData) -> void:
 	if rand_card_variant == null:
 		return
 	var rand_card:Card = rand_card_variant
-	cards.erase(rand_card)
 	rand_card.card_data = card_data
 
+	cards.erase(rand_card)
 	OtherCardPlayed.emit(rand_card)
+
 	tween = new_tween()
 	tween.parallel().tween_property(rand_card,"global_position",play_place.global_position,card_movment_dur)
 	tween.parallel().tween_property(rand_card,"rotation_degrees",0,card_movment_dur)
@@ -126,7 +116,6 @@ func _play_others_card(card_data:CardData) -> void:
 	return
 
 
-# func draw_cards(from_pos: Vector2 = Vector2.ZERO) -> void:
 func draw_cards() -> void:
 	push_callback(_draw_cards.bind())
 
@@ -136,10 +125,11 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 	# print(cards.size())
 
 	isDrawn = false
-	sort_cards()
 
 	if tween and tween.is_running(): # Kill any running tween and create a new one with easing settings.
 		tween.kill()
+
+	sort_cards()
 
 	# Calculate deck width and centering offset.
 	var deck_length: float = card_offset * cards.size()
@@ -220,6 +210,7 @@ var in_deck_suites:Array[CardData.CardSuites] = []
 func sort_cards()->void:
 	in_deck_suites = []
 
+	# print_debug(cards.size())
 	for card:Card in cards:
 		if not in_deck_suites.has(card.card_data.suit):
 			in_deck_suites.append(card.card_data.suit)
