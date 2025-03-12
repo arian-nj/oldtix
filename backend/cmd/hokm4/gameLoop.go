@@ -93,25 +93,38 @@ func (game *GameState) RunGame() error {
 	}
 
 	for i := range 5 { // run tricks
-		if game.TeamOneTricksScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTricksScore >= SETTING_WINNING_TRICK_SCORE {
-			break
-		}
-
 		err = game.RunTrick(i)
 		if err != nil {
 			return err
 		}
-
+		if game.TeamOneTricksScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTricksScore >= SETTING_WINNING_TRICK_SCORE {
+			break
+		}
 	}
 	return nil
 }
-func (game *GameState) RunTrick(trick_number int) error {
-	var err error
 
+func (game *GameState) DeclareHakemIndex(trick_number int) int {
 	var HakemIndex int
 	if trick_number == 0 { // if first trick
 		HakemIndex = rand.Intn(len(game.Players))
+	} else {
+		if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].TeamId {
+			HakemIndex = game.CurrentTrick.HakemIndex
+			if HakemIndex < len(game.Players)-1 {
+				HakemIndex += 1
+			} else {
+				HakemIndex = 0
+			}
+		}
 	}
+	return HakemIndex
+}
+
+func (game *GameState) RunTrick(trick_number int) error {
+	var err error
+
+	HakemIndex := game.DeclareHakemIndex(trick_number)
 
 	game.CurrentTrick, err = game.NewTrick(HakemIndex)
 	if err != nil {
@@ -157,8 +170,10 @@ func (game *GameState) RunTrick(trick_number int) error {
 		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
 			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
 				game.TeamOneTricksScore += 1
+				game.CurrentTrick.WinnerTeam = TeamOne
 			} else {
 				game.TeamTwoTricksScore += 1
+				game.CurrentTrick.WinnerTeam = TeamTwo
 			}
 			break
 		}

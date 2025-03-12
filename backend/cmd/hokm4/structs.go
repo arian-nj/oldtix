@@ -104,6 +104,8 @@ type Trick struct {
 
 	TeamOneTurnScore int `json:"team_one_turn_score"`
 	TeamTwoTurnScore int `json:"team_two_turn_score"`
+
+	WinnerTeam Team `json:"-"`
 }
 
 func (game *GameState) NewTrick(HakemIndex int) (*Trick, error) {
