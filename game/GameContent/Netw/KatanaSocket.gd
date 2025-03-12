@@ -62,14 +62,14 @@ func process_events(_delta: float) -> void:
 	time_passed += _delta
 	if pause:
 		return
-	if time_passed >= 2:
+	if time_passed >= .5:
 		return
 	time_passed = 0	
 
 	var event : KEvent.Event = events_queue.pop_front()
 	if event == null:
 		return
-	print(KAccount._instance.MyAccount.username + " " +event.type)
+	# print(KAccount._instance.MyAccount.username + " " +event.type)
 	new_event.emit(event)	
 
 # Handles the open state and processes incoming messages

@@ -38,7 +38,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		table.parse_game_data(e.data)
 		status_label.text = "Hokm Choosed"
 		if choose_hokm_instance != null:
-			choose_hokm_instance.queue_free()
+			choose_hokm_instance.queue_free.call_deferred()
 	else:
 		print_debug(e.type)
 

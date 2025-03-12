@@ -2,13 +2,13 @@ class_name KAccount extends Node
 
 static var _instance:KAccount
 
-static func inst()->KAccount:
+static func instanciate()->KAccount:
 	if _instance == null:
 		_instance = KAccount.new()
 	return _instance
 
 # Global value
-var MyAccount:Account
+var MyAccount:AccountData
 var Auth_Token:String = ""
 
 ## Signals
@@ -22,32 +22,10 @@ const UserUrl:String = Katana.UserBaseUrl + "/get/"
 const MeUrl:String = Katana.UserBaseUrl + "/me"
 const StatusUrl:String = Katana.UserBaseUrl + "/status"
 
-
-
-class Account:
-	var id:int
-	var username:String
-	var display_name:String
-	var bio:String
-	var coin:int
-
-	func parse_from_json_string(json_string:String)->void:
-		var body_content:Variant = JSON.parse_string(json_string)
-		if body_content == null:
-			print_debug("failed")
-			return
-		self.id = body_content["id"]
-		self.username = body_content["username"]
-		self.display_name = body_content["display_name"]
-		self.bio = body_content["bio"]
-		self.coin = body_content["coin"]
-
-func _ready() -> void:
-	await LoggedIn
-	
-
 # token
 func set_token(token:String)->void:
+	if token == "":
+		return
 	Auth_Token = token
 	LoggedIn.emit()
 
@@ -57,18 +35,18 @@ func AddAuthHeader(headers:PackedStringArray = [])->PackedStringArray:
 	return headers
 
 func RefetchME()->bool:
-	var me:Account = await _get_user("me")
+	var me:AccountData = await _get_user("me")
 	if me == null:
 		print_debug("can't get user data")
 		return false
 	MyAccount = me
 	return true
 
-func GetUser(user_id:String)->Account:
-	var user:Account = await _get_user(user_id)
+func GetUser(user_id:String)->AccountData:
+	var user:AccountData = await _get_user(user_id)
 	return user
 
-func _get_user(user_id:String)->Account:
+func _get_user(user_id:String)->AccountData:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	add_child(http_req_node)
 	var req_url:= UserUrl+user_id
@@ -97,6 +75,7 @@ func _get_user(user_id:String)->Account:
 	
 	var body_byte:PackedByteArray = response[3]
 
-	var me :Account = Account.new()
-	me.parse_from_json_string(body_byte.get_string_from_utf8())
+	var me :AccountData = AccountData.new()
+	me = JsonClassConverter.json_string_to_class(AccountData,body_byte.get_string_from_utf8()
+)
 	return me

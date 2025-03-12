@@ -10,7 +10,7 @@ enum Levels{
 }
 
 func _ready() -> void:
-	KAccount.inst()
+	KAccount.instanciate()
 	self.add_child(KAccount._instance)
 	
 
