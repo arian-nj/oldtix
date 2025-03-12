@@ -93,7 +93,7 @@ func (game *GameState) RunGame() error {
 	}
 
 	for i := range 5 { // run tricks
-		if game.TeamOneTricksScore >= 3 || game.TeamTwoTricksScore >= 3 {
+		if game.TeamOneTricksScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTricksScore >= SETTING_WINNING_TRICK_SCORE {
 			break
 		}
 
@@ -154,8 +154,8 @@ func (game *GameState) RunTrick(trick_number int) error {
 		if err != nil {
 			return err
 		}
-		if game.CurrentTrick.TeamOneTurnScore >= 2 || game.CurrentTrick.TeamTwoTurnScore >= 2 {
-			if game.CurrentTrick.TeamOneTurnScore >= 2 {
+		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
+			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
 				game.TeamOneTricksScore += 1
 			} else {
 				game.TeamTwoTricksScore += 1
@@ -188,9 +188,9 @@ func (game *GameState) WaitToChooseHokm() {
 	hakem := game.Players[game.CurrentTrick.HakemIndex]
 	game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
 	var choose_hokm_ticker *time.Ticker
-	choose_hokm_ticker = time.NewTicker(5 * time.Second)
+	choose_hokm_ticker = time.NewTicker(SETTING_BOT_CHOOSE_HOKM_WAIT)
 	if hakem.IsPlayng {
-		choose_hokm_ticker = time.NewTicker(10 * time.Second)
+		choose_hokm_ticker = time.NewTicker(SETTING_PLAYER_CHOOSE_HOKM_WAIT)
 	}
 	defer choose_hokm_ticker.Stop()
 	for {
@@ -231,7 +231,7 @@ func (game *GameState) WaitToChooseHokm() {
 func (game *GameState) RunTurn() error {
 	// new Turn
 	game.CurrentTrick.CurrentTurn = NewTurn()
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Second * 2)
 
 	// game starts
 	for _, p := range game.Players {
@@ -344,9 +344,9 @@ func (game *GameState) WaitForPlayerToPlayCard(playing_player *Player) (cardInde
 	playing_player.AddToEgress(socket.NewEvent(socket.TypeYourTurn, socket.EventMessage("")))
 	var NewTicker *time.Ticker
 
-	NewTicker = time.NewTicker(time.Millisecond * 1)
+	NewTicker = time.NewTicker(SETTING_BOT_PLAY_WAIT)
 	if playing_player.IsPlayng {
-		NewTicker = time.NewTicker(time.Second * 30)
+		NewTicker = time.NewTicker(SETTING_PLAYER_PLAY_WAIT)
 	}
 	var card_played cards.Card
 	cardIndex = -1
@@ -390,8 +390,12 @@ OuterLoop:
 		case <-NewTicker.C:
 			NewTicker.Stop()
 			cardIndex = game.BotPlayTurn(playing_player)
-			choosen_card_by_bot := playing_player.Cards[cardIndex].String()
-			playing_player.AddToEgress(socket.NewEvent(socket.TypePlayTimeout, socket.EventMessage(choosen_card_by_bot)))
+			choosen_card_by_bot := playing_player.Cards[cardIndex]
+			data_byte, err := json.Marshal(choosen_card_by_bot)
+			if err != nil {
+				return -1, err
+			}
+			playing_player.AddToEgress(socket.NewEvent(socket.TypePlayTimeout, socket.EventMessage(data_byte)))
 			break OuterLoop
 		}
 	}

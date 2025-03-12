@@ -1,7 +1,7 @@
 class_name CardDrawer extends Control
 
 signal MyCardPlayed(card:Card)
-signal OtherCardPlayed(card:Card)
+signal not_inplace(card:Card)
 signal AddToQueue(call:Callable)
 
 var unique_string:String :
@@ -67,7 +67,7 @@ func _new_cards_event(e:KEvent.Event)->void:
 	var cards_json:Variant = json_data["cards"]
 	for card_json:Variant in cards_json:
 		create_card(card_json["suit"],card_json["value"])
-	draw_cards()
+	draw_cards_and_sort()
 	# print("cards size is : ",cards.size())
 
 
@@ -85,7 +85,10 @@ func _create_card(suite:CardData.CardSuites,value:int)->void:
 	cards.append(c)
 
 	c.card_played.connect(_card_played)
-	c.not_inplace.connect(draw_cards)
+	c.not_inplace.connect(func(card:Card)->void:
+		draw_cards()
+		not_inplace.emit(card)
+		)
 
 func _card_played(card:Card)->void:
 	if isDrawn:
@@ -94,11 +97,7 @@ func _card_played(card:Card)->void:
 
 # play card
 
-func play_others_card(card_data:CardData) -> void:
-	push_callback(_play_others_card.bind(card_data))
-	push_callback(draw_cards)
-
-func _play_others_card(card_data:CardData) -> void:
+func play_others_card(card_data:CardData) -> Card:
 	var rand_card_variant :Variant = cards.pick_random()
 	if rand_card_variant == null:
 		return
@@ -106,20 +105,42 @@ func _play_others_card(card_data:CardData) -> void:
 	rand_card.card_data = card_data
 
 	cards.erase(rand_card)
-	OtherCardPlayed.emit(rand_card)
+	push_callback(_play_others_card.bind(rand_card))
+	return rand_card
 
+func _play_others_card(c:Card) -> void:
 	tween = new_tween()
-	tween.parallel().tween_property(rand_card,"global_position",play_place.global_position,card_movment_dur)
-	tween.parallel().tween_property(rand_card,"rotation_degrees",0,card_movment_dur)
-	rand_card.prespective3DShader.flip_y(flip_card_dur, card_movment_dur/2, rand_card.load_assets)
-	await tween.finished
+	tween.parallel().tween_property(c,"global_position",play_place.global_position,card_movment_dur)
+	tween.parallel().tween_property(c,"rotation_degrees",0,card_movment_dur)
+	c.prespective3DShader.flip_y(flip_card_dur, card_movment_dur/2, c.load_assets)
 	return
 
+func play_me_card(card_data:CardData) -> Card:
+	var found_card : Card = null
+	for c in cards:
+		if c.card_data.suit == card_data.suit and c.card_data.value == card_data.value:
+			found_card = c
+			break
+	if found_card == null:
+		return
+	cards.erase(found_card)
+	push_callback(_play_me_card.bind(found_card))
+	return found_card
+
+func _play_me_card(c:Card) -> void:
+	tween = new_tween()
+	tween.parallel().tween_property(c,"global_position",play_place.global_position,card_movment_dur)
+	return
+	
+
+
+func draw_cards_and_sort() -> void:
+	push_callback(_draw_cards.bind(Vector2.ZERO,true))
 
 func draw_cards() -> void:
 	push_callback(_draw_cards.bind())
 
-func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
+func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false) -> void:
 	if cards.is_empty():
 		return
 	# print(cards.size())
@@ -128,8 +149,9 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 
 	if tween and tween.is_running(): # Kill any running tween and create a new one with easing settings.
 		tween.kill()
-
-	sort_cards()
+	
+	if sort_flag:
+		sort_cards()
 
 	# Calculate deck width and centering offset.
 	var deck_length: float = card_offset * cards.size()
@@ -141,6 +163,8 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 	var x_offset: float = deck_length / 2.0
 
 	var newCardsCounter: int = 0
+
+	var wait_time: float = 0.0
 
 	for i in range(cards.size()):
 
@@ -182,8 +206,11 @@ func _draw_cards(_from_pos:= Vector2.ZERO) -> void:
 				movementDuration += i * (two_card_movment_dur / 4.0)
 				tween = new_tween()
 				tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
+		wait_time = movementDuration + delay
 
-	await tween.finished
+	# delted tween object may hang forever
+
+	await get_tree().create_timer(wait_time).timeout
 	isDrawn = true
 
 
@@ -208,6 +235,13 @@ func _calculate_final_position(index: int, card: Card, x_offset: float) -> Vecto
 var in_deck_suites:Array[CardData.CardSuites] = []
 
 func sort_cards()->void:
+	if cards.size() <= 2:
+		return
+	for i in range(cards.size()):
+		var c := cards[i]
+		if is_instance_valid(c):
+			continue
+		cards.remove_at(i)
 	in_deck_suites = []
 
 	# print_debug(cards.size())
@@ -215,8 +249,7 @@ func sort_cards()->void:
 		if not in_deck_suites.has(card.card_data.suit):
 			in_deck_suites.append(card.card_data.suit)
 	
-	if len(cards) <= 2:
-		return
+
 	
 	in_deck_suites = sort_deck_suits(in_deck_suites)
 

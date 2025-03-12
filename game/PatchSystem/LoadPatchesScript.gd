@@ -2,8 +2,8 @@ extends CanvasLayer
 
 @export var status_label:Label
 
-var server_url := "http://192.168.1.230:4444"
-var patch_user_config_address := "user://score.cfg"
+var server_url := "http://192.168.224.205:4444"
+var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
 func _ready() -> void:

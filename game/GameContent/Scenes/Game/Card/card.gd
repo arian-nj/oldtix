@@ -1,9 +1,8 @@
 class_name Card extends Button
 
 signal card_played(card:Card)
-signal card_unplayed(card:Card)
 
-signal not_inplace()
+signal not_inplace(card:Card)
 
 @export var cardTexture:TextureRect
 @export var cardArea:Area2D
@@ -83,7 +82,7 @@ func _on_button_up() -> void:
 	if is_touching_area:
 		card_played.emit(self)
 	else :
-		not_inplace.emit()
+		not_inplace.emit(self)
 	
 	prespective3DShader.set_shader(0,0)
 

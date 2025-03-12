@@ -18,7 +18,7 @@
 
 [sub_resource type="Gradient" id="Gradient_wqsup"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
-colors = PackedColorArray(0, 0.329412, 0, 1, 1.23335e-07, 0.196067, 0, 1, 0, 0.328236, 2.40654e-07, 1)
+colors = PackedColorArray(0, 0.329412, 0, 1, 1.23335e-07, 0.196067, 0, 1, 0.0666667, 0.329412, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2hoqw"]
 gradient = SubResource("Gradient_wqsup")
@@ -62,7 +62,7 @@ script = ExtResource("1_i0n3b")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Table" type="Control" parent="." node_paths=PackedStringArray("drawer", "right_drawer", "top_drawer", "left_drawer")]
+[node name="Table" type="Control" parent="." node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,7 +71,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
-drawer = NodePath("Hands/MeDrawCards")
+me_drawer = NodePath("Hands/MeDrawCards")
 right_drawer = NodePath("Hands/RightDrawCards")
 top_drawer = NodePath("Hands/TopDrawCards")
 left_drawer = NodePath("Hands/LeftDrawCards")
@@ -113,7 +113,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "uniqueLabel", "isDrawnLabel")]
+[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel", "isDrawnLabel")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -132,6 +132,7 @@ is_horizontal = true
 show_cards_value = true
 from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
+play_place = NodePath("PlayPlace")
 card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
 two_card_movment_dur = 0.3
@@ -167,6 +168,20 @@ offset_top = -123.0
 offset_right = 38.0
 offset_bottom = -100.0
 text = " ttttk"
+
+[node name="PlayPlace" type="Control" parent="Table/Hands/MeDrawCards"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -10.0
+offset_top = -363.0
+offset_right = 30.0
+offset_bottom = -323.0
+
+[node name="ColorRect3" type="ColorRect" parent="Table/Hands/MeDrawCards/PlayPlace"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="RightDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
