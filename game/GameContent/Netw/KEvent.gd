@@ -33,7 +33,9 @@ const TYPE_HOKM_CHOOSED:String = "hokm_choosed"
 
 const TYPE_MAKE_MATCH:String = "make_match"
 const TYPE_MATCH_FOUND:String = "found_match"
+const TYPE_REJOIN_MATCH:String = "rejoin_match"
 
+const TYPE_GET_MY_CARDS:String = "get_my_cards"
 
 const TYPE_NEW_TRICK:String = "new_trick"
 const TYPE_END_TRICK:String = "end_trick"

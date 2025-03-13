@@ -20,6 +20,18 @@ func _on_new_event(e:KEvent.Event)->void:
 		ws.hold_events()
 		Transition.emit(self,"new_trick")
 
+	elif e.type == KEvent.TYPE_REJOIN_MATCH:
+		table.parse_game_data(e.data)
+		table.set_player_to_hand()
+		# table.
+		status_label.text = "Re joining"
+		ws.send_event(KEvent.TYPE_GET_MY_CARDS)
+	
+	elif e.type == KEvent.TYPE_GET_MY_CARDS:
+		status_label.text = "Fetching cards"
+		table.new_cards_event(e)
+		Transition.emit(self,"game_turn")
+
 
 func Exit()->void:
 	ws.new_event.disconnect(_on_new_event)

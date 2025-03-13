@@ -25,6 +25,7 @@ func (app *ApplicationH2) wsHokm2Router() *chi.Mux {
 		r.Use(app.Authenticate)
 		r.Use(app.RequireAuthenticatedUser)
 
+		r.Get("/active_game", app.isInActiveGame)
 	})
 
 	return mux

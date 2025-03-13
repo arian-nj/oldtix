@@ -31,6 +31,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		table.new_cards_event(e)		
 		got_cards_time += 1
 		if got_cards_time == 3:
+			ws.hold_events()
 			Transition.emit(self,"game_turn")
 
 

@@ -14,28 +14,50 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+func (game *GameState) AddPlayer(player *Player, gameId int64) error {
+	if player.UserId != 0 {
+		game.BackgroundSocketHandlers(player)
+	}
+	_, err := game.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
+		PlayerID: player.UserId,
+		GameID:   gameId,
+		Team:     int16(player.TeamId),
+	})
+	game.Players = append(game.Players, player)
+	return err
+}
+
 func (app *ApplicationH2) MatchUsers() error {
 	for {
+		gameRow, err := app.Queries.InsertHokm4Game(context.Background())
+		if err != nil {
+			return err
+		}
+
+		game, err := app.NewGameState(gameRow.ID)
+		if err != nil {
+			return err
+		}
+
 		p1 := <-app.lobby.Queue
+		game.AddPlayer(p1, game.ID)
 		p2 := <-app.lobby.Queue
+		game.AddPlayer(p2, game.ID)
+
 		p1.IsPlayng = true
 		p2.IsPlayng = true
 
 		p3 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
+		game.AddPlayer(p3, game.ID)
+
 		p4 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
+		game.AddPlayer(p4, game.ID)
 
 		p1.TeamId = TeamOne
 		p2.TeamId = TeamTwo
 
 		p3.TeamId = TeamOne
 		p4.TeamId = TeamTwo
-
-		players := []*Player{p1, p2, p3, p4}
-
-		game, err := app.NewGameState(players)
-		if err != nil {
-			return err
-		}
 
 		app.lobby.Mu.Lock()
 		for _, p := range game.Players {
@@ -61,22 +83,6 @@ func (app *ApplicationH2) MatchUsers() error {
 	}
 }
 
-func (app *ApplicationH2) AddUserToMatchMaking(event *socket.Event, client *socket.Client, userId int64) error {
-	p := NewPlayer(userId, client, []cards.Card{}, false)
-	app.lobby.Queue <- p
-	return nil
-}
-
-func (game *GameState) GameInitialize() error {
-	for _, player := range game.Players {
-		game.BackgroundTask(func() error {
-			game.BackgroundSocketHandlers(player)
-			return nil
-		})
-	}
-	return nil
-}
-
 func (game *GameState) RunGame() error {
 	defer func() {
 		for _, p := range game.Players {
@@ -85,10 +91,6 @@ func (game *GameState) RunGame() error {
 	}()
 
 	// choose hakem
-	err := game.GameInitialize()
-	if err != nil {
-		return err
-	}
 
 	for _, p := range game.Players {
 		err := game.SendGameData(socket.TypeMatchFound, p)
@@ -98,7 +100,7 @@ func (game *GameState) RunGame() error {
 	}
 
 	for i := range 5 { // run tricks
-		err = game.RunTrick(i)
+		err := game.RunTrick(i)
 		if err != nil {
 			return err
 		}
@@ -414,12 +416,42 @@ OuterLoop:
 
 // events come here if not used go to GameEventCh
 func (game *GameState) BackgroundSocketHandlers(p *Player) {
-	for {
-		new_event := <-p.Client.NewEvents
-		if new_event.Type == socket.TypeGetData {
-			game.SendGameData(socket.TypeGameData, p)
-		} else {
-			game.GameEventsCh <- NewGameEvent(&new_event, p)
+
+	game.BackgroundTask(func() error {
+		for {
+			new_event := <-p.Client.NewEvents
+
+			if p.Client == nil {
+				game.Logger.Info("client is nill")
+			}
+			if p.Client.NewEvents == nil {
+				game.Logger.Info("NewEvents is nill")
+			}
+			if p == nil {
+				game.Logger.Info("p is nill")
+			}
+			if p == nil {
+				game.Logger.Info("card is nill")
+			}
+			game.Logger.Info("every thing is checked")
+			if new_event.Type == socket.TypeGetData {
+				game.SendGameData(socket.TypeGameData, p)
+			} else if new_event.Type == socket.TypeGetMyCards {
+				game.Logger.Info("get my cards")
+				var output struct {
+					NewCards []cards.Card `json:"cards"`
+				}
+				output.NewCards = p.Cards
+				data_byte, err := json.Marshal(output)
+				if err != nil {
+					game.Logger.Error(err.Error())
+					continue
+				}
+				p.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
+			} else {
+				game.GameEventsCh <- NewGameEvent(&new_event, p)
+			}
 		}
-	}
+	})
+
 }

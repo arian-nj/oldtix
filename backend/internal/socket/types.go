@@ -9,8 +9,11 @@ const (
 	TypeNewCard     EventType = "new_card"
 	TypeHokmChoosed EventType = "hokm_choosed"
 
-	TypeMakeMatch  EventType = "make_match"
-	TypeMatchFound EventType = "found_match"
+	TypeGetMyCards EventType = "get_my_cards"
+
+	TypeMakeMatch   EventType = "make_match"
+	TypeMatchFound  EventType = "found_match"
+	TypeRejoinMatch EventType = "rejoin_match"
 
 	TypeNewTrick EventType = "new_trick"
 	TypeEndTrick EventType = "end_trick"
