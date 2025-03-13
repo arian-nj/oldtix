@@ -38,10 +38,19 @@ func (app *ApplicationH2) MatchUsers() error {
 		}
 
 		app.lobby.Mu.Lock()
-		app.lobby.Games[game.ID] = game
+		for _, p := range game.Players {
+			if p.UserId != 0 {
+				app.lobby.UserGames[p.UserId] = game
+			}
+		}
 		app.lobby.Mu.Unlock()
 
 		app.BackgroundTask(func() error {
+			defer func() {
+				for _, p := range game.Players {
+					delete(app.lobby.UserGames, p.UserId)
+				}
+			}()
 			err := game.RunGame()
 			app.Logger.Error("Game Loop Ended")
 			if err != nil {
@@ -79,10 +88,6 @@ func (game *GameState) RunGame() error {
 	err := game.GameInitialize()
 	if err != nil {
 		return err
-	}
-
-	for _, p := range game.Players {
-		game.Logger.Info(p.PlayerUnique)
 	}
 
 	for _, p := range game.Players {
@@ -222,7 +227,6 @@ func (game *GameState) WaitToChooseHokm() {
 				game.Logger.Info("no data")
 				continue
 			}
-			game.Logger.Info("here setting")
 			hokm_int, err := strconv.Atoi(string(*hokm_data))
 			if err != nil {
 				game.Logger.Error(fmt.Sprintf("trying to set %s as hokm", string(*hokm_data)))
@@ -260,9 +264,7 @@ func (game *GameState) RunTurn() error {
 	after_ward := []*Player{}
 	var starterFound = false
 
-	game.Logger.Info(fmt.Sprintln(game.CurrentTrick.TurnStarterIndex))
 	for player_index, p := range game.Players {
-		game.Logger.Info(p.PlayerUnique)
 		if player_index == game.CurrentTrick.TurnStarterIndex {
 			starterFound = true
 			to_play_order = append(to_play_order, p)
@@ -279,12 +281,6 @@ func (game *GameState) RunTurn() error {
 	}
 	to_play_order = append(to_play_order, after_ward...)
 	to_play_order = append(to_play_order, before_ward...)
-
-	game.Logger.Info(fmt.Sprintln("len of players", len(game.Players)))
-	game.Logger.Info(fmt.Sprintln("len of to play", len(to_play_order)))
-	for _, play_order := range to_play_order {
-		game.Logger.Info(play_order.PlayerUnique)
-	}
 
 	for _, playing_player := range to_play_order {
 		cardIndex, err := game.WaitForPlayerToPlayCard(playing_player)

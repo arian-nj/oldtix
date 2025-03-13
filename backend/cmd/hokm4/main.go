@@ -22,7 +22,8 @@ func main() {
 		CommonGlobals: gb,
 		lobby: &Lobby{
 			Queue: make(chan *Player),
-			Games: make(map[int64]*GameState),
+			// Games: make(map[int64]*GameState),
+			UserGames: map[int64]*GameState{},
 		},
 	}
 

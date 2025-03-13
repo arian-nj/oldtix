@@ -154,8 +154,9 @@ func NewPlayerCardPlayed(player *Player, card cards.Card) *PlayerCardPlayed {
 
 type Lobby struct {
 	Queue chan *Player
-	Games map[int64]*GameState
-	Mu    sync.Mutex
+	// Games map[int64]*GameState
+	UserGames map[int64]*GameState
+	Mu        sync.Mutex
 }
 
 // type CurrentPlayer int

@@ -43,8 +43,7 @@ func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context) error {
 		default:
 			_, payload, err := c.Conn.ReadMessage()
 			if err != nil {
-				l.Debug(err.Error())
-				return nil
+				return err
 			}
 
 			event, err := EventUnmarshal(payload)

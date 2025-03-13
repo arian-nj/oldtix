@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -12,10 +11,7 @@ import (
 
 func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
-	if user == nil {
-		app.AuthenticationRequired(w, r)
-		return
-	}
+
 	conn, err := socket.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		app.Logger.Error(err.Error())
@@ -29,8 +25,20 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 	app.BackgroundTask(
 		func() error {
 			defer cancel()
-			defer fmt.Println("read disconnect ", user.ID)
-			return client.ReadMessage(app.Logger, ctx)
+			defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
+			err := client.ReadMessage(app.Logger, ctx)
+			if err != nil {
+				game, exist := app.lobby.UserGames[user.ID]
+				if exist {
+					for _, p := range game.Players {
+						if p.UserId == user.ID {
+							p.IsPlayng = false
+						}
+					}
+				}
+
+			}
+			return nil
 		})
 
 	app.BackgroundTask(func() error {
@@ -40,7 +48,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 			if err != nil {
 				app.Logger.Error(err.Error())
 			} else {
-				app.Logger.Error("write closed " + strconv.Itoa(int(user.ID)))
+				app.Logger.Error(fmt.Sprintf("write disconnect %d", user.ID))
 			}
 		}()
 		return client.WriteMessage(app.Logger, ctx)
