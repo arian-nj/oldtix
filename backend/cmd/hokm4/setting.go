@@ -3,7 +3,7 @@ package main
 import "time"
 
 const (
-	SETTING_BOT_PLAY_WAIT    = time.Second * 1
+	SETTING_BOT_PLAY_WAIT    = time.Second * 2
 	SETTING_PLAYER_PLAY_WAIT = time.Second * 10
 
 	SETTING_BOT_CHOOSE_HOKM_WAIT    = time.Second * 5
@@ -11,4 +11,6 @@ const (
 
 	SETTING_WINNING_TRICK_SCORE = 3
 	SETTING_WINNIG_TURN_SCORE   = 2
+
+	SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME = time.Second * 2
 )
