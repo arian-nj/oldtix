@@ -42,8 +42,10 @@ func (p *Player) AddToEgress(e *socket.Event) {
 	if !p.IsPlayng {
 		return
 	}
-	p.Client.Egres <- *e
+	go func() {
+		p.Client.Egres <- *e
 
+	}()
 }
 
 type GameEvent struct {

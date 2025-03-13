@@ -161,7 +161,6 @@ func (game *GameState) RunTrick(trick_number int) error {
 	all_cards = game.sendCards(4, all_cards, game.Players)
 	game.sendCards(4, all_cards, game.Players)
 
-	// time.Sleep(5 * time.Second)
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
@@ -246,7 +245,6 @@ func (game *GameState) WaitToChooseHokm() {
 func (game *GameState) RunTurn() error {
 	// new Turn
 	game.CurrentTrick.CurrentTurn = NewTurn()
-	time.Sleep(time.Second * 2)
 
 	// game starts
 	for _, p := range game.Players {
@@ -327,6 +325,7 @@ func (game *GameState) RunTurn() error {
 		}
 	}
 
+	time.Sleep(SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME)
 	// End The Turn
 	for _, p := range game.Players {
 		err := game.SendGameData(socket.TypeTurnEnd, p)
