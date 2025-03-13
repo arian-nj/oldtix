@@ -72,26 +72,12 @@ type GameState struct {
 	TeamTwoTricksScore int `json:"team_two_trick_score"`
 }
 
-func (app *ApplicationH2) NewGameState(players []*Player) (*GameState, error) {
-
-	gameRow, err := app.Queries.InsertHokm4Game(context.Background())
-	if err != nil {
-		return nil, err
-	}
-
-	for _, player := range players {
-		app.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
-			PlayerID: player.UserId,
-			GameID:   gameRow.ID,
-			Team:     int16(player.TeamId),
-		})
-	}
+func (app *ApplicationH2) NewGameState(id int64) (*GameState, error) {
 
 	return &GameState{
-		ID:            gameRow.ID,
+		ID:            id,
 		ApplicationH2: app,
 		GameEventsCh:  make(chan *GameEvent),
-		Players:       players,
 	}, nil
 }
 

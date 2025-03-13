@@ -14,14 +14,6 @@ var Auth_Token:String = ""
 ## Signals
 signal LoggedIn
 
-## Consts
-const RegisterUrl:String = Katana.UserBaseUrl + "/register"
-const TokenUrl:String = Katana.UserBaseUrl + "/token"
-
-const UserUrl:String = Katana.UserBaseUrl + "/get/"
-const MeUrl:String = Katana.UserBaseUrl + "/me"
-const StatusUrl:String = Katana.UserBaseUrl + "/status"
-
 # token
 func set_token(token:String)->void:
 	if token == "":
@@ -49,9 +41,9 @@ func GetUser(user_id:String)->AccountData:
 func _get_user(user_id:String)->AccountData:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	add_child(http_req_node)
-	var req_url:= UserUrl+user_id
+	var req_url:= Katana.UserUrl+user_id
 	if user_id == "me":
-		req_url = MeUrl
+		req_url = Katana.MeUrl
 	
 	var err :int = http_req_node.request(req_url,AddAuthHeader(),HTTPClient.METHOD_GET)
 	

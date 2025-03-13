@@ -32,7 +32,7 @@ func _handle_event(event: KEvent.Event) -> void:
 # Initializes the WebSocket connection
 func _ready() -> void:
 	print("Starting connection...")
-	var ws_url:String = Katana.WsBaseUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token
+	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect")
