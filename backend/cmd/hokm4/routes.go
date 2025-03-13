@@ -21,5 +21,11 @@ func (app *ApplicationH2) wsHokm2Router() *chi.Mux {
 		r.Get("/ws", app.WsUpgradeHandler)
 	})
 
+	mux.Group(func(r chi.Router) {
+		r.Use(app.Authenticate)
+		r.Use(app.RequireAuthenticatedUser)
+
+	})
+
 	return mux
 }

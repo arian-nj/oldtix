@@ -109,10 +109,6 @@ func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
-	if user == nil {
-		app.AuthenticationRequired(w, r)
-		return
-	}
 
 	var input struct {
 		DisplayName *string             `json:"display_name"`
