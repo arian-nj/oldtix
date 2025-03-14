@@ -29,14 +29,18 @@ func send_event(event_type: String, event_data: String="") -> void:
 func _handle_event(event: KEvent.Event) -> void:
 	events_queue.append(event)
 
-# Initializes the WebSocket connection
 func _ready() -> void:
+	connect_to_game()
+
+func connect_to_game() -> void:
+	set_process(true)
 	print("Starting connection...")
 	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect")
 		set_process(false)
+		# get_tree().create_timer()
 
 
 var state:int
@@ -89,11 +93,12 @@ func _handle_closed_state() -> void:
 	print("WebSocket closed with code: %d, reason: %s" % [code, reason])
 	ErrorBoard._instance.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorBoard.ErrorLevel)
 	set_process(false)
-	var node_parent:Node = get_parent()
-	if node_parent is SceneLevel:
-		var scene_parent:SceneLevel = node_parent
-		await  get_tree().create_timer(1).timeout
-		scene_parent.manager_change_scene.emit(SceneManager.Levels.MainMenu)
+	get_tree().create_timer(1).timeout.connect(connect_to_game)
+	# var node_parent:Node = get_parent()
+	# if node_parent is SceneLevel:
+	# 	var scene_parent:SceneLevel = node_parent
+	# 	await  get_tree().create_timer(1).timeout
+	# 	scene_parent.manager_change_scene.emit(SceneManager.Levels.MainMenu)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:

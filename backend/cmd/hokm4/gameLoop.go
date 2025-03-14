@@ -14,7 +14,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) AddPlayer(player *Player, gameId int64) error {
+func (game *GameState) AddPlayerToGame(player *Player, gameId int64) error {
 	if player.UserId != 0 {
 		game.BackgroundSocketHandlers(player)
 	}
@@ -40,18 +40,18 @@ func (app *ApplicationH2) MatchUsers() error {
 		}
 
 		p1 := <-app.lobby.Queue
-		game.AddPlayer(p1, game.ID)
+		game.AddPlayerToGame(p1, game.ID)
 		p2 := <-app.lobby.Queue
-		game.AddPlayer(p2, game.ID)
+		game.AddPlayerToGame(p2, game.ID)
 
 		p1.IsPlayng = true
 		p2.IsPlayng = true
 
 		p3 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
-		game.AddPlayer(p3, game.ID)
+		game.AddPlayerToGame(p3, game.ID)
 
 		p4 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
-		game.AddPlayer(p4, game.ID)
+		game.AddPlayerToGame(p4, game.ID)
 
 		p1.TeamId = TeamOne
 		p2.TeamId = TeamTwo
@@ -91,7 +91,6 @@ func (game *GameState) RunGame() error {
 	}()
 
 	// choose hakem
-
 	for _, p := range game.Players {
 		err := game.SendGameData(socket.TypeMatchFound, p)
 		if err != nil {
@@ -107,6 +106,13 @@ func (game *GameState) RunGame() error {
 		if game.TeamOneTricksScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTricksScore >= SETTING_WINNING_TRICK_SCORE {
 			break
 		}
+	}
+	return game.TheEnd()
+}
+
+func (game *GameState) TheEnd() error {
+	for _, p := range game.Players {
+		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
 	}
 	return nil
 }
@@ -149,6 +155,9 @@ func (game *GameState) RunTrick(trick_number int) error {
 		}
 	}
 
+	for _, p := range game.Players {
+		p.Cards = []cards.Card{}
+	}
 	all_cards := cards.NewAllCards()
 	all_cards = game.sendCards(5, all_cards, game.Players)
 
@@ -415,28 +424,30 @@ OuterLoop:
 }
 
 // events come here if not used go to GameEventCh
-func (game *GameState) BackgroundSocketHandlers(p *Player) {
+func (game *GameState) BackgroundSocketHandlers(player *Player) {
 
 	game.BackgroundTask(func() error {
 		for {
-			new_event := <-p.Client.NewEvents
-			game.Logger.Info("every thing is checked")
-			if new_event.Type == socket.TypeGetData {
-				game.SendGameData(socket.TypeGameData, p)
-			} else if new_event.Type == socket.TypeGetMyCards {
-				game.Logger.Info("get my cards")
-				var output struct {
-					NewCards []cards.Card `json:"cards"`
+			select {
+			case new_event := <-player.Client.NewEvents:
+				if new_event.Type == socket.TypeGetData {
+					game.SendGameData(socket.TypeGameData, player)
+				} else if new_event.Type == socket.TypeGetMyCards {
+					var output struct {
+						NewCards []cards.Card `json:"cards"`
+					}
+					output.NewCards = player.Cards
+					data_byte, err := json.Marshal(output)
+					if err != nil {
+						game.Logger.Error(err.Error())
+						continue
+					}
+					player.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
+				} else {
+					game.GameEventsCh <- NewGameEvent(&new_event, player)
 				}
-				output.NewCards = p.Cards
-				data_byte, err := json.Marshal(output)
-				if err != nil {
-					game.Logger.Error(err.Error())
-					continue
-				}
-				p.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
-			} else {
-				game.GameEventsCh <- NewGameEvent(&new_event, p)
+			case <-player.CancelCtx.Done():
+				return nil
 			}
 		}
 	})

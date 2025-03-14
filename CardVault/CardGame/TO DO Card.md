@@ -6,7 +6,7 @@
 - [ ] Don't Look Like Shit
 - [ ] Ship It
 
-# V 2.0.0 Friends
+# V 2.0.0 Social
 - [ ] pre made text chat 
 - [ ] add fiends and play (only 0 coin mode is allowed)
 

@@ -18,12 +18,14 @@ const (
 )
 
 type Player struct {
-	UserId       int64          `json:"user_id"`
-	PlayerUnique string         `json:"player_unique"`
-	TeamId       Team           `json:"team"`
-	Client       *socket.Client `json:"-"`
-	Cards        []cards.Card   `json:"-"`
-	IsPlayng     bool           `json:"is_playing"`
+	UserId       int64              `json:"user_id"`
+	PlayerUnique string             `json:"player_unique"`
+	TeamId       Team               `json:"team"`
+	Client       *socket.Client     `json:"-"`
+	Cards        []cards.Card       `json:"-"`
+	IsPlayng     bool               `json:"is_playing"`
+	CancelCtx    context.Context    `json:"-"`
+	Cancel       context.CancelFunc `json:"-"`
 }
 
 func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *Player {

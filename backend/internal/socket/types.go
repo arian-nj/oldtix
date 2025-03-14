@@ -26,6 +26,8 @@ const (
 	TypePlayTimeout EventType = "play_timeout"
 	TypeTurnPlayed  EventType = "turn_played"
 	TypeTurnEnd     EventType = "turn_end"
+
+	TypeTheEnd EventType = "the_end"
 )
 
 type EventMessage string

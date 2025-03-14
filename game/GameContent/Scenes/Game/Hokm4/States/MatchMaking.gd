@@ -18,7 +18,7 @@ func _on_new_event(e:KEvent.Event)->void:
 
 		status_label.text = "waiting new trick"
 		ws.hold_events()
-		Transition.emit(self,"new_trick")
+		Transition.emit(self,"wait_state")
 
 	elif e.type == KEvent.TYPE_REJOIN_MATCH:
 		table.parse_game_data(e.data)
