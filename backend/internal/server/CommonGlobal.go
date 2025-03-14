@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log/slog"
 	"os"
 	"sync"
 
@@ -10,6 +9,8 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func Run() {
@@ -32,7 +33,7 @@ type config struct {
 
 type CommonGlobals struct {
 	Config  *config
-	Logger  *slog.Logger
+	Logger  *zap.Logger
 	Queries *sqldb.Queries
 	wg      sync.WaitGroup
 }
@@ -44,10 +45,23 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	cfg := &config{}
 	Glob.Config = cfg
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	// logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	config := zap.NewProductionConfig()
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.TimeKey = "timestamp"
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.StacktraceKey = ""
+	config.EncoderConfig = encoderConfig
+
+	logger, err := config.Build(zap.AddCallerSkip(1))
+
+	// logger, err :=
+	if err != nil {
+		return nil, nil, err
+	}
 	Glob.Logger = logger
 
-	err := godotenv.Load()
+	err = godotenv.Load()
 	if err != nil {
 		return nil, nil, fmt.Errorf("error loading .env file")
 	}

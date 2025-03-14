@@ -420,19 +420,6 @@ func (game *GameState) BackgroundSocketHandlers(p *Player) {
 	game.BackgroundTask(func() error {
 		for {
 			new_event := <-p.Client.NewEvents
-
-			if p.Client == nil {
-				game.Logger.Info("client is nill")
-			}
-			if p.Client.NewEvents == nil {
-				game.Logger.Info("NewEvents is nill")
-			}
-			if p == nil {
-				game.Logger.Info("p is nill")
-			}
-			if p == nil {
-				game.Logger.Info("card is nill")
-			}
 			game.Logger.Info("every thing is checked")
 			if new_event.Type == socket.TypeGetData {
 				game.SendGameData(socket.TypeGameData, p)

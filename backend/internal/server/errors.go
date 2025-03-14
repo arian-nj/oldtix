@@ -14,14 +14,15 @@ import (
 func (app *CommonGlobals) ReportServerError(r *http.Request, err error) {
 	var (
 		message = err.Error()
-		method  = r.Method
-		url     = r.URL.String()
-		trace   = string(debug.Stack())
+		// method  = r.Method
+		// url     = r.URL.String()
+		trace = string(debug.Stack())
 	)
 
 	// requestAttrs := slog.Group("request", "method", method, "url", url)
 	// app.Logger.Error(message, requestAttrs, "trace", trace)
-	log.Println(message, method, url)
+	// log.Println(message, method, url)
+	app.Logger.Error(message)
 	log.Println(trace)
 }
 func (app *CommonGlobals) ReportError(err error) {
@@ -32,7 +33,7 @@ func (app *CommonGlobals) ReportError(err error) {
 
 	// requestAttrs := slog.Group("request", "method", method, "url", url)
 	// app.Logger.Error(message, requestAttrs, "trace", trace)
-	log.Println(message)
+	app.Logger.Error(message)
 	log.Println(trace)
 }
 
