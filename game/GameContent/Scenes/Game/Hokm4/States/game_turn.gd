@@ -13,7 +13,6 @@ func Enter()->void:
 	table.MyCardPlayed.connect(on_me_card_played)
 
 func Exit()->void:
-	ws.hold_events()
 	ws.new_event.disconnect(_on_new_event)
 	table.MyCardPlayed.disconnect(on_me_card_played)
 
@@ -62,7 +61,8 @@ func _on_new_event(e:KEvent.Event)->void:
 		status_label.text = "Trick Ended"
 		table.parse_game_data(e.data)
 		table.clear_cards()
-		Transition.emit(self,"new_trick")
+		ws.hold_events()
+		Transition.emit(self,"wait_state")
 
 
 func on_me_card_played(card:Card)->void:

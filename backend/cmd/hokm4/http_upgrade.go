@@ -18,16 +18,58 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 		app.Logger.Error(err.Error())
 		return
 	}
+
 	client := socket.NewClient(conn)
 	app.Logger.Debug("new ws connection established")
 
-	ctx, cancel := context.WithCancel(context.Background())
+	activeGame, wasInAGame := app.lobby.UserGames[user.ID]
 
+	var player *Player
+
+	if wasInAGame {
+		for _, p := range activeGame.Players {
+			if p.UserId == user.ID {
+				player = p
+				player.Client = client
+				player.IsPlayng = true
+				err := activeGame.SendGameData(socket.TypeRejoinMatch, p)
+				if err != nil {
+					app.ServerError(w, r, err)
+					return
+				}
+				activeGame.BackgroundSocketHandlers(player)
+
+				// p.AddToEgress(e)
+			}
+		}
+	} else { // new game
+		player = NewPlayer(user.ID, client, []cards.Card{}, false)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	player.CancelCtx = ctx
+	player.Cancel = cancel
+
+	if !wasInAGame { // wait for make match request event
+		app.BackgroundTask(func() error {
+			for {
+				select {
+				case new_event := <-client.NewEvents:
+					if new_event.Type == socket.TypeMakeMatch {
+						app.lobby.Queue <- player
+						return nil
+					}
+				case <-player.CancelCtx.Done():
+					return nil
+				}
+			}
+		})
+	}
 	app.BackgroundTask(
 		func() error {
-			defer cancel()
+			defer player.Cancel()
 			defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
-			err := client.ReadMessage(app.Logger, ctx)
+			err := client.ReadMessage(app.Logger, player.CancelCtx)
 			if err != nil {
 				playinggame, exist := app.lobby.UserGames[user.ID]
 				if exist {
@@ -43,7 +85,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 		})
 
 	app.BackgroundTask(func() error {
-		defer cancel()
+		defer player.Cancel()
 		defer func() {
 			err := client.Close()
 			if err != nil {
@@ -52,44 +94,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 				app.Logger.Error(fmt.Sprintf("write disconnect %d", user.ID))
 			}
 		}()
-		return client.WriteMessage(app.Logger, ctx)
+		return client.WriteMessage(app.Logger, player.CancelCtx)
 	})
-
-	activeGame, wasInAGame := app.lobby.UserGames[user.ID]
-
-	if wasInAGame {
-		for _, p := range activeGame.Players {
-			if p.UserId == user.ID {
-				player := p
-				player.Client = client
-				player.IsPlayng = true
-				err := activeGame.SendGameData(socket.TypeRejoinMatch, p)
-				if err != nil {
-					app.ServerError(w, r, err)
-					return
-				}
-				activeGame.BackgroundSocketHandlers(player)
-
-				// p.AddToEgress(e)
-			}
-		}
-	} else { // new game
-		player := NewPlayer(user.ID, client, []cards.Card{}, false)
-
-		app.BackgroundTask(func() error {
-			// defer app.Logger.Info("Make Match Waiter Ended")
-			for {
-				select {
-				case new_event := <-client.NewEvents:
-					if new_event.Type == socket.TypeMakeMatch {
-						app.lobby.Queue <- player
-						return nil
-					}
-				case <-ctx.Done():
-					return nil
-				}
-			}
-		})
-	}
 
 }

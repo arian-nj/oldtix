@@ -47,3 +47,5 @@ const TYPE_INVALID_PLAY:String = "invalid_play"
 const TYPE_PLAY_TIMEOUT:String = "play_timeout"
 const TYPE_TURN_PLAYED:String = "turn_played"
 const TYPE_END_TURN:String = "turn_end"
+
+const TYPE_THE_END:String = "the_end"
