@@ -2,10 +2,10 @@ package socket
 
 import (
 	"context"
-	"log/slog"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 )
 
 var (
@@ -34,7 +34,7 @@ func NewClient(conn *websocket.Conn) *Client {
 	}
 }
 
-func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context) error {
+func (c *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
 
 	for {
 		select {
@@ -57,7 +57,7 @@ func (c *Client) ReadMessage(l *slog.Logger, ctx context.Context) error {
 	}
 }
 
-func (c *Client) WriteMessage(l *slog.Logger, ctx context.Context) error {
+func (c *Client) WriteMessage(l *zap.Logger, ctx context.Context) error {
 
 	// defer func() {
 	// 	c.manager.removeClient(c)

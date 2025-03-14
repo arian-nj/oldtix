@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,6 +11,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 const (
@@ -23,10 +24,14 @@ const (
 
 func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 
+	stdLogger, err := zap.NewStdLogAt(Glob.Logger, zapcore.WarnLevel)
+	if err != nil {
+		return err
+	}
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
 		Handler:      router,
-		ErrorLog:     slog.NewLogLogger(Glob.Logger.Handler(), slog.LevelWarn),
+		ErrorLog:     stdLogger,
 		IdleTimeout:  defaultIdleTimeout,
 		ReadTimeout:  defaultReadTimeout,
 		WriteTimeout: defaultWriteTimeout,
@@ -45,9 +50,10 @@ func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 		shutdownErrorChan <- srv.Shutdown(ctx)
 	}()
 
-	Glob.Logger.Info("starting server", slog.Group("server", "addr", srv.Addr))
+	Glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
+	// Glob.Logger.Info("starting server", slog.Group("server", "addr", srv.Addr))
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
@@ -57,7 +63,7 @@ func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 		return err
 	}
 
-	Glob.Logger.Info("stopped server", slog.Group("server", "addr", srv.Addr))
+	Glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
 
 	Glob.wg.Wait()
 	return nil
