@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=23 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/WaitState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/the_end.gd" id="16_tmsoy"]
+[ext_resource type="Script" uid="uid://bu2a3iuo1ja85" path="res://GameContent/Scenes/Game/win_panel.gd" id="17_mcw6q"]
 
 [sub_resource type="Gradient" id="Gradient_wqsup"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
@@ -480,10 +481,10 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="."]
 layer = 10
 
-[node name="UI" type="Control" parent="CanvasLayer"]
+[node name="UI" type="Control" parent="UILayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -496,7 +497,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HomeButton" type="Button" parent="CanvasLayer/UI"]
+[node name="HomeButton" type="Button" parent="UILayer/UI"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -509,7 +510,7 @@ size_flags_horizontal = 4
 icon = ExtResource("4_youex")
 flat = true
 
-[node name="StatusLabel" type="Label" parent="CanvasLayer/UI"]
+[node name="StatusLabel" type="Label" parent="UILayer/UI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -535,24 +536,24 @@ initial_state = NodePath("connecting")
 [node name="connecting" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label")]
 script = ExtResource("7_uxde4")
 ws = NodePath("../../WebSocket")
-status_label = NodePath("../../CanvasLayer/UI/StatusLabel")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
 
 [node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("8_ix53e")
 ws = NodePath("../../WebSocket")
-status_label = NodePath("../../CanvasLayer/UI/StatusLabel")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../Table")
 
 [node name="wait_state" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("12_cf8qb")
 ws = NodePath("../../WebSocket")
-status_label = NodePath("../../CanvasLayer/UI/StatusLabel")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../Table")
 
 [node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
-status_label = NodePath("../../CanvasLayer/UI/StatusLabel")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../Table")
 choose_hokm_scene = ExtResource("11_amrdn")
 
@@ -560,9 +561,46 @@ choose_hokm_scene = ExtResource("11_amrdn")
 script = ExtResource("12_d5oqf")
 ws = NodePath("../../WebSocket")
 table = NodePath("../../Table")
-status_label = NodePath("../../CanvasLayer/UI/StatusLabel")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
 
-[node name="the_end" type="Node" parent="StateMachine"]
+[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("16_tmsoy")
+ws = NodePath("../../WebSocket")
+status_label = NodePath("../../UILayer/UI/StatusLabel")
+table = NodePath("../../Table")
 
-[connection signal="pressed" from="CanvasLayer/UI/HomeButton" to="." method="_on_home_button_pressed"]
+[node name="WinPanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("17_mcw6q")
+
+[node name="ColorRect" type="ColorRect" parent="WinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176419, 0.176419, 0.176419, 0.517647)
+
+[node name="Label" type="Label" parent="WinPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 60
+text = "The End"
+
+[connection signal="pressed" from="UILayer/UI/HomeButton" to="." method="_on_home_button_pressed"]
