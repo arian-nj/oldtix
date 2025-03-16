@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/V 1.0.0.md",
+                "file": "CardGame/Release Pipe.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "V 1.0.0"
+              "title": "Release Pipe"
             }
           }
         ]
@@ -176,10 +176,11 @@
   },
   "active": "5a3caa5d95798a37",
   "lastOpenFiles": [
+    "CardGame/V 1.0.0.md",
+    "CardGame/Release Pipe.md",
     "CardGame/Game Flow Chart.md",
     "CardGame/Self Notes.md",
     "CardGame/TO DO Card.md",
-    "CardGame/V 1.0.0.md",
     "CardGame/Version.md",
     "CardGame/Name.md",
     "6 - Main Notes/2025-03-06.md",
@@ -217,7 +218,6 @@
     "Excalidraw",
     "6 - Main Notes/me.md",
     "6 - Main Notes/Gizmondo Story.md",
-    "2 - Source Materials/Videos/Obsidian The King of Learning Tools.md",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]

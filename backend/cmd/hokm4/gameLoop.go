@@ -67,29 +67,27 @@ func (app *ApplicationH2) MatchUsers() error {
 		}
 		app.lobby.Mu.Unlock()
 
-		app.BackgroundTask(func() error {
-			defer func() {
-				for _, p := range game.Players {
-					delete(app.lobby.UserGames, p.UserId)
-				}
-			}()
-			err := game.RunGame()
-			app.Logger.Error("Game Loop Ended")
-			if err != nil {
-				app.ReportError(err)
-			}
-			return err
-		})
+		app.RunGameInBackground(game)
 	}
+}
+func (app *ApplicationH2) RunGameInBackground(game *GameState) {
+	app.BackgroundTask(func() error {
+		defer func() {
+			for _, p := range game.Players {
+				delete(app.lobby.UserGames, p.UserId)
+				p.Client.Close()
+			}
+		}()
+		err := game.RunGame()
+		app.Logger.Error("Game Loop Ended")
+		if err != nil {
+			app.ReportError(err)
+		}
+		return err
+	})
 }
 
 func (game *GameState) RunGame() error {
-	defer func() {
-		for _, p := range game.Players {
-			p.Client.Close()
-		}
-	}()
-
 	// choose hakem
 	for _, p := range game.Players {
 		err := game.SendGameData(socket.TypeMatchFound, p)

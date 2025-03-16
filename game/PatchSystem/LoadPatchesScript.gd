@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @export var status_label:Label
 
-var server_url := "http://192.168.224.205:4444"
+var server_url := "http://192.168.0.104:4444"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
