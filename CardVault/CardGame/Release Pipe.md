@@ -1,5 +1,9 @@
 # Release
 
+# Server Vps
+- installed Fail2Ban to prevent brute force attacks  
+- ufw is installed 80 , 443 and Open-ssh is open
+
 ## notes
 - Store the latest `.pck` version number in a metadata file (e.g., `version.json`) on S3.
 
