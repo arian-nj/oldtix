@@ -36,6 +36,6 @@ jobs:
       - name: Copy file to Vps
         run: |
           mkdir -p backend
-          scp -i ~/.ssh/id_rsa ./build/core arian@hcard.strangled.net:~/backend/core
+          scp -i ~/.ssh/id_rsa ./backend/build/core arian@hcard.strangled.net:~/backend/core
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
