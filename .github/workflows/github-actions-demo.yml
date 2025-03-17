@@ -34,7 +34,8 @@ jobs:
           ssh-keyscan -H hcard.strangled.net >> ~/.ssh/known_hosts
         
       - name: Copy file to Vps
+        working-directory: backend
         run: |
-          scp -i ~/.ssh/id_rsa ./backend/build/core arian@hcard.strangled.net:~/backend/core
+          scp -i ~/.ssh/id_rsa ./build/core arian@hcard.strangled.net:~/backend/core
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
