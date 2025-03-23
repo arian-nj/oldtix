@@ -9,7 +9,7 @@ import (
 
 // have card
 // same suite as first card if not first move
-func (game *GameState) ValidateAndDoMove(player *Player, played_card *cards.Card) (int, bool) {
+func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards.Card) (int, bool) {
 	// game.Logger.Debug("new card " + card.String())
 	cardIndex, haveCard := cards.IsCardInCards(played_card, &player.Cards)
 	if !haveCard {
@@ -62,7 +62,7 @@ type GameStateOut struct {
 	YourTeam Team `json:"your_team"`
 }
 
-func (game *GameState) SendGameData(MessageTurn socket.EventType, p *Player) error {
+func (game *GameState) SendGameData(MessageTurn socket.EventType, p *HumanPlayer) error {
 	gsOut := GameStateOut{
 		GameState: game,
 		YourTeam:  p.TeamId,
@@ -76,7 +76,7 @@ func (game *GameState) SendGameData(MessageTurn socket.EventType, p *Player) err
 	return nil
 }
 
-func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*Player) []cards.Card {
+func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*HumanPlayer) []cards.Card {
 	var remaining_cards []cards.Card = all_cards
 
 	for _, p := range players {

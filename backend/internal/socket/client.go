@@ -26,6 +26,9 @@ type Client struct {
 	State     ConncectionState
 	Egres     chan Event
 	NewEvents chan Event
+
+	CancelCtx context.Context
+	Cancel    context.CancelFunc
 }
 
 func (c *Client) Close() error {
@@ -35,7 +38,7 @@ func (c *Client) Close() error {
 	return nil
 }
 
-func NewClient(conn *websocket.Conn) *Client {
+func NewClient(conn *websocket.Conn) (*Client, error) {
 	client := &Client{
 		Conn:      conn,
 		State:     OPENING,
@@ -58,7 +61,7 @@ func NewClient(conn *websocket.Conn) *Client {
 		return nil
 	})
 
-	return client
+	return client, nil
 }
 
 func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {

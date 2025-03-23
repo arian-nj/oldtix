@@ -14,7 +14,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) AddPlayerToGame(player *Player, gameId int64) error {
+func (game *GameState) AddPlayerToGame(player *HumanPlayer, gameId int64) error {
 	if player.UserId != 0 {
 		game.BackgroundSocketHandlers(player)
 	}
@@ -34,7 +34,7 @@ func (app *ApplicationHokm4) MatchUsers() error {
 			return err
 		}
 
-		var foundPlayers []*Player
+		var foundPlayers []*HumanPlayer
 
 		for len(game.Players) < 2 {
 			foundPl := <-app.Lobby.Queue
@@ -54,10 +54,11 @@ func (app *ApplicationHokm4) MatchUsers() error {
 
 		// foundPlayer.IsPlayng = true
 
-		p3 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
+		nilclient, _ := socket.NewClient(nil)
+		p3 := NewPlayer(0, nilclient, []cards.Card{}, false)
 		game.AddPlayerToGame(p3, game.ID)
 
-		p4 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
+		p4 := NewPlayer(0, nilclient, []cards.Card{}, false)
 		game.AddPlayerToGame(p4, game.ID)
 
 		game.Players[0].TeamId = TeamOne
@@ -275,9 +276,9 @@ func (game *GameState) RunTurn() error {
 	}
 
 	// actual game
-	to_play_order := []*Player{}
-	before_ward := []*Player{}
-	after_ward := []*Player{}
+	to_play_order := []*HumanPlayer{}
+	before_ward := []*HumanPlayer{}
+	after_ward := []*HumanPlayer{}
 	var starterFound = false
 
 	for player_index, p := range game.Players {
@@ -366,7 +367,7 @@ func (game *GameState) RunTurn() error {
 
 }
 
-func (game *GameState) WaitForPlayerToPlayCard(playing_player *Player) (cardIndex int, err error) {
+func (game *GameState) WaitForPlayerToPlayCard(playing_player *HumanPlayer) (cardIndex int, err error) {
 	playing_player.AddToEgress(socket.NewEvent(socket.TypeYourTurn, socket.EventMessage("")))
 	var NewTicker *time.Ticker
 
@@ -415,7 +416,7 @@ OuterLoop:
 
 		case <-NewTicker.C:
 			NewTicker.Stop()
-			cardIndex = game.BotPlayTurn(playing_player)
+			cardIndex = game.BotPlayTurn(playing_player.Cards)
 			choosen_card_by_bot := playing_player.Cards[cardIndex]
 			data_byte, err := json.Marshal(choosen_card_by_bot)
 			if err != nil {
@@ -429,7 +430,7 @@ OuterLoop:
 }
 
 // events come here if not used go to GameEventCh
-func (game *GameState) BackgroundSocketHandlers(player *Player) {
+func (game *GameState) BackgroundSocketHandlers(player *HumanPlayer) {
 
 	game.BackgroundTask(func() error {
 		for {
@@ -451,7 +452,7 @@ func (game *GameState) BackgroundSocketHandlers(player *Player) {
 				} else {
 					game.GameEventsCh <- NewGameEvent(&new_event, player)
 				}
-			case <-player.CancelCtx.Done():
+			case <-player.Client.CancelCtx.Done():
 				return nil
 			}
 		}

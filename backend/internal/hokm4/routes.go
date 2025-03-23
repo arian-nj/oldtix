@@ -1,8 +1,21 @@
 package hokm4
 
 import (
+	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/go-chi/chi/v5"
 )
+
+type ApplicationHokm4 struct {
+	*server.CommonGlobals
+	Lobby *Lobby
+}
+
+func NewHokm4Application(globalStructs *server.CommonGlobals) *ApplicationHokm4 {
+	return &ApplicationHokm4{
+		CommonGlobals: globalStructs,
+		Lobby:         NewLobby(),
+	}
+}
 
 func (app *ApplicationHokm4) Hokm4Router() *chi.Mux {
 	// http router

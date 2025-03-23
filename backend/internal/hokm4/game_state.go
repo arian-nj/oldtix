@@ -5,23 +5,9 @@ import (
 	"sync"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
-	"github.com/arian-nj/master-card/back/internal/randutils"
-	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/sqldb"
 )
-
-type ApplicationHokm4 struct {
-	*server.CommonGlobals
-	Lobby *Lobby
-}
-
-func NewHokm4Application(globalStructs *server.CommonGlobals) *ApplicationHokm4 {
-	return &ApplicationHokm4{
-		CommonGlobals: globalStructs,
-		Lobby:         NewLobby(),
-	}
-}
 
 type Team int16
 
@@ -30,45 +16,12 @@ const (
 	TeamTwo
 )
 
-type Player struct {
-	UserId       int64              `json:"user_id"`
-	PlayerUnique string             `json:"player_unique"`
-	TeamId       Team               `json:"team"`
-	Client       *socket.Client     `json:"-"`
-	Cards        []cards.Card       `json:"-"`
-	IsPlayng     bool               `json:"is_playing"`
-	CancelCtx    context.Context    `json:"-"`
-	Cancel       context.CancelFunc `json:"-"`
-}
-
-func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *Player {
-	randString := randutils.GenerateRandomString(16)
-
-	return &Player{
-		UserId:       UserId,
-		PlayerUnique: randString,
-		Client:       Client,
-		Cards:        Cards,
-		IsPlayng:     IsPlayng,
-	}
-}
-
-func (p *Player) AddToEgress(e *socket.Event) {
-	if p.Client != nil && p.Client.State != socket.OPEN {
-		return
-	}
-	go func() {
-		p.Client.Egres <- *e
-
-	}()
-}
-
 type GameEvent struct {
-	Player *Player
+	Player *HumanPlayer
 	event  *socket.Event
 }
 
-func NewGameEvent(event *socket.Event, player *Player) *GameEvent {
+func NewGameEvent(event *socket.Event, player *HumanPlayer) *GameEvent {
 	return &GameEvent{
 		event:  event,
 		Player: player,
@@ -78,7 +31,7 @@ func NewGameEvent(event *socket.Event, player *Player) *GameEvent {
 type GameState struct {
 	*ApplicationHokm4 `json:"-"`
 	ID                int64           `json:"id"`
-	Players           []*Player       `json:"players"`
+	Players           []*HumanPlayer  `json:"players"`
 	GameEventsCh      chan *GameEvent `json:"-"`
 	CurrentTrick      *Trick          `json:"current_trick"`
 	Tricks            []*Trick        `json:"-"`
@@ -146,11 +99,11 @@ func NewTurn() *Turn {
 }
 
 type PlayerCardPlayed struct {
-	Player *Player    `json:"player"`
-	Card   cards.Card `json:"card"`
+	Player *HumanPlayer `json:"player"`
+	Card   cards.Card   `json:"card"`
 }
 
-func NewPlayerCardPlayed(player *Player, card cards.Card) *PlayerCardPlayed {
+func NewPlayerCardPlayed(player *HumanPlayer, card cards.Card) *PlayerCardPlayed {
 	return &PlayerCardPlayed{
 		Player: player,
 		Card:   card,
@@ -158,29 +111,16 @@ func NewPlayerCardPlayed(player *Player, card cards.Card) *PlayerCardPlayed {
 }
 
 type Lobby struct {
-	Queue chan *Player
-	// Games map[int64]*GameState
+	Queue     chan *HumanPlayer
 	UserGames map[int64]*GameState
 	Mu        sync.Mutex
 }
 
 func NewLobby() *Lobby {
 	return &Lobby{
-		Queue: make(chan *Player),
+		Queue: make(chan *HumanPlayer),
 		// Games: make(map[int64]*GameState),
 		UserGames: map[int64]*GameState{},
 		Mu:        sync.Mutex{},
 	}
 }
-
-// type CurrentPlayer int
-
-// func (gs *GameState) NextCurrent() {
-// 	lastPlayerIndex := len(gs.Players) - 1
-// 	if gs.Current+1 <= lastPlayerIndex {
-// 		gs.Current += 1
-// 	} else if gs.Current+1 > lastPlayerIndex {
-// 		gs.Current = 0
-// 	}
-
-// }

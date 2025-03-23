@@ -19,12 +19,16 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	client := socket.NewClient(conn)
+	client, err := socket.NewClient(conn)
+	if err != nil {
+		app.ReportServerError(r, err)
+		return
+	}
 	app.Logger.Debug("new ws connection established")
 
 	activeGame, wasInAGame := app.Lobby.UserGames[user.ID]
 
-	var player *Player
+	var player *HumanPlayer
 
 	if wasInAGame {
 		for _, p := range activeGame.Players {
@@ -47,8 +51,8 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	player.CancelCtx = ctx
-	player.Cancel = cancel
+	player.Client.CancelCtx = ctx
+	player.Client.Cancel = cancel
 
 	if !wasInAGame { // wait for make match request event
 		app.BackgroundTask(func() error {
@@ -59,7 +63,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 						app.Lobby.Queue <- player
 						return nil
 					}
-				case <-player.CancelCtx.Done():
+				case <-player.Client.CancelCtx.Done():
 					if player != nil {
 						player.IsPlayng = false
 					}
@@ -70,7 +74,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 	}
 	app.BackgroundTask( // read messages
 		func() error {
-			defer player.Cancel()
+			defer player.Client.Cancel()
 			defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
 			defer func() {
 				if player != nil {
@@ -78,11 +82,11 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 				}
 			}()
 
-			return client.ReadMessage(app.Logger, player.CancelCtx)
+			return client.ReadMessage(app.Logger, player.Client.CancelCtx)
 		})
 
 	app.BackgroundTask(func() error { // write messages
-		defer player.Cancel()
+		defer player.Client.Cancel()
 		defer func() {
 			if player != nil {
 				player.IsPlayng = false
@@ -98,7 +102,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 			}
 		}()
 
-		return client.WriteMessage(app.Logger, player.CancelCtx)
+		return client.WriteMessage(app.Logger, player.Client.CancelCtx)
 	})
 
 }
