@@ -1,10 +1,10 @@
-package main
+package hokm4
 
 import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (app *ApplicationH2) wsHokm2Router() *chi.Mux {
+func (app *ApplicationHokm4) Hokm4Router() *chi.Mux {
 	// http router
 	mux := chi.NewRouter()
 

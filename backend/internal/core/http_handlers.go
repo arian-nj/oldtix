@@ -1,4 +1,4 @@
-package main
+package core_api
 
 import (
 	"context"
@@ -8,18 +8,18 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/arian-nj/master-card/back/internal/password"
-	"github.com/arian-nj/master-card/back/internal/request"
-	"github.com/arian-nj/master-card/back/internal/response"
 	"github.com/arian-nj/master-card/back/internal/server"
-	"github.com/arian-nj/master-card/back/internal/validator"
+	"github.com/arian-nj/master-card/back/pkg/password"
+	"github.com/arian-nj/master-card/back/pkg/request"
+	"github.com/arian-nj/master-card/back/pkg/response"
+	"github.com/arian-nj/master-card/back/pkg/validator"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
 	"github.com/pascaldekloe/jwt"
 )
 
-func (app *Application) status(writer http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) status(writer http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
 		"status": "ok",
 	}
@@ -30,7 +30,7 @@ func (app *Application) status(writer http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *Application) getLatestVersion(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) getLatestVersion(w http.ResponseWriter, r *http.Request) {
 	pwRow, err := app.Queries.GetVersion(context.Background(), app.ReleaseMode)
 	if err != nil {
 		app.ServerError(w, r, err)
@@ -51,7 +51,7 @@ func (app *Application) getLatestVersion(w http.ResponseWriter, r *http.Request)
 
 var errUserIsNotValidErr error = fmt.Errorf("user id is not valid")
 
-func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 	user_param := chi.URLParam(r, "user_id")
 	userid_int, err := strconv.Atoi(user_param)
 	if err != nil {
@@ -84,7 +84,7 @@ func (app *Application) getUserData(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) getMeData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
@@ -107,7 +107,7 @@ func (app *Application) getMeData(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) updateUserData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var input struct {
@@ -149,7 +149,7 @@ func (app *Application) updateUserData(w http.ResponseWriter, r *http.Request) {
 
 // Auth
 
-func (app *Application) register(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Username  string              `json:"username"`
 		Password  string              `json:"password"`
@@ -207,7 +207,7 @@ func (app *Application) register(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (app *Application) createAuthenticationToken(w http.ResponseWriter, r *http.Request) {
+func (app *ApiApplication) createAuthenticationToken(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Username  string              `json:"username"`
 		Password  string              `json:"password"`

@@ -1,4 +1,4 @@
-package main
+package hokm4
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
-func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
+func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	conn, err := socket.Upgrader.Upgrade(w, r, nil)
@@ -22,7 +22,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 	client := socket.NewClient(conn)
 	app.Logger.Debug("new ws connection established")
 
-	activeGame, wasInAGame := app.lobby.UserGames[user.ID]
+	activeGame, wasInAGame := app.Lobby.UserGames[user.ID]
 
 	var player *Player
 
@@ -56,7 +56,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 				select {
 				case new_event := <-client.NewEvents:
 					if new_event.Type == socket.TypeMakeMatch {
-						app.lobby.Queue <- player
+						app.Lobby.Queue <- player
 						return nil
 					}
 				case <-player.CancelCtx.Done():

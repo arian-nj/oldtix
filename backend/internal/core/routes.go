@@ -1,10 +1,25 @@
-package main
+package core_api
 
 import (
+	"os"
+
+	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/go-chi/chi/v5"
 )
 
-func (app *Application) profileRoutes() *chi.Mux {
+type ApiApplication struct {
+	*server.CommonGlobals
+	ReleaseMode string
+}
+
+func NewApiApplication(globalStructs *server.CommonGlobals) *ApiApplication {
+	return &ApiApplication{
+		CommonGlobals: globalStructs,
+		ReleaseMode:   os.Getenv("RELEASE_MODE"),
+	}
+}
+
+func (app *ApiApplication) CoreRoutes() *chi.Mux {
 
 	// http router
 	mux := chi.NewRouter()

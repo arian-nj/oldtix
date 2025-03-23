@@ -1,14 +1,27 @@
-package main
+package hokm4
 
 import (
 	"context"
 	"sync"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
+	"github.com/arian-nj/master-card/back/internal/randutils"
+	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
-	"github.com/arian-nj/master-card/back/internal/utils"
 	"github.com/arian-nj/master-card/back/sqldb"
 )
+
+type ApplicationHokm4 struct {
+	*server.CommonGlobals
+	Lobby *Lobby
+}
+
+func NewHokm4Application(globalStructs *server.CommonGlobals) *ApplicationHokm4 {
+	return &ApplicationHokm4{
+		CommonGlobals: globalStructs,
+		Lobby:         NewLobby(),
+	}
+}
 
 type Team int16
 
@@ -29,7 +42,7 @@ type Player struct {
 }
 
 func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *Player {
-	randString := utils.GenerateRandomString(16)
+	randString := randutils.GenerateRandomString(16)
 
 	return &Player{
 		UserId:       UserId,
@@ -63,27 +76,27 @@ func NewGameEvent(event *socket.Event, player *Player) *GameEvent {
 }
 
 type GameState struct {
-	*ApplicationH2 `json:"-"`
-	ID             int64           `json:"id"`
-	Players        []*Player       `json:"players"`
-	GameEventsCh   chan *GameEvent `json:"-"`
-	CurrentTrick   *Trick          `json:"current_trick"`
-	Tricks         []*Trick        `json:"-"`
+	*ApplicationHokm4 `json:"-"`
+	ID                int64           `json:"id"`
+	Players           []*Player       `json:"players"`
+	GameEventsCh      chan *GameEvent `json:"-"`
+	CurrentTrick      *Trick          `json:"current_trick"`
+	Tricks            []*Trick        `json:"-"`
 
 	TeamOneTricksScore int `json:"team_one_trick_score"`
 	TeamTwoTricksScore int `json:"team_two_trick_score"`
 }
 
-func (app *ApplicationH2) NewGameState() (*GameState, error) {
+func (app *ApplicationHokm4) NewGameState() (*GameState, error) {
 	gameRow, err := app.Queries.InsertHokm4Game(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
 	return &GameState{
-		ID:            gameRow.ID,
-		ApplicationH2: app,
-		GameEventsCh:  make(chan *GameEvent),
+		ID:               gameRow.ID,
+		ApplicationHokm4: app,
+		GameEventsCh:     make(chan *GameEvent),
 	}, nil
 }
 
@@ -149,6 +162,15 @@ type Lobby struct {
 	// Games map[int64]*GameState
 	UserGames map[int64]*GameState
 	Mu        sync.Mutex
+}
+
+func NewLobby() *Lobby {
+	return &Lobby{
+		Queue: make(chan *Player),
+		// Games: make(map[int64]*GameState),
+		UserGames: map[int64]*GameState{},
+		Mu:        sync.Mutex{},
+	}
 }
 
 // type CurrentPlayer int

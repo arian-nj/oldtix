@@ -1,4 +1,4 @@
-package main
+package hokm4
 
 import (
 	"math/rand/v2"

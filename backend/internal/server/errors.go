@@ -7,8 +7,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/arian-nj/master-card/back/internal/response"
-	"github.com/arian-nj/master-card/back/internal/validator"
+	"github.com/arian-nj/master-card/back/pkg/response"
+	"github.com/arian-nj/master-card/back/pkg/validator"
 )
 
 func (app *CommonGlobals) ReportServerError(r *http.Request, err error) {

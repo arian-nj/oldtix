@@ -1,4 +1,4 @@
-package main
+package hokm4
 
 import (
 	"context"
@@ -27,7 +27,7 @@ func (game *GameState) AddPlayerToGame(player *Player, gameId int64) error {
 	return err
 }
 
-func (app *ApplicationH2) MatchUsers() error {
+func (app *ApplicationHokm4) MatchUsers() error {
 	for {
 		game, err := app.NewGameState()
 		if err != nil {
@@ -37,7 +37,7 @@ func (app *ApplicationH2) MatchUsers() error {
 		var foundPlayers []*Player
 
 		for len(game.Players) < 2 {
-			foundPl := <-app.lobby.Queue
+			foundPl := <-app.Lobby.Queue
 			if foundPl.Client.State != socket.OPEN {
 				continue
 			}
@@ -65,22 +65,22 @@ func (app *ApplicationH2) MatchUsers() error {
 		game.Players[2].TeamId = TeamOne
 		game.Players[3].TeamId = TeamTwo
 
-		app.lobby.Mu.Lock()
+		app.Lobby.Mu.Lock()
 		for _, p := range game.Players {
 			if p.UserId != 0 {
-				app.lobby.UserGames[p.UserId] = game
+				app.Lobby.UserGames[p.UserId] = game
 			}
 		}
-		app.lobby.Mu.Unlock()
+		app.Lobby.Mu.Unlock()
 
 		app.RunGameInBackground(game)
 	}
 }
-func (app *ApplicationH2) RunGameInBackground(game *GameState) {
+func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 	app.BackgroundTask(func() error {
 		defer func() {
 			for _, p := range game.Players {
-				delete(app.lobby.UserGames, p.UserId)
+				delete(app.Lobby.UserGames, p.UserId)
 				p.Client.Close()
 			}
 		}()
