@@ -5,8 +5,11 @@ signal card_played(card:Card)
 signal not_inplace(card:Card)
 
 @export var cardTexture:TextureRect
-@export var cardArea:Area2D
 @export var prespective3DShader:Prescpective3DShader
+@export var atlasTexture:Texture2D
+
+
+@export var cardArea:Area2D
 @export var swingComponent:SwingComponent
 
 var local_pos_on_press:Vector2 
@@ -33,16 +36,17 @@ func suite_name() -> String:
 	
 	return sname
 
-func value_name() -> String:
-	match card_data.value:
-		11:return "J"
-		12:return "Q"
-		13:return "K"
-		14:return "A."
-		_:return str(card_data.value)+"."
+# func value_name() -> String:
+# 	match card_data.value:
+# 		11:return "J"
+# 		12:return "Q"
+# 		13:return "K"
+# 		14:return "A."
+# 		_:return str(card_data.value)+"."
 
-func get_assets_path() -> String:
-	return "res://GameContent/assets/cards/"+value_name()+suite_name()+".png"
+# func get_assets_path() -> String:
+
+	# return "res://GameContent/assets/cards/"+value_name()+suite_name()+".png"
 
 func _ready()->void:
 	# print(global_position)
@@ -54,11 +58,14 @@ func _ready()->void:
 	button_up.connect(_on_button_up)
 	button_down.connect(_on_button_down)	
 	set_process(true)
+	load_assets()
 
 func load_assets()->void:
-	var file_name:String = get_assets_path()
-	var img:CompressedTexture2D = load(file_name)
-	cardTexture.texture = img
+	# var file_name:String = get_assets_path()
+	# var img:CompressedTexture2D = load(file_name)
+	var region := Vector2((self.size.x * (card_data.value-2)),(self.size.y * (card_data.suit)))
+	var croped_image := atlasTexture.get_image().get_region(Rect2i(region,self.size))
+	cardTexture.texture = ImageTexture.create_from_image(croped_image)
 
 func _body_entered(_body:Node2D)->void:
 	is_touching_area = true

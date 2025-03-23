@@ -13,8 +13,17 @@ var (
 	pingInterval = pongWait * 9 / 10
 )
 
+type ConncectionState int
+
+const (
+	OPEN ConncectionState = iota
+	OPENING
+	CLOSED
+)
+
 type Client struct {
 	Conn      *websocket.Conn
+	State     ConncectionState
 	Egres     chan Event
 	NewEvents chan Event
 }
@@ -27,21 +36,43 @@ func (c *Client) Close() error {
 }
 
 func NewClient(conn *websocket.Conn) *Client {
-	return &Client{
+	client := &Client{
 		Conn:      conn,
+		State:     OPENING,
 		Egres:     make(chan Event),
 		NewEvents: make(chan Event),
 	}
+
+	conn.SetReadDeadline(time.Now().Add(pongWait))
+
+	conn.SetPongHandler(func(appData string) error {
+		err := conn.SetReadDeadline(time.Now().Add(pongWait))
+		if err != nil {
+			return err
+		}
+		return err
+	})
+
+	conn.SetCloseHandler(func(code int, text string) error {
+		client.State = CLOSED
+		return nil
+	})
+
+	return client
 }
 
-func (c *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
+func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
+	defer func() {
+		client.State = CLOSED
+	}()
 
 	for {
+
 		select {
 		case <-ctx.Done():
 			return nil
 		default:
-			_, payload, err := c.Conn.ReadMessage()
+			_, payload, err := client.Conn.ReadMessage()
 			if err != nil {
 				return err
 			}
@@ -51,45 +82,37 @@ func (c *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
 				l.Debug("err in unmarshalling event: " + err.Error())
 				continue
 			}
-			c.NewEvents <- *event
+			client.NewEvents <- *event
 		}
 
 	}
+
 }
 
-func (c *Client) WriteMessage(l *zap.Logger, ctx context.Context) error {
-
-	// defer func() {
-	// 	c.manager.removeClient(c)
-	// }()
+func (client *Client) WriteMessage(l *zap.Logger, ctx context.Context) error {
+	defer func() {
+		client.State = CLOSED
+	}()
 
 	pingTicker := time.NewTicker(pingInterval)
 	defer pingTicker.Stop()
 
-	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
-	c.Conn.SetPongHandler(func(appData string) error {
-		err := c.Conn.SetReadDeadline(time.Now().Add(pongWait))
-		if err != nil {
-			l.Debug(err.Error())
-		}
-		// l.Debug("pong")
-		return err
-	})
+	client.State = OPEN
 
 	for {
 		select {
-		case event := <-c.Egres:
+		case event := <-client.Egres:
 			payload, err := event.GetJsonByte()
 			if err != nil {
 				l.Debug("err in marshalling event: " + err.Error())
 			}
-			err = c.Conn.WriteMessage(websocket.TextMessage, payload)
+			err = client.Conn.WriteMessage(websocket.TextMessage, payload)
 			if err != nil {
 				l.Debug(err.Error())
 			}
 
 		case <-pingTicker.C:
-			err := c.Conn.WriteMessage(websocket.PingMessage, []byte(""))
+			err := client.Conn.WriteMessage(websocket.PingMessage, []byte(""))
 			if err != nil {
 				l.Debug("error in writing ping msg: " + err.Error())
 			}

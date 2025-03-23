@@ -1,6 +1,18 @@
 class_name Prescpective3DShader extends TextureRect
 
 
+func _ready()->void:
+	var atlas_tex := texture as AtlasTexture
+	if atlas_tex:
+		var atlas_size := atlas_tex.atlas.get_size()
+		var region := atlas_tex.region
+		var offset := region.position / atlas_size
+		var scaleb := region.size / atlas_size
+		var mat:ShaderMaterial= material
+
+		mat.set_shader_parameter("atlas_offset", offset)
+		mat.set_shader_parameter("atlas_scale", scaleb)
+
 ### 3d prespective Shader stuff
 var rot_x_max:float = 10
 var rot_y_max:float = 10

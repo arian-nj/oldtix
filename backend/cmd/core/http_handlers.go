@@ -19,14 +19,14 @@ import (
 	"github.com/pascaldekloe/jwt"
 )
 
-func (app *Application) status(w http.ResponseWriter, r *http.Request) {
+func (app *Application) status(writer http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
 		"status": "ok",
 	}
 
-	err := response.JSON(w, http.StatusOK, data)
+	err := response.JSON(writer, http.StatusOK, data)
 	if err != nil {
-		app.ServerError(w, r, err)
+		app.ServerError(writer, r, err)
 	}
 }
 

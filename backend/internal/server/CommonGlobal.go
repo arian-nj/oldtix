@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"sync"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
@@ -23,7 +24,7 @@ func Run() {
 }
 
 type config struct {
-	HttpPort string
+	HTTPPort int
 	BaseURL  string
 	Jwt      struct {
 		SecretKey string
@@ -86,7 +87,11 @@ func readConfigs(cfg *config) error {
 	if port == "" {
 		return fmt.Errorf("can't read port from .env %s", port)
 	}
-	cfg.HttpPort = port
+	port_int, err := strconv.Atoi(port)
+	if err != nil {
+		return err
+	}
+	cfg.HTTPPort = port_int
 
 	base_url := os.Getenv("BASE_URL")
 	if base_url == "" {

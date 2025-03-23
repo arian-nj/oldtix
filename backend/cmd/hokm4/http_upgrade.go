@@ -60,32 +60,35 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 						return nil
 					}
 				case <-player.CancelCtx.Done():
+					if player != nil {
+						player.IsPlayng = false
+					}
 					return nil
 				}
 			}
 		})
 	}
-	app.BackgroundTask(
+	app.BackgroundTask( // read messages
 		func() error {
 			defer player.Cancel()
 			defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
-			err := client.ReadMessage(app.Logger, player.CancelCtx)
-			if err != nil {
-				playinggame, exist := app.lobby.UserGames[user.ID]
-				if exist {
-					for _, p := range playinggame.Players {
-						if p.UserId == user.ID {
-							p.IsPlayng = false
-						}
-					}
+			defer func() {
+				if player != nil {
+					player.IsPlayng = false
 				}
+			}()
 
-			}
-			return nil
+			return client.ReadMessage(app.Logger, player.CancelCtx)
 		})
 
-	app.BackgroundTask(func() error {
+	app.BackgroundTask(func() error { // write messages
 		defer player.Cancel()
+		defer func() {
+			if player != nil {
+				player.IsPlayng = false
+			}
+		}()
+
 		defer func() {
 			err := client.Close()
 			if err != nil {
@@ -94,6 +97,7 @@ func (app *ApplicationH2) WsUpgradeHandler(w http.ResponseWriter, r *http.Reques
 				app.Logger.Error(fmt.Sprintf("write disconnect %d", user.ID))
 			}
 		}()
+
 		return client.WriteMessage(app.Logger, player.CancelCtx)
 	})
 

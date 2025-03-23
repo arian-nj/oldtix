@@ -55,7 +55,7 @@ table = NodePath("Table")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Table" type="Control" parent="." node_paths=PackedStringArray("drawer", "right_drawer", "top_drawer", "left_drawer")]
+[node name="Table" type="Control" parent="." node_paths=PackedStringArray("right_drawer", "top_drawer", "left_drawer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,7 +64,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("2_mh4s5")
-drawer = NodePath("Hands/MeDrawCards")
 right_drawer = NodePath("Hands/RightDrawCards")
 top_drawer = NodePath("Hands/TopDrawCards")
 left_drawer = NodePath("Hands/LeftDrawCards")
@@ -106,7 +105,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "IsDrawnLabel")]
+[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -130,7 +129,6 @@ card_scene = ExtResource("4_u5swi")
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
-IsDrawnLabel = NodePath("../../IsDrawnLabel")
 
 [node name="hand" type="Control" parent="Table/Hands/MeDrawCards"]
 layout_mode = 1
@@ -150,7 +148,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="RightDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "IsDrawnLabel")]
+[node name="RightDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place")]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -172,7 +170,6 @@ two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
 final_degree = -90.0
-IsDrawnLabel = NodePath("../../IsDrawnLabel")
 
 [node name="hand" type="Control" parent="Table/Hands/RightDrawCards"]
 layout_mode = 1
@@ -207,7 +204,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TopDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "IsDrawnLabel")]
+[node name="TopDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place")]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -226,7 +223,6 @@ card_scene = ExtResource("4_u5swi")
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
-IsDrawnLabel = NodePath("../../IsDrawnLabel")
 
 [node name="hand" type="Control" parent="Table/Hands/TopDrawCards"]
 layout_mode = 1
@@ -262,7 +258,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="LeftDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "IsDrawnLabel")]
+[node name="LeftDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -281,7 +277,6 @@ two_card_movment_dur = 0.3
 flip_card_dur = 0.09
 two_card_dur = 0.1
 final_degree = -90.0
-IsDrawnLabel = NodePath("../../IsDrawnLabel")
 
 [node name="hand" type="Control" parent="Table/Hands/LeftDrawCards"]
 layout_mode = 1

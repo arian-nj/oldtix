@@ -4,7 +4,7 @@ extends PanelContainer
 @export var passwordField:LineEdit
 
 func _ready()->void:
-	var r:int = randi()%10
+	var r:int = randi()%50
 	usernameField.text += str(r)
 	_on_login_button_pressed()
 
@@ -16,13 +16,13 @@ func _on_register_button_pressed() -> void:
 		"username":username,
 		"password":password,
 	}
-	var json_data_strin:String = JSON.stringify(json_data)
+	var json_data_string:String = JSON.stringify(json_data)
 
 	var http_req:HTTPRequest = HTTPRequest.new()
 	add_child(http_req)
 	http_req.request_completed.connect(_on_register_request_completed)
 
-	var err:int = http_req.request(Katana.RegisterUrl,[],HTTPClient.METHOD_POST,json_data_strin)
+	var err:int = http_req.request(Katana.RegisterUrl,[],HTTPClient.METHOD_POST,json_data_string)
 	if err != OK:
 		print_debug(err)
 		ErrorBoard._instance.new_error("error sending register request",ErrorBoard.ErrorLevel)

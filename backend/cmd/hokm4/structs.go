@@ -41,7 +41,7 @@ func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng
 }
 
 func (p *Player) AddToEgress(e *socket.Event) {
-	if !p.IsPlayng {
+	if p.Client != nil && p.Client.State != socket.OPEN {
 		return
 	}
 	go func() {
@@ -74,10 +74,14 @@ type GameState struct {
 	TeamTwoTricksScore int `json:"team_two_trick_score"`
 }
 
-func (app *ApplicationH2) NewGameState(id int64) (*GameState, error) {
+func (app *ApplicationH2) NewGameState() (*GameState, error) {
+	gameRow, err := app.Queries.InsertHokm4Game(context.Background())
+	if err != nil {
+		return nil, err
+	}
 
 	return &GameState{
-		ID:            id,
+		ID:            gameRow.ID,
 		ApplicationH2: app,
 		GameEventsCh:  make(chan *GameEvent),
 	}, nil

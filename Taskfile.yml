@@ -1,16 +1,16 @@
 version: '3'
 
 tasks:
-  run_user:
-    desc: run user service
-    deps: [clean_task,gsqlc]
+  run_core:
+    desc: run core service
     dir: ./backend
+    deps: [clean_task,gsqlc]
     watch: true
     sources:
      - '**/*.go'
      - exclude: sqldb/*.go
     cmds:
-      - go run ./cmd/user/.
+      - go run ./cmd/core/.
       
   
   run_hokm_4:
@@ -43,7 +43,7 @@ tasks:
     desc: docker up
     dir: ./backend
     cmds:
-      - sudo docker compose up -d
+      - docker compose up -d
   docker_down:
     desc: docker down
     dir: ./backend

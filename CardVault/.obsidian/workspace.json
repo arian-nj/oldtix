@@ -11,9 +11,21 @@
             "id": "5a3caa5d95798a37",
             "type": "leaf",
             "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "CardGame/Game Flow Chart.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Game Flow Chart"
+            }
+          },
+          {
+            "id": "ea929983e8c33067",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/Release Pipe.md",
+                "file": "CardGame/V 1.0.0.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,10 +40,11 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Release Pipe"
+              "title": "V 1.0.0"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -174,29 +187,33 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "5a3caa5d95798a37",
+  "active": "ea929983e8c33067",
   "lastOpenFiles": [
-    "CardGame/V 1.0.0.md",
     "CardGame/Release Pipe.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/Self Notes.md",
+    "CardGame/V 1.0.0.md",
     "CardGame/TO DO Card.md",
+    "CardGame/Game Flow Chart.md",
+    "8 - files/Pasted image 20241217020304.png",
+    "8 - files/Pasted image 20241217021805.png",
+    "8 - files/update-state.gif",
+    "6 - Main Notes/How to use Obsidian.md",
+    "6 - Main Notes/multiplayer.md",
+    "6 - Main Notes/turn based game.md",
+    "6 - Main Notes/card-game.md",
+    "6 - Main Notes/2025-03-06.md",
+    "6 - Main Notes/Static Godot.md",
+    "6 - Main Notes/online tic-toc-toe.md",
+    "2 - Source Materials/Videos/Obsidian The King of Learning Tools.md",
+    "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
     "CardGame/Version.md",
     "CardGame/Name.md",
-    "6 - Main Notes/2025-03-06.md",
     "CardGame/Authentication.md",
+    "CardGame/Self Notes.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
     "Sherry.md",
     "7 - Daily/2024-12-22.md",
-    "6 - Main Notes/online tic-toc-toe.md",
-    "6 - Main Notes/Static Godot.md",
-    "6 - Main Notes/multiplayer.md",
-    "6 - Main Notes/How to use Obsidian.md",
-    "6 - Main Notes/card-game.md",
     "6 - Main Notes/Game biz.md",
-    "6 - Main Notes/turn based game.md",
     "FileManager.md",
-    "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
     "exicle_lib/basic-shapes.excalidrawlib",
     "exicle_lib/icons.excalidrawlib",
     "exicle_lib/google-icons.excalidrawlib",
@@ -207,17 +224,12 @@
     "CardGame",
     "6 - Main Notes/Untitled 1.md",
     "6 - Main Notes/Untitled 2.md",
-    "8 - files/Pasted image 20241217020304.png",
-    "8 - files/update-state.gif",
     "وکتور-آرامگاه-خیام.png",
-    "8 - files/Pasted image 20241217021805.png",
     "unnamed.png",
     "8 - files",
     "Excalidraw/Drawing 2024-12-26 13.04.57.excalidraw.md",
     "istockphoto-96611427-612x612.jpg",
     "Excalidraw",
-    "6 - Main Notes/me.md",
-    "6 - Main Notes/Gizmondo Story.md",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]

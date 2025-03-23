@@ -429,58 +429,6 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TrickScore" type="Control" parent="Table" node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "table")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("6_do6i4")
-MyTeamLabel = NodePath("PanelContainer3/MyTeamLabel")
-OtherTeamLabel = NodePath("PanelContainer2/OtherTeamLabel")
-table = NodePath("..")
-
-[node name="PanelContainer3" type="PanelContainer" parent="Table/TrickScore"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -60.0
-offset_top = -284.0
-offset_bottom = -224.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_mcw6q")
-
-[node name="MyTeamLabel" type="Label" parent="Table/TrickScore/PanelContainer3"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PanelContainer2" type="PanelContainer" parent="Table/TrickScore"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -284.0
-offset_right = 60.0
-offset_bottom = -223.0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_d1yw2")
-
-[node name="OtherTeamLabel" type="Label" parent="Table/TrickScore/PanelContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 10
 
@@ -563,11 +511,13 @@ ws = NodePath("../../WebSocket")
 table = NodePath("../../Table")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 
-[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
+[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "win_panel", "trick_score_panel")]
 script = ExtResource("16_tmsoy")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../Table")
+win_panel = NodePath("../../WinPanel")
+trick_score_panel = NodePath("../../TrickScore")
 
 [node name="WinPanel" type="Control" parent="."]
 layout_mode = 1
@@ -585,7 +535,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.176419, 0.176419, 0.176419, 0.517647)
+color = Color(0.176471, 0.176471, 0.176471, 0.901961)
 
 [node name="Label" type="Label" parent="WinPanel"]
 layout_mode = 1
@@ -602,5 +552,70 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 60
 text = "The End"
+
+[node name="TrickScore" type="Control" parent="." node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "MyTeamPanel", "OtherTeamPanel", "table")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_do6i4")
+MyTeamLabel = NodePath("PanelContainer/MyTeamPanel/MyTeamLabel")
+OtherTeamLabel = NodePath("PanelContainer/OtherTeamPanel/OtherTeamLabel")
+MyTeamPanel = NodePath("PanelContainer/MyTeamPanel")
+OtherTeamPanel = NodePath("PanelContainer/OtherTeamPanel")
+table = NodePath("../Table")
+
+[node name="PanelContainer" type="Control" parent="TrickScore"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 100.0
+offset_bottom = 170.0
+grow_horizontal = 2
+
+[node name="MyTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -30.5
+offset_bottom = 30.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mcw6q")
+metadata/_edit_group_ = true
+
+[node name="MyTeamLabel" type="Label" parent="TrickScore/PanelContainer/MyTeamPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OtherTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -30.5
+offset_right = 60.0
+offset_bottom = 30.5
+grow_vertical = 2
+pivot_offset = Vector2(60, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_d1yw2")
+metadata/_edit_group_ = true
+
+[node name="OtherTeamLabel" type="Label" parent="TrickScore/PanelContainer/OtherTeamPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="UILayer/UI/HomeButton" to="." method="_on_home_button_pressed"]

@@ -29,23 +29,30 @@ func (game *GameState) AddPlayerToGame(player *Player, gameId int64) error {
 
 func (app *ApplicationH2) MatchUsers() error {
 	for {
-		gameRow, err := app.Queries.InsertHokm4Game(context.Background())
+		game, err := app.NewGameState()
 		if err != nil {
 			return err
 		}
 
-		game, err := app.NewGameState(gameRow.ID)
-		if err != nil {
-			return err
+		var foundPlayers []*Player
+
+		for len(game.Players) < 2 {
+			foundPl := <-app.lobby.Queue
+			if foundPl.Client.State != socket.OPEN {
+				continue
+			}
+			foundPlayers = append(foundPlayers, foundPl)
+
+			for index, p := range foundPlayers {
+				if p.Client.State != socket.OPEN {
+					foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
+				}
+			}
 		}
 
-		p1 := <-app.lobby.Queue
-		game.AddPlayerToGame(p1, game.ID)
-		p2 := <-app.lobby.Queue
-		game.AddPlayerToGame(p2, game.ID)
+		// game.AddPlayerToGame(foundPlayer, game.ID)
 
-		p1.IsPlayng = true
-		p2.IsPlayng = true
+		// foundPlayer.IsPlayng = true
 
 		p3 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
 		game.AddPlayerToGame(p3, game.ID)
@@ -53,11 +60,10 @@ func (app *ApplicationH2) MatchUsers() error {
 		p4 := NewPlayer(0, socket.NewClient(nil), []cards.Card{}, false)
 		game.AddPlayerToGame(p4, game.ID)
 
-		p1.TeamId = TeamOne
-		p2.TeamId = TeamTwo
-
-		p3.TeamId = TeamOne
-		p4.TeamId = TeamTwo
+		game.Players[0].TeamId = TeamOne
+		game.Players[1].TeamId = TeamTwo
+		game.Players[2].TeamId = TeamOne
+		game.Players[3].TeamId = TeamTwo
 
 		app.lobby.Mu.Lock()
 		for _, p := range game.Players {
@@ -112,6 +118,7 @@ func (game *GameState) TheEnd() error {
 	for _, p := range game.Players {
 		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
 	}
+	time.Sleep(10 * time.Second)
 	return nil
 }
 
@@ -398,12 +405,12 @@ OuterLoop:
 
 			// app.Logger.Debug(card_played.String())
 			if !isValid {
-				new_game_event.Player.Client.Egres <- *socket.NewEvent(socket.TypeInvalidPlay, socket.EventMessage(""))
+				new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeInvalidPlay, socket.EventMessage("")))
 				// app.Logger.Debug("move not valid")
 				continue
 			}
 			cardIndex = newCardIndex
-			new_game_event.Player.Client.Egres <- *socket.NewEvent(socket.TypeValidPlay, socket.EventMessage(""))
+			new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeValidPlay, socket.EventMessage("")))
 			break OuterLoop
 
 		case <-NewTicker.C:
