@@ -7,23 +7,23 @@ import (
 )
 
 type HumanPlayer struct {
-	UserId       int64          `json:"user_id"`
-	PlayerUnique string         `json:"player_unique"`
-	TeamId       Team           `json:"team"`
-	Client       *socket.Client `json:"-"`
-	Cards        []cards.Card   `json:"-"`
-	IsPlayng     bool           `json:"is_playing"`
+	*Player
+	UserId   int64          `json:"user_id"`
+	Client   *socket.Client `json:"-"`
+	IsPlayng bool           `json:"is_playing"`
 }
 
-func NewPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *HumanPlayer {
+func NewHumanPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *HumanPlayer {
 	randString := randutils.GenerateRandomString(16)
 
 	return &HumanPlayer{
-		UserId:       UserId,
-		PlayerUnique: randString,
-		Client:       Client,
-		Cards:        Cards,
-		IsPlayng:     IsPlayng,
+		Player: &Player{
+			PlayerUnique: randString,
+			Cards:        Cards,
+		},
+		UserId:   UserId,
+		Client:   Client,
+		IsPlayng: IsPlayng,
 	}
 }
 

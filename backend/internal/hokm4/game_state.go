@@ -31,7 +31,7 @@ func NewGameEvent(event *socket.Event, player *HumanPlayer) *GameEvent {
 type GameState struct {
 	*ApplicationHokm4 `json:"-"`
 	ID                int64           `json:"id"`
-	Players           []*HumanPlayer  `json:"players"`
+	Players           []*Player       `json:"players"`
 	GameEventsCh      chan *GameEvent `json:"-"`
 	CurrentTrick      *Trick          `json:"current_trick"`
 	Tricks            []*Trick        `json:"-"`

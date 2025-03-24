@@ -47,7 +47,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 			}
 		}
 	} else { // new game
-		player = NewPlayer(user.ID, client, []cards.Card{}, false)
+		player = NewHumanPlayer(user.ID, client, []cards.Card{}, false)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())

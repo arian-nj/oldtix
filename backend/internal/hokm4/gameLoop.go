@@ -55,10 +55,10 @@ func (app *ApplicationHokm4) MatchUsers() error {
 		// foundPlayer.IsPlayng = true
 
 		nilclient, _ := socket.NewClient(nil)
-		p3 := NewPlayer(0, nilclient, []cards.Card{}, false)
+		p3 := NewHumanPlayer(0, nilclient, []cards.Card{}, false)
 		game.AddPlayerToGame(p3, game.ID)
 
-		p4 := NewPlayer(0, nilclient, []cards.Card{}, false)
+		p4 := NewHumanPlayer(0, nilclient, []cards.Card{}, false)
 		game.AddPlayerToGame(p4, game.ID)
 
 		game.Players[0].TeamId = TeamOne

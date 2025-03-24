@@ -1,10 +1,9 @@
 package hokm4
 
-import "github.com/arian-nj/master-card/back/internal/socket"
+import cards "github.com/arian-nj/master-card/back/internal/card"
 
-type Player interface {
-	AddToEgress(e *socket.Event)
-	PlayCard(game *GameState) (cardIndex int, err error)
-	ChooseHokm(game *GameState)
-	BackgroundSocketHandlers(game *GameState)
+type Player struct {
+	PlayerUnique string       `json:"player_unique"`
+	TeamId       Team         `json:"team"`
+	Cards        []cards.Card `json:"-"`
 }

@@ -7,9 +7,7 @@ import (
 )
 
 type BotPlayer struct {
-	PlayerUnique string       `json:"player_unique"`
-	TeamId       Team         `json:"team"`
-	Cards        []cards.Card `json:"-"`
+	*Player
 }
 
 func (game *GameState) BotPlayTurn(hand_cards []cards.Card) int {
