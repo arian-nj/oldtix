@@ -46,7 +46,10 @@ func NewClient(conn *websocket.Conn) (*Client, error) {
 		NewEvents: make(chan Event),
 	}
 
-	conn.SetReadDeadline(time.Now().Add(pongWait))
+	err := conn.SetReadDeadline(time.Now().Add(pongWait))
+	if err != nil {
+		return nil, err
+	}
 
 	conn.SetPongHandler(func(appData string) error {
 		err := conn.SetReadDeadline(time.Now().Add(pongWait))

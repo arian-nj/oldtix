@@ -30,14 +30,25 @@ func NewGameEvent(event *socket.Event, player *HumanPlayer) *GameEvent {
 
 type GameState struct {
 	*ApplicationHokm4 `json:"-"`
-	ID                int64           `json:"id"`
-	Players           []*Player       `json:"players"`
-	GameEventsCh      chan *GameEvent `json:"-"`
-	CurrentTrick      *Trick          `json:"current_trick"`
-	Tricks            []*Trick        `json:"-"`
+	ID                int64             `json:"id"`
+	Players           []PlayerInterface `json:"players"`
+	GameEventsCh      chan *GameEvent   `json:"-"`
+	CurrentTrick      *Trick            `json:"current_trick"`
+	Tricks            []*Trick          `json:"-"`
 
 	TeamOneTricksScore int `json:"team_one_trick_score"`
 	TeamTwoTricksScore int `json:"team_two_trick_score"`
+}
+
+func (gs *GameState) GetHumanPlayers() (allHumanPlayers []*HumanPlayer) {
+	for _, p := range gs.Players {
+		hp, ok := p.(*HumanPlayer)
+		if !ok {
+			continue
+		}
+		allHumanPlayers = append(allHumanPlayers, hp)
+	}
+	return allHumanPlayers
 }
 
 func (app *ApplicationHokm4) NewGameState() (*GameState, error) {
@@ -99,11 +110,11 @@ func NewTurn() *Turn {
 }
 
 type PlayerCardPlayed struct {
-	Player *HumanPlayer `json:"player"`
-	Card   cards.Card   `json:"card"`
+	Player PlayerInterface `json:"player"`
+	Card   cards.Card      `json:"card"`
 }
 
-func NewPlayerCardPlayed(player *HumanPlayer, card cards.Card) *PlayerCardPlayed {
+func NewPlayerCardPlayed(player PlayerInterface, card cards.Card) *PlayerCardPlayed {
 	return &PlayerCardPlayed{
 		Player: player,
 		Card:   card,

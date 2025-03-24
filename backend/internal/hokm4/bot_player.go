@@ -4,10 +4,23 @@ import (
 	"math/rand/v2"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
+	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
 type BotPlayer struct {
-	*Player
+	*PlayerCommon
+}
+
+func NewBotPlayer(player_cards []cards.Card) *BotPlayer {
+	return &BotPlayer{
+		PlayerCommon: NewPlayerCommon(player_cards),
+	}
+}
+
+func (bplayer *BotPlayer) AddToEgress(e *socket.Event) {
+}
+
+func (bplayer *BotPlayer) BackgroundSocketHandlers(game *GameState) {
 }
 
 func (game *GameState) BotPlayTurn(hand_cards []cards.Card) int {

@@ -3,7 +3,7 @@ package hokm4
 import "time"
 
 const (
-	SETTING_BOT_PLAY_WAIT    = time.Second * 2
+	SETTING_BOT_PLAY_WAIT    = time.Second
 	SETTING_PLAYER_PLAY_WAIT = time.Second * 10
 
 	SETTING_BOT_CHOOSE_HOKM_WAIT    = time.Second * 5

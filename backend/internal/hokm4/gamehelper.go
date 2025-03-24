@@ -2,6 +2,7 @@ package hokm4
 
 import (
 	"encoding/json"
+	"strconv"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -76,10 +77,10 @@ func (game *GameState) SendGameData(MessageTurn socket.EventType, p *HumanPlayer
 	return nil
 }
 
-func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*HumanPlayer) []cards.Card {
+func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Card, error) {
 	var remaining_cards []cards.Card = all_cards
 
-	for _, p := range players {
+	for _, p := range game.Players {
 		var randomCards []cards.Card
 		var err error
 		randomCards, remaining_cards, err = cards.GiveRandomCards(number, remaining_cards)
@@ -87,17 +88,25 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card, players []*
 			game.Logger.Error(err.Error())
 		}
 
+		p.SetCards(append(p.GetCards(), randomCards...))
+
+		humanPlayer, ok := p.(*HumanPlayer)
+		if !ok {
+			continue
+		}
+		game.Logger.Info("giving card to human player " + strconv.Itoa(int(humanPlayer.UserId)))
+
 		var output struct {
 			NewCards []cards.Card `json:"cards"`
 		}
 		output.NewCards = randomCards
 		data_byte, err := json.Marshal(output)
 		if err != nil {
-			game.Logger.Error(err.Error())
+			return []cards.Card{}, err
 		}
-		p.AddToEgress(socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte)))
-		p.Cards = append(p.Cards, randomCards...)
+		humanPlayer.AddToEgress(socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte)))
+
 	}
-	return remaining_cards
+	return remaining_cards, nil
 
 }

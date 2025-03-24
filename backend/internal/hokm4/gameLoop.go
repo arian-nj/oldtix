@@ -14,10 +14,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) AddPlayerToGame(player *HumanPlayer, gameId int64) error {
-	if player.UserId != 0 {
-		game.BackgroundSocketHandlers(player)
-	}
+func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int64) error {
+	player.BackgroundSocketHandlers(game)
 	_, err := game.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
 		PlayerID: player.UserId,
 		GameID:   gameId,
@@ -25,6 +23,10 @@ func (game *GameState) AddPlayerToGame(player *HumanPlayer, gameId int64) error 
 	})
 	game.Players = append(game.Players, player)
 	return err
+}
+
+func (game *GameState) AddBotPlayerToGame(player *BotPlayer) {
+	game.Players = append(game.Players, player)
 }
 
 func (app *ApplicationHokm4) MatchUsers() error {
@@ -36,41 +38,43 @@ func (app *ApplicationHokm4) MatchUsers() error {
 
 		var foundPlayers []*HumanPlayer
 
-		for len(game.Players) < 2 {
+		for range 2 {
 			foundPl := <-app.Lobby.Queue
-			if foundPl.Client.State != socket.OPEN {
-				continue
-			}
+			// if foundPl.Client.State != socket.OPEN {
+			// continue
+			// }
 			foundPlayers = append(foundPlayers, foundPl)
 
-			for index, p := range foundPlayers {
-				if p.Client.State != socket.OPEN {
-					foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
-				}
+			// for index, p := range foundPlayers {
+			// 	if p.Client.State != socket.OPEN {
+			// 		foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
+			// 	}
+			// }
+		}
+
+		for _, p := range foundPlayers {
+			err = game.AddHumanPlayerToGame(p, game.ID)
+			if err != nil {
+				return err
 			}
 		}
 
-		// game.AddPlayerToGame(foundPlayer, game.ID)
-
 		// foundPlayer.IsPlayng = true
 
-		nilclient, _ := socket.NewClient(nil)
-		p3 := NewHumanPlayer(0, nilclient, []cards.Card{}, false)
-		game.AddPlayerToGame(p3, game.ID)
+		p3 := NewBotPlayer([]cards.Card{})
+		game.AddBotPlayerToGame(p3)
 
-		p4 := NewHumanPlayer(0, nilclient, []cards.Card{}, false)
-		game.AddPlayerToGame(p4, game.ID)
+		p4 := NewBotPlayer([]cards.Card{})
+		game.AddBotPlayerToGame(p4)
 
-		game.Players[0].TeamId = TeamOne
-		game.Players[1].TeamId = TeamTwo
-		game.Players[2].TeamId = TeamOne
-		game.Players[3].TeamId = TeamTwo
+		game.Players[0].SetTeamID(TeamOne)
+		game.Players[1].SetTeamID(TeamTwo)
+		game.Players[2].SetTeamID(TeamOne)
+		game.Players[3].SetTeamID(TeamTwo)
 
 		app.Lobby.Mu.Lock()
-		for _, p := range game.Players {
-			if p.UserId != 0 {
-				app.Lobby.UserGames[p.UserId] = game
-			}
+		for _, p := range game.GetHumanPlayers() {
+			app.Lobby.UserGames[p.UserId] = game
 		}
 		app.Lobby.Mu.Unlock()
 
@@ -80,7 +84,7 @@ func (app *ApplicationHokm4) MatchUsers() error {
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 	app.BackgroundTask(func() error {
 		defer func() {
-			for _, p := range game.Players {
+			for _, p := range game.GetHumanPlayers() {
 				delete(app.Lobby.UserGames, p.UserId)
 				p.Client.Close()
 			}
@@ -96,7 +100,7 @@ func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 
 func (game *GameState) RunGame() error {
 	// choose hakem
-	for _, p := range game.Players {
+	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(socket.TypeMatchFound, p)
 		if err != nil {
 			return err
@@ -128,7 +132,7 @@ func (game *GameState) DeclareHakemIndex(trick_number int) int {
 	if trick_number == 0 { // if first trick
 		HakemIndex = rand.Intn(len(game.Players))
 	} else {
-		if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].TeamId {
+		if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].GetTeamID() {
 			HakemIndex = game.CurrentTrick.HakemIndex
 			if HakemIndex < len(game.Players)-1 {
 				HakemIndex += 1
@@ -154,7 +158,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 
 	game.CurrentTrick.TurnStarterIndex = game.CurrentTrick.HakemIndex
 
-	for _, p := range game.Players {
+	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(socket.TypeNewTrick, p)
 		if err != nil {
 			return err
@@ -162,14 +166,21 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	for _, p := range game.Players {
-		p.Cards = []cards.Card{}
+		p.SetCards([]cards.Card{})
 	}
-	all_cards := cards.NewAllCards()
-	all_cards = game.sendCards(5, all_cards, game.Players)
 
-	game.WaitToChooseHokm()          // put hokm in game.CurrentTurn.Hokm
-	for _, p := range game.Players { // update hokm data
-		game.SendGameData(socket.TypeGameData, p)
+	allCards := cards.NewAllCards()
+	allCards, err = game.sendCards(5, allCards)
+	if err != nil {
+		return err
+	}
+
+	game.WaitToChooseHokm()                    // put hokm in game.CurrentTurn.Hokm
+	for _, p := range game.GetHumanPlayers() { // update hokm data
+		err = game.SendGameData(socket.TypeGameData, p)
+		if err != nil {
+			return err
+		}
 	}
 	err = game.Queries.UpdateHokmTrick(context.Background(), sqldb.UpdateHokmTrickParams{
 		Hokm:    pgtype.Int4{Int32: int32(game.CurrentTrick.Hokm), Valid: true},
@@ -180,8 +191,14 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	// send rest of cards
-	all_cards = game.sendCards(4, all_cards, game.Players)
-	game.sendCards(4, all_cards, game.Players)
+	allCards, err = game.sendCards(4, allCards)
+	if err != nil {
+		return err
+	}
+	_, err = game.sendCards(5, allCards)
+	if err != nil {
+		return err
+	}
 
 	for range 13 {
 		err := game.RunTurn()
@@ -201,7 +218,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	// notify winners and end the game
-	for _, p := range game.Players { // update hokm data
+	for _, p := range game.GetHumanPlayers() { // update hokm data
 		err := game.SendGameData(socket.TypeEndTrick, p)
 		if err != nil {
 			return err
@@ -221,22 +238,25 @@ func (game *GameState) RunTrick(trick_number int) error {
 
 func (game *GameState) WaitToChooseHokm() {
 
-	hakem := game.Players[game.CurrentTrick.HakemIndex]
-	game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
+	hakemPlayer := game.Players[game.CurrentTrick.HakemIndex]
+	// game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
 	var choose_hokm_ticker *time.Ticker
+
 	choose_hokm_ticker = time.NewTicker(SETTING_BOT_CHOOSE_HOKM_WAIT)
-	if hakem.IsPlayng {
+	humanHakemPlayer, ok := hakemPlayer.(*HumanPlayer)
+	if ok && humanHakemPlayer.IsPlayng {
 		choose_hokm_ticker = time.NewTicker(SETTING_PLAYER_CHOOSE_HOKM_WAIT)
 	}
-	defer choose_hokm_ticker.Stop()
-	for {
 
+	defer choose_hokm_ticker.Stop()
+
+	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
 			if new_game_event.event.Type != socket.TypeHokmChoosed {
 				continue
 			}
-			if new_game_event.Player != hakem {
+			if new_game_event.Player != hakemPlayer {
 				continue
 			}
 			hokm_data := new_game_event.event.Data
@@ -268,7 +288,7 @@ func (game *GameState) RunTurn() error {
 	game.CurrentTrick.CurrentTurn = NewTurn()
 
 	// game starts
-	for _, p := range game.Players {
+	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(socket.TypeTurnStart, p)
 		if err != nil {
 			game.Logger.Debug(err.Error())
@@ -276,9 +296,9 @@ func (game *GameState) RunTurn() error {
 	}
 
 	// actual game
-	to_play_order := []*HumanPlayer{}
-	before_ward := []*HumanPlayer{}
-	after_ward := []*HumanPlayer{}
+	to_play_order := []PlayerInterface{}
+	before_ward := []PlayerInterface{}
+	after_ward := []PlayerInterface{}
 	var starterFound = false
 
 	for player_index, p := range game.Players {
@@ -305,7 +325,7 @@ func (game *GameState) RunTurn() error {
 			return err
 		}
 		currentTurn := game.CurrentTrick.CurrentTurn
-		new_card_player := NewPlayerCardPlayed(playing_player, playing_player.Cards[cardIndex])
+		new_card_player := NewPlayerCardPlayed(playing_player, playing_player.GetCards()[cardIndex])
 
 		// Brodcast played card
 		b_data, err := json.Marshal(new_card_player)
@@ -321,12 +341,13 @@ func (game *GameState) RunTurn() error {
 		}
 
 		currentTurn.CardsPlayed = append(currentTurn.CardsPlayed, new_card_player)
-		playing_player.Cards = append(playing_player.Cards[:cardIndex], playing_player.Cards[cardIndex+1:]...)
+		plcards := playing_player.GetCards()
+		playing_player.SetCards(append(plcards[:cardIndex], plcards[cardIndex+1:]...))
 	}
 
 	// Decide who wins Turn
 	Winner := game.WhoWins()
-	if Winner.Player.TeamId == TeamOne {
+	if Winner.Player.GetTeamID() == TeamOne {
 		game.CurrentTrick.TeamOneTurnScore += 1
 	} else {
 		game.CurrentTrick.TeamTwoTurnScore += 1
@@ -340,7 +361,7 @@ func (game *GameState) RunTurn() error {
 
 	time.Sleep(SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME)
 	// End The Turn
-	for _, p := range game.Players {
+	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(socket.TypeTurnEnd, p)
 		if err != nil {
 			game.Logger.Debug(err.Error())
@@ -367,12 +388,14 @@ func (game *GameState) RunTurn() error {
 
 }
 
-func (game *GameState) WaitForPlayerToPlayCard(playing_player *HumanPlayer) (cardIndex int, err error) {
+func (game *GameState) WaitForPlayerToPlayCard(playing_player PlayerInterface) (cardIndex int, err error) {
 	playing_player.AddToEgress(socket.NewEvent(socket.TypeYourTurn, socket.EventMessage("")))
-	var NewTicker *time.Ticker
 
+	var NewTicker *time.Ticker
 	NewTicker = time.NewTicker(SETTING_BOT_PLAY_WAIT)
-	if playing_player.IsPlayng {
+
+	PlayingHumanPlayer, ok := playing_player.(*HumanPlayer)
+	if ok && PlayingHumanPlayer.IsPlayng {
 		NewTicker = time.NewTicker(SETTING_PLAYER_PLAY_WAIT)
 	}
 	var card_played cards.Card
@@ -386,7 +409,7 @@ OuterLoop:
 				// app.Logger.Debug("not same type")
 				continue
 			}
-			if new_game_event.Player.UserId != playing_player.UserId {
+			if new_game_event.Player != playing_player {
 				// app.Logger.Debug("not same user")
 				continue
 			}
@@ -416,8 +439,8 @@ OuterLoop:
 
 		case <-NewTicker.C:
 			NewTicker.Stop()
-			cardIndex = game.BotPlayTurn(playing_player.Cards)
-			choosen_card_by_bot := playing_player.Cards[cardIndex]
+			cardIndex = game.BotPlayTurn(playing_player.GetCards())
+			choosen_card_by_bot := playing_player.GetCards()[cardIndex]
 			data_byte, err := json.Marshal(choosen_card_by_bot)
 			if err != nil {
 				return -1, err
@@ -427,35 +450,4 @@ OuterLoop:
 		}
 	}
 	return cardIndex, nil
-}
-
-// events come here if not used go to GameEventCh
-func (game *GameState) BackgroundSocketHandlers(player *HumanPlayer) {
-
-	game.BackgroundTask(func() error {
-		for {
-			select {
-			case new_event := <-player.Client.NewEvents:
-				if new_event.Type == socket.TypeGetData {
-					game.SendGameData(socket.TypeGameData, player)
-				} else if new_event.Type == socket.TypeGetMyCards {
-					var output struct {
-						NewCards []cards.Card `json:"cards"`
-					}
-					output.NewCards = player.Cards
-					data_byte, err := json.Marshal(output)
-					if err != nil {
-						game.Logger.Error(err.Error())
-						continue
-					}
-					player.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
-				} else {
-					game.GameEventsCh <- NewGameEvent(&new_event, player)
-				}
-			case <-player.Client.CancelCtx.Done():
-				return nil
-			}
-		}
-	})
-
 }

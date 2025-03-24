@@ -31,7 +31,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 	var player *HumanPlayer
 
 	if wasInAGame {
-		for _, p := range activeGame.Players {
+		for _, p := range activeGame.GetHumanPlayers() {
 			if p.UserId == user.ID {
 				player = p
 				player.Client = client
@@ -41,13 +41,13 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 					app.ServerError(w, r, err)
 					return
 				}
-				activeGame.BackgroundSocketHandlers(player)
+				player.BackgroundSocketHandlers(activeGame)
 
 				// p.AddToEgress(e)
 			}
 		}
 	} else { // new game
-		player = NewHumanPlayer(user.ID, client, []cards.Card{}, false)
+		player = NewHumanPlayer(user.ID, client, []cards.Card{}, true)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -64,9 +64,6 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 						return nil
 					}
 				case <-player.Client.CancelCtx.Done():
-					if player != nil {
-						player.IsPlayng = false
-					}
 					return nil
 				}
 			}
