@@ -23,6 +23,7 @@ type Hokm4Game struct {
 }
 
 type Hokm4GameStatistic struct {
+	ID         int
 	MatchID    int
 	PersonID   int
 	TricksWon  int
@@ -65,6 +66,7 @@ type Turn struct {
 }
 
 type UserStatistic struct {
+	ID              int
 	UserID          int
 	Wins            int
 	Losses          int

@@ -44,7 +44,7 @@ func (q *Queries) InsertHokm4Game(ctx context.Context) (Hokm4Game, error) {
 }
 
 const insertHokm4Statistic = `-- name: InsertHokm4Statistic :exec
-INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING match_id, person_id, tricks_won, tricks_lost, turns_won, turns_lost, is_won, created_at
+INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, match_id, person_id, tricks_won, tricks_lost, turns_won, turns_lost, is_won, created_at
 `
 
 type InsertHokm4StatisticParams struct {

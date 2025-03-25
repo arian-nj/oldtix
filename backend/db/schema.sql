@@ -15,7 +15,8 @@ CREATE TABLE person (
 );
 
 CREATE TABLE user_statistic(
-    user_id BIGSERIAL PRIMARY KEY REFERENCES person(id),
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGSERIAL NOT NULL REFERENCES person(id),
     wins bigserial NOT NULL,
     losses bigserial NOT NULL,
     total_tricks_won bigserial NOT NULL,
@@ -52,7 +53,8 @@ CREATE TABLE hokm4_game (
 );
 
 CREATE TABLE hokm4_game_statistic(
-    match_id BIGSERIAL PRIMARY KEY REFERENCES hokm4_game(id),
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    match_id BIGSERIAL NOT NULL REFERENCES hokm4_game(id),
     person_id BIGSERIAL REFERENCES person(id),
     tricks_won bigserial NOT NULL,
     tricks_lost bigserial NOT NULL,

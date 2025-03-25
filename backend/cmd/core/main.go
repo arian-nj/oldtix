@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
 	"log"
+	"strconv"
 
 	core_api "github.com/arian-nj/master-card/back/internal/core"
 	"github.com/arian-nj/master-card/back/internal/server"
+	"github.com/arian-nj/master-card/back/pkg/password"
+	"github.com/arian-nj/master-card/back/sqldb"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func main() {
@@ -21,21 +26,21 @@ func main() {
 	}
 	app.Config.HTTPPort = 4444
 
-	// hashedPassword, err := password.Hash("arian123")
-	// if err != nil {
-	// 	return
-	// }
+	hashedPassword, err := password.Hash("arian123")
+	if err != nil {
+		return
+	}
 
-	// for i := range 50 {
-	// 	_, err := app.Queries.InsertPerson(context.Background(), sqldb.InsertPersonParams{
-	// 		Username:       "arian" + strconv.Itoa(i),
-	// 		DisplayName:    pgtype.Text{String: "darian" + strconv.Itoa(i), Valid: true},
-	// 		HashedPassword: hashedPassword,
-	// 	})
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// }
+	for i := range 50 {
+		_, err := app.Queries.InsertPerson(context.Background(), sqldb.InsertPersonParams{
+			Username:       "arian" + strconv.Itoa(i),
+			DisplayName:    pgtype.Text{String: "darian" + strconv.Itoa(i), Valid: true},
+			HashedPassword: hashedPassword,
+		})
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	chiRouter := app.CoreRoutes()
 	err = app.ServeHTTP(chiRouter, app.Config.HTTPPort)
