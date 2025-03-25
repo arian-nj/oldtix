@@ -53,20 +53,21 @@ func (q *Queries) GetPersonByUsername(ctx context.Context, username string) (Per
 
 const insertPerson = `-- name: InsertPerson :one
 INSERT INTO person (
-  username,hashed_password
+  username,display_name,hashed_password
 ) VALUES (
-  $1,$2
+  $1,$2,$3
 )
 RETURNING id, created, username, display_name, hashed_password, bio, coin
 `
 
 type InsertPersonParams struct {
 	Username       string
+	DisplayName    pgtype.Text
 	HashedPassword string
 }
 
 func (q *Queries) InsertPerson(ctx context.Context, arg InsertPersonParams) (Person, error) {
-	row := q.db.QueryRow(ctx, insertPerson, arg.Username, arg.HashedPassword)
+	row := q.db.QueryRow(ctx, insertPerson, arg.Username, arg.DisplayName, arg.HashedPassword)
 	var i Person
 	err := row.Scan(
 		&i.ID,
@@ -80,20 +81,54 @@ func (q *Queries) InsertPerson(ctx context.Context, arg InsertPersonParams) (Per
 	return i, err
 }
 
-const updatePerson = `-- name: UpdatePerson :exec
+const updatePersonDisplayName = `-- name: UpdatePersonDisplayName :exec
 UPDATE person
-SET display_name = $1,
-bio = $2
-WHERE id = $3
+SET display_name = $1
+WHERE id = $2
 `
 
-type UpdatePersonParams struct {
+type UpdatePersonDisplayNameParams struct {
 	DisplayName pgtype.Text
-	Bio         pgtype.Text
 	ID          int
 }
 
-func (q *Queries) UpdatePerson(ctx context.Context, arg UpdatePersonParams) error {
-	_, err := q.db.Exec(ctx, updatePerson, arg.DisplayName, arg.Bio, arg.ID)
+func (q *Queries) UpdatePersonDisplayName(ctx context.Context, arg UpdatePersonDisplayNameParams) error {
+	_, err := q.db.Exec(ctx, updatePersonDisplayName, arg.DisplayName, arg.ID)
+	return err
+}
+
+const updateUserStatistics = `-- name: UpdateUserStatistics :exec
+UPDATE user_statistic
+SET 
+    wins = wins + $1,
+    losses = losses + $2,
+    total_tricks_won = total_tricks_won + $3,
+    total_tricks_lost = total_tricks_lost + $4,
+    total_turns_won = total_turns_won + $5,
+    total_turns_lost = total_turns_lost + $6,
+    updated_at = NOW()
+WHERE user_id = $7
+`
+
+type UpdateUserStatisticsParams struct {
+	Wins            int
+	Losses          int
+	TotalTricksWon  int
+	TotalTricksLost int
+	TotalTurnsWon   int
+	TotalTurnsLost  int
+	UserID          int
+}
+
+func (q *Queries) UpdateUserStatistics(ctx context.Context, arg UpdateUserStatisticsParams) error {
+	_, err := q.db.Exec(ctx, updateUserStatistics,
+		arg.Wins,
+		arg.Losses,
+		arg.TotalTricksWon,
+		arg.TotalTricksLost,
+		arg.TotalTurnsWon,
+		arg.TotalTurnsLost,
+		arg.UserID,
+	)
 	return err
 }

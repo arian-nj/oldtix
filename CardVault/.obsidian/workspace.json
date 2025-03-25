@@ -11,10 +11,24 @@
             "id": "099bcd6503dbfe88",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "CardGame/V 1.0.0.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "V 1.0.0"
             }
           }
         ]
@@ -162,11 +176,13 @@
   },
   "active": "099bcd6503dbfe88",
   "lastOpenFiles": [
-    "CardGame/V 1.0.0.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/Name.md",
-    "CardGame/Release Pipe.md",
     "CardGame/TO DO Card.md",
+    "CardGame/Release Pipe.md",
+    "CardGame/Game Flow Chart.md",
+    "CardGame/Authentication.md",
+    "CardGame/Name.md",
+    "CardGame/V 1.0.0.md",
+    "Untitled",
     "8 - files/Pasted image 20241217020304.png",
     "8 - files/Pasted image 20241217021805.png",
     "8 - files/update-state.gif",
@@ -180,7 +196,6 @@
     "2 - Source Materials/Videos/Obsidian The King of Learning Tools.md",
     "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
     "CardGame/Version.md",
-    "CardGame/Authentication.md",
     "CardGame/Self Notes.md",
     "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
     "Sherry.md",
@@ -202,7 +217,6 @@
     "8 - files",
     "Excalidraw/Drawing 2024-12-26 13.04.57.excalidraw.md",
     "istockphoto-96611427-612x612.jpg",
-    "Excalidraw",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]

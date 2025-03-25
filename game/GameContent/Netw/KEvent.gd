@@ -32,6 +32,7 @@ const TYPE_NEW_CARD:String = "new_card"
 const TYPE_HOKM_CHOOSED:String = "hokm_choosed"
 
 const TYPE_MAKE_MATCH:String = "make_match"
+const TYPE_DISCONNECT:String = "disconnect"
 const TYPE_MATCH_FOUND:String = "found_match"
 const TYPE_REJOIN_MATCH:String = "rejoin_match"
 

@@ -18,6 +18,19 @@ type Hokm4Game struct {
 	ID                 int
 	TeamOneTricksScore int
 	TeamTwoTricksScore int
+	CreatedStamp       pgtype.Timestamptz
+	EndStamp           pgtype.Timestamptz
+}
+
+type Hokm4GameStatistic struct {
+	MatchID    int
+	PersonID   int
+	TricksWon  int
+	TricksLost int
+	TurnsWon   int
+	TurnsLost  int
+	IsWon      bool
+	CreatedAt  pgtype.Timestamp
 }
 
 type PatchVersion struct {
@@ -49,4 +62,15 @@ type Turn struct {
 	TurnID  int
 	TrickID int
 	Moves   string
+}
+
+type UserStatistic struct {
+	UserID          int
+	Wins            int
+	Losses          int
+	TotalTricksWon  int
+	TotalTricksLost int
+	TotalTurnsWon   int
+	TotalTurnsLost  int
+	UpdatedAt       pgtype.Timestamp
 }

@@ -36,8 +36,8 @@ type GameState struct {
 	CurrentTrick      *Trick            `json:"current_trick"`
 	Tricks            []*Trick          `json:"-"`
 
-	TeamOneTricksScore int `json:"team_one_trick_score"`
-	TeamTwoTricksScore int `json:"team_two_trick_score"`
+	TeamOneTrickScore int `json:"team_one_trick_score"`
+	TeamTwoTrickScore int `json:"team_two_trick_score"`
 }
 
 func (gs *GameState) GetHumanPlayers() (allHumanPlayers []*HumanPlayer) {

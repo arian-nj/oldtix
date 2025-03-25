@@ -12,6 +12,7 @@ const (
 	TypeGetMyCards EventType = "get_my_cards"
 
 	TypeMakeMatch   EventType = "make_match"
+	TypeDisconnect  EventType = "disconnect"
 	TypeMatchFound  EventType = "found_match"
 	TypeRejoinMatch EventType = "rejoin_match"
 

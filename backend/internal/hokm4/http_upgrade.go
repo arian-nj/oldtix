@@ -59,6 +59,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 						app.Lobby.Queue <- player
 						return nil
 					}
+
 				case <-player.Client.CancelCtx.Done():
 					return nil
 				}

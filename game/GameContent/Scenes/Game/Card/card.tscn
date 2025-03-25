@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://bd5brlxcojtaw"]
+[gd_scene load_steps=11 format=3 uid="uid://bd5brlxcojtaw"]
 
 [ext_resource type="Script" uid="uid://do4kwe8wpei4i" path="res://GameContent/Scenes/Game/Card/card.gd" id="1_tdtid"]
 [ext_resource type="Texture2D" uid="uid://gkgo5ogqcuii" path="res://GameContent/assets/cards/Back1.png" id="2_0cob8"]
-[ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="2_thmox"]
 [ext_resource type="Script" uid="uid://dcfkky1f6i0pk" path="res://GameContent/Componets/ShadowTextureComponent.gd" id="3_5ropr"]
 [ext_resource type="Script" uid="uid://bt78as30bdywo" path="res://GameContent/Scenes/Game/Card/shader_script.gd" id="5_8njo5"]
 [ext_resource type="Shader" uid="uid://bub16xh8gpro7" path="res://GameContent/Scenes/Game/Card/2d_prespective.gdshader" id="5_c3c7p"]
@@ -10,12 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://bnc2utgiovtm1" path="res://GameContent/assets/cards-Sheet.png" id="5_thmox"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r5psd"]
-
-[sub_resource type="Resource" id="Resource_py3qo"]
-script = ExtResource("2_thmox")
-suit = 0
-value = 14
-metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_18omn"]
 resource_local_to_scene = true
@@ -49,7 +42,6 @@ prespective3DShader = NodePath("TextureRect")
 atlasTexture = ExtResource("5_thmox")
 cardArea = NodePath("Area2D")
 swingComponent = NodePath("SwingComponent")
-card_data = SubResource("Resource_py3qo")
 metadata/_edit_group_ = true
 
 [node name="ShadowRect" type="TextureRect" parent="." node_paths=PackedStringArray("MainObject")]

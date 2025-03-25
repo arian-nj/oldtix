@@ -1,10 +1,38 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=13 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://GameContent/Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
+[ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/DefaultTheme.tres" id="2_o2jf8"]
 [ext_resource type="Script" uid="uid://dxdp0uldpe775" path="res://GameContent/Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
+[ext_resource type="Texture2D" uid="uid://cxl83f86oi3b4" path="res://GameContent/assets/play_button_background.png" id="4_jcjvh"]
+[ext_resource type="Texture2D" uid="uid://dldiq53b4j7ba" path="res://GameContent/assets/user_data_background.png" id="6_vh2g8"]
+[ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
+[ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="8_700qd"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vbryv"]
+[sub_resource type="Resource" id="Resource_700qd"]
+script = ExtResource("8_700qd")
+suit = 0
+value = 14
+metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
+
+[sub_resource type="Resource" id="Resource_xwmnj"]
+resource_local_to_scene = true
+script = ExtResource("8_700qd")
+suit = 1
+value = 14
+metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
+
+[sub_resource type="Resource" id="Resource_bbm5d"]
+script = ExtResource("8_700qd")
+suit = 2
+value = 14
+metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
+
+[sub_resource type="Resource" id="Resource_5cl1r"]
+script = ExtResource("8_700qd")
+suit = 3
+value = 14
+metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -13,6 +41,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_o2jf8")
 script = ExtResource("1_c7oo3")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -22,7 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.254544, 0.361311, 0.221748, 1)
+color = Color(0.0666667, 0.0627451, 0.0666667, 1)
 
 [node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("StatusLabel", "PlayButton", "ContinueGameButton")]
 layout_mode = 1
@@ -46,64 +75,168 @@ offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MainMenu"]
+[node name="PanelContainer" type="Control" parent="MainMenu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -66.0
-offset_top = -43.0
-offset_right = 66.0
-offset_bottom = 43.0
+offset_left = -267.0
+offset_top = -136.0
+offset_right = 267.0
+offset_bottom = 136.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_vbryv")
 
 [node name="ContinueButton" type="Button" parent="MainMenu/PanelContainer"]
 layout_mode = 2
+offset_left = 107.0
+offset_top = 53.0
+offset_right = 423.0
+offset_bottom = 191.0
 size_flags_horizontal = 4
-size_flags_vertical = 0
-text = "Continue Game"
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "برگرد به بازی"
+icon = ExtResource("4_jcjvh")
+flat = true
+icon_alignment = 1
+expand_icon = true
 
 [node name="PlayTic2Button" type="Button" parent="MainMenu/PanelContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-text = "Play 2 Player Tic"
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_top = 19.0
+offset_right = 129.0
+offset_bottom = 131.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 30
+text = "شروع بازی"
+icon = ExtResource("4_jcjvh")
+flat = true
+icon_alignment = 1
+expand_icon = true
 
-[node name="UserData" type="Control" parent="." node_paths=PackedStringArray("UsernameLabel")]
+[node name="UserDataComponent" type="Control" parent="." node_paths=PackedStringArray("UsernameLabel", "DisplaynameLabel")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -38.0
-offset_right = 20.0
-offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("4_1k8vq")
-UsernameLabel = NodePath("Username")
+UsernameLabel = NodePath("VBoxContainer/Username")
+DisplaynameLabel = NodePath("VBoxContainer/Displayname")
 
-[node name="Username" type="Label" parent="UserData"]
+[node name="TextureRect" type="TextureRect" parent="UserDataComponent"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -55.0
-offset_right = 40.0
-offset_bottom = -32.0
+offset_left = -103.0
+offset_top = -119.0
+offset_right = 292.0
+offset_bottom = 162.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Username"
+scale = Vector2(0.52, 0.44)
+texture = ExtResource("6_vh2g8")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UserDataComponent"]
+layout_mode = 0
+offset_left = -88.0
+offset_top = -90.0
+offset_right = 85.0
+offset_bottom = -25.0
+alignment = 1
+
+[node name="Displayname" type="Label" parent="UserDataComponent/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "Arian"
+
+[node name="Username" type="Label" parent="UserDataComponent/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.521141, 0.521141, 0.521141, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 22
+text = "@username"
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 21.0
+offset_top = 148.0
+offset_right = 61.0
+offset_bottom = 188.0
+metadata/_edit_group_ = true
+
+[node name="Card" parent="Control" instance=ExtResource("7_tw3df")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 100.0
+offset_top = 0.0
+offset_right = 171.0
+offset_bottom = 95.0
+grow_horizontal = 1
+card_data = SubResource("Resource_700qd")
+
+[node name="Card2" parent="Control" instance=ExtResource("7_tw3df")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 150.0
+offset_top = 0.0
+offset_right = 221.0
+offset_bottom = 95.0
+grow_horizontal = 1
+card_data = SubResource("Resource_xwmnj")
+
+[node name="Card3" parent="Control" instance=ExtResource("7_tw3df")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 200.0
+offset_top = 0.0
+offset_right = 271.0
+offset_bottom = 95.0
+grow_horizontal = 1
+card_data = SubResource("Resource_bbm5d")
+
+[node name="Card4" parent="Control" instance=ExtResource("7_tw3df")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 250.0
+offset_top = 0.0
+offset_right = 321.0
+offset_bottom = 95.0
+grow_horizontal = 1
+card_data = SubResource("Resource_5cl1r")
 
 [connection signal="pressed" from="MainMenu/PanelContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]

@@ -15,6 +15,7 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pascaldekloe/jwt"
 )
 
@@ -132,9 +133,8 @@ func (app *ApiApplication) updateUserData(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = app.Queries.UpdatePerson(r.Context(), sqldb.UpdatePersonParams{
+	err = app.Queries.UpdatePersonDisplayName(r.Context(), sqldb.UpdatePersonDisplayNameParams{
 		DisplayName: user.DisplayName,
-		Bio:         user.Bio,
 		ID:          user.ID,
 	})
 	if err != nil {
@@ -193,7 +193,10 @@ func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, err = app.Queries.InsertPerson(r.Context(),
-		sqldb.InsertPersonParams{Username: input.Username, HashedPassword: hashedPassword},
+		sqldb.InsertPersonParams{
+			Username:       input.Username,
+			DisplayName:    pgtype.Text{String: input.Username, Valid: true},
+			HashedPassword: hashedPassword},
 	)
 	if err != nil {
 		app.ServerError(w, r, err)

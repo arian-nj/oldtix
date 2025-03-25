@@ -61,6 +61,9 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 						continue
 					}
 					hplayer.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
+				case socket.TypeDisconnect:
+					hplayer.Client.State = socket.CLOSED
+					hplayer.Client.Cancel()
 				default:
 					game.GameEventsCh <- NewGameEvent(&new_event, hplayer)
 				}

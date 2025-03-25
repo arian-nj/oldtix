@@ -27,14 +27,47 @@ func (q *Queries) InsertGamePlayer(ctx context.Context, arg InsertGamePlayerPara
 }
 
 const insertHokm4Game = `-- name: InsertHokm4Game :one
-INSERT INTO hokm4_game DEFAULT VALUES RETURNING id, team_one_tricks_score, team_two_tricks_score
+INSERT INTO hokm4_game DEFAULT VALUES RETURNING id, team_one_tricks_score, team_two_tricks_score, created_stamp, end_stamp
 `
 
 func (q *Queries) InsertHokm4Game(ctx context.Context) (Hokm4Game, error) {
 	row := q.db.QueryRow(ctx, insertHokm4Game)
 	var i Hokm4Game
-	err := row.Scan(&i.ID, &i.TeamOneTricksScore, &i.TeamTwoTricksScore)
+	err := row.Scan(
+		&i.ID,
+		&i.TeamOneTricksScore,
+		&i.TeamTwoTricksScore,
+		&i.CreatedStamp,
+		&i.EndStamp,
+	)
 	return i, err
+}
+
+const insertHokm4Statistic = `-- name: InsertHokm4Statistic :exec
+INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING match_id, person_id, tricks_won, tricks_lost, turns_won, turns_lost, is_won, created_at
+`
+
+type InsertHokm4StatisticParams struct {
+	MatchID    int
+	PersonID   int
+	TricksWon  int
+	TricksLost int
+	TurnsWon   int
+	TurnsLost  int
+	IsWon      bool
+}
+
+func (q *Queries) InsertHokm4Statistic(ctx context.Context, arg InsertHokm4StatisticParams) error {
+	_, err := q.db.Exec(ctx, insertHokm4Statistic,
+		arg.MatchID,
+		arg.PersonID,
+		arg.TricksWon,
+		arg.TricksLost,
+		arg.TurnsWon,
+		arg.TurnsLost,
+		arg.IsWon,
+	)
+	return err
 }
 
 const insertTrick = `-- name: InsertTrick :one

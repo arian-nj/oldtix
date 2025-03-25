@@ -14,7 +14,6 @@ import (
 )
 
 func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int) error {
-	player.BackgroundSocketHandlers(game)
 	_, err := game.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
 		PlayerID: player.UserId,
 		GameID:   gameId,
@@ -37,18 +36,19 @@ func (app *ApplicationHokm4) MatchUsers() error {
 
 		var foundPlayers []*HumanPlayer
 
-		for range 2 {
+		for len(foundPlayers) < 2 {
 			foundPl := <-app.Lobby.Queue
-			// if foundPl.Client.State != socket.OPEN {
-			// continue
-			// }
+			if foundPl.Client.State != socket.OPEN {
+				continue
+			}
+			foundPl.BackgroundSocketHandlers(game)
 			foundPlayers = append(foundPlayers, foundPl)
 
-			// for index, p := range foundPlayers {
-			// 	if p.Client.State != socket.OPEN {
-			// 		foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
-			// 	}
-			// }
+			for index, p := range foundPlayers {
+				if p.Client.State != socket.OPEN {
+					foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
+				}
+			}
 		}
 
 		for _, p := range foundPlayers {
@@ -111,7 +111,7 @@ func (game *GameState) RunGame() error {
 		if err != nil {
 			return err
 		}
-		if game.TeamOneTricksScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTricksScore >= SETTING_WINNING_TRICK_SCORE {
+		if game.TeamOneTrickScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTrickScore >= SETTING_WINNING_TRICK_SCORE {
 			break
 		}
 	}
@@ -122,7 +122,71 @@ func (game *GameState) TheEnd() error {
 	for _, p := range game.Players {
 		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
 	}
-	time.Sleep(10 * time.Second)
+	// Statics
+	var winner_team Team
+	if game.TeamOneTrickScore > game.TeamTwoTrickScore {
+		winner_team = TeamOne
+	} else {
+		winner_team = TeamTwo
+	}
+
+	TeamOneTurnScores := 0
+	TeamTwoTurnScores := 0
+
+	for _, trick := range game.Tricks {
+		TeamOneTurnScores += trick.TeamOneTurnScore
+		TeamTwoTurnScores += trick.TeamTwoTurnScore
+	}
+
+	for _, humanPlayer := range game.GetHumanPlayers() {
+
+		insertStatisticsParams := sqldb.InsertHokm4StatisticParams{
+			MatchID:  game.ID,
+			PersonID: humanPlayer.UserId,
+		}
+		if humanPlayer.GetTeamID() == TeamOne {
+			insertStatisticsParams.TricksWon = game.TeamOneTrickScore
+			insertStatisticsParams.TricksLost = game.TeamTwoTrickScore
+			insertStatisticsParams.TurnsWon = TeamOneTurnScores
+			insertStatisticsParams.TurnsLost = TeamTwoTurnScores
+		} else {
+			insertStatisticsParams.TurnsWon = TeamTwoTurnScores
+			insertStatisticsParams.TurnsLost = TeamOneTurnScores
+			insertStatisticsParams.TricksWon = game.TeamTwoTrickScore
+			insertStatisticsParams.TricksLost = game.TeamOneTrickScore
+		}
+
+		insertStatisticsParams.IsWon = false
+		if winner_team == humanPlayer.GetTeamID() {
+			insertStatisticsParams.IsWon = true
+		}
+
+		err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
+		if err != nil {
+			return err
+		}
+		win := 0
+		loss := 0
+		if insertStatisticsParams.IsWon {
+			win += 1
+		} else {
+			loss += 1
+		}
+		err = game.Queries.UpdateUserStatistics(context.Background(), sqldb.UpdateUserStatisticsParams{
+			Wins:            win,
+			Losses:          loss,
+			TotalTricksWon:  insertStatisticsParams.TricksWon,
+			TotalTricksLost: insertStatisticsParams.TricksLost,
+			TotalTurnsWon:   insertStatisticsParams.TurnsWon,
+			TotalTurnsLost:  insertStatisticsParams.TurnsLost,
+			UserID:          humanPlayer.UserId,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	time.Sleep(5 * time.Second)
 	return nil
 }
 
@@ -205,10 +269,10 @@ func (game *GameState) RunTrick(trick_number int) error {
 		}
 		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
 			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
-				game.TeamOneTricksScore += 1
+				game.TeamOneTrickScore += 1
 				game.CurrentTrick.WinnerTeam = TeamOne
 			} else {
-				game.TeamTwoTricksScore += 1
+				game.TeamTwoTrickScore += 1
 				game.CurrentTrick.WinnerTeam = TeamTwo
 			}
 			break
@@ -224,8 +288,8 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	err = game.Queries.UpdateTrickScores(context.Background(), sqldb.UpdateTrickScoresParams{
-		TeamOneTricksScore: game.TeamOneTricksScore,
-		TeamTwoTricksScore: game.TeamTwoTricksScore,
+		TeamOneTricksScore: game.TeamOneTrickScore,
+		TeamTwoTricksScore: game.TeamTwoTrickScore,
 		ID:                 game.ID,
 	})
 	if err != nil {
