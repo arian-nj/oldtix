@@ -16,7 +16,7 @@ SELECT id, created, username, display_name, hashed_password, bio, coin FROM pers
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPerson(ctx context.Context, id int64) (Person, error) {
+func (q *Queries) GetPerson(ctx context.Context, id int) (Person, error) {
 	row := q.db.QueryRow(ctx, getPerson, id)
 	var i Person
 	err := row.Scan(
@@ -90,7 +90,7 @@ WHERE id = $3
 type UpdatePersonParams struct {
 	DisplayName pgtype.Text
 	Bio         pgtype.Text
-	ID          int64
+	ID          int
 }
 
 func (q *Queries) UpdatePerson(ctx context.Context, arg UpdatePersonParams) error {

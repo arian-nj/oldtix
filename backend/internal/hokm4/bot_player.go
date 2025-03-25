@@ -1,9 +1,8 @@
 package hokm4
 
 import (
-	"math/rand/v2"
-
 	cards "github.com/arian-nj/master-card/back/internal/card"
+	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
@@ -33,7 +32,7 @@ func (game *GameState) BotPlayTurn(hand_cards []cards.Card) int {
 }
 
 func (game *GameState) _first_play(hand_cards *[]cards.Card) int {
-	rand_card_index := rand.IntN(len(*hand_cards))
+	rand_card_index := randutils.GenerateRandomNumber(len(*hand_cards))
 	return rand_card_index
 }
 
@@ -53,7 +52,7 @@ func (game *GameState) _not_first_play(hand_cards *[]cards.Card) int {
 		return cardIndex
 	}
 	extracted_suites := cards.ExtractDeckSuites(hand_cards)
-	rand_suite_index := rand.IntN(len(extracted_suites))
+	rand_suite_index := randutils.GenerateRandomNumber(len(extracted_suites))
 
 	choosed_suite := extracted_suites[rand_suite_index]
 	choosed_card := cards.SelectLowestCard(hand_cards, choosed_suite)

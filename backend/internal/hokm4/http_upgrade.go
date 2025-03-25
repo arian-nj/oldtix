@@ -8,6 +8,7 @@ import (
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/sqldb"
 )
 
 func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +51,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		player = NewHumanPlayer(user.ID, client, []cards.Card{}, true)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(r.Context())
 	player.Client.CancelCtx = ctx
 	player.Client.Cancel = cancel
 
@@ -69,6 +70,10 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 			}
 		})
 	}
+	app.RunReadWriteClientInBackground(player, user)
+}
+
+func (app *ApplicationHokm4) RunReadWriteClientInBackground(player *HumanPlayer, user *sqldb.Person) {
 	app.BackgroundTask( // read messages
 		func() error {
 			defer player.Client.Cancel()
@@ -79,7 +84,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 				}
 			}()
 
-			return client.ReadMessage(app.Logger, player.Client.CancelCtx)
+			return player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
 		})
 
 	app.BackgroundTask(func() error { // write messages
@@ -91,7 +96,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		}()
 
 		defer func() {
-			err := client.Close()
+			err := player.Client.Close()
 			if err != nil {
 				app.Logger.Error(err.Error())
 			} else {
@@ -99,7 +104,6 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 			}
 		}()
 
-		return client.WriteMessage(app.Logger, player.Client.CancelCtx)
+		return player.Client.WriteMessage(app.Logger, player.Client.CancelCtx)
 	})
-
 }

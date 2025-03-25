@@ -1,7 +1,6 @@
 package core_api
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -31,7 +30,7 @@ func (app *ApiApplication) status(writer http.ResponseWriter, r *http.Request) {
 }
 
 func (app *ApiApplication) getLatestVersion(w http.ResponseWriter, r *http.Request) {
-	pwRow, err := app.Queries.GetVersion(context.Background(), app.ReleaseMode)
+	pwRow, err := app.Queries.GetVersion(r.Context(), app.ReleaseMode)
 	if err != nil {
 		app.ServerError(w, r, err)
 		return
@@ -49,19 +48,18 @@ func (app *ApiApplication) getLatestVersion(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-var errUserIsNotValidErr error = fmt.Errorf("user id is not valid")
-
 func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
+	var UserIsNotValidErr error = fmt.Errorf("user id is not valid")
 	user_param := chi.URLParam(r, "user_id")
 	userid_int, err := strconv.Atoi(user_param)
 	if err != nil {
-		app.BadRequest(w, r, errUserIsNotValidErr)
+		app.BadRequest(w, r, UserIsNotValidErr)
 		return
 	}
 
-	user, err := app.Queries.GetPerson(context.Background(), int64(userid_int))
+	user, err := app.Queries.GetPerson(r.Context(), userid_int)
 	if err != nil {
-		app.BadRequest(w, r, errUserIsNotValidErr)
+		app.BadRequest(w, r, UserIsNotValidErr)
 		return
 	}
 
@@ -75,7 +73,7 @@ func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 	output.Username = user.Username
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String
-	output.Coin = int(user.Coin.Int32)
+	output.Coin = user.Coin
 
 	err = response.JSON(w, http.StatusOK, output)
 	if err != nil {
@@ -88,7 +86,7 @@ func (app *ApiApplication) getMeData(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
-		ID          int64  `json:"id"`
+		ID          int    `json:"id"`
 		Username    string `json:"username"`
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
@@ -98,7 +96,7 @@ func (app *ApiApplication) getMeData(w http.ResponseWriter, r *http.Request) {
 	output.Username = user.Username
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String
-	output.Coin = int(user.Coin.Int32)
+	output.Coin = user.Coin
 
 	err := response.JSON(w, http.StatusOK, output)
 	if err != nil {
@@ -134,7 +132,7 @@ func (app *ApiApplication) updateUserData(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = app.Queries.UpdatePerson(context.Background(), sqldb.UpdatePersonParams{
+	err = app.Queries.UpdatePerson(r.Context(), sqldb.UpdatePersonParams{
 		DisplayName: user.DisplayName,
 		Bio:         user.Bio,
 		ID:          user.ID,
@@ -173,7 +171,7 @@ func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {
 		app.FailedValidation(w, r, input.Validator)
 		return
 	}
-	userRow, err := app.Queries.GetPersonByUsername(context.Background(), input.Username)
+	userRow, err := app.Queries.GetPersonByUsername(r.Context(), input.Username)
 	if err != nil {
 		if !errors.Is(err, pgx.ErrNoRows) {
 			app.ServerError(w, r, err)
@@ -194,7 +192,7 @@ func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {
 		app.ServerError(w, r, err)
 		return
 	}
-	_, err = app.Queries.InsertPerson(context.Background(),
+	_, err = app.Queries.InsertPerson(r.Context(),
 		sqldb.InsertPersonParams{Username: input.Username, HashedPassword: hashedPassword},
 	)
 	if err != nil {
@@ -220,7 +218,7 @@ func (app *ApiApplication) createAuthenticationToken(w http.ResponseWriter, r *h
 		return
 	}
 
-	user, err := app.Queries.GetPersonByUsername(context.Background(), input.Username)
+	user, err := app.Queries.GetPersonByUsername(r.Context(), input.Username)
 	username_found := true
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {

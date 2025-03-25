@@ -9,7 +9,7 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
-type Team int16
+type Team int
 
 const (
 	TeamOne Team = iota
@@ -30,7 +30,7 @@ func NewGameEvent(event *socket.Event, player *HumanPlayer) *GameEvent {
 
 type GameState struct {
 	*ApplicationHokm4 `json:"-"`
-	ID                int64             `json:"id"`
+	ID                int               `json:"id"`
 	Players           []PlayerInterface `json:"players"`
 	GameEventsCh      chan *GameEvent   `json:"-"`
 	CurrentTrick      *Trick            `json:"current_trick"`
@@ -65,7 +65,7 @@ func (app *ApplicationHokm4) NewGameState() (*GameState, error) {
 }
 
 type Trick struct {
-	id               int64
+	id               int
 	Hokm             cards.Suite `json:"hokm"`
 	HakemIndex       int         `json:"hakem_index"`
 	TurnStarterIndex int         `json:"turn_starter_index"`
@@ -79,10 +79,10 @@ type Trick struct {
 	WinnerTeam Team `json:"-"`
 }
 
-func (game *GameState) NewTrick(HakemIndex int) (*Trick, error) {
+func (game *GameState) NewTrick(hakem_index int) (*Trick, error) {
 	trickRow, err := game.Queries.InsertTrick(context.Background(), sqldb.InsertTrickParams{
-		GameID:     int64(game.ID),
-		HakemIndex: int32(HakemIndex),
+		GameID:     game.ID,
+		HakemIndex: hakem_index,
 	})
 	if err != nil {
 		return nil, err
@@ -123,15 +123,15 @@ func NewPlayerCardPlayed(player PlayerInterface, card cards.Card) *PlayerCardPla
 
 type Lobby struct {
 	Queue     chan *HumanPlayer
-	UserGames map[int64]*GameState
+	UserGames map[int]*GameState
 	Mu        sync.Mutex
 }
 
 func NewLobby() *Lobby {
 	return &Lobby{
 		Queue: make(chan *HumanPlayer),
-		// Games: make(map[int64]*GameState),
-		UserGames: map[int64]*GameState{},
+		// Games: make(map[int]*GameState),
+		UserGames: map[int]*GameState{},
 		Mu:        sync.Mutex{},
 	}
 }

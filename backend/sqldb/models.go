@@ -9,44 +9,44 @@ import (
 )
 
 type GamePlayer struct {
-	PlayerID int64
-	GameID   int64
-	Team     int16
+	PlayerID int
+	GameID   int
+	Team     int
 }
 
 type Hokm4Game struct {
-	ID                 int64
-	TeamOneTricksScore int32
-	TeamTwoTricksScore int32
+	ID                 int
+	TeamOneTricksScore int
+	TeamTwoTricksScore int
 }
 
 type PatchVersion struct {
-	ID            int64
+	ID            int
 	Rmode         string
 	VersionNumber string
 }
 
 type Person struct {
-	ID             int64
+	ID             int
 	Created        pgtype.Timestamptz
 	Username       string
 	DisplayName    pgtype.Text
 	HashedPassword string
 	Bio            pgtype.Text
-	Coin           pgtype.Int4
+	Coin           int
 }
 
 type Trick struct {
-	TrickID          int64
-	GameID           int64
-	Hokm             pgtype.Int4
-	HakemIndex       int32
-	TeamOneTurnScore int32
-	TeamTwoTurnScore int32
+	TrickID          int
+	GameID           int
+	Hokm             int
+	HakemIndex       int
+	TeamOneTurnScore int
+	TeamTwoTurnScore int
 }
 
 type Turn struct {
-	TurnID  int64
-	TrickID int64
+	TurnID  int
+	TrickID int
 	Moves   string
 }

@@ -65,7 +65,7 @@ func run() error {
 		if err != nil {
 			return err
 		}
-		v.Patch = v.Patch + 1
+		v.Patch++
 		pvRow, err = queries.UpdateVersion(context.Background(), sqldb.UpdateVersionParams{
 			Rmode:         release_mode,
 			VersionNumber: v.String(),
@@ -86,7 +86,7 @@ func run() error {
 	}
 
 	entery := dirEntries[0]
-	fmt.Println(entery.Name())
+	log.Println(entery.Name())
 	fb, err := os.ReadFile(patchesPath + entery.Name())
 	if err != nil {
 		return err

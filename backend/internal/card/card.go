@@ -2,7 +2,8 @@ package cards
 
 import (
 	"fmt"
-	"math/rand/v2"
+
+	"github.com/arian-nj/master-card/back/internal/randutils"
 )
 
 type Suite int
@@ -15,7 +16,6 @@ const ( // sync it with card/card.gd
 	CLUB         = 3
 )
 
-// const
 const (
 	N2 = iota + 2
 	N3
@@ -58,10 +58,10 @@ func NewAllCards() []Card {
 
 func GiveRandomCards(numberOfCards int, availableCards []Card) (allRandomCards []Card, remaningCards []Card, err error) {
 	for range numberOfCards {
-		if len(availableCards) <= 0 {
+		if len(availableCards) == 0 {
 			return allRandomCards, availableCards, fmt.Errorf("available cards is %d cant give more", len(availableCards))
 		}
-		random_index := rand.IntN(len(availableCards))
+		random_index := randutils.GenerateRandomNumber(len(availableCards))
 		random_card := availableCards[random_index]
 		availableCards = append(availableCards[:random_index], availableCards[random_index+1:]...)
 		allRandomCards = append(allRandomCards, random_card)

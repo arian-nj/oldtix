@@ -9,6 +9,11 @@ sql:
         out: "sqldb"
         sql_package: "pgx/v5"
         overrides:
-          - db_type: "INT"
+          - db_type: "bigserial"
             go_type:
               type: "int"
+          
+          - db_type: "bigserial"
+            go_type:
+              type: "int"
+            nullable: true

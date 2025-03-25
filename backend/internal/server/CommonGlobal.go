@@ -23,7 +23,7 @@ func Run() {
 	// }
 }
 
-type config struct {
+type Config struct {
 	HTTPPort int
 	BaseURL  string
 	Jwt      struct {
@@ -33,7 +33,7 @@ type config struct {
 }
 
 type CommonGlobals struct {
-	Config  *config
+	Config  *Config
 	Logger  *zap.Logger
 	Queries *sqldb.Queries
 	wg      sync.WaitGroup
@@ -43,7 +43,7 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	// read configs
 	Glob := &CommonGlobals{}
 
-	cfg := &config{}
+	cfg := &Config{}
 	Glob.Config = cfg
 
 	// logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
@@ -67,10 +67,11 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 		return nil, nil, fmt.Errorf("error loading .env file")
 	}
 
-	err = readConfigs(cfg)
+	cfg, err = readConfigs()
 	if err != nil {
 		return nil, nil, err
 	}
+	Glob.Config = cfg
 
 	queries, poll, err := dbconf.SetupDB()
 	if err != nil {
@@ -81,35 +82,35 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	return Glob, poll, nil
 }
 
-func readConfigs(cfg *config) error {
-
+func readConfigs() (*Config, error) {
+	var cfg *Config = new(Config)
 	port := os.Getenv("HTTP_PORT")
 	if port == "" {
-		return fmt.Errorf("can't read port from .env %s", port)
+		return nil, fmt.Errorf("can't read port from .env %s", port)
 	}
 	port_int, err := strconv.Atoi(port)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	cfg.HTTPPort = port_int
 
 	base_url := os.Getenv("BASE_URL")
 	if base_url == "" {
-		return fmt.Errorf("can't base url from .env : %s", base_url)
+		return nil, fmt.Errorf("can't base url from .env : %s", base_url)
 	}
 	cfg.BaseURL = base_url
 
 	secret_key := os.Getenv("SecretKey")
 	if secret_key == "" {
-		return fmt.Errorf("can't read secret key from .env : %s", secret_key)
+		return nil, fmt.Errorf("can't read secret key from .env : %s", secret_key)
 	}
 	cfg.Jwt.SecretKey = secret_key
 
 	database_url := os.Getenv("DATABASE_URL")
 	if database_url == "" {
-		return fmt.Errorf("can't read database url from .env : %s", database_url)
+		return nil, fmt.Errorf("can't read database url from .env : %s", database_url)
 	}
 	cfg.DatabaseUrl = database_url
 
-	return nil
+	return cfg, nil
 }

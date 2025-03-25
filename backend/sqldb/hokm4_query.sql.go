@@ -7,8 +7,6 @@ package sqldb
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const insertGamePlayer = `-- name: InsertGamePlayer :one
@@ -16,9 +14,9 @@ INSERT INTO game_player (player_id, game_id,team) VALUES ($1,$2,$3) RETURNING pl
 `
 
 type InsertGamePlayerParams struct {
-	PlayerID int64
-	GameID   int64
-	Team     int16
+	PlayerID int
+	GameID   int
+	Team     int
 }
 
 func (q *Queries) InsertGamePlayer(ctx context.Context, arg InsertGamePlayerParams) (GamePlayer, error) {
@@ -44,8 +42,8 @@ INSERT INTO trick (game_id, hakem_index) VALUES ($1,$2) RETURNING trick_id, game
 `
 
 type InsertTrickParams struct {
-	GameID     int64
-	HakemIndex int32
+	GameID     int
+	HakemIndex int
 }
 
 func (q *Queries) InsertTrick(ctx context.Context, arg InsertTrickParams) (Trick, error) {
@@ -68,7 +66,7 @@ INSERT INTO turn (moves,trick_id) VALUES ($1,$2) RETURNING turn_id, trick_id, mo
 
 type InsertTurnParams struct {
 	Moves   string
-	TrickID int64
+	TrickID int
 }
 
 func (q *Queries) InsertTurn(ctx context.Context, arg InsertTurnParams) (Turn, error) {
@@ -83,8 +81,8 @@ UPDATE trick SET hokm = $1 WHERE trick_id = $2
 `
 
 type UpdateHokmTrickParams struct {
-	Hokm    pgtype.Int4
-	TrickID int64
+	Hokm    int
+	TrickID int
 }
 
 func (q *Queries) UpdateHokmTrick(ctx context.Context, arg UpdateHokmTrickParams) error {
@@ -97,9 +95,9 @@ UPDATE hokm4_game SET team_one_tricks_score = $1,team_two_tricks_score=$2 WHERE 
 `
 
 type UpdateTrickScoresParams struct {
-	TeamOneTricksScore int32
-	TeamTwoTricksScore int32
-	ID                 int64
+	TeamOneTricksScore int
+	TeamTwoTricksScore int
+	ID                 int
 }
 
 func (q *Queries) UpdateTrickScores(ctx context.Context, arg UpdateTrickScoresParams) error {
@@ -112,9 +110,9 @@ UPDATE trick SET team_one_turn_score = $1,team_two_turn_score=$2 WHERE trick_id 
 `
 
 type UpdateTurnScoresParams struct {
-	TeamOneTurnScore int32
-	TeamTwoTurnScore int32
-	TrickID          int64
+	TeamOneTurnScore int
+	TeamTwoTurnScore int
+	TrickID          int
 }
 
 func (q *Queries) UpdateTurnScores(ctx context.Context, arg UpdateTurnScoresParams) error {

@@ -63,7 +63,7 @@ type GameStateOut struct {
 	YourTeam Team `json:"your_team"`
 }
 
-func (game *GameState) SendGameData(MessageTurn socket.EventType, p *HumanPlayer) error {
+func (game *GameState) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
 	gsOut := GameStateOut{
 		GameState: game,
 		YourTeam:  p.TeamId,
@@ -73,7 +73,7 @@ func (game *GameState) SendGameData(MessageTurn socket.EventType, p *HumanPlayer
 	if err != nil {
 		return err
 	}
-	p.AddToEgress(socket.NewEvent(MessageTurn, socket.EventMessage(game_data)))
+	p.AddToEgress(socket.NewEvent(message_turn, socket.EventMessage(game_data)))
 	return nil
 }
 

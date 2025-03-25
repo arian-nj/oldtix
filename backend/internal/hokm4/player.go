@@ -40,7 +40,7 @@ func (pc *PlayerCommon) SetTeamID(team_id Team) {
 }
 
 func NewPlayerCommon(player_cards []cards.Card) *PlayerCommon {
-	randString := randutils.GenerateRandomString(16)
+	randString := randutils.GenerateRandomString(24)
 
 	return &PlayerCommon{
 		PlayerUnique: randString,

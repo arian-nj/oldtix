@@ -22,9 +22,9 @@ const (
 	defaultShutdownPeriod = 30 * time.Second
 )
 
-func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
+func (glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 
-	stdLogger, err := zap.NewStdLogAt(Glob.Logger, zapcore.WarnLevel)
+	stdLogger, err := zap.NewStdLogAt(glob.Logger, zapcore.WarnLevel)
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 		shutdownErrorChan <- srv.Shutdown(ctx)
 	}()
 
-	Glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
+	glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
 	// Glob.Logger.Info("starting server", slog.Group("server", "addr", srv.Addr))
 
 	err = srv.ListenAndServe()
@@ -63,8 +63,8 @@ func (Glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 		return err
 	}
 
-	Glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
+	glob.Logger.Info("starting server", zap.String("serveraddr", srv.Addr))
 
-	Glob.wg.Wait()
+	glob.wg.Wait()
 	return nil
 }

@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -52,7 +51,7 @@ func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, 
 		return nil
 	}
 
-	user, err := app.Queries.GetPerson(context.Background(), int64(userID))
+	user, err := app.Queries.GetPerson(r.Context(), userID)
 	if err != nil {
 		app.ServerError(w, r, err)
 		return nil

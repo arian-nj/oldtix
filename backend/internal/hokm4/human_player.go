@@ -9,17 +9,17 @@ import (
 
 type HumanPlayer struct {
 	*PlayerCommon
-	UserId   int64          `json:"user_id"`
+	UserId   int            `json:"user_id"`
 	Client   *socket.Client `json:"-"`
 	IsPlayng bool           `json:"is_playing"`
 }
 
-func NewHumanPlayer(UserId int64, Client *socket.Client, Cards []cards.Card, IsPlayng bool) *HumanPlayer {
+func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_playng bool) *HumanPlayer {
 	return &HumanPlayer{
-		PlayerCommon: NewPlayerCommon(Cards),
-		UserId:       UserId,
-		Client:       Client,
-		IsPlayng:     IsPlayng,
+		PlayerCommon: NewPlayerCommon(cards),
+		UserId:       userId,
+		Client:       client,
+		IsPlayng:     is_playng,
 	}
 }
 
@@ -41,12 +41,13 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 		for {
 			select {
 			case new_event := <-hplayer.Client.NewEvents:
-				if new_event.Type == socket.TypeGetData {
+				switch new_event.Type {
+				case socket.TypeGetData:
 					err := game.SendGameData(socket.TypeGameData, hplayer)
 					if err != nil {
 						return err
 					}
-				} else if new_event.Type == socket.TypeGetMyCards {
+				case socket.TypeGetMyCards:
 					var output struct {
 						NewCards []cards.Card `json:"cards"`
 					}
@@ -57,7 +58,7 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 						continue
 					}
 					hplayer.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
-				} else {
+				default:
 					game.GameEventsCh <- NewGameEvent(&new_event, hplayer)
 				}
 			case <-hplayer.Client.CancelCtx.Done():

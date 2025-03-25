@@ -11,8 +11,8 @@ func (app *ApplicationHokm4) isInActiveGame(w http.ResponseWriter, r *http.Reque
 	user := server.ContextGetAuthenticatedUser(r)
 
 	var output struct {
-		IsActive     bool  `json:"is_active"`
-		ActiveGameId int64 `json:"active_game_id,omitempty"`
+		IsActive     bool `json:"is_active"`
+		ActiveGameId int  `json:"active_game_id,omitempty"`
 	}
 	game, exist := app.Lobby.UserGames[user.ID]
 	if exist {

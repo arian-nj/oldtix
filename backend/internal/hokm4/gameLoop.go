@@ -4,22 +4,21 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"strconv"
 	"time"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
+	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/sqldb"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int64) error {
+func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int) error {
 	player.BackgroundSocketHandlers(game)
 	_, err := game.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
 		PlayerID: player.UserId,
 		GameID:   gameId,
-		Team:     int16(player.TeamId),
+		Team:     int(player.TeamId),
 	})
 	game.Players = append(game.Players, player)
 	return err
@@ -130,15 +129,13 @@ func (game *GameState) TheEnd() error {
 func (game *GameState) DeclareHakemIndex(trick_number int) int {
 	var HakemIndex int
 	if trick_number == 0 { // if first trick
-		HakemIndex = rand.Intn(len(game.Players))
-	} else {
-		if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].GetTeamID() {
-			HakemIndex = game.CurrentTrick.HakemIndex
-			if HakemIndex < len(game.Players)-1 {
-				HakemIndex += 1
-			} else {
-				HakemIndex = 0
-			}
+		HakemIndex = randutils.GenerateRandomNumber(len(game.Players))
+	} else if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].GetTeamID() {
+		HakemIndex = game.CurrentTrick.HakemIndex
+		if HakemIndex < len(game.Players)-1 {
+			HakemIndex += 1
+		} else {
+			HakemIndex = 0
 		}
 	}
 	return HakemIndex
@@ -183,7 +180,8 @@ func (game *GameState) RunTrick(trick_number int) error {
 		}
 	}
 	err = game.Queries.UpdateHokmTrick(context.Background(), sqldb.UpdateHokmTrickParams{
-		Hokm:    pgtype.Int4{Int32: int32(game.CurrentTrick.Hokm), Valid: true},
+		// Hokm:    pgtype.Int4{Int32: int32(game.CurrentTrick.Hokm), Valid: true},
+		Hokm:    int(game.CurrentTrick.Hokm),
 		TrickID: game.CurrentTrick.id,
 	})
 	if err != nil {
@@ -226,8 +224,8 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	err = game.Queries.UpdateTrickScores(context.Background(), sqldb.UpdateTrickScoresParams{
-		TeamOneTricksScore: int32(game.TeamOneTricksScore),
-		TeamTwoTricksScore: int32(game.TeamTwoTricksScore),
+		TeamOneTricksScore: game.TeamOneTricksScore,
+		TeamTwoTricksScore: game.TeamTwoTricksScore,
 		ID:                 game.ID,
 	})
 	if err != nil {
@@ -274,7 +272,7 @@ func (game *GameState) WaitToChooseHokm() {
 			game.Logger.Info(fmt.Sprintf("new hokm is choosed by hakem %d ", hokm_int))
 			return
 		case <-choose_hokm_ticker.C:
-			rand_index := rand.Intn(4)
+			rand_index := randutils.GenerateRandomNumber(4)
 			new_hokm := cards.AllSuits[rand_index]
 			game.CurrentTrick.Hokm = new_hokm
 			game.Logger.Info(fmt.Sprintf("new hokm is choosed by server %d ", int(new_hokm)))
@@ -380,8 +378,8 @@ func (game *GameState) RunTurn() error {
 		return err
 	}
 	err = game.Queries.UpdateTurnScores(context.Background(), sqldb.UpdateTurnScoresParams{
-		TeamOneTurnScore: int32(game.CurrentTrick.TeamOneTurnScore),
-		TeamTwoTurnScore: int32(game.CurrentTrick.TeamTwoTurnScore),
+		TeamOneTurnScore: game.CurrentTrick.TeamOneTurnScore,
+		TeamTwoTurnScore: game.CurrentTrick.TeamTwoTurnScore,
 		TrickID:          game.CurrentTrick.id,
 	})
 	return err
