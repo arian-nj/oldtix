@@ -27,3 +27,15 @@ func main() {
 		app.Logger.Error(err.Error())
 	}
 }
+
+// hashedPassword, err := password.Hash("arian123")
+// if err != nil {
+// 	return
+// }
+
+// for i := range 50 {
+// 	app.Queries.InsertPerson(context.Background(), sqldb.InsertPersonParams{
+// 		Username:       "arian" + strconv.Itoa(i),
+// 		HashedPassword: hashedPassword,
+// 	})
+// }

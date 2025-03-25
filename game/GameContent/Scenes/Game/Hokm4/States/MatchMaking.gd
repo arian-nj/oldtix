@@ -21,10 +21,11 @@ func _on_new_event(e:KEvent.Event)->void:
 		Transition.emit(self,"wait_state")
 
 	elif e.type == KEvent.TYPE_REJOIN_MATCH:
+		print("rehoining request")
+		status_label.text = "rejoining"
 		table.parse_game_data(e.data)
 		table.set_player_to_hand()
 		# table.
-		status_label.text = "Re joining"
 		ws.send_event(KEvent.TYPE_GET_MY_CARDS)
 	
 	elif e.type == KEvent.TYPE_GET_MY_CARDS:

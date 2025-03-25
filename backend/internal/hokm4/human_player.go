@@ -2,6 +2,7 @@ package hokm4
 
 import (
 	"encoding/json"
+	"log"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -27,7 +28,9 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
 	if hplayer.Client != nil && hplayer.Client.State != socket.OPEN {
 		return
 	}
-
+	if e.Type == socket.TypeRejoinMatch {
+		log.Println("sending rejoin")
+	}
 	go func() {
 		hplayer.Client.Egres <- *e
 

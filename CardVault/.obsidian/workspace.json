@@ -4,35 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "1008f44122f374dc",
+        "id": "846ea063704f2c5c",
         "type": "tabs",
         "children": [
           {
-            "id": "5a3caa5d95798a37",
+            "id": "099bcd6503dbfe88",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "CardGame/Game Flow Chart.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
-            }
-          },
-          {
-            "id": "ea929983e8c33067",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "CardGame/Game Flow Chart.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -175,13 +160,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "ea929983e8c33067",
+  "active": "099bcd6503dbfe88",
   "lastOpenFiles": [
+    "CardGame/V 1.0.0.md",
+    "CardGame/Game Flow Chart.md",
     "CardGame/Name.md",
     "CardGame/Release Pipe.md",
     "CardGame/TO DO Card.md",
-    "CardGame/V 1.0.0.md",
-    "CardGame/Game Flow Chart.md",
     "8 - files/Pasted image 20241217020304.png",
     "8 - files/Pasted image 20241217021805.png",
     "8 - files/update-state.gif",

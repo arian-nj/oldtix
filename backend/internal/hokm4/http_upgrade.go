@@ -35,25 +35,20 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		for _, p := range activeGame.GetHumanPlayers() {
 			if p.UserId == user.ID {
 				player = p
-				player.Client = client
-				player.IsPlayng = true
-				err := activeGame.SendGameData(socket.TypeRejoinMatch, p)
-				if err != nil {
-					app.ServerError(w, r, err)
-					return
-				}
-				player.BackgroundSocketHandlers(activeGame)
-
-				// p.AddToEgress(e)
+				break
 			}
 		}
+		player.Client = client
+		player.IsPlayng = true
 	} else { // new game
 		player = NewHumanPlayer(user.ID, client, []cards.Card{}, true)
 	}
 
-	ctx, cancel := context.WithCancel(r.Context())
+	ctx, cancel := context.WithCancel(context.Background())
 	player.Client.CancelCtx = ctx
 	player.Client.Cancel = cancel
+
+	app.ReadWriteClientInBackground(player, user)
 
 	if !wasInAGame { // wait for make match request event
 		app.BackgroundTask(func() error {
@@ -69,26 +64,32 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 				}
 			}
 		})
+	} else {
+		err := activeGame.SendGameData(socket.TypeRejoinMatch, player)
+		if err != nil {
+			app.ServerError(w, r, err)
+			return
+		}
+		player.BackgroundSocketHandlers(activeGame)
+
 	}
-	app.RunReadWriteClientInBackground(player, user)
 }
 
-func (app *ApplicationHokm4) RunReadWriteClientInBackground(player *HumanPlayer, user *sqldb.Person) {
-	app.BackgroundTask( // read messages
-		func() error {
-			defer player.Client.Cancel()
-			defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
-			defer func() {
-				if player != nil {
-					player.IsPlayng = false
-				}
-			}()
+func (app *ApplicationHokm4) ReadWriteClientInBackground(player *HumanPlayer, user *sqldb.Person) {
+	player.Client.State = socket.OPEN
+	app.BackgroundTask(func() error { // read messages
+		defer player.Client.Cancel()
+		defer app.Logger.Error(fmt.Sprintf("read disconnect %d", user.ID))
+		defer func() {
+			if player != nil {
+				player.IsPlayng = false
+			}
+		}()
 
-			return player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
-		})
+		return player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
+	})
 
 	app.BackgroundTask(func() error { // write messages
-		defer player.Client.Cancel()
 		defer func() {
 			if player != nil {
 				player.IsPlayng = false
@@ -96,6 +97,7 @@ func (app *ApplicationHokm4) RunReadWriteClientInBackground(player *HumanPlayer,
 		}()
 
 		defer func() {
+			player.Client.Cancel()
 			err := player.Client.Close()
 			if err != nil {
 				app.Logger.Error(err.Error())

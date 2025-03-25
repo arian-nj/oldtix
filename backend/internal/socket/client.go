@@ -73,7 +73,6 @@ func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
 	}()
 
 	for {
-
 		select {
 		case <-ctx.Done():
 			return nil

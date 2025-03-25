@@ -11,14 +11,14 @@ CREATE TABLE person (
   display_name TEXT,
   hashed_password TEXT NOT NULL,
   bio  text,
-  coin bigserial NOT NULL DEFAULT 0
+  coin bigserial NOT NULL
 );
 
 CREATE TABLE hokm4_game (
   id BIGSERIAL NOT NULL PRIMARY KEY,
 
-  team_one_tricks_score bigserial NOT NULL DEFAULT 0,
-  team_two_tricks_score bigserial NOT NULL DEFAULT 0
+  team_one_tricks_score bigserial NOT NULL,
+  team_two_tricks_score bigserial NOT NULL 
 );
 
 CREATE TABLE trick (
@@ -30,8 +30,8 @@ CREATE TABLE trick (
 
   hakem_index bigserial NOT NULL,
 
-  team_one_turn_score bigserial NOT NULL DEFAULT 0,
-  team_two_turn_score bigserial NOT NULL DEFAULT 0,
+  team_one_turn_score bigserial NOT NULL,
+  team_two_turn_score bigserial NOT NULL,
   
   CONSTRAINT fk_game FOREIGN KEY (game_id) REFERENCES hokm4_game(id)
 );
