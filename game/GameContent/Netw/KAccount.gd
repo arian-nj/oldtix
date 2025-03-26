@@ -13,6 +13,7 @@ var Auth_Token:String = ""
 
 ## Signals
 signal LoggedIn
+signal MeChanged
 
 # token
 func set_token(token:String)->void:
@@ -32,6 +33,7 @@ func RefetchME()->bool:
 		print_debug("can't get user data")
 		return false
 	MyAccount = me
+	MeChanged.emit()
 	return true
 
 func GetUser(user_id:String)->AccountData:

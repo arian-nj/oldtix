@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=15 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://GameContent/Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dldiq53b4j7ba" path="res://GameContent/assets/user_data_background.png" id="6_vh2g8"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
 [ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="8_700qd"]
+[ext_resource type="Texture2D" uid="uid://caedcf6ps0e6i" path="res://GameContent/assets/coin.png" id="9_xwmnj"]
 
 [sub_resource type="Resource" id="Resource_700qd"]
 script = ExtResource("8_700qd")
@@ -34,7 +35,18 @@ suit = 3
 value = 14
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_700qd"]
+bg_color = Color(0.211765, 0.168627, 0.14902, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("aspect_ration_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,6 +55,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_o2jf8")
 script = ExtResource("1_c7oo3")
+max_aspect = 1.0
+aspect_ration_container = NodePath("AspectRatioContainer")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -53,7 +67,23 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0666667, 0.0627451, 0.0666667, 1)
 
-[node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("StatusLabel", "PlayButton", "ContinueGameButton")]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 0.5455
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer"]
+layout_mode = 2
+color = Color(0.0666667, 0.0627451, 0.0666667, 1)
+
+[node name="UI" type="Control" parent="AspectRatioContainer"]
+layout_mode = 2
+
+[node name="MainMenu" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("StatusLabel", "PlayButton", "ContinueGameButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +95,7 @@ StatusLabel = NodePath("StatusLable")
 PlayButton = NodePath("PanelContainer/PlayTic2Button")
 ContinueGameButton = NodePath("PanelContainer/ContinueButton")
 
-[node name="StatusLable" type="Label" parent="MainMenu"]
+[node name="StatusLable" type="Label" parent="AspectRatioContainer/UI/MainMenu"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -75,26 +105,30 @@ offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
 
-[node name="PanelContainer" type="Control" parent="MainMenu"]
+[node name="PanelContainer" type="Control" parent="AspectRatioContainer/UI/MainMenu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -267.0
-offset_top = -136.0
-offset_right = 267.0
-offset_bottom = 136.0
+offset_left = -267.12
+offset_top = -193.0
+offset_right = 266.88
+offset_bottom = 146.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
-[node name="ContinueButton" type="Button" parent="MainMenu/PanelContainer"]
-layout_mode = 2
-offset_left = 107.0
-offset_top = 53.0
-offset_right = 423.0
-offset_bottom = 191.0
+[node name="ContinueButton" type="Button" parent="AspectRatioContainer/UI/MainMenu/PanelContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -174.0
+offset_right = 174.0
+offset_bottom = 162.0
+grow_horizontal = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
@@ -104,139 +138,226 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="PlayTic2Button" type="Button" parent="MainMenu/PanelContainer"]
+[node name="PlayTic2Button" type="Button" parent="AspectRatioContainer/UI/MainMenu/PanelContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -129.0
-offset_top = 19.0
-offset_right = 129.0
-offset_bottom = 131.0
+anchor_bottom = 1.0
+offset_left = -198.0
+offset_top = -188.0
+offset_right = 198.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 50
 text = "شروع بازی"
 icon = ExtResource("4_jcjvh")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="UserDataComponent" type="Control" parent="." node_paths=PackedStringArray("UsernameLabel", "DisplaynameLabel")]
+[node name="Cards" type="Control" parent="AspectRatioContainer/UI"]
 layout_mode = 1
-anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.2
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.2
+offset_left = -16.0
+offset_top = 156.0
+offset_right = -16.0
+offset_bottom = 156.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("4_1k8vq")
-UsernameLabel = NodePath("VBoxContainer/Username")
-DisplaynameLabel = NodePath("VBoxContainer/Displayname")
+metadata/_edit_group_ = true
 
-[node name="TextureRect" type="TextureRect" parent="UserDataComponent"]
+[node name="Card" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
+layout_mode = 1
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -85.5
+offset_top = -47.5
+offset_right = -14.5
+offset_bottom = 47.5
+grow_vertical = 2
+scale = Vector2(3, 3)
+card_data = SubResource("Resource_700qd")
+
+[node name="Card2" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
+layout_mode = 1
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -47.5
+offset_right = 35.5
+offset_bottom = 47.5
+grow_vertical = 2
+scale = Vector2(3, 3)
+card_data = SubResource("Resource_xwmnj")
+
+[node name="Card3" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
+layout_mode = 1
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.5
+offset_top = -47.5
+offset_right = 85.5
+offset_bottom = 47.5
+grow_vertical = 2
+scale = Vector2(3, 3)
+card_data = SubResource("Resource_bbm5d")
+
+[node name="Card4" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
+layout_mode = 1
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.5
+offset_top = -47.5
+offset_right = 135.5
+offset_bottom = 47.5
+grow_vertical = 2
+scale = Vector2(3, 3)
+card_data = SubResource("Resource_5cl1r")
+
+[node name="Coin" type="Control" parent="AspectRatioContainer/UI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 106.0
+offset_bottom = 106.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/UI/Coin"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_right = 87.5
+offset_bottom = 120.0
+grow_horizontal = 2
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/UI/Coin/HBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+texture = ExtResource("9_xwmnj")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/Coin/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "10"
+
+[node name="UserDataComponent" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "panel_container")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 2
+script = ExtResource("4_1k8vq")
+usernameLabel = NodePath("ProfileButton/VBoxContainer/Username")
+displaynameLabel = NodePath("ProfileButton/VBoxContainer/Displayname")
+profileButton = NodePath("ProfileButton")
+panel_container = NodePath("ProfileContainer")
+
+[node name="ProfileButton" type="Button" parent="AspectRatioContainer/UI/UserDataComponent"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -103.0
-offset_top = -119.0
-offset_right = 292.0
-offset_bottom = 162.0
+offset_left = -197.0
+offset_top = -266.0
+offset_right = 206.0
+offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(0.52, 0.44)
-texture = ExtResource("6_vh2g8")
+icon = ExtResource("6_vh2g8")
+flat = true
+expand_icon = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UserDataComponent"]
-layout_mode = 0
-offset_left = -88.0
-offset_top = -90.0
-offset_right = 85.0
-offset_bottom = -25.0
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.5
+offset_top = -48.5
+offset_right = 86.5
+offset_bottom = 48.5
+grow_horizontal = 2
+grow_vertical = 2
 alignment = 1
+metadata/_edit_group_ = true
 
-[node name="Displayname" type="Label" parent="UserDataComponent/VBoxContainer"]
+[node name="Displayname" type="Label" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 50
 text = "Arian"
 
-[node name="Username" type="Label" parent="UserDataComponent/VBoxContainer"]
+[node name="Username" type="Label" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.521141, 0.521141, 0.521141, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 30
 text = "@username"
 
-[node name="Control" type="Control" parent="."]
-anchors_preset = 0
-offset_left = 21.0
-offset_top = 148.0
-offset_right = 61.0
-offset_bottom = 188.0
-metadata/_edit_group_ = true
+[node name="ProfileContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserDataComponent"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -10.0
+offset_right = 8.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_700qd")
 
-[node name="Card" parent="Control" instance=ExtResource("7_tw3df")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 100.0
-offset_top = 0.0
-offset_right = 171.0
-offset_bottom = 95.0
-grow_horizontal = 1
-card_data = SubResource("Resource_700qd")
+[node name="ProfilePage" type="Control" parent="AspectRatioContainer/UI/UserDataComponent/ProfileContainer"]
+layout_mode = 2
 
-[node name="Card2" parent="Control" instance=ExtResource("7_tw3df")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 150.0
-offset_top = 0.0
-offset_right = 221.0
-offset_bottom = 95.0
-grow_horizontal = 1
-card_data = SubResource("Resource_xwmnj")
+[node name="Button" type="Button" parent="AspectRatioContainer/UI/UserDataComponent/ProfileContainer/ProfilePage"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -72.5
+offset_top = -66.0
+offset_right = 72.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 80
+text = "HOME"
+flat = true
 
-[node name="Card3" parent="Control" instance=ExtResource("7_tw3df")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 200.0
-offset_top = 0.0
-offset_right = 271.0
-offset_bottom = 95.0
-grow_horizontal = 1
-card_data = SubResource("Resource_bbm5d")
-
-[node name="Card4" parent="Control" instance=ExtResource("7_tw3df")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 250.0
-offset_top = 0.0
-offset_right = 321.0
-offset_bottom = 95.0
-grow_horizontal = 1
-card_data = SubResource("Resource_5cl1r")
-
-[connection signal="pressed" from="MainMenu/PanelContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
-[connection signal="pressed" from="MainMenu/PanelContainer/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/UserDataComponent/ProfileContainer/ProfilePage/Button" to="AspectRatioContainer/UI/UserDataComponent" method="_on_button_pressed"]
