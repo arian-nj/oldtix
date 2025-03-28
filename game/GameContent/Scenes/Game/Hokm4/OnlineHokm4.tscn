@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=24 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/canvas_game_tic_2.gd" id="1_i0n3b"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
+[ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_d1yw2"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
 [ext_resource type="Script" uid="uid://c2hac1kxc4hd1" path="res://GameContent/Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
 [ext_resource type="Texture2D" uid="uid://dk5ucuiithtbc" path="res://GameContent/assets/icons/home.png" id="4_youex"]
@@ -28,7 +29,7 @@ fill_from = Vector2(0.478632, 0)
 fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsoy"]
-size = Vector2(182, 115)
+size = Vector2(345, 194)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcw6q"]
 bg_color = Color(0.145098, 0.72549, 0.352941, 1)
@@ -55,23 +56,29 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
 offset_top = 2.0
+offset_right = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_i0n3b")
 ws = NodePath("WebSocket")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-anchor_mode = 0
-
-[node name="Table" type="Control" parent="." node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer")]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+ratio = 0.5455
+script = ExtResource("2_d1yw2")
+max_aspect = 0.75
+metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
+
+[node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer")]
+layout_mode = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
 me_drawer = NodePath("Hands/MeDrawCards")
@@ -79,7 +86,7 @@ right_drawer = NodePath("Hands/RightDrawCards")
 top_drawer = NodePath("Hands/TopDrawCards")
 left_drawer = NodePath("Hands/LeftDrawCards")
 
-[node name="TextureRect" type="TextureRect" parent="Table"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Table"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,7 +98,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_2hoqw")
 
-[node name="from_middle" type="Control" parent="Table"]
+[node name="from_middle" type="Control" parent="AspectRatioContainer/Table"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -103,29 +110,32 @@ offset_right = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayZone" type="StaticBody2D" parent="Table"]
-position = Vector2(219, 457)
+[node name="PlayZone" type="StaticBody2D" parent="AspectRatioContainer/Table"]
+position = Vector2(378, 899)
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Table/PlayZone"]
-position = Vector2(4, 9.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AspectRatioContainer/Table/PlayZone"]
+position = Vector2(-6, -128)
 shape = SubResource("RectangleShape2D_tmsoy")
 
-[node name="Hands" type="Control" parent="Table"]
+[node name="Hands" type="Control" parent="AspectRatioContainer/Table"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="MeDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel", "isDrawnLabel")]
+[node name="MeDrawCards" type="Control" parent="AspectRatioContainer/Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel", "isDrawnLabel")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_top = -138.0
+offset_bottom = -138.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("2_22pf8")
@@ -135,7 +145,7 @@ show_cards_value = true
 from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
-card_offset = 30.0
+card_offset = 45.0
 card_scene = ExtResource("3_8tgkb")
 two_card_movment_dur = 0.3
 flip_card_dur = 0.09
@@ -143,7 +153,7 @@ two_card_dur = 0.1
 uniqueLabel = NodePath("hand/Label")
 isDrawnLabel = NodePath("../../IsDrawnLabel")
 
-[node name="hand" type="Control" parent="Table/Hands/MeDrawCards"]
+[node name="hand" type="Control" parent="AspectRatioContainer/Table/Hands/MeDrawCards"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -157,13 +167,13 @@ offset_bottom = -106.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ColorRect" type="ColorRect" parent="Table/Hands/MeDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/Table/Hands/MeDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="Table/Hands/MeDrawCards/hand"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Table/Hands/MeDrawCards/hand"]
 layout_mode = 0
 offset_left = -2.0
 offset_top = -123.0
@@ -171,33 +181,33 @@ offset_right = 38.0
 offset_bottom = -100.0
 text = " ttttk"
 
-[node name="PlayPlace" type="Control" parent="Table/Hands/MeDrawCards"]
+[node name="PlayPlace" type="Control" parent="AspectRatioContainer/Table/Hands/MeDrawCards"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -10.0
-offset_top = -363.0
-offset_right = 30.0
-offset_bottom = -323.0
+offset_left = -32.0
+offset_top = -464.0
+offset_right = 8.0
+offset_bottom = -424.0
 
-[node name="ColorRect3" type="ColorRect" parent="Table/Hands/MeDrawCards/PlayPlace"]
+[node name="ColorRect3" type="ColorRect" parent="AspectRatioContainer/Table/Hands/MeDrawCards/PlayPlace"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="RightDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
+[node name="RightDrawCards" type="Control" parent="AspectRatioContainer/Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_22pf8")
 from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
+card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
 card_movment_dur = 0.2
 two_card_movment_dur = 0.15
@@ -206,27 +216,27 @@ two_card_dur = 0.1
 final_degree = -90.0
 uniqueLabel = NodePath("hand/Label2")
 
-[node name="hand" type="Control" parent="Table/Hands/RightDrawCards"]
+[node name="hand" type="Control" parent="AspectRatioContainer/Table/Hands/RightDrawCards"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -57.0
-offset_right = -20.0
-offset_bottom = -57.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -32.12
+offset_top = -60.0
+offset_right = -32.12
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Table/Hands/RightDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/Table/Hands/RightDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="Label2" type="Label" parent="Table/Hands/RightDrawCards/hand"]
+[node name="Label2" type="Label" parent="AspectRatioContainer/Table/Hands/RightDrawCards/hand"]
 layout_mode = 0
 offset_left = -141.0
 offset_top = -29.0
@@ -234,30 +244,33 @@ offset_right = -101.0
 offset_bottom = -6.0
 text = " "
 
-[node name="PlayPlace" type="Control" parent="Table/Hands/RightDrawCards"]
+[node name="PlayPlace" type="Control" parent="AspectRatioContainer/Table/Hands/RightDrawCards"]
 anchors_preset = 0
-offset_left = -158.0
-offset_top = -195.0
-offset_right = -118.0
-offset_bottom = -155.0
+offset_left = 502.12
+offset_top = 459.0
+offset_right = 542.12
+offset_bottom = 499.0
 
-[node name="ColorRect3" type="ColorRect" parent="Table/Hands/RightDrawCards/PlayPlace"]
+[node name="ColorRect3" type="ColorRect" parent="AspectRatioContainer/Table/Hands/RightDrawCards/PlayPlace"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TopDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
+[node name="TopDrawCards" type="Control" parent="AspectRatioContainer/Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_22pf8")
 is_horizontal = true
 from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
+card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
 card_movment_dur = 0.2
 two_card_movment_dur = 0.15
@@ -265,27 +278,22 @@ flip_card_dur = 0.09
 two_card_dur = 0.1
 uniqueLabel = NodePath("hand/Label3")
 
-[node name="hand" type="Control" parent="Table/Hands/TopDrawCards"]
+[node name="hand" type="Control" parent="AspectRatioContainer/Table/Hands/TopDrawCards"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -57.0
-offset_right = -5.0
-offset_bottom = -57.0
+offset_top = -91.0
+offset_bottom = -91.0
 grow_horizontal = 2
-grow_vertical = 0
 
-[node name="ColorRect" type="ColorRect" parent="Table/Hands/TopDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/Table/Hands/TopDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="Label3" type="Label" parent="Table/Hands/TopDrawCards/hand"]
+[node name="Label3" type="Label" parent="AspectRatioContainer/Table/Hands/TopDrawCards/hand"]
 layout_mode = 0
 offset_left = -24.0
 offset_top = 131.0
@@ -293,32 +301,37 @@ offset_right = 16.0
 offset_bottom = 154.0
 text = " "
 
-[node name="PlayPlace" type="Control" parent="Table/Hands/TopDrawCards"]
-anchors_preset = 0
-offset_left = -20.0
-offset_top = 126.0
-offset_right = 20.0
-offset_bottom = 166.0
+[node name="PlayPlace" type="Control" parent="AspectRatioContainer/Table/Hands/TopDrawCards"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 243.0
+offset_right = -6.0
+offset_bottom = 283.0
+grow_horizontal = 2
 metadata/_edit_group_ = true
 
-[node name="ColorRect2" type="ColorRect" parent="Table/Hands/TopDrawCards/PlayPlace"]
+[node name="ColorRect2" type="ColorRect" parent="AspectRatioContainer/Table/Hands/TopDrawCards/PlayPlace"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="LeftDrawCards" type="Control" parent="Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
+[node name="LeftDrawCards" type="Control" parent="AspectRatioContainer/Table/Hands" node_paths=PackedStringArray("from_middle", "hand", "play_place", "uniqueLabel")]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -14.0
-offset_right = -14.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_22pf8")
 from_middle = NodePath("../../from_middle")
 hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
+card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
 card_movment_dur = 0.2
 two_card_movment_dur = 0.15
@@ -327,27 +340,24 @@ two_card_dur = 0.1
 final_degree = -90.0
 uniqueLabel = NodePath("hand/Label4")
 
-[node name="hand" type="Control" parent="Table/Hands/LeftDrawCards"]
+[node name="hand" type="Control" parent="AspectRatioContainer/Table/Hands/LeftDrawCards"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -22.0
-offset_top = -57.0
-offset_right = -22.0
-offset_bottom = -57.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -130.88
+offset_top = -60.0
+offset_right = -130.88
+offset_bottom = -60.0
+grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Table/Hands/LeftDrawCards/hand"]
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/Table/Hands/LeftDrawCards/hand"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
-[node name="Label4" type="Label" parent="Table/Hands/LeftDrawCards/hand"]
+[node name="Label4" type="Label" parent="AspectRatioContainer/Table/Hands/LeftDrawCards/hand"]
 layout_mode = 0
 offset_left = 142.0
 offset_top = -57.0
@@ -355,26 +365,26 @@ offset_right = 182.0
 offset_bottom = -34.0
 text = " "
 
-[node name="PlayPlace" type="Control" parent="Table/Hands/LeftDrawCards"]
+[node name="PlayPlace" type="Control" parent="AspectRatioContainer/Table/Hands/LeftDrawCards"]
 anchors_preset = 0
-offset_left = 149.0
-offset_top = -190.0
-offset_right = 189.0
-offset_bottom = -150.0
+offset_left = 182.12
+offset_top = 450.0
+offset_right = 222.12
+offset_bottom = 490.0
 metadata/_edit_group_ = true
 
-[node name="ColorRect" type="ColorRect" parent="Table/Hands/LeftDrawCards/PlayPlace"]
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/Table/Hands/LeftDrawCards/PlayPlace"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="IsDrawnLabel" type="Label" parent="Table"]
+[node name="IsDrawnLabel" type="Label" parent="AspectRatioContainer/Table"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="TurnScores" type="Control" parent="Table" node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "table")]
+[node name="TurnScores" type="Control" parent="AspectRatioContainer/Table" node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "table")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -388,7 +398,7 @@ MyTeamLabel = NodePath("MyTeamLabel")
 OtherTeamLabel = NodePath("OtherTeamLabel")
 table = NodePath("..")
 
-[node name="MyTeamLabel" type="Label" parent="Table/TurnScores"]
+[node name="MyTeamLabel" type="Label" parent="AspectRatioContainer/Table/TurnScores"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -405,7 +415,7 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OtherTeamLabel" type="Label" parent="Table/TurnScores"]
+[node name="OtherTeamLabel" type="Label" parent="AspectRatioContainer/Table/TurnScores"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -418,6 +428,104 @@ grow_vertical = 2
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="WinPanel" type="Control" parent="AspectRatioContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("17_mcw6q")
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/WinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.176471, 0.176471, 0.901961)
+
+[node name="Label" type="Label" parent="AspectRatioContainer/WinPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 60
+text = "The End"
+
+[node name="TrickScore" type="Control" parent="." node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "MyTeamPanel", "OtherTeamPanel", "table")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_do6i4")
+MyTeamLabel = NodePath("PanelContainer/MyTeamPanel/MyTeamLabel")
+OtherTeamLabel = NodePath("PanelContainer/OtherTeamPanel/OtherTeamLabel")
+MyTeamPanel = NodePath("PanelContainer/MyTeamPanel")
+OtherTeamPanel = NodePath("PanelContainer/OtherTeamPanel")
+table = NodePath("../AspectRatioContainer/Table")
+
+[node name="PanelContainer" type="Control" parent="TrickScore"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 100.0
+offset_bottom = 200.0
+grow_horizontal = 2
+
+[node name="MyTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mcw6q")
+metadata/_edit_group_ = true
+
+[node name="MyTeamLabel" type="Label" parent="TrickScore/PanelContainer/MyTeamPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OtherTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 50.0
+grow_vertical = 2
+pivot_offset = Vector2(60, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_d1yw2")
+metadata/_edit_group_ = true
+
+[node name="OtherTeamLabel" type="Label" parent="TrickScore/PanelContainer/OtherTeamPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -480,133 +588,33 @@ status_label = NodePath("../../UILayer/UI/StatusLabel")
 script = ExtResource("8_ix53e")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
-table = NodePath("../../Table")
+table = NodePath("../../AspectRatioContainer/Table")
 
 [node name="wait_state" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("12_cf8qb")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
-table = NodePath("../../Table")
+table = NodePath("../../AspectRatioContainer/Table")
 
 [node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
-table = NodePath("../../Table")
+table = NodePath("../../AspectRatioContainer/Table")
 choose_hokm_scene = ExtResource("11_amrdn")
 
 [node name="game_turn" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
 script = ExtResource("12_d5oqf")
 ws = NodePath("../../WebSocket")
-table = NodePath("../../Table")
+table = NodePath("../../AspectRatioContainer/Table")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 
 [node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "win_panel", "trick_score_panel")]
 script = ExtResource("16_tmsoy")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
-table = NodePath("../../Table")
-win_panel = NodePath("../../WinPanel")
+table = NodePath("../../AspectRatioContainer/Table")
+win_panel = NodePath("../../AspectRatioContainer/WinPanel")
 trick_score_panel = NodePath("../../TrickScore")
-
-[node name="WinPanel" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("17_mcw6q")
-
-[node name="ColorRect" type="ColorRect" parent="WinPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.176471, 0.176471, 0.176471, 0.901961)
-
-[node name="Label" type="Label" parent="WinPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 60
-text = "The End"
-
-[node name="TrickScore" type="Control" parent="." node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "MyTeamPanel", "OtherTeamPanel", "table")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("6_do6i4")
-MyTeamLabel = NodePath("PanelContainer/MyTeamPanel/MyTeamLabel")
-OtherTeamLabel = NodePath("PanelContainer/OtherTeamPanel/OtherTeamLabel")
-MyTeamPanel = NodePath("PanelContainer/MyTeamPanel")
-OtherTeamPanel = NodePath("PanelContainer/OtherTeamPanel")
-table = NodePath("../Table")
-
-[node name="PanelContainer" type="Control" parent="TrickScore"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 100.0
-offset_bottom = 170.0
-grow_horizontal = 2
-
-[node name="MyTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -60.0
-offset_top = -30.5
-offset_bottom = 30.5
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_mcw6q")
-metadata/_edit_group_ = true
-
-[node name="MyTeamLabel" type="Label" parent="TrickScore/PanelContainer/MyTeamPanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="OtherTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -30.5
-offset_right = 60.0
-offset_bottom = 30.5
-grow_vertical = 2
-pivot_offset = Vector2(60, 0)
-theme_override_styles/panel = SubResource("StyleBoxFlat_d1yw2")
-metadata/_edit_group_ = true
-
-[node name="OtherTeamLabel" type="Label" parent="TrickScore/PanelContainer/OtherTeamPanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="pressed" from="UILayer/UI/HomeButton" to="." method="_on_home_button_pressed"]

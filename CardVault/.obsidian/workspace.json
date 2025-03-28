@@ -1,22 +1,20 @@
 {
   "main": {
-    "id": "a1d2e9e6e426583d",
+    "id": "5950adc3f4e6aac5",
     "type": "split",
     "children": [
       {
-        "id": "846ea063704f2c5c",
+        "id": "de8118317dd1c5eb",
         "type": "tabs",
         "children": [
           {
-            "id": "099bcd6503dbfe88",
+            "id": "7c3281cb4c75ec26",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "CardGame/Game Flow Chart.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -25,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "d3493c67010e1d42",
+    "id": "2b13f371e07d87ba",
     "type": "split",
     "children": [
       {
-        "id": "c861ef0f3aaeb34f",
+        "id": "678b151c85df4e2a",
         "type": "tabs",
         "children": [
           {
-            "id": "eee9258bbadc09e9",
+            "id": "c2c4fee34db92c0b",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -46,7 +44,7 @@
             }
           },
           {
-            "id": "112674d335c5e098",
+            "id": "dc303663b479f98e",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -63,7 +61,7 @@
             }
           },
           {
-            "id": "afff7e53608082f3",
+            "id": "1b4653670c6beb1f",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -76,23 +74,22 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 300
   },
   "right": {
-    "id": "d6c3b11fe8095e4a",
+    "id": "46ba2a3863bbe053",
     "type": "split",
     "children": [
       {
-        "id": "276a339389c858bf",
+        "id": "a80e31e7c8ce895c",
         "type": "tabs",
         "children": [
           {
-            "id": "7dfbbde0fa1b689a",
+            "id": "9c84dc8ba79ec9d5",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "6 - Main Notes/Gizmondo Story.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,46 +99,49 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Gizmondo Story"
+              "title": "Backlinks"
             }
           },
           {
-            "id": "2acb86bf2849cc65",
+            "id": "406d260001359369",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "6 - Main Notes/Gizmondo Story.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Gizmondo Story"
+              "title": "Outgoing links"
             }
           },
           {
-            "id": "3d2a88aebcd77482",
+            "id": "1224c84b1a37ebeb",
             "type": "leaf",
             "state": {
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-tags",
               "title": "Tags"
             }
           },
           {
-            "id": "54f379e6420369c3",
+            "id": "c9cd1e629f2e3a35",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "6 - Main Notes/Gizmondo Story.md"
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Gizmondo Story"
+              "title": "Outline"
             }
           }
         ]
@@ -153,59 +153,15 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:Create new drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "099bcd6503dbfe88",
-  "lastOpenFiles": [
-    "CardGame/Game Flow Chart.md",
-    "CardGame/V 1.0.0.md",
-    "CardGame/TO DO Card.md",
-    "CardGame/Release Pipe.md",
-    "CardGame/Authentication.md",
-    "CardGame/Name.md",
-    "Untitled",
-    "8 - files/Pasted image 20241217020304.png",
-    "8 - files/Pasted image 20241217021805.png",
-    "8 - files/update-state.gif",
-    "6 - Main Notes/How to use Obsidian.md",
-    "6 - Main Notes/multiplayer.md",
-    "6 - Main Notes/turn based game.md",
-    "6 - Main Notes/card-game.md",
-    "6 - Main Notes/2025-03-06.md",
-    "6 - Main Notes/Static Godot.md",
-    "6 - Main Notes/online tic-toc-toe.md",
-    "2 - Source Materials/Videos/Obsidian The King of Learning Tools.md",
-    "2 - Source Materials/Articles/Making a turn-based multiplayer game in Rust.md",
-    "CardGame/Version.md",
-    "CardGame/Self Notes.md",
-    "Excalidraw/Drawing 2024-12-26 12.52.09.excalidraw.md",
-    "Sherry.md",
-    "7 - Daily/2024-12-22.md",
-    "6 - Main Notes/Game biz.md",
-    "FileManager.md",
-    "exicle_lib/basic-shapes.excalidrawlib",
-    "exicle_lib/icons.excalidrawlib",
-    "exicle_lib/google-icons.excalidrawlib",
-    "exicle_lib/basic-ux-wireframing-elements.excalidrawlib",
-    "exicle_lib/awesome-icons.excalidrawlib",
-    "exicle_lib/forms.excalidrawlib",
-    "exicle_lib",
-    "CardGame",
-    "6 - Main Notes/Untitled 1.md",
-    "6 - Main Notes/Untitled 2.md",
-    "وکتور-آرامگاه-خیام.png",
-    "unnamed.png",
-    "8 - files",
-    "Excalidraw/Drawing 2024-12-26 13.04.57.excalidraw.md",
-    "istockphoto-96611427-612x612.jpg",
-    "Untitled.canvas",
-    "Untitled 1.canvas"
-  ]
+  "active": "7c3281cb4c75ec26",
+  "lastOpenFiles": []
 }

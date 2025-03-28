@@ -9,10 +9,10 @@ const BaseUrl:String = "localhost"
 const HttpPreUrl:String = "http://"
 const WsPreUrl:String = "ws://"
 
-const HtppUserUrl:String = HttpPreUrl + "192.168.57.205:4444"
+const HtppUserUrl:String = HttpPreUrl + "192.168.188.205:4444"
 
-const WsHokmUrl:String = WsPreUrl+"192.168.57.205:4445"
-const HttpHokmUrl:String = HttpPreUrl+"192.168.57.205:4445"
+const WsHokmUrl:String = WsPreUrl+"192.168.188.205:4445"
+const HttpHokmUrl:String = HttpPreUrl+"192.168.188.205:4445"
 
 
 ## Consts

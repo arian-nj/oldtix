@@ -88,6 +88,13 @@ func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 				p.Client.Close()
 			}
 		}()
+		for _, p := range game.GetHumanPlayers() {
+			err := game.SendGameData(socket.TypeMatchFound, p)
+			if err != nil {
+				return err
+			}
+		}
+
 		err := game.RunGame()
 		app.Logger.Error("Game Loop Ended")
 		if err != nil {
@@ -98,14 +105,6 @@ func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 }
 
 func (game *GameState) RunGame() error {
-	// choose hakem
-	for _, p := range game.GetHumanPlayers() {
-		err := game.SendGameData(socket.TypeMatchFound, p)
-		if err != nil {
-			return err
-		}
-	}
-
 	for i := range 5 { // run tricks
 		err := game.RunTrick(i)
 		if err != nil {
@@ -257,7 +256,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	if err != nil {
 		return err
 	}
-	_, err = game.sendCards(5, allCards)
+	_, err = game.sendCards(4, allCards)
 	if err != nil {
 		return err
 	}

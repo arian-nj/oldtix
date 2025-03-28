@@ -24,7 +24,6 @@ func send_event(event_type: String, event_data: String="") -> void:
 	event.type = event_type
 	event.data = event_data
 	socket.send_text(event.to_json())
-	print("sent " + event_type)
 
 # Handles incoming events (to be extended)
 func _handle_event(event: KEvent.Event) -> void:

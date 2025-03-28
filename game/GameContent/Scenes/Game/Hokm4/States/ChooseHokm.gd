@@ -34,14 +34,13 @@ func _on_new_event(e:KEvent.Event)->void:
 			ws.hold_events()
 			Transition.emit(self,"game_turn")
 
-
 	elif e.type == KEvent.TYPE_GAME_DATA:
 		table.parse_game_data(e.data)
 		status_label.text = "Hokm Choosed"
 		if choose_hokm_instance != null:
 			choose_hokm_instance.queue_free.call_deferred()
-	else:
-		print_debug(e.type)
+	# else:
+		# print_debug(e.type)
 
 
 
