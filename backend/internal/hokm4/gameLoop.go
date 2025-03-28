@@ -3,12 +3,9 @@ package hokm4
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"strconv"
 	"time"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
-	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/sqldb"
 )
@@ -77,9 +74,17 @@ func (app *ApplicationHokm4) MatchUsers() error {
 		}
 		app.Lobby.Mu.Unlock()
 
+		for _, p := range game.GetHumanPlayers() {
+			err := game.SendGameData(socket.TypeMatchFound, p)
+			if err != nil {
+				return err
+			}
+		}
+
 		app.RunGameInBackground(game)
 	}
 }
+
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 	app.BackgroundTask(func() error {
 		defer func() {
@@ -88,12 +93,6 @@ func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 				p.Client.Close()
 			}
 		}()
-		for _, p := range game.GetHumanPlayers() {
-			err := game.SendGameData(socket.TypeMatchFound, p)
-			if err != nil {
-				return err
-			}
-		}
 
 		err := game.RunGame()
 		app.Logger.Error("Game Loop Ended")
@@ -117,93 +116,6 @@ func (game *GameState) RunGame() error {
 	return game.TheEnd()
 }
 
-func (game *GameState) TheEnd() error {
-	for _, p := range game.Players {
-		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
-	}
-	// Statics
-	var winner_team Team
-	if game.TeamOneTrickScore > game.TeamTwoTrickScore {
-		winner_team = TeamOne
-	} else {
-		winner_team = TeamTwo
-	}
-
-	TeamOneTurnScores := 0
-	TeamTwoTurnScores := 0
-
-	for _, trick := range game.Tricks {
-		TeamOneTurnScores += trick.TeamOneTurnScore
-		TeamTwoTurnScores += trick.TeamTwoTurnScore
-	}
-
-	for _, humanPlayer := range game.GetHumanPlayers() {
-
-		insertStatisticsParams := sqldb.InsertHokm4StatisticParams{
-			MatchID:  game.ID,
-			PersonID: humanPlayer.UserId,
-		}
-		if humanPlayer.GetTeamID() == TeamOne {
-			insertStatisticsParams.TricksWon = game.TeamOneTrickScore
-			insertStatisticsParams.TricksLost = game.TeamTwoTrickScore
-			insertStatisticsParams.TurnsWon = TeamOneTurnScores
-			insertStatisticsParams.TurnsLost = TeamTwoTurnScores
-		} else {
-			insertStatisticsParams.TurnsWon = TeamTwoTurnScores
-			insertStatisticsParams.TurnsLost = TeamOneTurnScores
-			insertStatisticsParams.TricksWon = game.TeamTwoTrickScore
-			insertStatisticsParams.TricksLost = game.TeamOneTrickScore
-		}
-
-		insertStatisticsParams.IsWon = false
-		if winner_team == humanPlayer.GetTeamID() {
-			insertStatisticsParams.IsWon = true
-		}
-
-		err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
-		if err != nil {
-			return err
-		}
-		win := 0
-		loss := 0
-		if insertStatisticsParams.IsWon {
-			win += 1
-		} else {
-			loss += 1
-		}
-		err = game.Queries.UpdateUserStatistics(context.Background(), sqldb.UpdateUserStatisticsParams{
-			Wins:            win,
-			Losses:          loss,
-			TotalTricksWon:  insertStatisticsParams.TricksWon,
-			TotalTricksLost: insertStatisticsParams.TricksLost,
-			TotalTurnsWon:   insertStatisticsParams.TurnsWon,
-			TotalTurnsLost:  insertStatisticsParams.TurnsLost,
-			UserID:          humanPlayer.UserId,
-		})
-		if err != nil {
-			return err
-		}
-	}
-
-	time.Sleep(5 * time.Second)
-	return nil
-}
-
-func (game *GameState) DeclareHakemIndex(trick_number int) int {
-	var HakemIndex int
-	if trick_number == 0 { // if first trick
-		HakemIndex = randutils.GenerateRandomNumber(len(game.Players))
-	} else if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].GetTeamID() {
-		HakemIndex = game.CurrentTrick.HakemIndex
-		if HakemIndex < len(game.Players)-1 {
-			HakemIndex += 1
-		} else {
-			HakemIndex = 0
-		}
-	}
-	return HakemIndex
-}
-
 func (game *GameState) RunTrick(trick_number int) error {
 	var err error
 
@@ -213,9 +125,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	if err != nil {
 		return err
 	}
-
 	game.Tricks = append(game.Tricks, game.CurrentTrick)
-
 	game.CurrentTrick.TurnStarterIndex = game.CurrentTrick.HakemIndex
 
 	for _, p := range game.GetHumanPlayers() {
@@ -235,20 +145,16 @@ func (game *GameState) RunTrick(trick_number int) error {
 		return err
 	}
 
-	game.WaitToChooseHokm()                    // put hokm in game.CurrentTurn.Hokm
+	game.CurrentTrick.Hokm, err = game.WaitToChooseHokm()
+	if err != nil {
+		return err
+	}
+
 	for _, p := range game.GetHumanPlayers() { // update hokm data
 		err = game.SendGameData(socket.TypeGameData, p)
 		if err != nil {
 			return err
 		}
-	}
-	err = game.Queries.UpdateHokmTrick(context.Background(), sqldb.UpdateHokmTrickParams{
-		// Hokm:    pgtype.Int4{Int32: int32(game.CurrentTrick.Hokm), Valid: true},
-		Hokm:    int(game.CurrentTrick.Hokm),
-		TrickID: game.CurrentTrick.id,
-	})
-	if err != nil {
-		return err
 	}
 
 	// send rest of cards
@@ -260,22 +166,9 @@ func (game *GameState) RunTrick(trick_number int) error {
 	if err != nil {
 		return err
 	}
-
-	for range 13 {
-		err := game.RunTurn()
-		if err != nil {
-			return err
-		}
-		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
-			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
-				game.TeamOneTrickScore += 1
-				game.CurrentTrick.WinnerTeam = TeamOne
-			} else {
-				game.TeamTwoTrickScore += 1
-				game.CurrentTrick.WinnerTeam = TeamTwo
-			}
-			break
-		}
+	err = game.RunTurns()
+	if err != nil {
+		return err
 	}
 
 	// notify winners and end the game
@@ -297,51 +190,24 @@ func (game *GameState) RunTrick(trick_number int) error {
 	return nil
 }
 
-func (game *GameState) WaitToChooseHokm() {
-
-	hakemPlayer := game.Players[game.CurrentTrick.HakemIndex]
-	// game.Logger.Info(fmt.Sprintln("hakem is ", hakem.PlayerUnique, game.CurrentTrick.HakemIndex))
-	var choose_hokm_ticker *time.Ticker
-
-	choose_hokm_ticker = time.NewTicker(SETTING_BOT_CHOOSE_HOKM_WAIT)
-	humanHakemPlayer, ok := hakemPlayer.(*HumanPlayer)
-	if ok && humanHakemPlayer.IsPlayng {
-		choose_hokm_ticker = time.NewTicker(SETTING_PLAYER_CHOOSE_HOKM_WAIT)
-	}
-
-	defer choose_hokm_ticker.Stop()
-
-	for {
-		select {
-		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypeHokmChoosed {
-				continue
+func (game *GameState) RunTurns() error {
+	for range 13 {
+		err := game.RunTurn()
+		if err != nil {
+			return err
+		}
+		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
+			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
+				game.TeamOneTrickScore += 1
+				game.CurrentTrick.WinnerTeam = TeamOne
+			} else {
+				game.TeamTwoTrickScore += 1
+				game.CurrentTrick.WinnerTeam = TeamTwo
 			}
-			if new_game_event.Player != hakemPlayer {
-				continue
-			}
-			hokm_data := new_game_event.event.Data
-			if new_game_event.event.Data == nil {
-				game.Logger.Info("no data")
-				continue
-			}
-			hokm_int, err := strconv.Atoi(string(*hokm_data))
-			if err != nil {
-				game.Logger.Error(fmt.Sprintf("trying to set %s as hokm", string(*hokm_data)))
-				continue
-			}
-			new_hokm := cards.Suite(hokm_int)
-			game.CurrentTrick.Hokm = new_hokm
-			game.Logger.Info(fmt.Sprintf("new hokm is choosed by hakem %d ", hokm_int))
-			return
-		case <-choose_hokm_ticker.C:
-			rand_index := randutils.GenerateRandomNumber(4)
-			new_hokm := cards.AllSuits[rand_index]
-			game.CurrentTrick.Hokm = new_hokm
-			game.Logger.Info(fmt.Sprintf("new hokm is choosed by server %d ", int(new_hokm)))
-			return
+			break
 		}
 	}
+	return nil
 }
 
 func (game *GameState) RunTurn() error {
@@ -449,66 +315,74 @@ func (game *GameState) RunTurn() error {
 
 }
 
-func (game *GameState) WaitForPlayerToPlayCard(playing_player PlayerInterface) (cardIndex int, err error) {
-	playing_player.AddToEgress(socket.NewEvent(socket.TypeYourTurn, socket.EventMessage("")))
-
-	var NewTicker *time.Ticker
-	NewTicker = time.NewTicker(SETTING_BOT_PLAY_WAIT)
-
-	PlayingHumanPlayer, ok := playing_player.(*HumanPlayer)
-	if ok && PlayingHumanPlayer.IsPlayng {
-		NewTicker = time.NewTicker(SETTING_PLAYER_PLAY_WAIT)
+func (game *GameState) TheEnd() error {
+	for _, p := range game.Players {
+		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
 	}
-	var card_played cards.Card
-	cardIndex = -1
+	// Statics
+	var winner_team Team
+	if game.TeamOneTrickScore > game.TeamTwoTrickScore {
+		winner_team = TeamOne
+	} else {
+		winner_team = TeamTwo
+	}
 
-OuterLoop:
-	for {
-		select {
-		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypeTurnPlayed {
-				// app.Logger.Debug("not same type")
-				continue
-			}
-			if new_game_event.Player != playing_player {
-				// app.Logger.Debug("not same user")
-				continue
-			}
-			if new_game_event.event.Data == nil {
-				// app.Logger.Debug("data is nil")
-				continue
-			}
+	TeamOneTurnScores := 0
+	TeamTwoTurnScores := 0
 
-			err := json.Unmarshal([]byte(*new_game_event.event.Data), &card_played)
-			if err != nil {
-				// app.Logger.Debug("can't marshal")
-				game.Logger.Debug(err.Error())
-				continue
-			}
+	for _, trick := range game.Tricks {
+		TeamOneTurnScores += trick.TeamOneTurnScore
+		TeamTwoTurnScores += trick.TeamTwoTurnScore
+	}
 
-			newCardIndex, isValid := game.ValidateAndDoMove(new_game_event.Player, &card_played)
+	for _, humanPlayer := range game.GetHumanPlayers() {
 
-			// app.Logger.Debug(card_played.String())
-			if !isValid {
-				new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeInvalidPlay, socket.EventMessage("")))
-				// app.Logger.Debug("move not valid")
-				continue
-			}
-			cardIndex = newCardIndex
-			new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeValidPlay, socket.EventMessage("")))
-			break OuterLoop
+		insertStatisticsParams := sqldb.InsertHokm4StatisticParams{
+			MatchID:  game.ID,
+			PersonID: humanPlayer.UserId,
+		}
+		if humanPlayer.GetTeamID() == TeamOne {
+			insertStatisticsParams.TricksWon = game.TeamOneTrickScore
+			insertStatisticsParams.TricksLost = game.TeamTwoTrickScore
+			insertStatisticsParams.TurnsWon = TeamOneTurnScores
+			insertStatisticsParams.TurnsLost = TeamTwoTurnScores
+		} else {
+			insertStatisticsParams.TurnsWon = TeamTwoTurnScores
+			insertStatisticsParams.TurnsLost = TeamOneTurnScores
+			insertStatisticsParams.TricksWon = game.TeamTwoTrickScore
+			insertStatisticsParams.TricksLost = game.TeamOneTrickScore
+		}
 
-		case <-NewTicker.C:
-			NewTicker.Stop()
-			cardIndex = game.BotPlayTurn(playing_player.GetCards())
-			choosen_card_by_bot := playing_player.GetCards()[cardIndex]
-			data_byte, err := json.Marshal(choosen_card_by_bot)
-			if err != nil {
-				return -1, err
-			}
-			playing_player.AddToEgress(socket.NewEvent(socket.TypePlayTimeout, socket.EventMessage(data_byte)))
-			break OuterLoop
+		insertStatisticsParams.IsWon = false
+		if winner_team == humanPlayer.GetTeamID() {
+			insertStatisticsParams.IsWon = true
+		}
+
+		err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
+		if err != nil {
+			return err
+		}
+		win := 0
+		loss := 0
+		if insertStatisticsParams.IsWon {
+			win += 1
+		} else {
+			loss += 1
+		}
+		err = game.Queries.UpdateUserStatistics(context.Background(), sqldb.UpdateUserStatisticsParams{
+			Wins:            win,
+			Losses:          loss,
+			TotalTricksWon:  insertStatisticsParams.TricksWon,
+			TotalTricksLost: insertStatisticsParams.TricksLost,
+			TotalTurnsWon:   insertStatisticsParams.TurnsWon,
+			TotalTurnsLost:  insertStatisticsParams.TurnsLost,
+			UserID:          humanPlayer.UserId,
+		})
+		if err != nil {
+			return err
 		}
 	}
-	return cardIndex, nil
+
+	time.Sleep(5 * time.Second)
+	return nil
 }
