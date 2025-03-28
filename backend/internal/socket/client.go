@@ -31,19 +31,16 @@ type Client struct {
 	Cancel    context.CancelFunc
 }
 
-func (c *Client) Close() error {
-	if c.Conn != nil {
-		return c.Conn.Close()
-	}
-	return nil
-}
-
 func NewClient(conn *websocket.Conn) (*Client, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+
 	client := &Client{
 		Conn:      conn,
 		State:     OPENING,
 		Egres:     make(chan Event),
 		NewEvents: make(chan Event),
+		CancelCtx: ctx,
+		Cancel:    cancel,
 	}
 
 	err := conn.SetReadDeadline(time.Now().Add(pongWait))
@@ -65,6 +62,13 @@ func NewClient(conn *websocket.Conn) (*Client, error) {
 	})
 
 	return client, nil
+}
+
+func (c *Client) Close() error {
+	if c.Conn != nil {
+		return c.Conn.Close()
+	}
+	return nil
 }
 
 func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {

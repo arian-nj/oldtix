@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 )
 
+type EventType string
+type EventMessage string
+
 type Event struct {
 	Type EventType     `json:"type"`
 	Data *EventMessage `json:"data"`
@@ -17,6 +20,7 @@ func EventUnmarshal(d []byte) (*Event, error) {
 	}
 	return &event, nil
 }
+
 func (e *Event) GetJsonByte() ([]byte, error) {
 	data, err := json.Marshal(e)
 	if err != nil {

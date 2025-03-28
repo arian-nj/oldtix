@@ -75,7 +75,7 @@ func (app *ApplicationHokm4) MatchUsers() error {
 		app.Lobby.Mu.Unlock()
 
 		for _, p := range game.GetHumanPlayers() {
-			err := game.SendGameData(socket.TypeMatchFound, p)
+			err := game.SendGameData(TypeMatchFound, p)
 			if err != nil {
 				return err
 			}
@@ -129,7 +129,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	game.CurrentTrick.TurnStarterIndex = game.CurrentTrick.HakemIndex
 
 	for _, p := range game.GetHumanPlayers() {
-		err := game.SendGameData(socket.TypeNewTrick, p)
+		err := game.SendGameData(TypeNewTrick, p)
 		if err != nil {
 			return err
 		}
@@ -151,7 +151,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	for _, p := range game.GetHumanPlayers() { // update hokm data
-		err = game.SendGameData(socket.TypeGameData, p)
+		err = game.SendGameData(TypeGameData, p)
 		if err != nil {
 			return err
 		}
@@ -173,7 +173,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 
 	// notify winners and end the game
 	for _, p := range game.GetHumanPlayers() { // update hokm data
-		err := game.SendGameData(socket.TypeEndTrick, p)
+		err := game.SendGameData(TypeEndTrick, p)
 		if err != nil {
 			return err
 		}
@@ -216,7 +216,7 @@ func (game *GameState) RunTurn() error {
 
 	// game starts
 	for _, p := range game.GetHumanPlayers() {
-		err := game.SendGameData(socket.TypeTurnStart, p)
+		err := game.SendGameData(TypeTurnStart, p)
 		if err != nil {
 			game.Logger.Debug(err.Error())
 		}
@@ -260,7 +260,7 @@ func (game *GameState) RunTurn() error {
 			return err
 		}
 
-		turn_played_event := socket.NewEvent(socket.TypeTurnPlayed, socket.EventMessage(b_data))
+		turn_played_event := socket.NewEvent(TypeTurnPlayed, socket.EventMessage(b_data))
 		for _, player := range game.Players {
 			if player != playing_player {
 				player.AddToEgress(turn_played_event)
@@ -289,7 +289,7 @@ func (game *GameState) RunTurn() error {
 	time.Sleep(SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME)
 	// End The Turn
 	for _, p := range game.GetHumanPlayers() {
-		err := game.SendGameData(socket.TypeTurnEnd, p)
+		err := game.SendGameData(TypeTurnEnd, p)
 		if err != nil {
 			game.Logger.Debug(err.Error())
 		}
@@ -317,7 +317,7 @@ func (game *GameState) RunTurn() error {
 
 func (game *GameState) TheEnd() error {
 	for _, p := range game.Players {
-		p.AddToEgress(socket.NewEvent(socket.TypeTheEnd, socket.EventMessage("")))
+		p.AddToEgress(socket.NewEvent(TypeTheEnd, socket.EventMessage("")))
 	}
 	// Statics
 	var winner_team Team

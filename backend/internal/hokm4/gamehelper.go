@@ -124,7 +124,7 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Ca
 		if err != nil {
 			return []cards.Card{}, err
 		}
-		humanPlayer.AddToEgress(socket.NewEvent(socket.TypeNewCard, socket.EventMessage(data_byte)))
+		humanPlayer.AddToEgress(socket.NewEvent(TypeNewCard, socket.EventMessage(data_byte)))
 
 	}
 	return remaining_cards, nil
@@ -150,7 +150,7 @@ Outerloop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypeHokmChoosed {
+			if new_game_event.event.Type != TypeHokmChoosed {
 				continue
 			}
 			if new_game_event.Player != hakemPlayer {
@@ -186,7 +186,7 @@ Outerloop:
 }
 
 func (game *GameState) WaitForPlayerToPlayCard(playing_player PlayerInterface) (cardIndex int, err error) {
-	playing_player.AddToEgress(socket.NewEvent(socket.TypeYourTurn, socket.EventMessage("")))
+	playing_player.AddToEgress(socket.NewEvent(TypeYourTurn, socket.EventMessage("")))
 
 	var NewTicker *time.Ticker
 	NewTicker = time.NewTicker(SETTING_BOT_PLAY_WAIT)
@@ -202,7 +202,7 @@ OuterLoop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != socket.TypeTurnPlayed {
+			if new_game_event.event.Type != TypeTurnPlayed {
 				// app.Logger.Debug("not same type")
 				continue
 			}
@@ -226,12 +226,12 @@ OuterLoop:
 
 			// app.Logger.Debug(card_played.String())
 			if !isValid {
-				new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeInvalidPlay, socket.EventMessage("")))
+				new_game_event.Player.AddToEgress(socket.NewEvent(TypeInvalidPlay, socket.EventMessage("")))
 				// app.Logger.Debug("move not valid")
 				continue
 			}
 			cardIndex = newCardIndex
-			new_game_event.Player.AddToEgress(socket.NewEvent(socket.TypeValidPlay, socket.EventMessage("")))
+			new_game_event.Player.AddToEgress(socket.NewEvent(TypeValidPlay, socket.EventMessage("")))
 			break OuterLoop
 
 		case <-NewTicker.C:
@@ -242,7 +242,7 @@ OuterLoop:
 			if err != nil {
 				return -1, err
 			}
-			playing_player.AddToEgress(socket.NewEvent(socket.TypePlayTimeout, socket.EventMessage(data_byte)))
+			playing_player.AddToEgress(socket.NewEvent(TypePlayTimeout, socket.EventMessage(data_byte)))
 			break OuterLoop
 		}
 	}

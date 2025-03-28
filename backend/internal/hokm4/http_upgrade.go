@@ -1,7 +1,6 @@
 package hokm4
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -25,11 +24,11 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		app.ReportServerError(r, err)
 		return
 	}
-	app.Logger.Debug("new ws connection established")
+
+	app.Logger.Info("new ws connection established")
+	var player *HumanPlayer
 
 	activeGame, wasInAGame := app.Lobby.UserGames[user.ID]
-
-	var player *HumanPlayer
 
 	if wasInAGame {
 		for _, p := range activeGame.GetHumanPlayers() {
@@ -44,18 +43,14 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		player = NewHumanPlayer(user.ID, client, []cards.Card{}, true)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	player.Client.CancelCtx = ctx
-	player.Client.Cancel = cancel
-
-	app.ReadWriteClientInBackground(player, user)
+	app.RunReadWriteInBackground(player, user)
 
 	if !wasInAGame { // wait for make match request event
 		app.BackgroundTask(func() error {
 			for {
 				select {
 				case new_event := <-client.NewEvents:
-					if new_event.Type == socket.TypeMakeMatch {
+					if new_event.Type == TypeMakeMatch {
 						app.Lobby.Queue <- player
 						return nil
 					}
@@ -66,7 +61,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 			}
 		})
 	} else {
-		err := activeGame.SendGameData(socket.TypeRejoinMatch, player)
+		err := activeGame.SendGameData(TypeRejoinMatch, player)
 		if err != nil {
 			app.ServerError(w, r, err)
 			return
@@ -76,7 +71,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (app *ApplicationHokm4) ReadWriteClientInBackground(player *HumanPlayer, user *sqldb.Person) {
+func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, user *sqldb.Person) {
 	player.Client.State = socket.OPEN
 	app.BackgroundTask(func() error { // read messages
 		defer player.Client.Cancel()

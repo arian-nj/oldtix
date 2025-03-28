@@ -28,7 +28,7 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
 	if hplayer.Client != nil && hplayer.Client.State != socket.OPEN {
 		return
 	}
-	if e.Type == socket.TypeRejoinMatch {
+	if e.Type == TypeRejoinMatch {
 		log.Println("sending rejoin")
 	}
 	go func() {
@@ -45,12 +45,12 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 			select {
 			case new_event := <-hplayer.Client.NewEvents:
 				switch new_event.Type {
-				case socket.TypeGetData:
-					err := game.SendGameData(socket.TypeGameData, hplayer)
+				case TypeGetData:
+					err := game.SendGameData(TypeGameData, hplayer)
 					if err != nil {
 						return err
 					}
-				case socket.TypeGetMyCards:
+				case TypeGetMyCards:
 					var output struct {
 						NewCards []cards.Card `json:"cards"`
 					}
@@ -60,8 +60,8 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 						game.Logger.Error(err.Error())
 						continue
 					}
-					hplayer.AddToEgress(socket.NewEvent(socket.TypeGetMyCards, socket.EventMessage(data_byte)))
-				case socket.TypeDisconnect:
+					hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
+				case TypeDisconnect:
 					hplayer.Client.State = socket.CLOSED
 					hplayer.Client.Cancel()
 				default:
