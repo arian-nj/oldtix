@@ -151,7 +151,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	}
 
 	for _, p := range game.GetHumanPlayers() { // update hokm data
-		err = game.SendGameData(TypeGameData, p)
+		err = game.SendGameData(TypeNewHokm, p)
 		if err != nil {
 			return err
 		}
@@ -166,12 +166,13 @@ func (game *GameState) RunTrick(trick_number int) error {
 	if err != nil {
 		return err
 	}
+
 	err = game.RunTurns()
 	if err != nil {
 		return err
 	}
 
-	// notify winners and end the game
+	// notify winners and end the trick
 	for _, p := range game.GetHumanPlayers() { // update hokm data
 		err := game.SendGameData(TypeEndTrick, p)
 		if err != nil {
@@ -184,10 +185,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 		TeamTwoTricksScore: game.TeamTwoTrickScore,
 		ID:                 game.ID,
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (game *GameState) RunTurns() error {
@@ -222,7 +220,9 @@ func (game *GameState) RunTurn() error {
 		}
 	}
 
-	// actual game
+	// Actual game
+
+	// Playing Order
 	to_play_order := []PlayerInterface{}
 	before_ward := []PlayerInterface{}
 	after_ward := []PlayerInterface{}
@@ -246,6 +246,7 @@ func (game *GameState) RunTurn() error {
 	to_play_order = append(to_play_order, after_ward...)
 	to_play_order = append(to_play_order, before_ward...)
 
+	// Wait for each player to play
 	for _, playing_player := range to_play_order {
 		cardIndex, err := game.WaitForPlayerToPlayCard(playing_player)
 		if err != nil {
@@ -273,7 +274,7 @@ func (game *GameState) RunTurn() error {
 	}
 
 	// Decide who wins Turn
-	Winner := game.WhoWins()
+	Winner := game.WhoWinsLastTurn()
 	if Winner.Player.GetTeamID() == TeamOne {
 		game.CurrentTrick.TeamOneTurnScore += 1
 	} else {
@@ -287,6 +288,7 @@ func (game *GameState) RunTurn() error {
 	}
 
 	time.Sleep(SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME)
+
 	// End The Turn
 	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(TypeTurnEnd, p)

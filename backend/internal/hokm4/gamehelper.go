@@ -52,7 +52,7 @@ func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards
 	return cardIndex, true
 }
 
-func (game *GameState) WhoWins() *PlayerCardPlayed {
+func (game *GameState) WhoWinsLastTurn() *PlayerCardPlayed {
 
 	HokmSuite := game.CurrentTrick.Hokm
 
@@ -150,7 +150,7 @@ Outerloop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			if new_game_event.event.Type != TypeHokmChoosed {
+			if new_game_event.event.Type != TypePlayerSelectedHokm {
 				continue
 			}
 			if new_game_event.Player != hakemPlayer {

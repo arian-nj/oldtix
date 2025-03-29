@@ -11,10 +11,12 @@
             "id": "7c3281cb4c75ec26",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "type": "excalidraw",
+              "state": {
+                "file": "CardGame/Game Flow Chart.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Game Flow Chart"
             }
           }
         ]
@@ -163,5 +165,7 @@
     }
   },
   "active": "7c3281cb4c75ec26",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "CardGame/Game Flow Chart.md"
+  ]
 }

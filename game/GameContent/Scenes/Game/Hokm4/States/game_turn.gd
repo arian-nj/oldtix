@@ -5,8 +5,6 @@ extends State
 @export var table:Game4Table
 @export var status_label:Label
 
-
-
 func Enter()->void:
 	ws.new_event.connect(_on_new_event)
 	ws.open_events()
@@ -20,6 +18,11 @@ func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_TURN_START:
 		status_label.text = "Turn Started"
 		table.parse_game_data(e.data)
+		var last_card := table.last_card_played
+		if last_card != null and is_instance_valid(last_card):
+			table.me_drawer.cards.append(last_card)
+			table.me_drawer.draw_cards()
+			table.last_card_played = null
 
 	elif e.type == KEvent.TYPE_YOUR_TURN:
 		status_label.text = "Your Turn"
@@ -45,7 +48,11 @@ func _on_new_event(e:KEvent.Event)->void:
 		# print("time out " + e.data)
 		var new_card_data :CardData = JsonClassConverter.json_string_to_class(CardData,e.data)
 		var played_card := table.me_drawer.play_me_card(new_card_data)
+		if table.last_card_played != null and is_instance_valid(table.last_card_played):
+			table.me_drawer.cards.append(table.last_card_played)
+			table.me_drawer.draw_cards()
 		table.last_card_played = played_card
+
 	
 	elif e.type == KEvent.TYPE_TURN_PLAYED:
 		status_label.text = "other played a turn"

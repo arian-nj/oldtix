@@ -3,11 +3,12 @@ package hokm4
 import "github.com/arian-nj/master-card/back/internal/socket"
 
 const (
-	TypeChat        socket.EventType = "chat"
-	TypeGameData    socket.EventType = "game_data"
-	TypeGetData     socket.EventType = "get_data"
-	TypeNewCard     socket.EventType = "new_card"
-	TypeHokmChoosed socket.EventType = "hokm_choosed"
+	TypeChat               socket.EventType = "chat"
+	TypeGameData           socket.EventType = "game_data"
+	TypeGetData            socket.EventType = "get_data"
+	TypeNewCard            socket.EventType = "new_card"
+	TypePlayerSelectedHokm socket.EventType = "player_selected_hokm"
+	TypeNewHokm            socket.EventType = "new_hokm"
 
 	TypeGetMyCards socket.EventType = "get_my_cards"
 

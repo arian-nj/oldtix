@@ -28,9 +28,10 @@ func _on_new_event(e:KEvent.Event)->void:
 		# table.
 		ws.send_event(KEvent.TYPE_GET_MY_CARDS)
 	
-	elif e.type == KEvent.TYPE_GET_MY_CARDS:
+	elif e.type == KEvent.TYPE_GET_MY_CARDS: # move it to game turn
 		status_label.text = "Fetching cards"
 		table.new_cards_event(e)
+		status_label.text = "Wait for new turn"
 		Transition.emit(self,"game_turn")
 
 

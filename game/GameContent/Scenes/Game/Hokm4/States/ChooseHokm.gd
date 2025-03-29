@@ -34,7 +34,7 @@ func _on_new_event(e:KEvent.Event)->void:
 			ws.hold_events()
 			Transition.emit(self,"game_turn")
 
-	elif e.type == KEvent.TYPE_GAME_DATA:
+	elif e.type == KEvent.TYPE_NEW_HOKM:
 		table.parse_game_data(e.data)
 		status_label.text = "Hokm Choosed"
 		if choose_hokm_instance != null:
@@ -46,4 +46,4 @@ func _on_new_event(e:KEvent.Event)->void:
 
 # only runs if hakem panel is shown and hakem choosed hokm
 func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
-	ws.send_event(KEvent.TYPE_HOKM_CHOOSED,str(Hokm))
+	ws.send_event(KEvent.TYPE_PLAYER_SELECTED_HOKM,str(Hokm))
