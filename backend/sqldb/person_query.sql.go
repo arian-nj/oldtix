@@ -11,6 +11,22 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const addCoinToPerson = `-- name: AddCoinToPerson :exec
+UPDATE person
+SET coin = coin + $1
+WHERE id = $2
+`
+
+type AddCoinToPersonParams struct {
+	Coin int
+	ID   int
+}
+
+func (q *Queries) AddCoinToPerson(ctx context.Context, arg AddCoinToPersonParams) error {
+	_, err := q.db.Exec(ctx, addCoinToPerson, arg.Coin, arg.ID)
+	return err
+}
+
 const getPerson = `-- name: GetPerson :one
 SELECT id, created, username, display_name, hashed_password, bio, coin FROM person
 WHERE id = $1 LIMIT 1

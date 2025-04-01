@@ -64,10 +64,12 @@ func NewClient(conn *websocket.Conn) (*Client, error) {
 	return client, nil
 }
 
-func (c *Client) Close() error {
-	if c.Conn != nil {
-		return c.Conn.Close()
+func (client *Client) Close() error {
+	if client.Conn != nil {
+		return client.Conn.Close()
 	}
+	client.State = CLOSED
+	client.Cancel()
 	return nil
 }
 

@@ -4,19 +4,31 @@
     "type": "split",
     "children": [
       {
-        "id": "de8118317dd1c5eb",
+        "id": "72104de847a6c195",
         "type": "tabs",
         "children": [
           {
-            "id": "7c3281cb4c75ec26",
+            "id": "f16822dc8c729a22",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "CardGame/Game Flow Chart.md"
+                "file": "CardGame/V 1.0.0.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
               },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
+              "icon": "lucide-file",
+              "title": "V 1.0.0"
             }
           }
         ]
@@ -164,8 +176,13 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "7c3281cb4c75ec26",
+  "active": "f16822dc8c729a22",
   "lastOpenFiles": [
+    "CardGame/TO DO Card.md",
+    "CardGame/V 1.0.0.md",
+    "CardGame/Release Pipe.md",
+    "CardGame/Name.md",
+    "CardGame/Authentication.md",
     "CardGame/Game Flow Chart.md"
   ]
 }

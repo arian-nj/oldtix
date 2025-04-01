@@ -114,7 +114,6 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Ca
 		if !ok {
 			continue
 		}
-		game.Logger.Info("giving card to human player " + strconv.Itoa(int(humanPlayer.UserId)))
 
 		var output struct {
 			NewCards []cards.Card `json:"cards"`
@@ -167,12 +166,12 @@ Outerloop:
 				continue
 			}
 			new_hokm = cards.Suite(hokm_int)
-			game.Logger.Info(fmt.Sprintf("new hokm is choosed by hakem %d ", hokm_int))
+			// game.Logger.Info(fmt.Sprintf("new hokm is choosed by hakem %d ", hokm_int))
 			break Outerloop
 		case <-choose_hokm_ticker.C:
 			rand_index := randutils.GenerateRandomNumber(4)
 			new_hokm = cards.AllSuits[rand_index]
-			game.Logger.Info(fmt.Sprintf("new hokm is choosed by server %d ", int(new_hokm)))
+			// game.Logger.Info(fmt.Sprintf("new hokm is choosed by server %d ", int(new_hokm)))
 			break Outerloop
 		}
 	}

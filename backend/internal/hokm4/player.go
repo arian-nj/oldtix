@@ -11,8 +11,6 @@ type PlayerInterface interface {
 	// feature me remove them if you can
 	AddToEgress(e *socket.Event)
 	// PlayCard(game *GameState) (cardIndex int, err error)
-	BackgroundSocketHandlers(game *GameState)
-
 	GetTeamID() Team
 	SetTeamID(team_id Team)
 	SetCards(player_cards []cards.Card)

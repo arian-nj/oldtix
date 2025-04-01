@@ -1,6 +1,7 @@
 extends Control
 class_name SceneLevel
 
+const SharedBetAmount = "bet_amount"
 
 var level_parameters:Dictionary = {}
 

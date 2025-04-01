@@ -2,7 +2,6 @@ package hokm4
 
 import (
 	"context"
-	"sync"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -35,9 +34,9 @@ type GameState struct {
 	GameEventsCh      chan *GameEvent   `json:"-"`
 	CurrentTrick      *Trick            `json:"current_trick"`
 	Tricks            []*Trick          `json:"-"`
-
-	TeamOneTrickScore int `json:"team_one_trick_score"`
-	TeamTwoTrickScore int `json:"team_two_trick_score"`
+	BetAmount         int               `json:"-"`
+	TeamOneTrickScore int               `json:"team_one_trick_score"`
+	TeamTwoTrickScore int               `json:"team_two_trick_score"`
 }
 
 func (gs *GameState) GetHumanPlayers() (allHumanPlayers []*HumanPlayer) {
@@ -118,20 +117,5 @@ func NewPlayerCardPlayed(player PlayerInterface, card cards.Card) *PlayerCardPla
 	return &PlayerCardPlayed{
 		Player: player,
 		Card:   card,
-	}
-}
-
-type Lobby struct {
-	Queue     chan *HumanPlayer
-	UserGames map[int]*GameState
-	Mu        sync.Mutex
-}
-
-func NewLobby() *Lobby {
-	return &Lobby{
-		Queue: make(chan *HumanPlayer),
-		// Games: make(map[int]*GameState),
-		UserGames: map[int]*GameState{},
-		Mu:        sync.Mutex{},
 	}
 }

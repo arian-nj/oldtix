@@ -10,81 +10,6 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
-func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int) error {
-	_, err := game.Queries.InsertGamePlayer(context.Background(), sqldb.InsertGamePlayerParams{
-		PlayerID: player.UserId,
-		GameID:   gameId,
-		Team:     int(player.TeamId),
-	})
-	game.Players = append(game.Players, player)
-	return err
-}
-
-func (game *GameState) AddBotPlayerToGame(player *BotPlayer) {
-	game.Players = append(game.Players, player)
-}
-
-func (app *ApplicationHokm4) MatchUsers() error {
-	for {
-		game, err := app.NewGameState()
-		if err != nil {
-			return err
-		}
-
-		var foundPlayers []*HumanPlayer
-
-		for len(foundPlayers) < 2 {
-			foundPl := <-app.Lobby.Queue
-			if foundPl.Client.State != socket.OPEN {
-				continue
-			}
-			foundPl.BackgroundSocketHandlers(game)
-			foundPlayers = append(foundPlayers, foundPl)
-
-			for index, p := range foundPlayers {
-				if p.Client.State != socket.OPEN {
-					foundPlayers = append(foundPlayers[:index], foundPlayers[index+1:]...)
-				}
-			}
-		}
-
-		for _, p := range foundPlayers {
-			err = game.AddHumanPlayerToGame(p, game.ID)
-			if err != nil {
-				return err
-			}
-		}
-
-		// foundPlayer.IsPlayng = true
-
-		p3 := NewBotPlayer([]cards.Card{})
-		game.AddBotPlayerToGame(p3)
-
-		p4 := NewBotPlayer([]cards.Card{})
-		game.AddBotPlayerToGame(p4)
-
-		game.Players[0].SetTeamID(TeamOne)
-		game.Players[1].SetTeamID(TeamTwo)
-		game.Players[2].SetTeamID(TeamOne)
-		game.Players[3].SetTeamID(TeamTwo)
-
-		app.Lobby.Mu.Lock()
-		for _, p := range game.GetHumanPlayers() {
-			app.Lobby.UserGames[p.UserId] = game
-		}
-		app.Lobby.Mu.Unlock()
-
-		for _, p := range game.GetHumanPlayers() {
-			err := game.SendGameData(TypeMatchFound, p)
-			if err != nil {
-				return err
-			}
-		}
-
-		app.RunGameInBackground(game)
-	}
-}
-
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 	app.BackgroundTask(func() error {
 		defer func() {
@@ -317,10 +242,30 @@ func (game *GameState) RunTurn() error {
 
 }
 
+func (game *GameState) AddCoins(hplayer *HumanPlayer) error {
+	coin_to_add := 0
+	if game.BetAmount == 0 {
+		coin_to_add = 15
+	} else if game.BetAmount == 50 {
+		coin_to_add = 100
+	}
+
+	err := game.Queries.AddCoinToPerson(context.Background(), sqldb.AddCoinToPersonParams{
+		Coin: coin_to_add,
+		ID:   hplayer.UserId,
+	})
+	return err
+}
+
 func (game *GameState) TheEnd() error {
+	for _, p := range game.GetHumanPlayers() {
+		delete(game.Lobby.UserGames, p.UserId)
+	}
+
 	for _, p := range game.Players {
 		p.AddToEgress(socket.NewEvent(TypeTheEnd, socket.EventMessage("")))
 	}
+
 	// Statics
 	var winner_team Team
 	if game.TeamOneTrickScore > game.TeamTwoTrickScore {
@@ -358,6 +303,12 @@ func (game *GameState) TheEnd() error {
 		insertStatisticsParams.IsWon = false
 		if winner_team == humanPlayer.GetTeamID() {
 			insertStatisticsParams.IsWon = true
+		}
+		if insertStatisticsParams.IsWon {
+			err := game.AddCoins(humanPlayer)
+			if err != nil {
+				return err
+			}
 		}
 
 		err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)

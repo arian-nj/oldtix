@@ -13,6 +13,7 @@ type HumanPlayer struct {
 	UserId   int            `json:"user_id"`
 	Client   *socket.Client `json:"-"`
 	IsPlayng bool           `json:"is_playing"`
+	Game     *GameState     `json:"-"`
 }
 
 func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_playng bool) *HumanPlayer {
@@ -38,15 +39,18 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
 }
 
 // events come here if not used go to GameEventCh
-func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
+func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_amount int) { // game is nil
 
-	game.BackgroundTask(func() error {
+	app.BackgroundTask(func() error {
 		for {
 			select {
 			case new_event := <-hplayer.Client.NewEvents:
 				switch new_event.Type {
 				case TypeGetData:
-					err := game.SendGameData(TypeGameData, hplayer)
+					if hplayer.Game == nil {
+						break
+					}
+					err := hplayer.Game.SendGameData(TypeGameData, hplayer)
 					if err != nil {
 						return err
 					}
@@ -57,15 +61,32 @@ func (hplayer *HumanPlayer) BackgroundSocketHandlers(game *GameState) {
 					output.NewCards = hplayer.Cards
 					data_byte, err := json.Marshal(output)
 					if err != nil {
-						game.Logger.Error(err.Error())
+						app.Logger.Error(err.Error())
 						continue
 					}
 					hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
 				case TypeDisconnect:
-					hplayer.Client.State = socket.CLOSED
-					hplayer.Client.Cancel()
+					hplayer.Client.Close()
+				case TypeMakeMatch:
+					activeGame, wasInAGame := app.Lobby.UserGames[hplayer.UserId]
+					if wasInAGame {
+						err := activeGame.SendGameData(TypeRejoinMatch, hplayer)
+						if err != nil {
+							app.Logger.Error(err.Error())
+						}
+					} else {
+						new_match_request := NewMatchmakingRequest(hplayer)
+						if bet_amount == 0 {
+							app.Lobby.MatchmakingQueueFor0 <- new_match_request
+						} else if bet_amount == 50 {
+							app.Lobby.MatchmakingQueueFor50 <- new_match_request
+						}
+					}
 				default:
-					game.GameEventsCh <- NewGameEvent(&new_event, hplayer)
+					if hplayer.Game == nil {
+						break
+					}
+					hplayer.Game.GameEventsCh <- NewGameEvent(&new_event, hplayer)
 				}
 			case <-hplayer.Client.CancelCtx.Done():
 				return nil

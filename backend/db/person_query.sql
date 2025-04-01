@@ -19,6 +19,12 @@ UPDATE person
 SET display_name = $1
 WHERE id = $2;
 
+-- name: AddCoinToPerson :exec
+UPDATE person
+SET coin = coin + $1
+WHERE id = $2;
+
+
 -- name: UpdateUserStatistics :exec
 UPDATE user_statistic
 SET 

@@ -1,7 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://bd5brlxcojtaw"]
 
 [ext_resource type="Script" uid="uid://do4kwe8wpei4i" path="res://GameContent/Scenes/Game/Card/card.gd" id="1_tdtid"]
-[ext_resource type="Texture2D" uid="uid://gkgo5ogqcuii" path="res://GameContent/assets/cards/Back1.png" id="2_0cob8"]
 [ext_resource type="Script" uid="uid://dcfkky1f6i0pk" path="res://GameContent/Componets/ShadowTextureComponent.gd" id="3_5ropr"]
 [ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="3_py3qo"]
 [ext_resource type="Script" uid="uid://bt78as30bdywo" path="res://GameContent/Scenes/Game/Card/shader_script.gd" id="5_8njo5"]
@@ -16,6 +15,9 @@ script = ExtResource("3_py3qo")
 suit = 0
 value = 12
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_thmox"]
+load_path = "res://.godot/imported/Back1.png-5949f245c2962a3608cecd7261461a52.ctex"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_18omn"]
 resource_local_to_scene = true
@@ -61,7 +63,7 @@ offset_top = 2.66667
 offset_right = 71.0
 offset_bottom = 102.667
 mouse_filter = 2
-texture = ExtResource("2_0cob8")
+texture = SubResource("CompressedTexture2D_thmox")
 script = ExtResource("3_5ropr")
 MainObject = NodePath("..")
 

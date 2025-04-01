@@ -1,11 +1,14 @@
 extends SceneLevel
 
-@export var aspect_ration_container:CustomRatioAspectContainer
+@export var aspectRationContainer:CustomRatioAspectContainer
+@export var betPanel:BetPanel
 
 func _ready() -> void:
-	resized.connect(aspect_ration_container._on_aspect)
+	resized.connect(aspectRationContainer._on_aspect)
+	betPanel.BetAmountChoosed.connect(_on_bet_amount_choosed)
 
-func _on_play_tic_2_button_pressed() -> void:
+func _on_bet_amount_choosed(coin_amount:int)->void:
+	level_parameters[SharedBetAmount] = coin_amount
 	manager_change_scene.emit(SceneManager.Levels.GameHokm4)
 
 

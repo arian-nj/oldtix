@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=20 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://GameContent/Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
 [ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="8_700qd"]
 [ext_resource type="Texture2D" uid="uid://caedcf6ps0e6i" path="res://GameContent/assets/coin.png" id="9_xwmnj"]
+[ext_resource type="Texture2D" uid="uid://cs5roy44jbjjl" path="res://GameContent/assets/icons/cross.png" id="11_5cl1r"]
+[ext_resource type="Script" uid="uid://ufeh7ogg7h74" path="res://GameContent/Scenes/MainMenu/bet_amount_panel.gd" id="11_c1jlk"]
+[ext_resource type="Texture2D" uid="uid://dhpvdigmxwixs" path="res://GameContent/assets/bet_amount_background.png" id="13_x5g5h"]
 
 [sub_resource type="Resource" id="Resource_700qd"]
 script = ExtResource("8_700qd")
@@ -17,7 +20,7 @@ suit = 0
 value = 14
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[sub_resource type="Resource" id="Resource_c1jlk"]
+[sub_resource type="Resource" id="Resource_x5g5h"]
 resource_local_to_scene = true
 script = ExtResource("8_700qd")
 suit = 1
@@ -37,7 +40,7 @@ value = 14
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_700qd"]
-bg_color = Color(0.211765, 0.168627, 0.14902, 1)
+bg_color = Color(0.0516501, 0.0343745, 0.0274843, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -47,16 +50,29 @@ corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("aspect_ration_container")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1jlk"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.0431373, 0.0235294, 0.0196078, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("aspectRationContainer", "betPanel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("2_o2jf8")
 script = ExtResource("1_c7oo3")
-aspect_ration_container = NodePath("AspectRatioContainer")
+aspectRationContainer = NodePath("AspectRatioContainer")
+betPanel = NodePath("AspectRatioContainer/UI/BetAmountPanel")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -205,7 +221,7 @@ offset_right = 35.5
 offset_bottom = 47.5
 grow_vertical = 2
 scale = Vector2(3, 3)
-card_data = SubResource("Resource_c1jlk")
+card_data = SubResource("Resource_x5g5h")
 
 [node name="Card3" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
 layout_mode = 1
@@ -263,7 +279,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 80
 text = "10"
 
-[node name="UserDataComponent" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "panel_container")]
+[node name="UserDataComponent" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "profilePanelContainer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -277,7 +293,7 @@ script = ExtResource("4_1k8vq")
 usernameLabel = NodePath("ProfileButton/VBoxContainer/Username")
 displaynameLabel = NodePath("ProfileButton/VBoxContainer/Displayname")
 profileButton = NodePath("ProfileButton")
-panel_container = NodePath("ProfileContainer")
+profilePanelContainer = NodePath("ProfileContainer")
 
 [node name="ProfileButton" type="Button" parent="AspectRatioContainer/UI/UserDataComponent"]
 layout_mode = 1
@@ -359,9 +375,103 @@ offset_right = 72.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 80
-text = "HOME"
+text = "خونه"
 flat = true
 
+[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "secondBetButton")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_c1jlk")
+betVBoxContainer = NodePath("PanelContainer")
+playButton = NodePath("../MainMenu/PanelContainer/PlayTic2Button")
+firstBetButton = NodePath("PanelContainer/VBoxContainer2/FirstBetButton")
+secondBetButton = NodePath("PanelContainer/VBoxContainer2/SecondBetButton")
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/BetAmountPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 640.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c1jlk")
+
+[node name="Button" type="Button" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+icon = ExtResource("11_5cl1r")
+flat = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="FirstBetButton" type="Button" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+theme_override_font_sizes/font_size = 70
+icon = ExtResource("13_x5g5h")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2/FirstBetButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.5
+offset_top = -46.0
+offset_right = 121.5
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 80
+text = "0 -> 15"
+
+[node name="SecondBetButton" type="Button" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 70
+icon = ExtResource("13_x5g5h")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2/SecondBetButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -46.0
+offset_right = 168.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 80
+text = "50 -> 100"
+
+[node name="Control2" type="Control" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
 [connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
-[connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/PlayTic2Button" to="." method="_on_play_tic_2_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/PlayTic2Button" to="AspectRatioContainer/UI/BetAmountPanel" method="_on_play_tic_2_button_pressed"]
 [connection signal="pressed" from="AspectRatioContainer/UI/UserDataComponent/ProfileContainer/ProfilePage/Button" to="AspectRatioContainer/UI/UserDataComponent" method="_on_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/Button" to="AspectRatioContainer/UI/BetAmountPanel" method="_on_button_pressed"]

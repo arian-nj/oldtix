@@ -2,7 +2,7 @@ class_name ErrorBoard extends CanvasLayer
 
 static var _instance:ErrorBoard
 
-static func inst()->ErrorBoard:
+static func instanciate()->ErrorBoard:
 	if _instance == null:
 		_instance = ErrorBoard.new()
 	return _instance

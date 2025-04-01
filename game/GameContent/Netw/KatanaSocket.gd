@@ -5,10 +5,13 @@ signal new_event(e:KEvent.Event)
 var pause :bool = true
 
 var events_queue:Array[KEvent.Event] = []
+signal Disconnected
 
 # func _on_new_event(e:KEvent.Event)->void:
 # 	pass
 
+func _ready() -> void:
+	set_process(false)
 # WebSocket instance
 var socket:WebSocketPeer = WebSocketPeer.new()
 
@@ -29,13 +32,11 @@ func send_event(event_type: String, event_data: String="") -> void:
 func _handle_event(event: KEvent.Event) -> void:
 	events_queue.append(event)
 
-func _ready() -> void:
-	connect_to_game()
 
-func connect_to_game() -> void:
+func connect_to_game(coin_amount:int) -> void:
 	set_process(true)
 	print("Starting connection...")
-	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token
+	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect")
@@ -93,7 +94,8 @@ func _handle_closed_state() -> void:
 	print("WebSocket closed with code: %d, reason: %s" % [code, reason])
 	ErrorBoard._instance.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorBoard.ErrorLevel)
 	set_process(false)
-	get_tree().create_timer(1).timeout.connect(connect_to_game)
+	Disconnected.emit()
+	# get_tree().create_timer(1).timeout.connect(connect_to_game)
 	# var node_parent:Node = get_parent()
 	# if node_parent is SceneLevel:
 	# 	var scene_parent:SceneLevel = node_parent
