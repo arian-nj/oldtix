@@ -15,7 +15,6 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pascaldekloe/jwt"
 )
 
@@ -187,17 +186,7 @@ func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPassword, err := password.Hash(input.Password)
-	if err != nil {
-		app.ServerError(w, r, err)
-		return
-	}
-	_, err = app.Queries.InsertPerson(r.Context(),
-		sqldb.InsertPersonParams{
-			Username:       input.Username,
-			DisplayName:    pgtype.Text{String: input.Username, Valid: true},
-			HashedPassword: hashedPassword},
-	)
+	err = app.CreateBrandNewPerson(input.Username, input.Username, input.Password)
 	if err != nil {
 		app.ServerError(w, r, err)
 		return

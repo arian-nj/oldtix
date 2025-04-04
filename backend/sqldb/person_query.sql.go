@@ -97,6 +97,32 @@ func (q *Queries) InsertPerson(ctx context.Context, arg InsertPersonParams) (Per
 	return i, err
 }
 
+const insertUserStatistic = `-- name: InsertUserStatistic :one
+INSERT INTO user_statistic (
+  user_id
+) VALUES (
+  $1
+) 
+RETURNING id, user_id, win, lose, total_tricks_won, total_tricks_lost, total_turns_won, total_turns_lost, updated_at
+`
+
+func (q *Queries) InsertUserStatistic(ctx context.Context, userID int) (UserStatistic, error) {
+	row := q.db.QueryRow(ctx, insertUserStatistic, userID)
+	var i UserStatistic
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Win,
+		&i.Lose,
+		&i.TotalTricksWon,
+		&i.TotalTricksLost,
+		&i.TotalTurnsWon,
+		&i.TotalTurnsLost,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updatePersonDisplayName = `-- name: UpdatePersonDisplayName :exec
 UPDATE person
 SET display_name = $1
@@ -116,8 +142,8 @@ func (q *Queries) UpdatePersonDisplayName(ctx context.Context, arg UpdatePersonD
 const updateUserStatistics = `-- name: UpdateUserStatistics :exec
 UPDATE user_statistic
 SET 
-    wins = wins + $1,
-    losses = losses + $2,
+    win = win + $1,
+    lose = lose + $2,
     total_tricks_won = total_tricks_won + $3,
     total_tricks_lost = total_tricks_lost + $4,
     total_turns_won = total_turns_won + $5,
@@ -127,8 +153,8 @@ WHERE user_id = $7
 `
 
 type UpdateUserStatisticsParams struct {
-	Wins            int
-	Losses          int
+	Win             int
+	Lose            int
 	TotalTricksWon  int
 	TotalTricksLost int
 	TotalTurnsWon   int
@@ -138,8 +164,8 @@ type UpdateUserStatisticsParams struct {
 
 func (q *Queries) UpdateUserStatistics(ctx context.Context, arg UpdateUserStatisticsParams) error {
 	_, err := q.db.Exec(ctx, updateUserStatistics,
-		arg.Wins,
-		arg.Losses,
+		arg.Win,
+		arg.Lose,
 		arg.TotalTricksWon,
 		arg.TotalTricksLost,
 		arg.TotalTurnsWon,

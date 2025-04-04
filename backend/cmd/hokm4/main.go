@@ -19,12 +19,12 @@ func main() {
 
 	chiRouter := app.Hokm4Router()
 
-	app.BackgroundTask(func() error {
-		return app.MatchUsers(app.Lobby.MatchmakingQueueFor0, 0)
+	app.BackgroundTask(func() {
+		app.MatchUsers(app.Lobby.MatchmakingQueueFor0, 0)
 	})
 
-	app.BackgroundTask(func() error {
-		return app.MatchUsers(app.Lobby.MatchmakingQueueFor50, 50)
+	app.BackgroundTask(func() {
+		app.MatchUsers(app.Lobby.MatchmakingQueueFor50, 50)
 	})
 
 	err = app.ServeHTTP(chiRouter, app.Config.HTTPPort)

@@ -73,7 +73,7 @@ func (app *ApplicationHokm4) CreatePlayer(client *socket.Client, userID int, coi
 
 func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, userID int) {
 	player.Client.State = socket.OPEN
-	app.BackgroundTask(func() error { // read messages
+	app.BackgroundTask(func() { // read messages
 		defer player.Client.Close()
 		defer app.Logger.Error(fmt.Sprintf("read disconnect %d", userID))
 		defer func() {
@@ -82,10 +82,14 @@ func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, userI
 			}
 		}()
 
-		return player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
+		err := player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
+		if err != nil {
+			app.ReportError(err)
+			return
+		}
 	})
 
-	app.BackgroundTask(func() error { // write messages
+	app.BackgroundTask(func() { // write messages
 		defer func() {
 			if player != nil {
 				player.IsPlayng = false
@@ -101,6 +105,10 @@ func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, userI
 			}
 		}()
 
-		return player.Client.WriteMessage(app.Logger, player.Client.CancelCtx)
+		err := player.Client.WriteMessage(app.Logger, player.Client.CancelCtx)
+		if err != nil {
+			app.ReportError(err)
+			return
+		}
 	})
 }

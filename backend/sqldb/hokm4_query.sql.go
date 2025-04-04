@@ -43,33 +43,6 @@ func (q *Queries) InsertHokm4Game(ctx context.Context) (Hokm4Game, error) {
 	return i, err
 }
 
-const insertHokm4Statistic = `-- name: InsertHokm4Statistic :exec
-INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, match_id, person_id, tricks_won, tricks_lost, turns_won, turns_lost, is_won, created_at
-`
-
-type InsertHokm4StatisticParams struct {
-	MatchID    int
-	PersonID   int
-	TricksWon  int
-	TricksLost int
-	TurnsWon   int
-	TurnsLost  int
-	IsWon      bool
-}
-
-func (q *Queries) InsertHokm4Statistic(ctx context.Context, arg InsertHokm4StatisticParams) error {
-	_, err := q.db.Exec(ctx, insertHokm4Statistic,
-		arg.MatchID,
-		arg.PersonID,
-		arg.TricksWon,
-		arg.TricksLost,
-		arg.TurnsWon,
-		arg.TurnsLost,
-		arg.IsWon,
-	)
-	return err
-}
-
 const insertTrick = `-- name: InsertTrick :one
 INSERT INTO trick (game_id, hakem_index) VALUES ($1,$2) RETURNING trick_id, game_id, hokm, hakem_index, team_one_turn_score, team_two_turn_score
 `

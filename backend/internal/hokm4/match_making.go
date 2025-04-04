@@ -55,11 +55,12 @@ func (game *GameState) AddBotPlayerToGame(player *BotPlayer) {
 	game.Players = append(game.Players, player)
 }
 
-func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, betting_amount int) error {
+func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, betting_amount int) {
 	for {
 		game, err := app.NewGameState()
 		if err != nil {
-			return err
+			app.ReportError(err)
+			return
 		}
 		game.BetAmount = betting_amount
 
@@ -84,7 +85,8 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, be
 			p.Game = game
 			err = game.AddHumanPlayerToGame(p, game.ID)
 			if err != nil {
-				return err
+				app.ReportError(err)
+				return
 			}
 		}
 
@@ -113,11 +115,13 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, be
 				ID:   p.UserId,
 			})
 			if err != nil {
-				return err
+				app.ReportError(err)
+				return
 			}
 			err = game.SendGameData(TypeMatchFound, p)
 			if err != nil {
-				return err
+				app.ReportError(err)
+				return
 			}
 		}
 		app.RunGameInBackground(game)

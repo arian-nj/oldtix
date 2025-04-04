@@ -24,12 +24,18 @@ UPDATE person
 SET coin = coin + $1
 WHERE id = $2;
 
-
+-- name: InsertUserStatistic :one
+INSERT INTO user_statistic (
+  user_id
+) VALUES (
+  $1
+) 
+RETURNING *;
 -- name: UpdateUserStatistics :exec
 UPDATE user_statistic
 SET 
-    wins = wins + $1,
-    losses = losses + $2,
+    win = win + $1,
+    lose = lose + $2,
     total_tricks_won = total_tricks_won + $3,
     total_tricks_lost = total_tricks_lost + $4,
     total_turns_won = total_turns_won + $5,

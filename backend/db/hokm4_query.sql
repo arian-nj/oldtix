@@ -20,5 +20,5 @@ UPDATE hokm4_game SET team_one_tricks_score = $1,team_two_tricks_score=$2 WHERE 
 -- name: UpdateTurnScores :exec
 UPDATE trick SET team_one_turn_score = $1,team_two_turn_score=$2 WHERE trick_id = $3;
 
--- name: InsertHokm4Statistic :exec
-INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *;
+-- -- name: InsertHokm4Statistic :exec
+-- INSERT INTO hokm4_game_statistic (match_id,person_id,tricks_won,tricks_lost,turns_won,turns_lost,is_won) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *;

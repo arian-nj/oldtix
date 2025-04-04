@@ -11,7 +11,7 @@ import (
 )
 
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
-	app.BackgroundTask(func() error {
+	app.BackgroundTask(func() {
 		defer func() {
 			for _, p := range game.GetHumanPlayers() {
 				delete(app.Lobby.UserGames, p.UserId)
@@ -23,8 +23,9 @@ func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 		app.Logger.Error("Game Loop Ended")
 		if err != nil {
 			app.ReportError(err)
+			return
 		}
-		return err
+
 	})
 }
 
@@ -284,53 +285,41 @@ func (game *GameState) TheEnd() error {
 
 	for _, humanPlayer := range game.GetHumanPlayers() {
 
-		insertStatisticsParams := sqldb.InsertHokm4StatisticParams{
-			MatchID:  game.ID,
-			PersonID: humanPlayer.UserId,
-		}
-		if humanPlayer.GetTeamID() == TeamOne {
-			insertStatisticsParams.TricksWon = game.TeamOneTrickScore
-			insertStatisticsParams.TricksLost = game.TeamTwoTrickScore
-			insertStatisticsParams.TurnsWon = TeamOneTurnScores
-			insertStatisticsParams.TurnsLost = TeamTwoTurnScores
-		} else {
-			insertStatisticsParams.TurnsWon = TeamTwoTurnScores
-			insertStatisticsParams.TurnsLost = TeamOneTurnScores
-			insertStatisticsParams.TricksWon = game.TeamTwoTrickScore
-			insertStatisticsParams.TricksLost = game.TeamOneTrickScore
+		updateStaticsParams := sqldb.UpdateUserStatisticsParams{
+			UserID: humanPlayer.UserId,
 		}
 
-		insertStatisticsParams.IsWon = false
-		if winner_team == humanPlayer.GetTeamID() {
-			insertStatisticsParams.IsWon = true
+		if humanPlayer.GetTeamID() == TeamOne {
+			updateStaticsParams.TotalTricksWon = game.TeamOneTrickScore
+			updateStaticsParams.TotalTricksLost = game.TeamTwoTrickScore
+			updateStaticsParams.TotalTurnsWon = TeamOneTurnScores
+			updateStaticsParams.TotalTurnsLost = TeamTwoTurnScores
+		} else {
+			updateStaticsParams.TotalTurnsWon = TeamTwoTurnScores
+			updateStaticsParams.TotalTurnsLost = TeamOneTurnScores
+			updateStaticsParams.TotalTricksWon = game.TeamTwoTrickScore
+			updateStaticsParams.TotalTricksLost = game.TeamOneTrickScore
 		}
-		if insertStatisticsParams.IsWon {
+
+		if winner_team == humanPlayer.GetTeamID() {
+			updateStaticsParams.Win = 1
+		} else {
+			updateStaticsParams.Lose = 1
+		}
+
+		if updateStaticsParams.Win == 1 {
 			err := game.AddCoins(humanPlayer)
 			if err != nil {
 				return err
 			}
 		}
 
-		err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
-		if err != nil {
-			return err
-		}
-		win := 0
-		loss := 0
-		if insertStatisticsParams.IsWon {
-			win += 1
-		} else {
-			loss += 1
-		}
-		err = game.Queries.UpdateUserStatistics(context.Background(), sqldb.UpdateUserStatisticsParams{
-			Wins:            win,
-			Losses:          loss,
-			TotalTricksWon:  insertStatisticsParams.TricksWon,
-			TotalTricksLost: insertStatisticsParams.TricksLost,
-			TotalTurnsWon:   insertStatisticsParams.TurnsWon,
-			TotalTurnsLost:  insertStatisticsParams.TurnsLost,
-			UserID:          humanPlayer.UserId,
-		})
+		// err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
+		// if err != nil {
+		// 	return err
+		// }
+
+		err := game.Queries.UpdateUserStatistics(context.Background(), updateStaticsParams)
 		if err != nil {
 			return err
 		}

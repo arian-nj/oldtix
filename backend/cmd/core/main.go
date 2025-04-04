@@ -20,20 +20,8 @@ func main() {
 	}
 	app.Config.HTTPPort = 4444
 
-	// hashedPassword, err := password.Hash("arian123")
-	// if err != nil {
-	// 	return
-	// }
-
 	// for i := range 50 {
-	// 	_, err := app.Queries.InsertPerson(context.Background(), sqldb.InsertPersonParams{
-	// 		Username:       "arian" + strconv.Itoa(i),
-	// 		DisplayName:    pgtype.Text{String: "darian" + strconv.Itoa(i), Valid: true},
-	// 		HashedPassword: hashedPassword,
-	// 	})
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
+	// 	app.CreateBrandNewPerson("arian"+strconv.Itoa(i), "darian"+strconv.Itoa(i), "arian123")
 	// }
 
 	chiRouter := app.CoreRoutes()

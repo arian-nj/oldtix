@@ -22,18 +22,6 @@ type Hokm4Game struct {
 	EndStamp           pgtype.Timestamptz
 }
 
-type Hokm4GameStatistic struct {
-	ID         int
-	MatchID    int
-	PersonID   int
-	TricksWon  int
-	TricksLost int
-	TurnsWon   int
-	TurnsLost  int
-	IsWon      bool
-	CreatedAt  pgtype.Timestamp
-}
-
 type PatchVersion struct {
 	ID            int
 	Rmode         string
@@ -68,8 +56,8 @@ type Turn struct {
 type UserStatistic struct {
 	ID              int
 	UserID          int
-	Wins            int
-	Losses          int
+	Win             int
+	Lose            int
 	TotalTricksWon  int
 	TotalTricksLost int
 	TotalTurnsWon   int

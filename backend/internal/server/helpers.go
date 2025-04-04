@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (app *CommonGlobals) BackgroundTask(fn func() error) {
+func (app *CommonGlobals) BackgroundTask(fn func()) {
 	// app.wg.Add(1)
 
 	go func() {
@@ -17,9 +17,6 @@ func (app *CommonGlobals) BackgroundTask(fn func() error) {
 			}
 		}()
 
-		err := fn()
-		if err != nil {
-			app.ReportError(err)
-		}
+		fn()
 	}()
 }

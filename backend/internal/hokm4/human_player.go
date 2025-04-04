@@ -41,7 +41,7 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
 // events come here if not used go to GameEventCh
 func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_amount int) { // game is nil
 
-	app.BackgroundTask(func() error {
+	app.BackgroundTask(func() {
 		for {
 			select {
 			case new_event := <-hplayer.Client.NewEvents:
@@ -52,7 +52,8 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_
 					}
 					err := hplayer.Game.SendGameData(TypeGameData, hplayer)
 					if err != nil {
-						return err
+						app.ReportError(err)
+						return
 					}
 				case TypeGetMyCards:
 					var output struct {
@@ -89,7 +90,7 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_
 					hplayer.Game.GameEventsCh <- NewGameEvent(&new_event, hplayer)
 				}
 			case <-hplayer.Client.CancelCtx.Done():
-				return nil
+				return
 			}
 		}
 	})
