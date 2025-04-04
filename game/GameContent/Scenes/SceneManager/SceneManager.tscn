@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cp42g4to36wr" path="res://GameContent/Scenes/SceneManager/CheckErrors.gd" id="1_8htr5"]
 [ext_resource type="Script" uid="uid://doc3jv3q07w3o" path="res://GameContent/Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
-[ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://GameContent/Scenes/Loading/loading.tscn" id="2_2qq82"]
+[ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://GameContent/Scenes/Loading/LoginMenu.tscn" id="2_2qq82"]
 [ext_resource type="PackedScene" uid="uid://0t55dgj7g3jk" path="res://GameContent/Scenes/ErrorBoard/error_board.tscn" id="3_mv5ew"]
 
 [sub_resource type="Animation" id="Animation_qoiuy"]

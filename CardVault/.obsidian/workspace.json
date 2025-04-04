@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "72104de847a6c195",
+        "id": "5ba5cce8c9159300",
         "type": "tabs",
         "children": [
           {
-            "id": "f16822dc8c729a22",
+            "id": "df0c19167d56ab38",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -176,13 +176,14 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "f16822dc8c729a22",
+  "active": "df0c19167d56ab38",
   "lastOpenFiles": [
-    "CardGame/TO DO Card.md",
+    "6 - Main Notes/Coin.md",
+    "CardGame/Game Flow Chart.md",
     "CardGame/V 1.0.0.md",
-    "CardGame/Release Pipe.md",
-    "CardGame/Name.md",
+    "CardGame/TO DO Card.md",
     "CardGame/Authentication.md",
-    "CardGame/Game Flow Chart.md"
+    "CardGame/Name.md",
+    "CardGame/Release Pipe.md"
   ]
 }

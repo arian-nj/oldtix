@@ -13,7 +13,6 @@ func main() {
 		log.Panic(err)
 	}
 	defer poll.Close()
-
 	app := core_api.NewApiApplication(globalStructs)
 	if app.ReleaseMode == "" {
 		globalStructs.Logger.Error("RELEASE_MODE is empty")

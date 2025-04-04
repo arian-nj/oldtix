@@ -26,7 +26,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 
 	tmpValidator.CheckField(validator.In(coin_amount_int, validBetAmounts...), "coin_amount", "this amount is not allowed")
 
-	tmpValidator.CheckField(coin_amount_int >= user.Coin, "coin_amount", "don't have enough coins")
+	tmpValidator.CheckField(coin_amount_int <= user.Coin, "coin_amount", "don't have enough coins")
 
 	if tmpValidator.HasErrors() {
 		app.FailedValidation(w, r, tmpValidator)

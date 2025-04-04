@@ -1,0 +1,209 @@
+[gd_scene load_steps=4 format=3 uid="uid://diswtcr1glloo"]
+
+[ext_resource type="Script" uid="uid://c03bodhrlnldf" path="res://GameContent/Scenes/Loading/LoginMenu_canvas.gd" id="1_f2nl5"]
+[ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_ipa2s"]
+
+[sub_resource type="GDScript" id="GDScript_p4t1s"]
+script/source = "extends PanelContainer
+
+@export var usernameField:LineEdit
+@export var passwordField:LineEdit
+
+func _ready()->void:
+	var r:int = randi()%50
+	usernameField.text += str(r)
+	# _on_login_button_pressed()
+
+func _on_register_button_pressed() -> void:
+	var username:String = usernameField.text
+	var password:String = passwordField.text
+
+	var json_data:Dictionary = {
+		\"username\":username,
+		\"password\":password,
+	}
+	var json_data_string:String = JSON.stringify(json_data)
+
+	var http_req:HTTPRequest = HTTPRequest.new()
+	add_child(http_req)
+	http_req.request_completed.connect(_on_register_request_completed)
+
+	var err:int = http_req.request(Katana.RegisterUrl,[],HTTPClient.METHOD_POST,json_data_string)
+	if err != OK:
+		print_debug(err)
+		ErrorBoard._instance.new_error(\"error sending register request\",ErrorBoard.ErrorLevel)
+
+	await http_req.request_completed
+	http_req.queue_free()
+
+func _on_register_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
+	if response_code == HTTPClient.RESPONSE_CREATED:
+		ErrorBoard._instance.new_error(\"account registered\",ErrorBoard.SuccessLevel)
+	elif response_code == HTTPClient.RESPONSE_UNPROCESSABLE_ENTITY:
+		var body_content:Variant = JSON.parse_string(body.get_string_from_utf8())
+		if body_content.has(\"FieldErrors\"):
+			for k:String in body_content[\"FieldErrors\"]:
+				ErrorBoard._instance.new_error(body_content[\"FieldErrors\"][k],ErrorBoard.InfoLevel)
+
+	else:
+		ErrorBoard._instance.new_error(\"failed register\",ErrorBoard.ErrorLevel)
+		print_debug(str(_result)+\" \" + str(response_code),\" \",body.get_string_from_utf8())
+
+
+func _on_login_button_pressed() -> void:
+	var username:String = usernameField.text
+	var password:String = passwordField.text
+
+	var json_data:Dictionary = {
+		\"username\":username,
+		\"password\":password,
+	}
+	var json_data_strin:String = JSON.stringify(json_data)
+
+	var http_req:HTTPRequest = HTTPRequest.new()
+	add_child(http_req)
+	http_req.request_completed.connect(_on_token_request_completed)
+
+	var err:int = http_req.request(Katana.TokenUrl,[],HTTPClient.METHOD_POST,json_data_strin)
+	if err != OK:
+		print_debug(err)
+		
+		ErrorBoard._instance.new_error(\"error sending login request\",ErrorBoard.ErrorLevel)
+	
+	await http_req.request_completed
+	http_req.queue_free()
+
+
+func _on_token_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
+	if response_code == HTTPClient.RESPONSE_OK:
+		ErrorBoard._instance.new_error(\"You're In\",ErrorBoard.SuccessLevel)
+		var tokenBodyJson :Variant = JSON.parse_string(body.get_string_from_utf8())
+		var new_token:String = tokenBodyJson[\"AuthenticationToken\"]	
+		KAccount._instance.set_token(new_token)
+		self.visible = false
+
+	elif response_code == HTTPClient.RESPONSE_UNPROCESSABLE_ENTITY:
+		var body_content:Variant = JSON.parse_string(body.get_string_from_utf8())
+		if body_content.has(\"FieldErrors\"):
+			for k:String in body_content[\"FieldErrors\"]:
+				ErrorBoard._instance.new_error(body_content[\"FieldErrors\"][k],ErrorBoard.InfoLevel)
+
+	else:
+		ErrorBoard._instance.new_error(\"failed login\",ErrorBoard.ErrorLevel)
+		print_debug(str(_result)+\" \" + str(response_code),\" \",body.get_string_from_utf8())
+"
+
+[node name="LoginMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f2nl5")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.395259, 0.382124, 0.395254, 1)
+
+[node name="CustomRatioAspectContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 0.5455
+script = ExtResource("2_ipa2s")
+metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
+
+[node name="ColorRect" type="ColorRect" parent="CustomRatioAspectContainer"]
+layout_mode = 2
+color = Color(0.0666667, 0.0627451, 0.0666667, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomRatioAspectContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="CustomRatioAspectContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CustomRatioAspectContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Control" type="Control" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoginPanel" type="PanelContainer" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("usernameField", "passwordField")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.0
+script = SubResource("GDScript_p4t1s")
+usernameField = NodePath("MarginContainer/VBoxContainer/UsernameLineEdit")
+passwordField = NodePath("MarginContainer/VBoxContainer/PassLineEdit")
+
+[node name="ColorRect" type="ColorRect" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel"]
+layout_mode = 2
+color = Color(0.8, 0.776471, 0.729412, 0.317647)
+
+[node name="MarginContainer" type="MarginContainer" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="UsernameLineEdit" type="LineEdit" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "arian"
+placeholder_text = "Username"
+
+[node name="PassLineEdit" type="LineEdit" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "arian123"
+placeholder_text = "Password"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="RegisterButton" type="Button" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "Register"
+
+[node name="LoginButton" type="Button" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "Login"
+
+[node name="Control2" type="Control" parent="CustomRatioAspectContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="CustomRatioAspectContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="pressed" from="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/HBoxContainer/RegisterButton" to="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel" method="_on_register_button_pressed"]
+[connection signal="pressed" from="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/HBoxContainer/LoginButton" to="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel" method="_on_login_button_pressed"]

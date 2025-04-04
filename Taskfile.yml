@@ -60,10 +60,11 @@ tasks:
     desc: export game content as pck
     dir: ./game
     cmds:
-      - rm -f ./files/patches/*.pck
+      - mkdir -p ../files/patches/
+      - rm -f ../files/patches/*.pck
       - ~/Godot_v4.4-stable_linux.x86_64 --headless --export-pack AndroidPck ../files/patches/system.pck
 
-  upload_s3:
+  upload_s3_dev:
     desc: upload new version to s3
     dir: ./backend/tools/gos3
     cmds:

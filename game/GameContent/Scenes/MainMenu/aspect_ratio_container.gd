@@ -1,7 +1,7 @@
 class_name CustomRatioAspectContainer extends AspectRatioContainer
 
 
-@export var max_aspect:float
+@export var max_aspect:float = 0.75
 
 func _ready() -> void:
 	_on_aspect()

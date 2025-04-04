@@ -15,6 +15,10 @@ run/main_scene="uid://b5crye8ert6gb"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://GameContent/icon.svg"
 
+[autoload]
+
+GodotPlayGameServices="*res://addons/GodotPlayGameServices/scripts/autoloads/godot_play_game_services.gd"
+
 [debug]
 
 gdscript/warnings/unused_variable=2
@@ -29,6 +33,10 @@ window/size/always_on_top=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotPlayGameServices/plugin.cfg")
 
 [input_devices]
 

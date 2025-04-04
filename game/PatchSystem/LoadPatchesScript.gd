@@ -1,95 +1,91 @@
 extends CanvasLayer
 
-@export var status_label:Label
+@export var oldVersionLabel:Label
+@export var newVersionLabel:Label
+@export var downloadProgressBar:DownloadProgressBar
+@export var errorBorad:LPError
 
 var server_url := "http://192.168.188.205:4444"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
 func _ready() -> void:
-	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-	var err := config.load(patch_user_config_address)
-	if err != OK:
-		err = config.save(patch_user_config_address)
-		if err != OK:
-			return
+	errorBorad.TryAgain.connect(do_request)
+	do_request()
 
-	var new_version_string:String = await check_version()
-	if new_version_string == "":
-		print_debug("version is empty")
-		return
-	print(new_version_string)
-	var old_version :String = config.get_value("player", "version","0.0.0")
-	config.set_value("player", "version", new_version_string)
+func do_request()->void:
+	var err := await get_newest_version()
+	if err != "":
+		pass
+		errorBorad.new_error(err)
+	
+func get_newest_version()-> String:
+	
+	downloadProgressBar.indeterminate = true
+	newVersionLabel.visible = false
+	# get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 
-	if new_version_string != old_version:
+	var ov_result := get_local_version()
+	var old_version_string:String = ov_result[0]
+	var err:String = ov_result[1]
+
+	if err != "":
+		return err
+
+	oldVersionLabel.text = "V " + old_version_string
+
+	var nv_result := await get_latest_version_number()
+	var new_version_string:String = nv_result[0]
+	err = nv_result[1]
+
+	if err != "":
+		return err
+		
+	if new_version_string != old_version_string:
 		print("downloading new version")
-		var dl_success := await download("https://cgame.storage.c2.liara.space/patches/dev/GameContentV_"+new_version_string+".pck")
-		if !dl_success:
-			print_debug("download failed")
-			return
-		print("download success")	
+		downloadProgressBar.indeterminate = false
+
+		newVersionLabel.text = "V " + new_version_string
+		newVersionLabel.visible = true
+		
+		var domain := "cgame.storage.c2.liara.space"
+		var pack_url := "/patches/dev/GameContentV_"+new_version_string+".pck"
+		err = await downloadProgressBar.start_downloading(domain,pack_url)
+		if err != "":
+			return err
 	
 	var success := ProjectSettings.load_resource_pack("user://system.pck")
 	if !success:
 		print_debug("loading failed")
-		return
+		return "can't load resource pack"
+	config.save(patch_user_config_address)
 	var change_success := get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 	if change_success != OK:
 		print_debug("change scene failed")
-		return
-	config.save(patch_user_config_address)
+		return "changing scene failed"
+	return ""
 
-
-func download(link:String)->bool:
-	var http_req := HTTPRequest.new()
-	add_child(http_req)
-	var request := http_req.request(link)
-	if request != OK:
-		print_debug("Http request error")
-	status_label.text = "waiting"
-	var response :Variant = await http_req.request_completed
-	var result: int = response[0]
-	var response_code: int = response[1]
-	# var _headers: PackedStringArray = response[2]
-	var body: PackedByteArray = response[3]
-	
-	if result != HTTPRequest.RESULT_SUCCESS:
-		print_debug(result)
-	
-	if response_code != HTTPClient.RESPONSE_OK:
-		print_debug(response_code)
-		return false
-	
-	var f := FileAccess.open("user://system.pck",FileAccess.WRITE)
-	f.store_buffer(body)
-	f.close()
-	return true
-	
-	
-
-func check_version() -> String:
+func get_latest_version_number() -> Array:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
+	http_req_node.timeout = 5
 	self.add_child(http_req_node)
 	
 	var err := http_req_node.request(server_url+"/version",PackedStringArray(),HTTPClient.METHOD_GET)
 	
 	if err != OK:
-		print_debug("error code not ok ",err)
-		return ""
+		return ["","can't connect to server"]
 	
 	var response:Variant = await http_req_node.request_completed
 	http_req_node.queue_free()
 
 	var result:int = response[0]
 	if result != OK:
-		print_debug("result code not ok ",result)
+		return ["","result is not ok " + str(result)]
 	
 	var response_code:int = response[1]
 	if response_code != HTTPClient.RESPONSE_OK:
-		print_debug("response code not ok ",response_code)
-		return ""
-	
+		return ["","response is not ok " + str(response_code)
+]	
 	# var _headers = response[2] # <-- not used
 	
 	var body_byte:PackedByteArray = response[3]
@@ -97,7 +93,16 @@ func check_version() -> String:
 	var nj := JSON.new()
 	if nj.parse(body_string) != OK:
 		print_debug("can't parse")
-		return ""
+		return ["","can't parse version request body"]
 	var version_string:String =  nj.data.get("version")
-	return version_string
-	
+	return [version_string,""]
+
+func get_local_version()->Array:
+	var load_err := config.load(patch_user_config_address)
+	if load_err != OK:
+		load_err = config.save(patch_user_config_address)
+		if load_err != OK:
+			return ["","can't save file code "+str(load_err)]
+
+	var old_version :String = config.get_value("player", "version","0.0.0")
+	return [old_version,""]

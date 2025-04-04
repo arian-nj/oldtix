@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
 [ext_resource type="Script" uid="uid://c2hac1kxc4hd1" path="res://GameContent/Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
 [ext_resource type="Texture2D" uid="uid://i4q2pr8oxlov" path="res://GameContent/assets/icons/home.png" id="4_youex"]
-[ext_resource type="Script" uid="uid://ea2nqkryih34" path="res://GameContent/Netw/KatanaSocket.gd" id="5_48k1w"]
+[ext_resource type="Script" uid="uid://ea2nqkryih34" path="res://GameContent/Katana/KatanaSocket.gd" id="5_48k1w"]
 [ext_resource type="Script" uid="uid://saluitmh1llq" path="res://GameContent/Scenes/Game/Hokm4/TurnScores.gd" id="5_bwnrb"]
 [ext_resource type="Script" uid="uid://ggywgqynjdcr" path="res://GameContent/Scenes/Game/Hokm4/TrickScore.gd" id="6_do6i4"]
 [ext_resource type="Script" uid="uid://coue7g2pwtieo" path="res://GameContent/Scenes/States/state_machine.gd" id="6_rcy6w"]
@@ -74,7 +74,6 @@ grow_horizontal = 2
 grow_vertical = 2
 ratio = 0.5455
 script = ExtResource("2_d1yw2")
-max_aspect = 0.75
 metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
 
 [node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer")]

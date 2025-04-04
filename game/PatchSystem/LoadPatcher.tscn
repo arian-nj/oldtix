@@ -1,0 +1,129 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5crye8ert6gb"]
+
+[ext_resource type="Script" uid="uid://cw5df7u6sqlw8" path="res://PatchSystem/LoadPatchesScript.gd" id="1_ylikw"]
+[ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_4t5hd"]
+[ext_resource type="Script" uid="uid://c8yhikus38yc" path="res://PatchSystem/download_progress_control.gd" id="3_g0i2y"]
+[ext_resource type="Script" uid="uid://be2vor2nor6hu" path="res://PatchSystem/LPEroorScript.gd" id="4_574je"]
+[ext_resource type="Texture2D" uid="uid://b16527gy3pryc" path="res://PatchSystem/LoadPatcherreturn.png" id="5_hopgu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_574je"]
+bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+
+[node name="LoadPatcher" type="CanvasLayer" node_paths=PackedStringArray("oldVersionLabel", "newVersionLabel", "downloadProgressBar", "errorBorad")]
+script = ExtResource("1_ylikw")
+oldVersionLabel = NodePath("CustomRatioAspectContainer/VBoxContainer/VersionsLabel/OldVersionLabel")
+newVersionLabel = NodePath("CustomRatioAspectContainer/VBoxContainer/VersionsLabel/NewVersionLabel")
+downloadProgressBar = NodePath("CustomRatioAspectContainer/VBoxContainer/ProgressControl/ProgressBar")
+errorBorad = NodePath("CustomRatioAspectContainer/VBoxContainer/LPErrorControl")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.395259, 0.382124, 0.395254, 1)
+
+[node name="CustomRatioAspectContainer" type="AspectRatioContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 0.5455
+script = ExtResource("2_4t5hd")
+metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
+
+[node name="ColorRect" type="ColorRect" parent="CustomRatioAspectContainer"]
+layout_mode = 2
+color = Color(0.0666667, 0.0627451, 0.0666667, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomRatioAspectContainer"]
+layout_mode = 2
+
+[node name="VersionsLabel" type="Control" parent="CustomRatioAspectContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NewVersionLabel" type="Label" parent="CustomRatioAspectContainer/VBoxContainer/VersionsLabel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -94.0
+offset_top = -83.0
+offset_right = 94.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "V 0.0.0"
+
+[node name="OldVersionLabel" type="Label" parent="CustomRatioAspectContainer/VBoxContainer/VersionsLabel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -157.0
+offset_bottom = 69.0
+grow_horizontal = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 0.536163, 0.471334, 1)
+theme_override_font_sizes/font_size = 50
+text = "V 0.0.0"
+
+[node name="ProgressControl" type="Control" parent="CustomRatioAspectContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="CustomRatioAspectContainer/VBoxContainer/ProgressControl"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -43.5
+offset_bottom = 43.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 60
+script = ExtResource("3_g0i2y")
+
+[node name="LPErrorControl" type="Control" parent="CustomRatioAspectContainer/VBoxContainer" node_paths=PackedStringArray("lpErrorPanelContainer", "reTryButton", "errorsLabel")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("4_574je")
+lpErrorPanelContainer = NodePath("LPErrorPanelContainer")
+reTryButton = NodePath("LPErrorPanelContainer/VBoxContainer/ReTryButton")
+errorsLabel = NodePath("LPErrorPanelContainer/VBoxContainer/Label")
+
+[node name="LPErrorPanelContainer" type="PanelContainer" parent="CustomRatioAspectContainer/VBoxContainer/LPErrorControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_574je")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomRatioAspectContainer/VBoxContainer/LPErrorControl/LPErrorPanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CustomRatioAspectContainer/VBoxContainer/LPErrorControl/LPErrorPanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_font_sizes/font_size = 35
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReTryButton" type="Button" parent="CustomRatioAspectContainer/VBoxContainer/LPErrorControl/LPErrorPanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 30
+icon = ExtResource("5_hopgu")
+icon_alignment = 1
+expand_icon = true

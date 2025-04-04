@@ -120,6 +120,7 @@ func FolderPathFromVersion(mode version.ReleasModes) string {
 }
 
 func FilePathFromVersion(v string, mode version.ReleasModes) string {
+	log.Println(v)
 	return fmt.Sprintf("%sGameContentV_%s.pck", FolderPathFromVersion(mode), v)
 }
 
