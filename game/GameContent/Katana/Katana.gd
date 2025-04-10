@@ -19,8 +19,10 @@ const HttpHokmUrl:String = HttpPreUrl+"192.168.188.205:4445"
 const RegisterUrl:String = HtppUserUrl + "/register"
 const TokenUrl:String = HtppUserUrl + "/token"
 
-const UserUrl:String = HtppUserUrl + "/get/"
+const PersonUrl:String = HtppUserUrl + "/person/"
 const MeUrl:String = HtppUserUrl + "/me"
 const StatusUrl:String = HtppUserUrl + "/status"
+const PersonStatisticsAfter = "/stat"
 
 const ActiveGameUrl:String = HttpHokmUrl + "/active_game"
+

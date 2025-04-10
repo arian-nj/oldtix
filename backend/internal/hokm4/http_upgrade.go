@@ -2,6 +2,7 @@ package hokm4
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -15,21 +16,29 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 	user := server.ContextGetAuthenticatedUser(r)
 
 	// Coin Amount
-	tmpValidator := validator.Validator{}
 	coin_amount_string := r.URL.Query().Get("coin_amount")
-	tmpValidator.CheckField(coin_amount_string != "", "coin_amount", "not provided")
 	coin_amount_int, err := strconv.Atoi(coin_amount_string)
 	if err != nil {
-		app.Logger.Error("error in parsing coin amount " + err.Error())
+		app.BadRequest(w, r, err)
+		return
 	}
+
+	tmpValidator := validator.Validator{}
+	tmpValidator.CheckField(coin_amount_string != "", "coin_amount", "not provided")
+
 	tmpValidator.CheckField(err == nil, "coin_amount", "not a valid number")
 
 	tmpValidator.CheckField(validator.In(coin_amount_int, validBetAmounts...), "coin_amount", "this amount is not allowed")
 
 	tmpValidator.CheckField(coin_amount_int <= user.Coin, "coin_amount", "don't have enough coins")
 
+	// if user.Coin >= BET_AMOUNT_ONE {
+	// 	tmpValidator.CheckField(coin_amount_int != BET_NO_MONEY, "coin_amount", "you can't play a free game")
+	// }
+
 	if tmpValidator.HasErrors() {
 		app.FailedValidation(w, r, tmpValidator)
+		log.Println(tmpValidator.Errors)
 		return
 	}
 
@@ -45,10 +54,13 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		app.ReportServerError(r, err)
 		return
 	}
-	app.CreatePlayer(client, user.ID, coin_amount_int)
+	hplayer := app.CreatePlayer(client, user.ID, coin_amount_int)
+	app.RunReadWriteInBackground(hplayer)
+	app.Logger.Info("new ws connection established " + strconv.Itoa(coin_amount_int))
+	app.BackgroundSocketHandlers(hplayer, coin_amount_int)
 }
 
-func (app *ApplicationHokm4) CreatePlayer(client *socket.Client, userID int, coin_amount int) {
+func (app *ApplicationHokm4) CreatePlayer(client *socket.Client, userID int, coin_amount int) *HumanPlayer {
 	var player *HumanPlayer
 
 	activeGame, wasInAGame := app.Lobby.UserGames[userID]
@@ -65,17 +77,15 @@ func (app *ApplicationHokm4) CreatePlayer(client *socket.Client, userID int, coi
 	} else { // new game
 		player = NewHumanPlayer(userID, client, []cards.Card{}, true)
 	}
+	return player
 
-	app.RunReadWriteInBackground(player, userID)
-	app.Logger.Info("new ws connection established")
-	app.BackgroundSocketHandlers(player, coin_amount)
 }
 
-func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, userID int) {
+func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer) {
 	player.Client.State = socket.OPEN
 	app.BackgroundTask(func() { // read messages
 		defer player.Client.Close()
-		defer app.Logger.Error(fmt.Sprintf("read disconnect %d", userID))
+		defer app.Logger.Error(fmt.Sprintf("read disconnect %d", player.UserId))
 		defer func() {
 			if player != nil {
 				player.IsPlayng = false
@@ -101,7 +111,7 @@ func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer, userI
 			if err != nil {
 				app.Logger.Error(err.Error())
 			} else {
-				app.Logger.Error(fmt.Sprintf("write disconnect %d", userID))
+				app.Logger.Error(fmt.Sprintf("write disconnect %d", player.UserId))
 			}
 		}()
 

@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"runtime/debug"
 )
 
 func (app *CommonGlobals) BackgroundTask(fn func()) {
@@ -11,9 +12,10 @@ func (app *CommonGlobals) BackgroundTask(fn func()) {
 		// defer app.wg.Done()
 
 		defer func() {
-			err := recover()
-			if err != nil {
-				app.ReportError(fmt.Errorf("%s", err))
+			r := recover()
+			if r != nil {
+				app.Logger.Error("Recovered: " + fmt.Sprintln(r))
+				debug.PrintStack()
 			}
 		}()
 

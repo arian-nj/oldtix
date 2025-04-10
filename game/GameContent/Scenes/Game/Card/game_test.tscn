@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="1_0mwao"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="2_kp8tw"]
-[ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/ChooseHokm/choose_hokm.tscn" id="3_y8ftj"]
+[ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/choose_hokm.tscn" id="3_y8ftj"]
 
 [sub_resource type="Gradient" id="Gradient_0evr3"]
 offsets = PackedFloat32Array(0, 0.540084, 1)

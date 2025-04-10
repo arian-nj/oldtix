@@ -171,7 +171,9 @@ func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false) -> void:
 		var card: Card = cards[i]
 
 		# Update tree order to correctly handle input and render order.
-		remove_child(card)
+		if is_instance_valid(card) and card and card.get_parent() == self:
+			remove_child(card)
+		
 		add_child(card)
 
 		# Compute the final position for this card.

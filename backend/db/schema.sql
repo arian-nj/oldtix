@@ -11,26 +11,26 @@ CREATE TABLE person (
   display_name TEXT,
   hashed_password TEXT NOT NULL,
   bio  text,
-  coin BIGINT DEFAULT 50
+  coin BIGINT Not NULL
 );
 
 CREATE TABLE user_statistic(
     id BIGSERIAL NOT NULL PRIMARY KEY,
-    user_id BIGINT DEFAULT 0 REFERENCES person(id),
-    win BIGINT DEFAULT 0,
-    lose BIGINT DEFAULT 0,
-    total_tricks_won BIGINT DEFAULT 0,
-    total_tricks_lost BIGINT DEFAULT 0,
-    total_turns_won BIGINT DEFAULT 0,
-    total_turns_lost BIGINT DEFAULT 0,
+    user_id BIGINT Not NULL REFERENCES person(id),
+    win BIGINT Not NULL,
+    lose BIGINT Not NULL,
+    total_tricks_won BIGINT Not NULL,
+    total_tricks_lost BIGINT Not NULL,
+    total_turns_won BIGINT Not NULL,
+    total_turns_lost BIGINT Not NULL,
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE hokm4_game (
   id BIGSERIAL NOT NULL PRIMARY KEY,
 
-  team_one_tricks_score BIGINT DEFAULT 0, 
-  team_two_tricks_score BIGINT DEFAULT 0,
+  team_one_tricks_score BIGINT Not NULL, 
+  team_two_tricks_score BIGINT Not NULL,
   created_stamp TIMESTAMPTZ DEFAULT NOW(),
   end_stamp TIMESTAMPTZ
 );
@@ -57,8 +57,8 @@ CREATE TABLE trick (
 
   hakem_index BIGINT NOT NULL,
 
-  team_one_turn_score BIGINT DEFAULT 0,
-  team_two_turn_score BIGINT DEFAULT 0,
+  team_one_turn_score BIGINT Not NULL,
+  team_two_turn_score BIGINT Not NULL,
   
   CONSTRAINT fk_game FOREIGN KEY (game_id) REFERENCES hokm4_game(id)
 );

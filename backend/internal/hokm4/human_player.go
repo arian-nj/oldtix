@@ -76,12 +76,8 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_
 							app.Logger.Error(err.Error())
 						}
 					} else {
-						new_match_request := NewMatchmakingRequest(hplayer)
-						if bet_amount == 0 {
-							app.Lobby.MatchmakingQueueFor0 <- new_match_request
-						} else if bet_amount == 50 {
-							app.Lobby.MatchmakingQueueFor50 <- new_match_request
-						}
+						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer, bet_amount)
+
 					}
 				default:
 					if hplayer.Game == nil {

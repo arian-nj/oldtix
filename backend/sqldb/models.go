@@ -41,7 +41,7 @@ type Person struct {
 type Trick struct {
 	TrickID          int
 	GameID           int
-	Hokm             int
+	Hokm             pgtype.Int8
 	HakemIndex       int
 	TeamOneTurnScore int
 	TeamTwoTurnScore int

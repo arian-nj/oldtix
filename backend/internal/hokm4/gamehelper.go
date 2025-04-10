@@ -11,12 +11,14 @@ import (
 	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/sqldb"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (game *GameState) DeclareHakemIndex(trick_number int) int {
 	var HakemIndex int
 	if trick_number == 0 { // if first trick
-		HakemIndex = randutils.GenerateRandomNumber(len(game.Players))
+		// HakemIndex = randutils.GenerateRandomNumber(len(game.Players))
+		HakemIndex = 0
 	} else if game.CurrentTrick.WinnerTeam != game.Players[game.CurrentTrick.HakemIndex].GetTeamID() {
 		HakemIndex = game.CurrentTrick.HakemIndex
 		if HakemIndex < len(game.Players)-1 {
@@ -177,7 +179,7 @@ Outerloop:
 	}
 
 	err := game.Queries.UpdateHokmTrick(context.Background(), sqldb.UpdateHokmTrickParams{
-		Hokm:    int(game.CurrentTrick.Hokm),
+		Hokm:    pgtype.Int8{Int64: int64(game.CurrentTrick.Hokm), Valid: true},
 		TrickID: game.CurrentTrick.id,
 	})
 

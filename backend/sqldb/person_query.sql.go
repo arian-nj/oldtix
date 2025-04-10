@@ -67,11 +67,32 @@ func (q *Queries) GetPersonByUsername(ctx context.Context, username string) (Per
 	return i, err
 }
 
+const getPersonStatisticsById = `-- name: GetPersonStatisticsById :one
+SELECT id, user_id, win, lose, total_tricks_won, total_tricks_lost, total_turns_won, total_turns_lost, updated_at FROM user_statistic WHERE user_id = $1
+`
+
+func (q *Queries) GetPersonStatisticsById(ctx context.Context, userID int) (UserStatistic, error) {
+	row := q.db.QueryRow(ctx, getPersonStatisticsById, userID)
+	var i UserStatistic
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Win,
+		&i.Lose,
+		&i.TotalTricksWon,
+		&i.TotalTricksLost,
+		&i.TotalTurnsWon,
+		&i.TotalTurnsLost,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const insertPerson = `-- name: InsertPerson :one
 INSERT INTO person (
-  username,display_name,hashed_password
+  username,display_name,hashed_password,coin
 ) VALUES (
-  $1,$2,$3
+  $1,$2,$3,$4
 )
 RETURNING id, created, username, display_name, hashed_password, bio, coin
 `
@@ -80,10 +101,16 @@ type InsertPersonParams struct {
 	Username       string
 	DisplayName    pgtype.Text
 	HashedPassword string
+	Coin           int
 }
 
 func (q *Queries) InsertPerson(ctx context.Context, arg InsertPersonParams) (Person, error) {
-	row := q.db.QueryRow(ctx, insertPerson, arg.Username, arg.DisplayName, arg.HashedPassword)
+	row := q.db.QueryRow(ctx, insertPerson,
+		arg.Username,
+		arg.DisplayName,
+		arg.HashedPassword,
+		arg.Coin,
+	)
 	var i Person
 	err := row.Scan(
 		&i.ID,

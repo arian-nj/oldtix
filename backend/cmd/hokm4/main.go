@@ -20,11 +20,15 @@ func main() {
 	chiRouter := app.Hokm4Router()
 
 	app.BackgroundTask(func() {
-		app.MatchUsers(app.Lobby.MatchmakingQueueFor0, 0)
+		app.FilterMatchMkingByCoin()
 	})
 
 	app.BackgroundTask(func() {
-		app.MatchUsers(app.Lobby.MatchmakingQueueFor50, 50)
+		app.MatchUsers(app.Lobby.MatchmakingQueueForBetOne, hokm4.BET_AMOUNT_ONE)
+	})
+
+	app.BackgroundTask(func() {
+		app.MatchUsers(app.Lobby.MatchmakingQueueForBetTwo, hokm4.BET_AMOUNT_TWO)
 	})
 
 	err = app.ServeHTTP(chiRouter, app.Config.HTTPPort)

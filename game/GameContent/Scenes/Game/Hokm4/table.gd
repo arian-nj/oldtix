@@ -8,6 +8,11 @@ signal MyCardPlayed(card:Card)
 @export var top_drawer:CardDrawer
 @export var left_drawer:CardDrawer
 
+@export var right_player_panel:UserComponent
+@export var left_player_panel:UserComponent
+@export var top_player_panel:UserComponent
+@export var me_player_panel:UserComponent
+
 var all_drawers :Array[CardDrawer]
 var table_draw_queue:Array[Callable]
 
@@ -93,6 +98,11 @@ func set_player_to_hand()->void:
 	top_drawer.unique_string = player_order_from_me[1].player_unique
 	left_drawer.unique_string = player_order_from_me[2].player_unique
 
+	me_player_panel.user_id = mePlayer.user_id
+	right_player_panel.user_id = player_order_from_me[0].user_id
+	top_player_panel.user_id = player_order_from_me[1].user_id
+	left_player_panel.user_id = player_order_from_me[2].user_id
+
 func run_actions()->void:
 	while true:
 		var action_variant:Variant = table_draw_queue.pop_front()
@@ -127,13 +137,14 @@ func remove_played_cards()->void:
 	var cards_trash : Array[Card]
 	cards_trash.append(last_card_played)
 	cards_trash.append_array(others_card_played)
+	last_card_played = null
 	others_card_played = []
 
 	push_callback(_remove_played_cards.bind(cards_trash))
 
 func _remove_played_cards(cards_trash:Array[Card])->void:
 	for c in cards_trash:
-		if is_instance_valid(c) and c != null:
-			c.queue_free.call_deferred()
+		if is_instance_valid(c) and c:
+			c.queue_free()
 	for dr in all_drawers:
 		dr.draw_cards_and_sort()

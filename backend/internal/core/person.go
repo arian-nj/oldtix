@@ -17,6 +17,7 @@ func (app *ApiApplication) CreateBrandNewPerson(username, displayname, palin_pas
 		Username:       username,
 		DisplayName:    pgtype.Text{String: displayname, Valid: true},
 		HashedPassword: hashedPassword,
+		Coin:           50,
 	})
 	if err != nil {
 		return err

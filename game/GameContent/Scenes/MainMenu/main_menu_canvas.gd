@@ -4,6 +4,7 @@ extends SceneLevel
 @export var betPanel:BetPanel
 
 func _ready() -> void:
+	print("main menu")
 	resized.connect(aspectRationContainer._on_aspect)
 	betPanel.BetAmountChoosed.connect(_on_bet_amount_choosed)
 

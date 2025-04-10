@@ -8,9 +8,9 @@ WHERE username = $1 LIMIT 1;
 
 -- name: InsertPerson :one
 INSERT INTO person (
-  username,display_name,hashed_password
+  username,display_name,hashed_password,coin
 ) VALUES (
-  $1,$2,$3
+  $1,$2,$3,$4
 )
 RETURNING *;
 
@@ -42,3 +42,6 @@ SET
     total_turns_lost = total_turns_lost + $6,
     updated_at = NOW()
 WHERE user_id = $7;
+
+-- name: GetPersonStatisticsById :one
+SELECT * FROM user_statistic WHERE user_id = $1;

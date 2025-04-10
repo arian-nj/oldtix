@@ -12,43 +12,43 @@ import (
 
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
 	app.BackgroundTask(func() {
-		defer func() {
-			for _, p := range game.GetHumanPlayers() {
-				delete(app.Lobby.UserGames, p.UserId)
-				p.Client.Close()
-			}
-		}()
 
-		err := game.RunGame()
-		app.Logger.Error("Game Loop Ended")
-		if err != nil {
-			app.ReportError(err)
-			return
-		}
+		// defer func() {
+		// 	for _, p := range game.GetHumanPlayers() {
+		// 		delete(app.Lobby.UserGames, p.UserId)
+		// 		p.Client.Close()
+		// 	}
+		// }()
+
+		game.RunGame()
 
 	})
 }
 
-func (game *GameState) RunGame() error {
+func (game *GameState) RunGame() {
 	for i := range 5 { // run tricks
 		err := game.RunTrick(i)
 		if err != nil {
-			return err
+			game.Logger.Error(err.Error())
+			return
 		}
 		if game.TeamOneTrickScore >= SETTING_WINNING_TRICK_SCORE || game.TeamTwoTrickScore >= SETTING_WINNING_TRICK_SCORE {
 			break
 		}
 	}
-	return game.TheEnd()
+	err := game.TheEnd()
+	if err != nil {
+		game.Logger.Error(err.Error())
+	}
 }
 
 func (game *GameState) RunTrick(trick_number int) error {
 	var err error
 
 	HakemIndex := game.DeclareHakemIndex(trick_number)
-
 	game.CurrentTrick, err = game.NewTrick(HakemIndex)
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 	game.Tricks = append(game.Tricks, game.CurrentTrick)
@@ -57,10 +57,10 @@ func (game *GameState) RunTrick(trick_number int) error {
 	for _, p := range game.GetHumanPlayers() {
 		err := game.SendGameData(TypeNewTrick, p)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 	}
-
 	for _, p := range game.Players {
 		p.SetCards([]cards.Card{})
 	}
@@ -68,33 +68,38 @@ func (game *GameState) RunTrick(trick_number int) error {
 	allCards := cards.NewAllCards()
 	allCards, err = game.sendCards(5, allCards)
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 
 	game.CurrentTrick.Hokm, err = game.WaitToChooseHokm()
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 
 	for _, p := range game.GetHumanPlayers() { // update hokm data
 		err = game.SendGameData(TypeNewHokm, p)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 	}
-
 	// send rest of cards
 	allCards, err = game.sendCards(4, allCards)
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 	_, err = game.sendCards(4, allCards)
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 
 	err = game.RunTurns()
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 
@@ -102,6 +107,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	for _, p := range game.GetHumanPlayers() { // update hokm data
 		err := game.SendGameData(TypeEndTrick, p)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 	}
@@ -111,6 +117,9 @@ func (game *GameState) RunTrick(trick_number int) error {
 		TeamTwoTricksScore: game.TeamTwoTrickScore,
 		ID:                 game.ID,
 	})
+	if err != nil {
+		game.Logger.Error(err.Error())
+	}
 	return err
 }
 
@@ -118,6 +127,7 @@ func (game *GameState) RunTurns() error {
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
@@ -176,6 +186,7 @@ func (game *GameState) RunTurn() error {
 	for _, playing_player := range to_play_order {
 		cardIndex, err := game.WaitForPlayerToPlayCard(playing_player)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 		currentTurn := game.CurrentTrick.CurrentTurn
@@ -184,6 +195,7 @@ func (game *GameState) RunTurn() error {
 		// Brodcast played card
 		b_data, err := json.Marshal(new_card_player)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 
@@ -225,6 +237,7 @@ func (game *GameState) RunTurn() error {
 
 	data_byte, err := json.Marshal(game.CurrentTrick.CurrentTurn.CardsPlayed)
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 	_, err = game.Queries.InsertTurn(context.Background(), sqldb.InsertTurnParams{
@@ -232,6 +245,7 @@ func (game *GameState) RunTurn() error {
 		TrickID: game.CurrentTrick.id,
 	})
 	if err != nil {
+		game.Logger.Error(err.Error())
 		return err
 	}
 	err = game.Queries.UpdateTurnScores(context.Background(), sqldb.UpdateTurnScoresParams{
@@ -239,6 +253,10 @@ func (game *GameState) RunTurn() error {
 		TeamTwoTurnScore: game.CurrentTrick.TeamTwoTurnScore,
 		TrickID:          game.CurrentTrick.id,
 	})
+	if err != nil {
+		game.Logger.Error(err.Error())
+
+	}
 	return err
 
 }
@@ -255,6 +273,7 @@ func (game *GameState) AddCoins(hplayer *HumanPlayer) error {
 		Coin: coin_to_add,
 		ID:   hplayer.UserId,
 	})
+	game.Logger.Error(err.Error())
 	return err
 }
 
@@ -310,17 +329,20 @@ func (game *GameState) TheEnd() error {
 		if updateStaticsParams.Win == 1 {
 			err := game.AddCoins(humanPlayer)
 			if err != nil {
+				game.Logger.Error(err.Error())
 				return err
 			}
 		}
 
 		// err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)
 		// if err != nil {
-		// 	return err
+		// 				game.Logger.Error(err.Error())
+		// return err
 		// }
 
 		err := game.Queries.UpdateUserStatistics(context.Background(), updateStaticsParams)
 		if err != nil {
+			game.Logger.Error(err.Error())
 			return err
 		}
 	}

@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=38 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/hokm4_scene_level.gd" id="1_i0n3b"]
+[ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="1_o4grb"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="2_22pf8"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_d1yw2"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
@@ -10,10 +11,12 @@
 [ext_resource type="Script" uid="uid://saluitmh1llq" path="res://GameContent/Scenes/Game/Hokm4/TurnScores.gd" id="5_bwnrb"]
 [ext_resource type="Script" uid="uid://ggywgqynjdcr" path="res://GameContent/Scenes/Game/Hokm4/TrickScore.gd" id="6_do6i4"]
 [ext_resource type="Script" uid="uid://coue7g2pwtieo" path="res://GameContent/Scenes/States/state_machine.gd" id="6_rcy6w"]
+[ext_resource type="PackedScene" uid="uid://bncwyablnlik8" path="res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.tscn" id="7_d1yw2"]
 [ext_resource type="Script" uid="uid://c3iw070iycfax" path="res://GameContent/Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
-[ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokm.gd" id="9_uajja"]
-[ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/ChooseHokm/choose_hokm.tscn" id="11_amrdn"]
+[ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd" id="9_uajja"]
+[ext_resource type="Texture2D" uid="uid://vlp3i4q5ybtu" path="res://GameContent/assets/name_background.png" id="10_7sva6"]
+[ext_resource type="Script" uid="uid://bnc0qns8r8xpq" path="res://GameContent/Scenes/Game/Hokm4/user_component.gd" id="11_5bin2"]
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/WaitState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/the_end.gd" id="16_tmsoy"]
@@ -30,6 +33,28 @@ fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsoy"]
 size = Vector2(345, 194)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7sva6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5bin2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4cut"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rc4y6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_78ieo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ylp6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c27fc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fnc6k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxtvm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3k2r3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4hy27"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcw6q"]
 bg_color = Color(0.145098, 0.72549, 0.352941, 1)
@@ -62,6 +87,7 @@ offset_right = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_o4grb")
 script = ExtResource("1_i0n3b")
 ws = NodePath("WebSocket")
 
@@ -76,7 +102,7 @@ ratio = 0.5455
 script = ExtResource("2_d1yw2")
 metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
 
-[node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer")]
+[node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer", "right_player_panel", "left_player_panel", "top_player_panel", "me_player_panel")]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("4_qoslj")
@@ -84,6 +110,10 @@ me_drawer = NodePath("Hands/MeDrawCards")
 right_drawer = NodePath("Hands/RightDrawCards")
 top_drawer = NodePath("Hands/TopDrawCards")
 left_drawer = NodePath("Hands/LeftDrawCards")
+right_player_panel = NodePath("../UsersPanel/RightUserComponent")
+left_player_panel = NodePath("../UsersPanel/LeftUserComponent")
+top_player_panel = NodePath("../UsersPanel/TopUserComponent")
+me_player_panel = NodePath("../UsersPanel/MeUserComponent")
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Table"]
 layout_mode = 1
@@ -173,6 +203,7 @@ offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="AspectRatioContainer/Table/Hands/MeDrawCards/hand"]
+visible = false
 layout_mode = 0
 offset_left = -2.0
 offset_top = -123.0
@@ -236,6 +267,7 @@ offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
 [node name="Label2" type="Label" parent="AspectRatioContainer/Table/Hands/RightDrawCards/hand"]
+visible = false
 layout_mode = 0
 offset_left = -141.0
 offset_top = -29.0
@@ -293,6 +325,7 @@ offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
 [node name="Label3" type="Label" parent="AspectRatioContainer/Table/Hands/TopDrawCards/hand"]
+visible = false
 layout_mode = 0
 offset_left = -24.0
 offset_top = 131.0
@@ -357,6 +390,7 @@ offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 
 [node name="Label4" type="Label" parent="AspectRatioContainer/Table/Hands/LeftDrawCards/hand"]
+visible = false
 layout_mode = 0
 offset_left = 142.0
 offset_top = -57.0
@@ -404,10 +438,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -211.0
-offset_right = 20.0
-offset_bottom = -188.0
+offset_left = 9.0
+offset_top = -400.0
+offset_right = 49.0
+offset_bottom = -377.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "0"
@@ -427,6 +461,10 @@ grow_vertical = 2
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ChooseHokm" parent="AspectRatioContainer/Table" instance=ExtResource("7_d1yw2")]
+visible = false
+layout_mode = 1
 
 [node name="WinPanel" type="Control" parent="AspectRatioContainer"]
 visible = false
@@ -457,6 +495,132 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 60
 text = "The End"
+
+[node name="UsersPanel" type="Control" parent="AspectRatioContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MeUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.12
+offset_top = -149.0
+offset_right = 177.88
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
+text = "Display Name"
+icon = ExtResource("10_7sva6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("11_5bin2")
+
+[node name="RightUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -233.12
+offset_top = 73.0
+offset_right = 53.88
+offset_bottom = 222.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
+text = "Display Name"
+icon = ExtResource("10_7sva6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("11_5bin2")
+
+[node name="LeftUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 73.0
+offset_right = 287.0
+offset_bottom = 222.0
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
+text = "Display Name"
+icon = ExtResource("10_7sva6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("11_5bin2")
+
+[node name="TopUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.12
+offset_right = 177.88
+offset_bottom = 149.0
+grow_horizontal = 2
+scale = Vector2(0.8, 0.8)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
+text = "Display Name "
+icon = ExtResource("10_7sva6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("11_5bin2")
 
 [node name="TrickScore" type="Control" parent="." node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "MyTeamPanel", "OtherTeamPanel", "table")]
 layout_mode = 1
@@ -595,12 +759,12 @@ ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "chooseHokmPanel")]
 script = ExtResource("9_uajja")
 ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
-choose_hokm_scene = ExtResource("11_amrdn")
+chooseHokmPanel = NodePath("../../AspectRatioContainer/Table/ChooseHokm")
 
 [node name="game_turn" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
 script = ExtResource("12_d5oqf")

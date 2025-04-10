@@ -15,10 +15,6 @@ run/main_scene="uid://b5crye8ert6gb"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://GameContent/icon.svg"
 
-[autoload]
-
-GodotPlayGameServices="*res://addons/GodotPlayGameServices/scripts/autoloads/godot_play_game_services.gd"
-
 [debug]
 
 gdscript/warnings/unused_variable=2
@@ -36,7 +32,7 @@ window/handheld/orientation=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GodotPlayGameServices/plugin.cfg")
+enabled=PackedStringArray()
 
 [input_devices]
 
@@ -45,5 +41,6 @@ pointing/emulate_touch_from_mouse=true
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true

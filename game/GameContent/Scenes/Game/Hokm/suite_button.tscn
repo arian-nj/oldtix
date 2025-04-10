@@ -1,0 +1,42 @@
+[gd_scene load_steps=10 format=3 uid="uid://cn8eprq2quc3f"]
+
+[ext_resource type="Shader" uid="uid://cjbre4q2cupfn" path="res://GameContent/Scenes/Game/Hokm/disolve_2d_shader.gdshader" id="1_is06r"]
+[ext_resource type="Texture2D" uid="uid://dkfccdhxbx1gs" path="res://GameContent/assets/Suites.png" id="1_taw70"]
+[ext_resource type="Script" uid="uid://by2n4x32cl6uu" path="res://GameContent/Scenes/Game/Hokm/suite_button.gd" id="3_kxwd4"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_is06r"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kxwd4"]
+noise = SubResource("FastNoiseLite_is06r")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w3ar1"]
+resource_local_to_scene = true
+shader = ExtResource("1_is06r")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_kxwd4")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.1
+shader_parameter/burn_color = Color(1, 0.670588, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfab5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5eoy0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bin2"]
+resource_local_to_scene = true
+atlas = ExtResource("1_taw70")
+region = Rect2(36, 0, 36, 41)
+
+[node name="SuiteButton" type="Button"]
+material = SubResource("ShaderMaterial_w3ar1")
+offset_right = 36.0
+offset_bottom = 41.0
+scale = Vector2(4, 4)
+pivot_offset = Vector2(22, 24.5)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_tfab5")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_5eoy0")
+icon = SubResource("AtlasTexture_5bin2")
+flat = true
+icon_alignment = 1
+script = ExtResource("3_kxwd4")

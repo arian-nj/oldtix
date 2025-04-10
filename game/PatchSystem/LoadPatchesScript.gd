@@ -19,12 +19,14 @@ func do_request()->void:
 		pass
 		errorBorad.new_error(err)
 	
+	
 func get_newest_version()-> String:
 	
 	downloadProgressBar.indeterminate = true
 	newVersionLabel.visible = false
-	# get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-
+	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
+	return ""
+# 
 	var ov_result := get_local_version()
 	var old_version_string:String = ov_result[0]
 	var err:String = ov_result[1]
@@ -53,6 +55,7 @@ func get_newest_version()-> String:
 		err = await downloadProgressBar.start_downloading(domain,pack_url)
 		if err != "":
 			return err
+	config.set_value("player", "version",new_version_string)
 	
 	var success := ProjectSettings.load_resource_pack("user://system.pck")
 	if !success:

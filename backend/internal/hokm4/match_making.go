@@ -2,6 +2,7 @@ package hokm4
 
 import (
 	"context"
+	"strconv"
 	"sync"
 	"time"
 
@@ -10,20 +11,23 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
-var validBetAmounts = []int{0, 50}
+var validBetAmounts = []int{BET_AMOUNT_ONE, BET_AMOUNT_TWO}
 
 type Lobby struct {
-	MatchmakingQueueFor0  chan *MatchmakingRequest
-	MatchmakingQueueFor50 chan *MatchmakingRequest
-	MakingMatches         map[int]*GameState
-	UserGames             map[int]*GameState
-	Mu                    sync.Mutex
+	MatchmakingQueueGlobal    chan *MatchmakingRequest
+	MatchmakingQueueForBetOne chan *MatchmakingRequest
+	MatchmakingQueueForBetTwo chan *MatchmakingRequest
+
+	MakingMatches map[int]*GameState
+	UserGames     map[int]*GameState
+	Mu            sync.Mutex
 }
 
 func NewLobby() *Lobby {
 	return &Lobby{
-		MatchmakingQueueFor0:  make(chan *MatchmakingRequest),
-		MatchmakingQueueFor50: make(chan *MatchmakingRequest),
+		MatchmakingQueueGlobal:    make(chan *MatchmakingRequest),
+		MatchmakingQueueForBetOne: make(chan *MatchmakingRequest),
+		MatchmakingQueueForBetTwo: make(chan *MatchmakingRequest),
 		// Games: make(map[int]*GameState),
 		UserGames: map[int]*GameState{},
 		Mu:        sync.Mutex{},
@@ -32,12 +36,14 @@ func NewLobby() *Lobby {
 
 type MatchmakingRequest struct {
 	Player    *HumanPlayer
+	BetAmount int
 	Timestamp time.Time
 }
 
-func NewMatchmakingRequest(hplayer *HumanPlayer) *MatchmakingRequest {
+func NewMatchmakingRequest(hplayer *HumanPlayer, bet_amount int) *MatchmakingRequest {
 	return &MatchmakingRequest{
 		Player:    hplayer,
+		BetAmount: bet_amount,
 		Timestamp: time.Now(),
 	}
 }
@@ -53,6 +59,18 @@ func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer, gameId int) err
 
 func (game *GameState) AddBotPlayerToGame(player *BotPlayer) {
 	game.Players = append(game.Players, player)
+}
+func (app *ApplicationHokm4) FilterMatchMkingByCoin() {
+	for {
+		newReq := <-app.Lobby.MatchmakingQueueGlobal
+		if newReq.BetAmount == BET_AMOUNT_ONE {
+			app.Lobby.MatchmakingQueueForBetOne <- newReq
+		} else if newReq.BetAmount == BET_AMOUNT_TWO {
+			app.Lobby.MatchmakingQueueForBetTwo <- newReq
+		} else {
+			app.Logger.Error("can'r filter this amount of coin " + strconv.Itoa(newReq.BetAmount))
+		}
+	}
 }
 
 func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, betting_amount int) {

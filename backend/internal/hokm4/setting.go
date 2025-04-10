@@ -3,14 +3,25 @@ package hokm4
 import "time"
 
 const (
-	SETTING_BOT_PLAY_WAIT    = time.Second
-	SETTING_PLAYER_PLAY_WAIT = time.Second * 10
+	SETTING_BOT_PLAY_WAIT                  = time.Second
+	SETTING_PLAYER_PLAY_WAIT               = time.Second * 10
+	SETTING_PLAYER_PLAY_AFTER_TIMEOUT_WAIT = time.Second * 2
 
 	SETTING_BOT_CHOOSE_HOKM_WAIT    = time.Second * 5
 	SETTING_PLAYER_CHOOSE_HOKM_WAIT = time.Second * 10
 
-	SETTING_WINNING_TRICK_SCORE = 1
+	SETTING_WINNING_TRICK_SCORE = 3
 	SETTING_WINNIG_TURN_SCORE   = 2
 
 	SETTING_BEFORE_END_TURN_MESSAGE_SLEEP_TIME = time.Second * 2
+)
+
+const (
+	BET_NO_MONEY = 0
+
+	BET_AMOUNT_ONE     = 10
+	BET_AMOUNT_ONE_WIN = 25
+
+	BET_AMOUNT_TWO     = 250
+	BET_AMOUNT_TWO_WIN = 500
 )

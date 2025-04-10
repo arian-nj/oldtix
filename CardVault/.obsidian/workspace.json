@@ -30,6 +30,30 @@
               "icon": "lucide-file",
               "title": "V 1.0.0"
             }
+          },
+          {
+            "id": "68a1f44620e22f88",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CardGame/Coin.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Coin"
+            }
           }
         ]
       }
@@ -178,11 +202,11 @@
   },
   "active": "df0c19167d56ab38",
   "lastOpenFiles": [
-    "CardGame/Release Pipe.md",
     "CardGame/Game Flow Chart.md",
-    "CardGame/Coin.md",
-    "CardGame/V 1.0.0.md",
+    "CardGame/Release Pipe.md",
     "CardGame/TO DO Card.md",
+    "CardGame/V 1.0.0.md",
+    "CardGame/Coin.md",
     "CardGame/Authentication.md",
     "CardGame/Name.md"
   ]

@@ -12,6 +12,7 @@ signal Disconnected
 
 func _ready() -> void:
 	set_process(false)
+
 # WebSocket instance
 var socket:WebSocketPeer = WebSocketPeer.new()
 
@@ -39,7 +40,7 @@ func connect_to_game(coin_amount:int) -> void:
 	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
-		print("Unable to connect")
+		print("Unable to connect err code " + str(err) +" " + error_string(err))
 		set_process(false)
 		# get_tree().create_timer()
 

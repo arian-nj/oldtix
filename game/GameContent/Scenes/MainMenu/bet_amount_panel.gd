@@ -4,14 +4,22 @@ class_name BetPanel extends Control
 @export var playButton:Button
 
 @export var firstBetButton:Button
+@export var firstBetLabel:Label
 @export var secondBetButton:Button
 
 signal BetAmountChoosed(coin_amount:int)
 
 func _ready() -> void:
 	betVBoxContainer.visible = false
-	firstBetButton.pressed.connect(fire_play_button.bind(0))
-	secondBetButton.pressed.connect(fire_play_button.bind(50))
+	secondBetButton.pressed.connect(fire_play_button.bind(250))
+	if KAccount._instance.MyAccount.coin < 10:
+		firstBetLabel.text = "0 -> 10"
+		firstBetButton.pressed.connect(fire_play_button.bind(0))
+		secondBetButton.disabled = true
+
+	else:
+		firstBetButton.pressed.connect(fire_play_button.bind(10))
+
 
 func fire_play_button(coin_amount:int)->void:
 	BetAmountChoosed.emit(coin_amount)

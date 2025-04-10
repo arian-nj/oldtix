@@ -54,7 +54,7 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	encoderConfig.StacktraceKey = ""
 	config.EncoderConfig = encoderConfig
 
-	logger, err := config.Build(zap.AddCallerSkip(1))
+	logger, err := config.Build()
 
 	// logger, err :=
 	if err != nil {

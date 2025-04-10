@@ -43,7 +43,8 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 			r2.Use(app.RequireAuthenticatedUser)
 			r2.Put("/update", app.updateUserData)
 			r2.Get("/me", app.getMeData)
-			r2.Get("/get/{user_id}", app.getUserData)
+			r2.Get("/person/{user_id}", app.getUserData)
+			r2.Get("/person/{user_id}/stat", app.getUserStatisticsData)
 		})
 	})
 

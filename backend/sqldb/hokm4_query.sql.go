@@ -7,6 +7,8 @@ package sqldb
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const insertGamePlayer = `-- name: InsertGamePlayer :one
@@ -87,7 +89,7 @@ UPDATE trick SET hokm = $1 WHERE trick_id = $2
 `
 
 type UpdateHokmTrickParams struct {
-	Hokm    int
+	Hokm    pgtype.Int8
 	TrickID int
 }
 

@@ -1,0 +1,167 @@
+[gd_scene load_steps=15 format=3 uid="uid://bncwyablnlik8"]
+
+[ext_resource type="Script" uid="uid://cuao4r37ihdu4" path="res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.gd" id="1_rvf6k"]
+[ext_resource type="PackedScene" uid="uid://cn8eprq2quc3f" path="res://GameContent/Scenes/Game/Hokm/suite_button.tscn" id="2_sqs23"]
+[ext_resource type="Shader" uid="uid://cjbre4q2cupfn" path="res://GameContent/Scenes/Game/Hokm/disolve_2d_shader.gdshader" id="3_x30ay"]
+[ext_resource type="Texture2D" uid="uid://dkfccdhxbx1gs" path="res://GameContent/assets/Suites.png" id="4_wqyuv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_is06r"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kxwd4"]
+noise = SubResource("FastNoiseLite_is06r")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4cut"]
+resource_local_to_scene = true
+shader = ExtResource("3_x30ay")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_kxwd4")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.1
+shader_parameter/burn_color = Color(1, 0.670588, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sva6"]
+resource_local_to_scene = true
+atlas = ExtResource("4_wqyuv")
+region = Rect2(72, 0, 36, 41)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rc4y6"]
+resource_local_to_scene = true
+shader = ExtResource("3_x30ay")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_kxwd4")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.1
+shader_parameter/burn_color = Color(1, 0.670588, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bin2"]
+resource_local_to_scene = true
+atlas = ExtResource("4_wqyuv")
+region = Rect2(108, 0, 36, 41)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78ieo"]
+resource_local_to_scene = true
+shader = ExtResource("3_x30ay")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_kxwd4")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.1
+shader_parameter/burn_color = Color(1, 0.670588, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4cut"]
+resource_local_to_scene = true
+atlas = ExtResource("4_wqyuv")
+region = Rect2(36, 0, 36, 41)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4ylp6"]
+resource_local_to_scene = true
+shader = ExtResource("3_x30ay")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_kxwd4")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.1
+shader_parameter/burn_color = Color(1, 0.670588, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rc4y6"]
+resource_local_to_scene = true
+atlas = ExtResource("4_wqyuv")
+region = Rect2(0, 0, 36, 41)
+
+[node name="ChooseHokm" type="Control" node_paths=PackedStringArray("spadeSuite", "heartSuite", "clubSuite", "diamondSuite", "final_hokm_control")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_rvf6k")
+spadeSuite = NodePath("Control/SpadeButton")
+heartSuite = NodePath("Control/HeartButton")
+clubSuite = NodePath("Control/ClubButton")
+diamondSuite = NodePath("Control/DiamondButton")
+final_hokm_control = NodePath("ChoosedPosition")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpadeButton" parent="Control" instance=ExtResource("2_sqs23")]
+material = SubResource("ShaderMaterial_c4cut")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 73.0
+offset_top = -36.0
+offset_right = 117.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+icon = SubResource("AtlasTexture_7sva6")
+
+[node name="ClubButton" parent="Control" instance=ExtResource("2_sqs23")]
+material = SubResource("ShaderMaterial_rc4y6")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = -33.5
+offset_right = -90.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+icon = SubResource("AtlasTexture_5bin2")
+
+[node name="HeartButton" parent="Control" instance=ExtResource("2_sqs23")]
+material = SubResource("ShaderMaterial_78ieo")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 71.0
+offset_top = -223.5
+offset_right = 115.0
+offset_bottom = -174.5
+grow_horizontal = 2
+grow_vertical = 2
+icon = SubResource("AtlasTexture_c4cut")
+
+[node name="DiamondButton" parent="Control" instance=ExtResource("2_sqs23")]
+material = SubResource("ShaderMaterial_4ylp6")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -209.0
+offset_right = -91.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 2
+icon = SubResource("AtlasTexture_rc4y6")
+
+[node name="ChoosedPosition" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -47.0
+offset_top = 154.0
+offset_right = -7.0
+offset_bottom = 194.0
+grow_horizontal = 2

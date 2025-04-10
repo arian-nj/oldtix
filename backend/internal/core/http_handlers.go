@@ -48,8 +48,9 @@ func (app *ApiApplication) getLatestVersion(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+var UserIsNotValidErr error = fmt.Errorf("user id is not valid")
+
 func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
-	var UserIsNotValidErr error = fmt.Errorf("user id is not valid")
 	user_param := chi.URLParam(r, "user_id")
 	userid_int, err := strconv.Atoi(user_param)
 	if err != nil {
@@ -74,6 +75,49 @@ func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String
 	output.Coin = user.Coin
+
+	err = response.JSON(w, http.StatusOK, output)
+	if err != nil {
+		app.ServerError(w, r, err)
+		return
+	}
+}
+func (app *ApiApplication) getUserStatisticsData(w http.ResponseWriter, r *http.Request) {
+	user_param := chi.URLParam(r, "user_id")
+	user_int, err := strconv.Atoi(user_param)
+	if err != nil {
+		app.BadRequest(w, r, UserIsNotValidErr)
+		return
+	}
+
+	statisticsRow, err := app.Queries.GetPersonStatisticsById(r.Context(), user_int)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			app.NotFound(w, r)
+		} else {
+			app.Logger.Info("wanted id is string" + user_param)
+			app.ServerError(w, r, err)
+		}
+		return
+	}
+
+	var output struct {
+		UserID     int `json:"user_id"`
+		Win        int `json:"win"`
+		Lose       int `json:"lose"`
+		TricksWon  int `json:"tricks_won"`
+		TricksLost int `json:"tricks_lost"`
+		TurnsWon   int `json:"turns_won"`
+		TurnsLost  int `json:"turns_lost"`
+	}
+
+	output.UserID = statisticsRow.UserID
+	output.Win = statisticsRow.Win
+	output.Lose = statisticsRow.Lose
+	output.TricksWon = statisticsRow.TotalTricksWon
+	output.TricksLost = statisticsRow.TotalTricksLost
+	output.TurnsWon = statisticsRow.TotalTurnsWon
+	output.TurnsLost = statisticsRow.TotalTurnsLost
 
 	err = response.JSON(w, http.StatusOK, output)
 	if err != nil {

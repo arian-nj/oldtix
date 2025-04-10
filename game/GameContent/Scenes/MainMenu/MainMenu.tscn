@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=21 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://GameContent/Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cxl83f86oi3b4" path="res://GameContent/assets/shapes/play_button_background.png" id="4_jcjvh"]
 [ext_resource type="Texture2D" uid="uid://dldiq53b4j7ba" path="res://GameContent/assets/shapes/user_data_background.png" id="6_vh2g8"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
+[ext_resource type="Script" uid="uid://cw6ov5aecyf86" path="res://GameContent/Scenes/MainMenu/CoinComponent.gd" id="8_52hew"]
 [ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="8_700qd"]
 [ext_resource type="Texture2D" uid="uid://caedcf6ps0e6i" path="res://GameContent/assets/shapes/coin.png" id="9_xwmnj"]
 [ext_resource type="Texture2D" uid="uid://cs5roy44jbjjl" path="res://GameContent/assets/icons/cross.png" id="11_5cl1r"]
@@ -20,7 +21,7 @@ suit = 0
 value = 14
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[sub_resource type="Resource" id="Resource_x5g5h"]
+[sub_resource type="Resource" id="Resource_52hew"]
 resource_local_to_scene = true
 script = ExtResource("8_700qd")
 suit = 1
@@ -220,7 +221,7 @@ offset_right = 35.5
 offset_bottom = 47.5
 grow_vertical = 2
 scale = Vector2(3, 3)
-card_data = SubResource("Resource_x5g5h")
+card_data = SubResource("Resource_52hew")
 
 [node name="Card3" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
 layout_mode = 1
@@ -248,13 +249,15 @@ grow_vertical = 2
 scale = Vector2(3, 3)
 card_data = SubResource("Resource_5cl1r")
 
-[node name="Coin" type="Control" parent="AspectRatioContainer/UI"]
+[node name="Coin" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("coinLabel")]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 106.0
 offset_bottom = 106.0
 grow_horizontal = 2
+script = ExtResource("8_52hew")
+coinLabel = NodePath("HBoxContainer/Label")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/UI/Coin"]
 layout_mode = 1
@@ -276,7 +279,7 @@ stretch_mode = 4
 [node name="Label" type="Label" parent="AspectRatioContainer/UI/Coin/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 80
-text = "10"
+text = "0"
 
 [node name="UserDataComponent" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "profilePanelContainer")]
 layout_mode = 1
@@ -377,7 +380,7 @@ theme_override_font_sizes/font_size = 80
 text = "خونه"
 flat = true
 
-[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "secondBetButton")]
+[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "firstBetLabel", "secondBetButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -389,6 +392,7 @@ script = ExtResource("11_c1jlk")
 betVBoxContainer = NodePath("PanelContainer")
 playButton = NodePath("../MainMenu/PanelContainer/PlayTic2Button")
 firstBetButton = NodePath("PanelContainer/VBoxContainer2/FirstBetButton")
+firstBetLabel = NodePath("PanelContainer/VBoxContainer2/FirstBetButton/Label2")
 secondBetButton = NodePath("PanelContainer/VBoxContainer2/SecondBetButton")
 
 [node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/BetAmountPanel"]
@@ -428,7 +432,7 @@ icon = ExtResource("13_x5g5h")
 flat = true
 icon_alignment = 1
 
-[node name="Label" type="Label" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2/FirstBetButton"]
+[node name="Label2" type="Label" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2/FirstBetButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -442,7 +446,7 @@ offset_bottom = 46.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 80
-text = "0 -> 15"
+text = "10    ==>    25"
 
 [node name="SecondBetButton" type="Button" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
 layout_mode = 2
@@ -467,7 +471,7 @@ offset_bottom = 46.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 80
-text = "50 -> 100"
+text = "250   ==>  500"
 
 [node name="Control2" type="Control" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
 layout_mode = 2
