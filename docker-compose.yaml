@@ -17,7 +17,7 @@ services:
       retries: 5
 
   core_api:
-    image: ghcr.io/arian-nj/tix-core:a342fa6be95a2a90b8e0ba7524acaac4d7887264
+    image: ghcr.io/arian-nj/tix/core:latest
     build:
       context: .
       dockerfile: core.Dockerfile
