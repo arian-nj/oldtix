@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"sync"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
@@ -39,7 +38,7 @@ type CommonGlobals struct {
 	wg      sync.WaitGroup
 }
 
-func NewCommonGlobals(http_port string) (*CommonGlobals, *pgxpool.Pool, error) {
+func NewCommonGlobals(http_port int) (*CommonGlobals, *pgxpool.Pool, error) {
 	// read configs
 	Glob := &CommonGlobals{}
 
@@ -82,18 +81,9 @@ func NewCommonGlobals(http_port string) (*CommonGlobals, *pgxpool.Pool, error) {
 	return Glob, poll, nil
 }
 
-func readConfigs(http_port string) (*Config, error) {
+func readConfigs(http_port int) (*Config, error) {
 	var cfg *Config = new(Config)
-	port := os.Getenv(http_port)
-	if port == "" {
-		return nil, fmt.Errorf("can't read port from .env %s", port)
-	}
-
-	port_int, err := strconv.Atoi(port)
-	if err != nil {
-		return nil, err
-	}
-	cfg.HTTPPort = port_int
+	cfg.HTTPPort = http_port
 
 	base_url := os.Getenv("BASE_URL")
 	if base_url == "" {
