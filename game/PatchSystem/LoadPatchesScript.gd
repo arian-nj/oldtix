@@ -5,7 +5,7 @@ extends CanvasLayer
 @export var downloadProgressBar:DownloadProgressBar
 @export var errorBorad:LPError
 
-var server_url := "http://192.168.188.205:4444"
+var server_url := "http://127.0.0.1:4444"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 

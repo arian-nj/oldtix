@@ -1,4 +1,5 @@
 services:
+
   db:
     image: postgres:latest
     environment:
@@ -9,6 +10,44 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Keeps data persistent
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  core_api:
+    build:
+      context: .
+      dockerfile: core.Dockerfile
+    ports:
+     - 127.0.0.1:4444:${CORE_HTTP_PORT}
+    environment:
+      - HTTP_PORT=${CORE_HTTP_PORT}
+      - BASE_URL=${BASE_URL}
+      - SecretKey=${SecretKey}
+      - DATABASE_URL=${DATABASE_URL}
+      - RELEASE_MODE=${RELEASE_MODE}
+      - VERSION=${VERSION}
+    depends_on:
+      db:
+        condition: service_healthy
+  hokm4:
+    build:
+      context: .
+      dockerfile: hokm4.Dockerfile
+    ports:
+     - 127.0.0.1:4445:${HOKM4_HTTP_PORT}
+    environment:
+      - HTTP_PORT=${HOKM4_HTTP_PORT}
+      - BASE_URL=${BASE_URL}
+      - SecretKey=${SecretKey}
+      - DATABASE_URL=${DATABASE_URL}
+      - RELEASE_MODE=${RELEASE_MODE}
+      - VERSION=${VERSION}
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

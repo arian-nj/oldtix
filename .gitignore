@@ -2,3 +2,4 @@
 .task/
 files/*
 .env
+.release.env

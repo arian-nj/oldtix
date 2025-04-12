@@ -59,9 +59,9 @@ jobs:
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
-          name: zenfulstats
+          name: hokmrun
           file: docker-stack.yaml
-          host: zenful.site
+          host: hokm.filelord.ir
           user: deploy
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          env_file: ./envfile
+          env_file: ./env.release

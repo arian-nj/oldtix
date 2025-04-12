@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	core_api "github.com/arian-nj/master-card/back/internal/core"
@@ -13,6 +14,12 @@ func main() {
 		log.Panic(err)
 	}
 	defer poll.Close()
+
+	err = poll.Ping(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
 	app := core_api.NewApiApplication(globalStructs)
 	if app.ReleaseMode == "" {
 		globalStructs.Logger.Error("RELEASE_MODE is empty")

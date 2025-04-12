@@ -9,7 +9,6 @@ import (
 	"github.com/arian-nj/master-card/back/internal/dbconf"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -25,8 +24,9 @@ func Run() {
 
 type Config struct {
 	HTTPPort int
-	BaseURL  string
-	Jwt      struct {
+
+	BaseURL string
+	Jwt     struct {
 		SecretKey string
 	}
 	DatabaseUrl string
@@ -62,10 +62,10 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	}
 	Glob.Logger = logger
 
-	err = godotenv.Load()
-	if err != nil {
-		return nil, nil, fmt.Errorf("error loading .env file")
-	}
+	// err = godotenv.Load()
+	// if err != nil {
+	// 	return nil, nil, fmt.Errorf("error loading .env file")
+	// }
 
 	cfg, err = readConfigs()
 	if err != nil {
