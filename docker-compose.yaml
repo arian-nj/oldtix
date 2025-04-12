@@ -7,21 +7,22 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: game
     ports:
-      - "127.0.0.1:5432:5432"
+      - 127.0.0.1:5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Keeps data persistent
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
       timeout: 5s
       retries: 5
 
   core_api:
+    image: ghcr.io/arian-nj/tix-core:a342fa6be95a2a90b8e0ba7524acaac4d7887264
     build:
       context: .
       dockerfile: core.Dockerfile
     ports:
-     - 127.0.0.1:4444:${CORE_HTTP_PORT}
+     - 4444:4444
     environment:
       - HTTP_PORT=${CORE_HTTP_PORT}
       - BASE_URL=${BASE_URL}
@@ -29,25 +30,24 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - RELEASE_MODE=${RELEASE_MODE}
       - VERSION=${VERSION}
+    deploy:
+      update_config:
+        order: start-first
     depends_on:
-      db:
-        condition: service_healthy
-  hokm4:
-    build:
-      context: .
-      dockerfile: hokm4.Dockerfile
-    ports:
-     - 127.0.0.1:4445:${HOKM4_HTTP_PORT}
-    environment:
-      - HTTP_PORT=${HOKM4_HTTP_PORT}
-      - BASE_URL=${BASE_URL}
-      - SecretKey=${SecretKey}
-      - DATABASE_URL=${DATABASE_URL}
-      - RELEASE_MODE=${RELEASE_MODE}
-      - VERSION=${VERSION}
-    depends_on:
-      db:
-        condition: service_healthy
+      - db
+  # hokm4:
+  #   build:
+  #     context: .
+  #     dockerfile: hokm4.Dockerfile
+  #   ports:
+  #    - 127.0.0.1:4445:4445
+  #   environment:
+  #     - HTTP_PORT=${HOKM4_HTTP_PORT}
+  #     - BASE_URL=${BASE_URL}
+  #     - SecretKey=${SecretKey}
+  #     - DATABASE_URL=${DATABASE_URL}
+  #     - RELEASE_MODE=${RELEASE_MODE}
+  #     - VERSION=${VERSION}
 
 volumes:
   postgres_data:
