@@ -88,6 +88,7 @@ func readConfigs(http_port string) (*Config, error) {
 	if port == "" {
 		return nil, fmt.Errorf("can't read port from .env %s", port)
 	}
+
 	port_int, err := strconv.Atoi(port)
 	if err != nil {
 		return nil, err
