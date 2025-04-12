@@ -45,24 +45,24 @@ jobs:
           tags: |
             ghcr.io/arian-nj/tix:latest
             ghcr.io/arian-nj/tix:${{ github.sha }}
-  deploy:
-      runs-on: ubuntu-latest
-      needs:
-        - build_and_push_image
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # deploy:
+  #     runs-on: ubuntu-latest
+  #     needs:
+  #       - build_and_push_image
+  #     steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: create env file
-        run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+  #     - name: create env file
+  #       run: |
+  #         echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
 
-      - name: Docker Stack Deploy
-        uses: cssnr/stack-deploy-action@v1
-        with:
-          name: hokmrun
-          file: docker-stack.yaml
-          host: hokm.filelord.ir
-          user: deploy
-          ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          env_file: ./env.release
+  #     - name: Docker Stack Deploy
+  #       uses: cssnr/stack-deploy-action@v1
+  #       with:
+  #         name: hokmrun
+  #         file: docker-stack.yaml
+  #         host: hokm.filelord.ir
+  #         user: deploy
+  #         ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+  #         env_file: ./env.release

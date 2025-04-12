@@ -13,8 +13,6 @@ COPY --from=deps /go/pkg /go/pkg
 
 COPY ./backend .
 
-RUN ls
-
 # RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o ./build/core_server ./cmd/core/.
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o ./build/core_server ./cmd/core/.
 
