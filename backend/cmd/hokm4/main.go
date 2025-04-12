@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	globalStructs, poll, err := server.NewCommonGlobals()
+	globalStructs, poll, err := server.NewCommonGlobals("HOKM4_HTTP_PORT")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -39,7 +39,7 @@ type CommonGlobals struct {
 	wg      sync.WaitGroup
 }
 
-func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
+func NewCommonGlobals(http_port string) (*CommonGlobals, *pgxpool.Pool, error) {
 	// read configs
 	Glob := &CommonGlobals{}
 
@@ -67,7 +67,7 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	// 	return nil, nil, fmt.Errorf("error loading .env file")
 	// }
 
-	cfg, err = readConfigs()
+	cfg, err = readConfigs(http_port)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -82,9 +82,9 @@ func NewCommonGlobals() (*CommonGlobals, *pgxpool.Pool, error) {
 	return Glob, poll, nil
 }
 
-func readConfigs() (*Config, error) {
+func readConfigs(http_port string) (*Config, error) {
 	var cfg *Config = new(Config)
-	port := os.Getenv("HTTP_PORT")
+	port := os.Getenv(http_port)
 	if port == "" {
 		return nil, fmt.Errorf("can't read port from .env %s", port)
 	}
