@@ -43,8 +43,17 @@ jobs:
           push: true
           file: core.Dockerfile
           tags: |
-            ghcr.io/arian-nj/tix:latest
-            ghcr.io/arian-nj/tix:${{ github.sha }}
+            ghcr.io/arian-nj/tix-core:latest
+            ghcr.io/arian-nj/tix-core:${{ github.sha }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          file: hokm4.Dockerfile
+          tags: |
+            ghcr.io/arian-nj/tix-hokm4:latest
+            ghcr.io/arian-nj/tix-hokm4:${{ github.sha }}
   # deploy:
   #     runs-on: ubuntu-latest
   #     needs:
