@@ -47,7 +47,7 @@ jobs:
       - name: Android pck
         run: |
           mkdir -p ${{env.EXPORT_FOLDER_LINUX}}
-          ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export-pack AndroidPck $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
           
 
       # - name: Android Pck Build
