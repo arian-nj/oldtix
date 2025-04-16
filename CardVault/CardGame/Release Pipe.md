@@ -6,7 +6,9 @@
 - [x] auto create image ✅ 2025-04-16
 - [x] setup traefik ✅ 2025-04-16
 - [x] on push to release automate deploy ✅ 2025-04-16
-- [ ] Godot action
+- [ ] export pck action
+- [ ] upload pack
+- [ ] manage versioning
 
 # RELEASE PIP LINE
 - [x] learn git branching ✅ 2025-03-17
