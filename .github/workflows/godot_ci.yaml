@@ -15,7 +15,7 @@ env:
   EXPORT_FOLDER_ANDROID: build/android
   EXPORT_FOLDER_LINUX: build/linux
   APPLICATION_NAME: TixGame
-  EXPORT_NAME: "android-pck"
+  # EXPORT_NAME: "android-pck"
   
 jobs:
   exports:
@@ -43,11 +43,12 @@ jobs:
             unzip godot_export_template.tpz -d ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
             mv ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/templates/* ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/
 
-            ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export-release linux $(pwd)/${{env.EXPORT_FOLDER_LINUX}}/${{env.EXPORT_NAME}}.x86_64
 
-      - name: linux build
+      - name: Android pck
         run: |
           mkdir -p ${{env.EXPORT_FOLDER_LINUX}}
+          ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export-pack AndroidPck $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          
 
       # - name: Android Pck Build
       #   run: |
