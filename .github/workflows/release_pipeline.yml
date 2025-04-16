@@ -79,3 +79,8 @@ jobs:
           user: filelord
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
+
+          registry_host: 'ghcr.io'
+          registry_user: ${{ vars.GHCR_USER }}
+          registry_pass: ${{ secrets.GHCR_TOKEN }}
+          summary: true
