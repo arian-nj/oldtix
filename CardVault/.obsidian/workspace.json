@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/V 1.0.0.md",
+                "file": "CardGame/Release Pipe.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "V 1.0.0"
+              "title": "Release Pipe"
             }
           },
           {
@@ -202,10 +202,10 @@
   },
   "active": "df0c19167d56ab38",
   "lastOpenFiles": [
+    "CardGame/V 1.0.0.md",
     "CardGame/Game Flow Chart.md",
     "CardGame/Release Pipe.md",
     "CardGame/TO DO Card.md",
-    "CardGame/V 1.0.0.md",
     "CardGame/Coin.md",
     "CardGame/Authentication.md",
     "CardGame/Name.md"

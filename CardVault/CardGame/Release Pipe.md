@@ -1,3 +1,13 @@
+- [x] make docker file ✅ 2025-04-16
+- [x] docker compose or stack file ✅ 2025-04-16
+- [x] read docker swarm docker ✅ 2025-04-16
+- [x] docker secrets ✅ 2025-04-16
+- [x] git hub actions ✅ 2025-04-16
+- [x] auto create image ✅ 2025-04-16
+- [x] setup traefik ✅ 2025-04-16
+- [ ] on push to release automate deploy
+- [ ] Godot action
+
 # RELEASE PIP LINE
 - [x] learn git branching ✅ 2025-03-17
 - [x] run action on change to release branch ✅ 2025-03-17
@@ -10,9 +20,7 @@
 docker seems to make more sense people say it's bad 
 how dockerize my project
 i think the solution in docker compose
-
-
-- [ ] time some off my tasks ??? write them in front of each task
+(later me: Yep!)
 
 # Smooth Update
 start new version
