@@ -5,7 +5,7 @@
 - [x] git hub actions ✅ 2025-04-16
 - [x] auto create image ✅ 2025-04-16
 - [x] setup traefik ✅ 2025-04-16
-- [ ] on push to release automate deploy
+- [x] on push to release automate deploy ✅ 2025-04-16
 - [ ] Godot action
 
 # RELEASE PIP LINE
