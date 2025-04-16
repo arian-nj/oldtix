@@ -64,7 +64,7 @@ jobs:
           aws_key_id: ${{ secrets.S3_SECRET_KEY }}
           aws_secret_access_key: ${{ secrets.S3_ACCESS_KEY}}
           aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_dir: ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          source_dir: ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
           # destination_dir: 
           endpoint: ${{secrets.S3_ENDPOINT}}
       # - name: Android Pck Build
