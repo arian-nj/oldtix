@@ -32,10 +32,11 @@ func run() error {
 		return err
 	}
 
-	release_mode := os.Getenv("RELEASE_MODE")
-	if release_mode == "" {
-		log.Fatal("RELEASE_MODE is empty")
-	}
+	// release_mode := os.Getenv("RELEASE_MODE")
+	// if release_mode == "" {
+	// 	log.Fatal("RELEASE_MODE is empty")
+	// }
+	release_mode := "release"
 
 	queries, poll, err := dbconf.SetupDB()
 	if err != nil {

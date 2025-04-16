@@ -52,21 +52,32 @@ jobs:
           echo ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
           mkdir -v -p ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
           ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
-      
-      - name: Upload Arifict
-        uses: actions/upload-artifact@v4
-        with:
-          name: android.pck
-          path:  ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
-      - name: Upload S3
-        uses: shallwefootball/s3-upload-action@master
-        with:
-          aws_key_id: ${{ secrets.S3_SECRET_KEY }}
-          aws_secret_access_key: ${{ secrets.S3_ACCESS_KEY}}
-          aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_dir: ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
-          # destination_dir: 
-          endpoint: ${{secrets.S3_ENDPOINT}}
+                
+      - name: Upload PCK to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
+          AWS_REGION: us-east-1  # change to your region
+        run: |
+          apt-get install -y awscli
+          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android.pck
+  
+      # - name: Install Go
+      #   run: |
+      #     wget https://go.dev/dl/go1.22.2.linux-amd64.tar.gz
+      #     tar -C /usr/local -xzf go1.22.2.linux-amd64.tar.gz
+      #     echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
+      #     echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
+      # - name: Run Go code
+      #   run: |
+      #     export PATH=$PATH:/usr/local/go/bin
+      #     export S3_ACCESS_KEY
+      #     export S3_BUCKET_NAME
+      #     export S3_SECRET_KEY
+      #     export S3_ENDPOINT
+
+      #     cd backend 
+      #     go run ./tools/gos3/.  # or go build, go test, etc.
       # - name: Android Pck Build
       #   run: |
       #     mkdir -v -p build/android/
