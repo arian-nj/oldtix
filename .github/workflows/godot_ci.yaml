@@ -25,7 +25,7 @@ jobs:
     
     steps:
       - name: install dependencies
-        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync wine64osslsigncode && rm -rf /var/lib/apt/lists/*
+        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync && rm -rf /var/lib/apt/lists/*
 
       - name: Checkout
         uses: actions/checkout@v4
