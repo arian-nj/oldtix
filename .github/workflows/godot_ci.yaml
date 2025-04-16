@@ -43,7 +43,7 @@ jobs:
             unzip godot_export_template.tpz -d ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
             mv ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/templates/* ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/
 
-            ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export linux $(pwd)/${{env.EXPORT_FOLDER_LINUX}}/${{env.EXPORT_NAME}}.x86_64
+            ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export-release linux $(pwd)/${{env.EXPORT_FOLDER_LINUX}}/${{env.EXPORT_NAME}}.x86_64
 
       - name: linux build
         run: |
