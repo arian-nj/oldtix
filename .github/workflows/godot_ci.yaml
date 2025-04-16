@@ -24,6 +24,9 @@ jobs:
       image: debian:bookworm-slim
     
     steps:
+      - name: setting env variable
+        run: |
+          echo "MAIN_FOLDER=$(pwd)" >> $GITHUB_ENV
       - name: install dependencies
         run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync && rm -rf /var/lib/apt/lists/*
 
@@ -46,14 +49,14 @@ jobs:
 
       - name: Android pck
         run: |
-          mkdir -v -p ${{env.EXPORT_FOLDER_ANDROID}}
-          ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          mkdir -v -p ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
+          ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
       
       - name: Upload Arifict
         uses: actions/upload-artifact@v4
         with:
           name: android.pck
-          path: $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          path:  ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
 
       # - name: Android Pck Build
       #   run: |
