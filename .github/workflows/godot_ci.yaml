@@ -60,7 +60,7 @@ jobs:
           AWS_REGION: us-east-1  # change to your region
         run: |
           apt-get install -y awscli
-          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android.pck
+          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
   
       # - name: Install Go
       #   run: |
