@@ -57,7 +57,15 @@ jobs:
         with:
           name: android.pck
           path:  ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
-
+      - name: Upload S3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.S3_SECRET_KEY }}
+          aws_secret_access_key: ${{ secrets.S3_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
+          source_dir: ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+          # destination_dir: 
+          endpoint: ${{secrets.S3_ENDPOINT}}
       # - name: Android Pck Build
       #   run: |
       #     mkdir -v -p build/android/

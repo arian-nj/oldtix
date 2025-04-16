@@ -24,8 +24,8 @@ func get_newest_version()-> String:
 	
 	downloadProgressBar.indeterminate = true
 	newVersionLabel.visible = false
-	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-	return ""
+	# get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
+	# return ""
 # 
 	var ov_result := get_local_version()
 	var old_version_string:String = ov_result[0]
@@ -52,6 +52,7 @@ func get_newest_version()-> String:
 		
 		var domain := "cgame.storage.c2.liara.space"
 		var pack_url := "/patches/dev/GameContentV_"+new_version_string+".pck"
+		pack_url = "/patches/dev/TixGame_android.pck"
 		err = await downloadProgressBar.start_downloading(domain,pack_url)
 		if err != "":
 			return err

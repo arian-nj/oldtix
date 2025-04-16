@@ -6,7 +6,7 @@
 - [x] auto create image ✅ 2025-04-16
 - [x] setup traefik ✅ 2025-04-16
 - [x] on push to release automate deploy ✅ 2025-04-16
-- [ ] export pck action
+- [x] export pck action ✅ 2025-04-16
 - [ ] upload pack
 - [ ] manage versioning
 
