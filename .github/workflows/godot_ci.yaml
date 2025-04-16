@@ -48,7 +48,12 @@ jobs:
         run: |
           mkdir -v -p ${{env.EXPORT_FOLDER_ANDROID}}
           ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
-          
+      
+      - name: Upload Arifict
+        uses: actions/upload-artifact@v4
+        with:
+          name: android.pck
+          path: $(pwd)/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
 
       # - name: Android Pck Build
       #   run: |
