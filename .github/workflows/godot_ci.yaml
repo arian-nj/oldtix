@@ -22,9 +22,10 @@ jobs:
         run: |
             mkdir -v -p ~/.local/share/godot/export_templates/
             mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Web Build
+      - name: Android Pck Build
         run: |
-          mkdir -v -p build/android
+          mkdir -v -p build/android/
+          mkdir -v -p build/android/pck
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH
           godot --headless --verbose --export-pack "AndroidPck" $EXPORT_DIR/pck/patch.pck
