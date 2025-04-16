@@ -1,11 +1,14 @@
 name: "godot-ci export"
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       project_version:
+#         required: true
+#         type: string
 on:
-  workflow_dispatch:
-    inputs:
-      project_version:
-        required: true
-        type: string
-
+  push:
+    branches:
+        - "release"
 env:
   GODOT_VERSION: 4.4.1
   GODOT_PROJRCT_LOCATION: ./game/project.godot
