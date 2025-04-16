@@ -1,32 +1,56 @@
 name: "godot-ci export"
 on:
-  push:
-    branches:
-        - "release"
+  workflow_dispatch:
+    inputs:
+      project_version:
+        required: true
+        type: string
+
 env:
   GODOT_VERSION: 4.4.1
+  GODOT_PROJRCT_LOCATION: ./game/project.godot
+  EXPORT_FOLDER_ANDROID: build/android
+  EXPORT_FOLDER_LINUX: build/linux
+  APPLICATION_NAME: TixGame
   EXPORT_NAME: "android-pck"
-  PROJECT_PATH: game
   
 jobs:
-  export-android:
+  exports:
     runs-on: ubuntu-22.04
     container:
-      image: barichello/godot-ci:4.4.1
+      image: debian:bookworm-slim
+    
     steps:
+      - name: install dependencies
+        run: apt-get update && apt-get install -y --no-install-recommends ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync wine64osslsigncode && rm -rf /var/lib/apt/lists/*
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup
+
+      - name: Setup Godot
         run: |
-            mkdir -v -p ~/.local/share/godot/export_templates/
-            mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Android Pck Build
+            wget -q -O godot_linux.zip https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64.zip
+            unzip godot_linux.zip
+            mv Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64 godotcmd
+
+            wget -q -O godot_export_template.tpz https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_export_templates.tpz
+            mkdir -v -p ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
+            unzip godot_export_template.tpz -d ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
+            mv ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/templates/* ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/
+
+            ./godotcmd --import ${{ env.GODOT_PROJRCT_LOCATION }} --headless --export linux $(pwd)/${{env.EXPORT_FOLDER_LINUX}}/${{env.EXPORT_NAME}}.x86_64
+
+      - name: linux build
         run: |
-          mkdir -v -p build/android/
-          mkdir -v -p build/android/pck
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-pack "AndroidPck" $EXPORT_DIR/pck/patch.pck
+          mkdir -p ${{env.EXPORT_FOLDER_LINUX}}
+
+      # - name: Android Pck Build
+      #   run: |
+      #     mkdir -v -p build/android/
+      #     mkdir -v -p build/android/pck
+      #     EXPORT_DIR="$(readlink -f build)"
+      #     cd $PROJECT_PATH
+      #     godot --headless --verbose --export-pack "AndroidPck" $EXPORT_DIR/pck/patch.pck
     
