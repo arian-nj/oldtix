@@ -1,7 +1,13 @@
 services:
+  networks:
+    default: # This targets the default network created for the stack
+      driver: overlay
+      attachable: true 
 
   reverse-proxy:
     image: traefik:v3.3
+    networks:
+      - default
     command:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
@@ -34,6 +40,8 @@ services:
   
   db:
     image: postgres:latest
+    networks:
+      - default
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: pass
@@ -50,6 +58,8 @@ services:
 
   migrate:
     image: amacneil/dbmate:latest
+    networks:
+      - default
     environment:
       DATABASE_URL: "postgres://admin:pass@db:5432/game?sslmode=disable"
     volumes:
@@ -62,6 +72,8 @@ services:
     
   core_api:
     image: ghcr.io/arian-nj/tix-core:${GIT_COMMIT_HASH}
+    networks:
+      - default
     build:
       context: .
       dockerfile: core.Dockerfile
@@ -85,7 +97,7 @@ services:
       update_config:
         order: start-first
     depends_on:
-      - db
+      - migrate
   # hokm4:
   #   build:
   #     context: .
