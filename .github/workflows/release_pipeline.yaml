@@ -15,7 +15,7 @@ env:
   GODOT_PROJRCT_LOCATION: ./game/project.godot
   EXPORT_FOLDER_ANDROID: build/android
   EXPORT_FOLDER_LINUX: build/linux
-  APPLICATION_NAME: TixGame
+  APPLICATION_NAME: Tix
   # EXPORT_NAME: "android-pck"
 
 jobs:
@@ -83,6 +83,7 @@ jobs:
       - name: create env file
         run: |
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+            echo "PROJECT_VERSION=${{ inputs.PROJECT_VERSION }}" >> ./envfile
             
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
@@ -144,4 +145,4 @@ jobs:
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" 
           unzip awscliv2.zip
           ./aws/install
-          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
+          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android_v${{ inputs.project_version }}.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}

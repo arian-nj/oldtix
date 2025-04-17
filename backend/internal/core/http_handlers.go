@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -30,37 +31,42 @@ func (app *ApiApplication) status(writer http.ResponseWriter, r *http.Request) {
 }
 
 func (app *ApiApplication) getLatestVersion(w http.ResponseWriter, r *http.Request) {
-	pwRow, err := app.Queries.GetVersion(r.Context(), app.ReleaseMode)
-	if err != nil {
-		app.ServerError(w, r, err)
-		return
+	// pwRow, err := app.Queries.GetVersion(r.Context(), app.ReleaseMode)
+	// if err != nil {
+	// 	app.ServerError(w, r, err)
+	// 	return
 
+	// }
+	project_version := os.Getenv("PROJECT_VERSION")
+	if project_version == "" {
+		app.ServerError(w, r, fmt.Errorf("PROJECT_VERSION is empty"))
+		return
 	}
 
 	data := map[string]string{
-		"version": pwRow.VersionNumber,
+		"version": project_version,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err := response.JSON(w, http.StatusOK, data)
 	if err != nil {
 		app.ServerError(w, r, err)
 		return
 	}
 }
 
-var UserIsNotValidErr error = fmt.Errorf("user id is not valid")
+var ErrUserIsNotValid error = fmt.Errorf("user id is not valid")
 
 func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 	user_param := chi.URLParam(r, "user_id")
 	userid_int, err := strconv.Atoi(user_param)
 	if err != nil {
-		app.BadRequest(w, r, UserIsNotValidErr)
+		app.BadRequest(w, r, ErrUserIsNotValid)
 		return
 	}
 
 	user, err := app.Queries.GetPerson(r.Context(), userid_int)
 	if err != nil {
-		app.BadRequest(w, r, UserIsNotValidErr)
+		app.BadRequest(w, r, ErrUserIsNotValid)
 		return
 	}
 
@@ -86,7 +92,7 @@ func (app *ApiApplication) getUserStatisticsData(w http.ResponseWriter, r *http.
 	user_param := chi.URLParam(r, "user_id")
 	user_int, err := strconv.Atoi(user_param)
 	if err != nil {
-		app.BadRequest(w, r, UserIsNotValidErr)
+		app.BadRequest(w, r, ErrUserIsNotValid)
 		return
 	}
 
