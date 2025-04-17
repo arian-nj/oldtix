@@ -55,10 +55,10 @@ services:
     volumes:
       - ./backend/db/migrations:/db/migrations
     command: ["dbmate", "--wait", "up"]
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: none
+    # deploy:
+    #   replicas: 1
+    #   restart_policy:
+    #     condition: none
     
   core_api:
     image: ghcr.io/arian-nj/tix-core:${GIT_COMMIT_HASH}
