@@ -50,19 +50,14 @@ services:
 
   migrate:
     image: amacneil/dbmate:latest
-    depends_on:
-      - db
     environment:
-      # point dbmate at your postgres service
       DATABASE_URL: "postgres://admin:pass@db:5432/game?sslmode=disable"
     volumes:
-      # assumes your migrations live in ./db/migrations
       - ./backend/db/migrations:/db/migrations
-    command: ["up"]
+    command: ["dbmate", "--wait", "up"]
     deploy:
       replicas: 1
       restart_policy:
-        # if migrations fail, you’ll see the error and it won’t endlessly restart
         condition: none
     
   core_api:
