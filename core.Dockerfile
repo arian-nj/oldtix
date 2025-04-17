@@ -1,6 +1,8 @@
 FROM golang:1.24-bookworm AS deps
 
 WORKDIR /app
+ARG PROJECT_VERSION
+ENV PROJECT_VERSION ${PROJECT_VERSION}
 
 COPY ./backend/go.mod ./backend/go.sum ./
 

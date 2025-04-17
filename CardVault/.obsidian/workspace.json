@@ -32,12 +32,12 @@
             }
           },
           {
-            "id": "68a1f44620e22f88",
+            "id": "eff3d8a363276b92",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/Coin.md",
+                "file": "CardGame/V 1.0.0.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -52,10 +52,11 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Coin"
+              "title": "V 1.0.0"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -200,10 +201,10 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "df0c19167d56ab38",
+  "active": "eff3d8a363276b92",
   "lastOpenFiles": [
-    "CardGame/V 1.0.0.md",
     "CardGame/Release Pipe.md",
+    "CardGame/V 1.0.0.md",
     "CardGame/Game Flow Chart.md",
     "CardGame/TO DO Card.md",
     "CardGame/Coin.md",

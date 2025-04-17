@@ -55,6 +55,8 @@ jobs:
           context: .
           push: true
           file: core.Dockerfile
+          build-args: |
+            "PROJECT_VERSION=${{ inputs.project_version }}"
           tags: |
             ghcr.io/arian-nj/tix-core:latest
             ghcr.io/arian-nj/tix-core:${{ github.sha }}
@@ -83,7 +85,8 @@ jobs:
       - name: create env file
         run: |
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
-            echo "PROJECT_VERSION=${{ inputs.PROJECT_VERSION }}" >> ./envfile
+            echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
+            cat ./envfile
             
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
