@@ -65,28 +65,3 @@ jobs:
           unzip awscliv2.zip
           ./aws/install
           aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
-  
-      # - name: Install Go
-      #   run: |
-      #     wget https://go.dev/dl/go1.22.2.linux-amd64.tar.gz
-      #     tar -C /usr/local -xzf go1.22.2.linux-amd64.tar.gz
-      #     echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
-      #     echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
-      # - name: Run Go code
-      #   run: |
-      #     export PATH=$PATH:/usr/local/go/bin
-      #     export S3_ACCESS_KEY
-      #     export S3_BUCKET_NAME
-      #     export S3_SECRET_KEY
-      #     export S3_ENDPOINT
-
-      #     cd backend 
-      #     go run ./tools/gos3/.  # or go build, go test, etc.
-      # - name: Android Pck Build
-      #   run: |
-      #     mkdir -v -p build/android/
-      #     mkdir -v -p build/android/pck
-      #     EXPORT_DIR="$(readlink -f build)"
-      #     cd $PROJECT_PATH
-      #     godot --headless --verbose --export-pack "AndroidPck" $EXPORT_DIR/pck/patch.pck
-    
