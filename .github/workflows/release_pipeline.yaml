@@ -99,9 +99,9 @@ jobs:
           env_file: ./envfile
 
           registry_auth: true
-          # registry_host: 'ghcr.io'
-          # registry_user: ${{ secrets.GHCR_USER }}
-          # registry_pass: ${{ secrets.GHCR_TOKEN }}
+          registry_host: 'ghcr.io'
+          registry_user: ${{ secrets.GHCR_USER }}
+          registry_pass: ${{ secrets.GHCR_TOKEN }}
           summary: true
 
   godot_export:
