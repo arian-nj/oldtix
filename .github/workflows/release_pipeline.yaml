@@ -55,8 +55,6 @@ jobs:
           context: .
           push: true
           file: core.Dockerfile
-          # build-args: |
-          #   "PROJECT_VERSION=${{ inputs.project_version }}"
           tags: |
             ghcr.io/arian-nj/tix-core:latest
             ghcr.io/arian-nj/tix-core:${{ github.sha }}
@@ -148,4 +146,4 @@ jobs:
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" 
           unzip awscliv2.zip
           ./aws/install
-          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/${{env.APPLICATION_NAME}}_android_v${{ inputs.project_version }}.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
+          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/release/${{env.APPLICATION_NAME}}_android_v${{ inputs.project_version }}.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}

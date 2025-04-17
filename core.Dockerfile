@@ -20,9 +20,6 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 
-# ARG PROJECT_VERSION
-# ENV PROJECT_VERSION ${PROJECT_VERSION}
-
 # Create a non-root user and group
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 

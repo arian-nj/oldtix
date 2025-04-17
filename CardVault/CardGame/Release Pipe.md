@@ -8,7 +8,7 @@
 - [x] on push to release automate deploy ✅ 2025-04-16
 - [x] export pck action ✅ 2025-04-16
 - [x] upload pack ✅ 2025-04-17
-- [ ] manage versioning
+- [x] manage versioning ✅ 2025-04-17
 
 # RELEASE PIP LINE
 - [x] learn git branching ✅ 2025-03-17
