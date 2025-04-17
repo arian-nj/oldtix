@@ -22,12 +22,6 @@ type Hokm4Game struct {
 	EndStamp           pgtype.Timestamptz
 }
 
-type PatchVersion struct {
-	ID            int
-	Rmode         string
-	VersionNumber string
-}
-
 type Person struct {
 	ID             int
 	Created        pgtype.Timestamptz
