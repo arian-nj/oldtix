@@ -55,8 +55,8 @@ jobs:
           context: .
           push: true
           file: core.Dockerfile
-          build-args: |
-            "PROJECT_VERSION=${{ inputs.project_version }}"
+          # build-args: |
+          #   "PROJECT_VERSION=${{ inputs.project_version }}"
           tags: |
             ghcr.io/arian-nj/tix-core:latest
             ghcr.io/arian-nj/tix-core:${{ github.sha }}
