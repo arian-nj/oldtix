@@ -1,10 +1,13 @@
-name: "godot-ci export"
+name: "godot export"
 on:
   workflow_dispatch:
     inputs:
       project_version:
         required: true
         type: string
+
+run-name: "godot export - ${{ inputs.project_version }}"
+
 # on:
 #   push:
 #     branches:
