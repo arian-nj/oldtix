@@ -7,7 +7,7 @@
 - [x] setup traefik ✅ 2025-04-16
 - [x] on push to release automate deploy ✅ 2025-04-16
 - [x] export pck action ✅ 2025-04-16
-- [ ] upload pack
+- [x] upload pack ✅ 2025-04-17
 - [ ] manage versioning
 
 # RELEASE PIP LINE
@@ -17,7 +17,6 @@
 - [x] setup vps ✅ 2025-03-17
 - [x] compile core go code ✅ 2025-03-18
 - [x] copy file to vps ✅ 2025-03-18
-- [ ] how to run it automatically
 - [ ] cors
 docker seems to make more sense people say it's bad 
 how dockerize my project
