@@ -1,9 +1,4 @@
 services:
-  networks:
-    default: # This targets the default network created for the stack
-      driver: overlay
-      attachable: true 
-
   reverse-proxy:
     image: traefik:v3.3
     networks:
@@ -119,3 +114,8 @@ volumes:
 secrets:
   secret-key: 
     external: true
+
+networks:
+  default: # This targets the default network created for the stack
+    driver: overlay
+    attachable: true 
