@@ -5,7 +5,7 @@ extends CanvasLayer
 @export var downloadProgressBar:DownloadProgressBar
 @export var errorBorad:LPError
 
-var server_url := "http://127.0.0.1:4444"
+var server_url := "https://hokm.filelord.ir"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
@@ -51,7 +51,7 @@ func get_newest_version()-> String:
 		newVersionLabel.visible = true
 		
 		var domain := "cgame.storage.c2.liara.space"
-		var pack_url := "/patches/dev/GameContentV_"+new_version_string+".pck"
+		var pack_url := "/patches/release/Tix_android_v"+new_version_string+".pck"
 		pack_url = "/patches/dev/TixGame_android.pck"
 		err = await downloadProgressBar.start_downloading(domain,pack_url)
 		if err != "":

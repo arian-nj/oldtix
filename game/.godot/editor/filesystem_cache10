@@ -1,5 +1,5 @@
 fc8a56933c4b1c8d796fdb8f7a9f9475
-::res://::1744834495
+::res://::1744906848
 export_presets.cfg::TextFile/TextFile::-1::1744818196::0::1::::<><><>0<>0<><>::
 ::res://GameContent/::1744820025
 icon.svg::CompressedTexture2D/CompressedTexture2D::710372229714011508::1742209041::1744820025::1::::<><><>0<>0<>ca5956eb1b9c3e7f6d5eb32df5cbc3b1<>res://.godot/imported/icon.svg-f43d973d7de90098ea79562830daca71.ctex::
@@ -36,7 +36,7 @@ SwingComponent.gd::GDScript/GDScript::3082081898919340792::1742209041::0::1::::S
 ::res://GameContent/Katana/::1742209041
 JsonClassConverter.gd::GDScript/GDScript::3737322763497134845::1742209041::0::1::::JsonClassConverter<>RefCounted<><>0<>0<><>::
 KAccount.gd::GDScript/GDScript::6627165314654854279::1744108791::0::1::::KAccount<>Node<><>0<>0<><>::
-Katana.gd::GDScript/GDScript::6302919366548538207::1744466662::0::1::::Katana<>Node<><>0<>0<><>::
+Katana.gd::GDScript::6302919366548538207::1744895080::0::1::::Katana<>Node<><>0<>0<><>::
 KatanaSocket.gd::GDScript/GDScript::282418805304031953::1743862303::0::1::::KatanaSocket<>Node<><>0<>0<><>::
 KEvent.gd::GDScript/GDScript::582543365396308314::1743184630::0::1::::KEvent<>Node<><>0<>0<><>::
 ::res://GameContent/Scenes/::1743927770
@@ -110,9 +110,9 @@ UserStatistics.gd::GDScript/GDScript::5996314393816919085::1744109289::0::1::::U
 ::res://GameContent/Types/Hub/::1742209041
 AccountData.gd::GDScript/GDScript::4342140966820892252::1742209041::0::1::::AccountData<>Resource<><>0<>0<><>::
 AcctiveGameData.gd::GDScript/GDScript::8789808599632364854::1742209041::0::1::::ActiveGameData<>Resource<><>0<>0<><>::
-::res://PatchSystem/::1744820025
-download_progress_control.gd::GDScript/GDScript::209972298112514102::1743796265::0::1::::DownloadProgressBar<>ProgressBar<><>0<>0<><>::
-LoadPatcher.tscn::PackedScene/PackedScene::4497290057550128049::1743927842::0::1::::<><><>0<>0<><>::uid://cw5df7u6sqlw8::::res://PatchSystem/LoadPatchesScript.gd<>uid://qtnu1lo5l4ls::::res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd<>uid://c8yhikus38yc::::res://PatchSystem/download_progress_control.gd<>uid://be2vor2nor6hu::::res://PatchSystem/LPEroorScript.gd<>uid://b16527gy3pryc::::res://PatchSystem/LoadPatcherreturn.png
+::res://PatchSystem/::1744895083
+download_progress_control.gd::GDScript/GDScript::209972298112514102::1744834559::0::1::::DownloadProgressBar<>ProgressBar<><>0<>0<><>::
+LoadPatcher.tscn::PackedScene::4497290057550128049::1744895083::0::1::::<><><>0<>0<><>::uid://cw5df7u6sqlw8::::res://PatchSystem/LoadPatchesScript.gd<>uid://qtnu1lo5l4ls::::res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd<>uid://c8yhikus38yc::::res://PatchSystem/download_progress_control.gd<>uid://be2vor2nor6hu::::res://PatchSystem/LPEroorScript.gd<>uid://b16527gy3pryc::::res://PatchSystem/LoadPatcherreturn.png
 LoadPatcherreturn.png::CompressedTexture2D/CompressedTexture2D::4277197746020730926::1414962528::1744820025::1::::<><><>0<>0<>7d335945545b9a158080db3970c4fc3c<>res://.godot/imported/LoadPatcherreturn.png-d64f95d0aadcfb38d1e1f786857f8661.ctex::
-LoadPatchesScript.gd::GDScript/GDScript::6379120053069019193::1744466662::0::1::::<>CanvasLayer<><>0<>0<><>::
+LoadPatchesScript.gd::GDScript::6379120053069019193::1744895016::0::1::::<>CanvasLayer<><>0<>0<><>::
 LPEroorScript.gd::GDScript/GDScript::2724215250784353990::1743765551::0::1::::LPError<>Control<><>0<>0<><>::

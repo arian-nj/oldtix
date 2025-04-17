@@ -9,7 +9,7 @@ const BaseUrl:String = "localhost"
 const HttpPreUrl:String = "http://"
 const WsPreUrl:String = "ws://"
 
-const HtppUserUrl:String = HttpPreUrl + "127.0.0.1:4444"
+const HtppUserUrl:String = "https://"+ "hokm.filelord.ir"
 
 const WsHokmUrl:String = WsPreUrl+"127.0.0.1:4445"
 const HttpHokmUrl:String = HttpPreUrl+"127.0.0.1:4445"
