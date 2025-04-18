@@ -1,8 +1,6 @@
 services:
   reverse-proxy:
     image: traefik:v3.3
-    networks:
-      - default
     command:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
@@ -35,11 +33,9 @@ services:
   
   db:
     image: postgres:latest
-    networks:
-      - default
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: pgpass
       POSTGRES_DB: game
     ports:
       - 0.0.0.0:5432:5432
@@ -51,24 +47,8 @@ services:
       timeout: 5s
       retries: 5
 
-  migrate:
-    image: amacneil/dbmate:latest
-    networks:
-      - default
-    environment:
-      DATABASE_URL: "postgres://admin:pass@db:5432/game?sslmode=disable"
-    volumes:
-      - ./backend/db/migrations:/db/migrations
-    command: ["dbmate", "--wait", "up"]
-    # deploy:
-    #   replicas: 1
-    #   restart_policy:
-    #     condition: none
-    
   core_api:
     image: ghcr.io/arian-nj/tix-core:${GIT_COMMIT_HASH}
-    networks:
-      - default
     build:
       context: .
       dockerfile: core.Dockerfile
@@ -84,7 +64,7 @@ services:
       - CORE_HTTP_PORT=4444
       - BASE_URL=https://hokm.filelord.ir
       - SecretKey=/run/secrets/secret-key
-      - DATABASE_URL=postgres://admin:pass@db:5432/game?sslmode=disable
+      - DATABASE_URL=postgres://pgadmin:pgpass@db:5432/game?sslmode=disable
       - RELEASE_MODE=dev
       - VERSION=0.2.0
       - PROJECT_VERSION=${PROJECT_VERSION}
@@ -114,8 +94,3 @@ volumes:
 secrets:
   secret-key: 
     external: true
-
-networks:
-  default: # This targets the default network created for the stack
-    driver: overlay
-    attachable: true 
