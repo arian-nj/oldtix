@@ -109,6 +109,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "./backend/db/*"
           target: "~/"
+        
       - name: Migrate DB
         uses: appleboy/ssh-action@v1
         with:
@@ -119,8 +120,9 @@ jobs:
             wget -O /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64
             chmod +x /usr/local/bin/dbmate
             ls
-            cd db_migrations
+            cd backend
             dbmate -u postgres://pgadmin:pgpass@db:5432/game?sslmode=disable up
+            cd ..
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
