@@ -101,6 +101,14 @@ jobs:
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
+      - name: Copy DB migration files to VPS
+        uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
+        with:
+          host: hokm.filelord.ir
+          username: filelord
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          source: "./backend/db/"
+          target: "~/db_migrations"
       - name: Migrate DB
         uses: appleboy/ssh-action@v1
         with:
@@ -109,10 +117,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
             wget -O /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64
-            sudo chmod +x /usr/local/bin/dbmate
-            cd ./backend
+            chmod +x /usr/local/bin/dbmate
+            ls
             dbmate -u postgres://pgadmin:pgpass@db:5432/game?sslmode=disable up
-            cd ..
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
