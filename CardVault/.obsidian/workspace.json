@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/Music.md",
+                "file": "CardGame/V 1.0.0.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Music"
+              "title": "V 1.0.0"
             }
           },
           {
@@ -43,8 +43,7 @@
               "title": "Game Flow Chart"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -189,15 +188,16 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "eff3d8a363276b92",
+  "active": "df0c19167d56ab38",
   "lastOpenFiles": [
-    "CardGame/Music.md",
     "CardGame/Release Pipe.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/V 1.0.0.md",
-    "CardGame/TO DO Card.md",
-    "CardGame/Coin.md",
+    "CardGame/Name.md",
     "CardGame/Authentication.md",
-    "CardGame/Name.md"
+    "CardGame/Game Flow Chart.md",
+    "CardGame/Coin.md",
+    "5 - Templates/Full Note.md",
+    "CardGame/V 1.0.0.md",
+    "CardGame/Music.md",
+    "CardGame/TO DO Card.md"
   ]
 }

@@ -381,6 +381,7 @@ text = "خونه"
 flat = true
 
 [node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "firstBetLabel", "secondBetButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
