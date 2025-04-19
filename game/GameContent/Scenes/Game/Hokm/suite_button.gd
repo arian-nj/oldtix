@@ -1,11 +1,12 @@
 class_name SuiteButton extends Button
 
 signal SuitePressed(sb:SuiteButton)
-var locked:bool = false
 
-var initial_position:Vector2
+var selected:bool = false # to use when reseting
+var locked:bool = false # locking from clicking
+
+var initial_position:Vector2 # start of scnene
 var initial_scale:Vector2
-
 
 func _ready() -> void:
 	initial_position = self.position
@@ -15,8 +16,7 @@ func _ready() -> void:
 func _on_pressed()->void:
 	if locked:
 		return
-	SuitePressed.emit(self)
-	locked = true
+	self.SuitePressed.emit(self)
 
 func move_hokm_to_position(final_hokm_control:Control) ->void:
 	var tween := create_tween()
@@ -28,36 +28,39 @@ func disolve_sprite()->Signal:
 	var mat:ShaderMaterial= material
 	tween.tween_property(mat,"shader_parameter/dissolve_value",0.0,2)
 	return tween.finished
+
 func set_disolve(disolve_value:float)->void:
 	var mat:ShaderMaterial= material
 	mat.set_shader_parameter("dissolve_value",disolve_value)
 
-func redo_scale()->void:
+func redo_scale(time_span:float)->void:
 	var tween := create_tween()
-	tween.parallel().tween_property(self,"scale",initial_scale,0.5)
+	tween.parallel().tween_property(self,"scale",initial_scale,time_span)
+	return 
 
-func redo_global_position()->void:
+func redo_global_position(time_span:float)->void:
 	var tween := create_tween()
-	tween.parallel().tween_property(self,"position",initial_position,0.5)
+	tween.parallel().tween_property(self,"position",initial_position,time_span)
+	return
 
-func _scale_up()->Signal:
+func _scale_up(time_span:float)->Signal:
 	var tween:Tween = create_tween()
 	self.scale = Vector2(0.0,0.0)
-	tween.parallel().tween_property(self,"scale",initial_scale,0.5)
+	tween.parallel().tween_property(self,"scale",initial_scale,time_span)
 	return tween.finished
 
-func go_to_place() -> void:
-	set_disolve(1.0)
-	redo_global_position()
-	if locked:
-		redo_scale()
+func reset(time_span:float) -> void:
+	self.set_disolve(1.0)
+	self.redo_global_position(time_span)
+	if selected:
+		self.redo_scale(time_span)
 	else:
-		_scale_up()
-	locked = false
+		self._scale_up(time_span)
 
-func go_up(final_hokm_control:Control)->void:
-	position = Vector2(0,0)
-	self.set_disolve(1)
-	await _scale_up()
-	await get_tree().create_timer(.5).timeout
-	move_hokm_to_position(final_hokm_control)
+
+# func go_up(final_hokm_control:Control,time_span:float)->void:
+# 	position = Vector2(0,0)
+# 	self.set_disolve(1)
+# 	await _scale_up(time_span)
+# 	await get_tree().create_timer(time_span).timeout
+# 	move_hokm_to_position(final_hokm_control)

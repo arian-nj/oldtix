@@ -1,2 +1,6 @@
 res://PatchSystem/LoadPatcher.tscn
 res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
+res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.tscn
+res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.gd
+res://GameContent/Scenes/Game/Hokm/suite_button.gd
+res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd

@@ -10,6 +10,7 @@ var is_hakem := false
 var got_cards_time:int
 
 func Enter()->void:
+	is_hakem = false
 	got_cards_time = 0
 	status_label.text = "Choose Hokm"
 	ws.new_event.connect(_on_new_event)
@@ -43,7 +44,9 @@ func _on_new_event(e:KEvent.Event)->void:
 			var btn :SuiteButton = chooseHokmPanel.find_btn_from_suite(table.game_data.current_trick.hokm)
 			btn.pressed.emit()
 		else:
-			chooseHokmPanel.come_up(table.game_data.current_trick.hokm)
+			await chooseHokmPanel.reset_all_suites()
+			var btn :SuiteButton = chooseHokmPanel.find_btn_from_suite(table.game_data.current_trick.hokm)
+			btn.pressed.emit()
 
 	# else:
 		# print_debug(e.type)
@@ -53,3 +56,4 @@ func _on_new_event(e:KEvent.Event)->void:
 # only runs if hakem panel is shown and hakem choosed hokm
 func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
 	ws.send_event(KEvent.TYPE_PLAYER_SELECTED_HOKM,str(Hokm))
+

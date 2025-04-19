@@ -10,7 +10,9 @@ signal HokmChoosed(Hokm:CardData.CardSuites)
 
 @export var final_hokm_control:Control
 
-var choosed_hokm_suite:SuiteButton
+@export var animation_time_span:float = 0.5
+
+var last_hokm_suite:SuiteButton
 
 var all_suits_btns:Array[SuiteButton]
 
@@ -53,29 +55,20 @@ func make_others_burn(sb:SuiteButton)->void:
 	for btn:SuiteButton in all_suits_btns:
 		if btn == sb:
 			btn.move_hokm_to_position(final_hokm_control)
-			choosed_hokm_suite = sb
+			last_hokm_suite = sb
+			btn.selected = true
 			continue
 		btn.disolve_sprite()
 		btn.locked = true
 	
-func reset_all_suites()->void:
+func reset_all_suites()->Signal:
 	for btn:SuiteButton in all_suits_btns:
-		btn.go_to_place()
+		btn.reset(animation_time_span)
+		btn.selected = false
+		btn.locked = false
 
-	choosed_hokm_suite = null
-
-
-func come_up(suite: CardData.CardSuites)->void:
-	if choosed_hokm_suite != null: 
-		await choosed_hokm_suite.disolve_sprite()
-		choosed_hokm_suite.redo_global_position()
-
-	var btn :SuiteButton =find_btn_from_suite(suite)
-	choosed_hokm_suite = btn
-	btn.go_up(final_hokm_control)
-	for other_btn:SuiteButton in all_suits_btns:
-		if other_btn != btn:
-			other_btn.set_disolve(0.0)
+	last_hokm_suite = null
+	return get_tree().create_timer(animation_time_span).timeout
 
 func find_btn_from_suite(suite: CardData.CardSuites)->SuiteButton:
 	var btn :SuiteButton
@@ -88,3 +81,17 @@ func find_btn_from_suite(suite: CardData.CardSuites)->SuiteButton:
 	elif suite == CardData.CardSuites.Heart:
 		btn = heartSuite
 	return btn
+
+func _on_show_choosed_hokm_button_pressed() -> void:
+	await reset_all_suites()
+	var btn :SuiteButton = find_btn_from_suite(CardData.CardSuites.Spade)
+	btn.pressed.emit()
+
+
+func _on_show_choosed_hokm_button_2_pressed() -> void:
+	await reset_all_suites()
+	var btn :SuiteButton = find_btn_from_suite(CardData.CardSuites.Club)
+	btn.pressed.emit()
+
+func _on_reset_button_pressed() -> void:
+	reset_all_suites()

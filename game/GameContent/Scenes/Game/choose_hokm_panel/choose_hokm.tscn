@@ -165,3 +165,48 @@ offset_top = 154.0
 offset_right = -7.0
 offset_bottom = 194.0
 grow_horizontal = 2
+
+[node name="ResetButton" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+disabled = true
+text = "Reset all"
+
+[node name="ShowChoosedHokmButton" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+offset_bottom = 50.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+disabled = true
+text = "Show new Hokm"
+
+[node name="ShowChoosedHokmButton2" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+disabled = true
+text = "Show new Hokm"
+
+[connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ShowChoosedHokmButton" to="." method="_on_show_choosed_hokm_button_pressed"]
+[connection signal="pressed" from="ShowChoosedHokmButton2" to="." method="_on_show_choosed_hokm_button_2_pressed"]
