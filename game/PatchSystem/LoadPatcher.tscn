@@ -9,12 +9,11 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_574je"]
 bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
 
-[node name="LoadPatcher" type="CanvasLayer" node_paths=PackedStringArray("oldVersionLabel", "newVersionLabel", "downloadProgressBar", "errorBorad")]
+[node name="LoadPatcher" type="CanvasLayer" node_paths=PackedStringArray("oldVersionLabel", "newVersionLabel", "downloadProgressBar")]
 script = ExtResource("1_ylikw")
 oldVersionLabel = NodePath("CustomRatioAspectContainer/VBoxContainer/VersionsLabel/OldVersionLabel")
 newVersionLabel = NodePath("CustomRatioAspectContainer/VBoxContainer/VersionsLabel/NewVersionLabel")
 downloadProgressBar = NodePath("CustomRatioAspectContainer/VBoxContainer/ProgressControl/ProgressBar")
-errorBorad = NodePath("CustomRatioAspectContainer/VBoxContainer/LPErrorControl")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15

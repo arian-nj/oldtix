@@ -71,8 +71,6 @@ services:
     deploy:
       update_config:
         order: start-first
-    depends_on:
-      - migrate
   # hokm4:
   #   build:
   #     context: .

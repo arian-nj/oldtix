@@ -21,7 +21,7 @@ import (
 
 func (app *ApiApplication) status(writer http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
-		"status": "ok",
+		"status": "ok u",
 	}
 
 	err := response.JSON(writer, http.StatusOK, data)

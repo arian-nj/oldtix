@@ -9,7 +9,7 @@
 - [x] export pck action ✅ 2025-04-16
 - [x] upload pack ✅ 2025-04-17
 - [x] manage versioning ✅ 2025-04-17
-- [ ] migration
+- [x] migration ✅ 2025-04-19
 
 # RELEASE PIP LINE
 - [x] learn git branching ✅ 2025-03-17

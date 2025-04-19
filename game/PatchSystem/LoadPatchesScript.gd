@@ -3,30 +3,30 @@ extends CanvasLayer
 @export var oldVersionLabel:Label
 @export var newVersionLabel:Label
 @export var downloadProgressBar:DownloadProgressBar
-@export var errorBorad:LPError
+@export var lpErrorBorad:LPErrorPanel
 
 var server_url := "https://hokm.filelord.ir"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
 func _ready() -> void:
-	errorBorad.TryAgain.connect(do_request)
+	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
+	return
+	lpErrorBorad.TryAgain.connect(do_request)
 	do_request()
 
 func do_request()->void:
 	var err := await get_newest_version()
 	if err != "":
 		pass
-		errorBorad.new_error(err)
+		lpErrorBorad.new_error(err)
 	
 	
 func get_newest_version()-> String:
 	
 	downloadProgressBar.indeterminate = true
 	newVersionLabel.visible = false
-	# get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-	# return ""
-# 
+
 	var ov_result := get_local_version()
 	var old_version_string:String = ov_result[0]
 	var err:String = ov_result[1]

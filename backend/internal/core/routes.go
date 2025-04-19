@@ -20,7 +20,6 @@ func NewApiApplication(globalStructs *server.CommonGlobals) *ApiApplication {
 }
 
 func (app *ApiApplication) CoreRoutes() *chi.Mux {
-
 	// http router
 	mux := chi.NewRouter()
 

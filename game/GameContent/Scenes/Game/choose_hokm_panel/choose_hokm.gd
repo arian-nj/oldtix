@@ -29,27 +29,27 @@ func _ready() -> void:
 func _on_spades_button_pressed(sb:SuiteButton) -> void:
 	print("spade")
 	HokmChoosed.emit(CardData.CardSuites.Spade)
-	make_it_burn(sb)
+	make_others_burn(sb)
 	
 
 func _on_heart_button_pressed(sb:SuiteButton) -> void:
 	print("heart")
 	HokmChoosed.emit(CardData.CardSuites.Heart)
-	make_it_burn(sb)
+	make_others_burn(sb)
 
 
 func _on_club_button_pressed(sb:SuiteButton) -> void:
 	print("club")
 	HokmChoosed.emit(CardData.CardSuites.Club)
-	make_it_burn(sb)
+	make_others_burn(sb)
 
 
 func _on_dimond_button_pressed(sb:SuiteButton) -> void:
 	print("diamond")
 	HokmChoosed.emit(CardData.CardSuites.Diamond)
-	make_it_burn(sb)
+	make_others_burn(sb)
 
-func make_it_burn(sb:SuiteButton)->void:
+func make_others_burn(sb:SuiteButton)->void:
 	for btn:SuiteButton in all_suits_btns:
 		if btn == sb:
 			btn.move_hokm_to_position(final_hokm_control)

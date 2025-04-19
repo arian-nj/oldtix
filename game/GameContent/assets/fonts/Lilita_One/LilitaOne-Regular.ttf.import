@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://iqxwhga1hhff"
+uid="uid://bwf20q5nlgh6b"
 path="res://.godot/imported/LilitaOne-Regular.ttf-5284eda61bfe3ca5f483ec137e6cd07a.fontdata"
 
 [deps]
@@ -26,7 +26,7 @@ subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
-fallbacks=[Resource("res://GameContent/assets/fonts/Almarai/Almarai-Bold.ttf")]
+fallbacks=[]
 Compress=null
 compress=true
 preload=[]

@@ -1,4 +1,4 @@
-class_name LPError extends Control
+class_name LPErrorPanel extends Control
 
 @export var lpErrorPanelContainer:PanelContainer
 @export var reTryButton:Button
