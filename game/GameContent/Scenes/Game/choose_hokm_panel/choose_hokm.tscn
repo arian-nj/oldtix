@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cuao4r37ihdu4" path="res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.gd" id="1_rvf6k"]
 [ext_resource type="PackedScene" uid="uid://cn8eprq2quc3f" path="res://GameContent/Scenes/Game/Hokm/suite_button.tscn" id="2_sqs23"]
 [ext_resource type="Shader" uid="uid://cjbre4q2cupfn" path="res://GameContent/Scenes/Game/Hokm/disolve_2d_shader.gdshader" id="3_x30ay"]
-[ext_resource type="Texture2D" uid="uid://dkfccdhxbx1gs" path="res://GameContent/assets/Suites.png" id="4_wqyuv"]
+[ext_resource type="Texture2D" uid="uid://chsi12k6h6txe" path="res://GameContent/assets/Suites.png" id="4_wqyuv"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_is06r"]
 

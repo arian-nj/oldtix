@@ -25,12 +25,14 @@ func Enter()->void:
 		is_hakem = true
 
 func Exit()->void:
+	ws.hold_events()
 	ws.new_event.disconnect(_on_new_event)
 	if chooseHokmPanel.HokmChoosed.is_connected(_on_hokm_choosed):
 		chooseHokmPanel.HokmChoosed.disconnect(_on_hokm_choosed)
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_NEW_CARD:
+		print(str(KAccount._instance.MyAccount.id) + " got new card event")
 		table.new_cards_event(e)		
 		got_cards_time += 1
 		if got_cards_time == 3:

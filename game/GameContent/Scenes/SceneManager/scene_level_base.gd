@@ -15,3 +15,6 @@ func CleanUp() -> void:
 	queue_free()
 
 signal manager_change_scene(to_level:SceneManager.Levels)
+
+func do_nothing_not_call()->void: # only reseon to exist resolving editor warning
+	manager_change_scene.is_null()

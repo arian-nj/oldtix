@@ -15,7 +15,7 @@ func Enter()->void:
 	win_panel.visible = true
 	trick_score_panel.end_game()
 
-func _on_new_event(e:KEvent.Event)->void:
+func _on_new_event(_e:KEvent.Event)->void:
 	pass
 
 func Exit()->void:

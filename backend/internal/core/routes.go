@@ -28,23 +28,20 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 
 	mux.Use(app.RecoverPanic)
 
-	mux.Group(func(r chi.Router) {
-		r.Use(app.Authenticate)
+	// All routes
+	mux.Get("/status", app.status)
+	mux.Get("/version", app.getLatestVersion)
+	mux.Post("/register", app.register)
+	mux.Post("/token", app.createAuthenticationToken)
 
-		// All routes
-		r.Get("/status", app.status)
-		r.Get("/version", app.getLatestVersion)
-		r.Post("/register", app.register)
-		r.Post("/token", app.createAuthenticationToken)
-
-		// Authenticated REST routes
-		r.Group(func(r2 chi.Router) {
-			r2.Use(app.RequireAuthenticatedUser)
-			r2.Put("/update", app.updateUserData)
-			r2.Get("/me", app.getMeData)
-			r2.Get("/person/{user_id}", app.getUserData)
-			r2.Get("/person/{user_id}/stat", app.getUserStatisticsData)
-		})
+	// Authenticated REST routes
+	mux.Group(func(authRouter chi.Router) {
+		authRouter.Use(app.Authenticate)
+		authRouter.Use(app.RequireAuthenticatedUser)
+		authRouter.Put("/update", app.updateUserData)
+		authRouter.Get("/me", app.getMeData)
+		authRouter.Get("/person/{user_id}", app.getUserData)
+		authRouter.Get("/person/{user_id}/stat", app.getUserStatisticsData)
 	})
 
 	return mux

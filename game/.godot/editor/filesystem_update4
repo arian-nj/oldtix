@@ -1,8 +1,8 @@
+res://GameContent/Scenes/MainMenu/main_menu.gd
+res://GameContent/Types/Hub/AcctiveGameData.gd
+res://GameContent/Scenes/MainMenu/bet_amount_panel.gd
 res://PatchSystem/LoadPatcher.tscn
-res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
-res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.tscn
-res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.gd
-res://GameContent/Scenes/Game/Hokm/suite_button.gd
-res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd
 res://GameContent/Scenes/MainMenu/MainMenu.tscn
-res://GameContent/Scenes/MainMenu/UserData/user_data.gd
+res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
+res://GameContent/Scenes/Game/Card/card.tscn
+res://GameContent/Scenes/LoginMenu/LoginMenu.tscn

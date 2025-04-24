@@ -1,6 +1,5 @@
 extends State
 
-
 @export var ws:KatanaSocket
 @export var table:Game4Table
 @export var status_label:Label
@@ -11,6 +10,7 @@ func Enter()->void:
 	table.MyCardPlayed.connect(on_me_card_played)
 
 func Exit()->void:
+	ws.hold_events()
 	ws.new_event.disconnect(_on_new_event)
 	table.MyCardPlayed.disconnect(on_me_card_played)
 
@@ -76,6 +76,8 @@ func on_me_card_played(card:Card)->void:
 	print("card played ",card.card_data.suit , " ", card.card_data.value)
 	if table.isMyTurn:
 		send_card_playend_event(card)
+	else:
+		table.last_card_played = card
 	
 func send_card_playend_event(card:Card)->void:
 	table.last_card_played = card

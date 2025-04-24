@@ -13,11 +13,11 @@ func Enter()->void:
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_MATCH_FOUND:
+		ws.hold_events()
 		table.parse_game_data(e.data)
 		table.set_player_to_hand()
 
 		status_label.text = "waiting new trick"
-		ws.hold_events()
 		Transition.emit(self,"wait_state")
 
 	elif e.type == KEvent.TYPE_REJOIN_MATCH:
@@ -36,4 +36,5 @@ func _on_new_event(e:KEvent.Event)->void:
 
 
 func Exit()->void:
+	ws.hold_events()
 	ws.new_event.disconnect(_on_new_event)

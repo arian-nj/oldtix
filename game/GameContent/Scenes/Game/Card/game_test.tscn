@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="1_0mwao"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="2_kp8tw"]
-[ext_resource type="PackedScene" uid="uid://1bin4853i1m6" path="res://GameContent/Scenes/Game/choose_hokm.tscn" id="3_y8ftj"]
 
 [sub_resource type="Gradient" id="Gradient_0evr3"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
@@ -15,6 +14,9 @@ fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7263d"]
 size = Vector2(94, 137)
+
+[sub_resource type="Resource" id="Resource_verbi"]
+metadata/__load_path__ = "res://GameContent/Scenes/Game/choose_hokm.tscn"
 
 [node name="CanvasLayer" type="CanvasLayer"]
 
@@ -107,7 +109,7 @@ collision_layer = 2
 position = Vector2(8, -37)
 shape = SubResource("RectangleShape2D_7263d")
 
-[node name="ChooseHokm" parent="GameTest/Table" instance=ExtResource("3_y8ftj")]
+[node name="ChooseHokm" parent="GameTest/Table"]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0

@@ -5,15 +5,14 @@ extends CanvasLayer
 @export var downloadProgressBar:DownloadProgressBar
 @export var lpErrorBorad:LPErrorPanel
 
-var server_url := "https://hokm.filelord.ir"
+var server_url := "https://core.filelord.ir"
 var patch_user_config_address := "user://version.cfg"
 var config := ConfigFile.new()
 
 func _ready() -> void:
-	get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-	return
-	lpErrorBorad.TryAgain.connect(do_request)
-	do_request()
+	get_tree().change_scene_to_file.call_deferred("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
+	# lpErrorBorad.TryAgain.connect(do_request)
+	# do_request()
 
 func do_request()->void:
 	var err := await get_newest_version()

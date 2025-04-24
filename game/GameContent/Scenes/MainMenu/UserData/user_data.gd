@@ -6,6 +6,8 @@ extends Control
 @export var profileButton:Button
 @export var profilePanelContainer:PanelContainer
 
+@export var statisticsSection:StatisticsSection
+
 
 func _ready() -> void:
 	profilePanelContainer.visible = false
@@ -21,15 +23,18 @@ func set_user_display_name_label()->void:
 
 func _on_resize()->void:
 	if profilePanelContainer.visible:
-		_on_profile_pressed()
+		# _on_profile_pressed()
+		profilePanelContainer.size = self.size
+		profilePanelContainer.global_position = self.global_position
 
 func _on_profile_pressed()->void:
 	panel_go_up()
 
-func _on_button_pressed() -> void:
+func _on_profile_panel_down_button_pressed() -> void:
 	panel_go_down()
 
 func panel_go_up()->void:
+	statisticsSection.get_animate_statistics()
 	profileButton.disabled = true
 	profilePanelContainer.visible = true
 
@@ -42,6 +47,7 @@ func panel_go_up()->void:
 	await tween.finished
 
 func panel_go_down()->void:
+	statisticsSection.redo_animate_statistics()
 	var target_position:Vector2 = self.global_position
 	target_position.y += self.size.y
 	
@@ -50,33 +56,3 @@ func panel_go_down()->void:
 	await tween.finished
 	profileButton.disabled = false
 	profilePanelContainer.visible = false
-
-
-# func panel_go_up()->void:
-# 	# profileButton.disabled = true
-# 	betPanelContainer.visible = true
-# 	betPanelContainer.size = self.size
-# 	betPanelContainer.global_position = self.global_position
-# 	betPanelContainer.global_position.y = self.size.y
-	
-# 	var tween := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-# 	tween.parallel().tween_property(betPanelContainer,"global_position",self.global_position,.8)
-# 	await tween.finished
-
-# func panel_go_down()->void:
-# 	var tween := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
-# 	var target_position:Vector2 = self.global_position
-# 	target_position.y += self.size.y
-
-# 	tween.parallel().tween_property(betPanelContainer,"global_position",target_position,1)
-# 	await tween.finished
-# 	# profileButton.disabled = false
-# 	betPanelContainer.visible = false
-
-
-# func _on_play_tic_2_button_pressed() -> void:
-# 	panel_go_up()
-
-
-# func _on_button_pressed() -> void:
-# 	panel_go_down()

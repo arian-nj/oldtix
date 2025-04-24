@@ -37,7 +37,7 @@ func _handle_event(event: KEvent.Event) -> void:
 func connect_to_game(coin_amount:int) -> void:
 	set_process(true)
 	print("Starting connection...")
-	var ws_url:String = Katana.WsHokmUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
+	var ws_url:String = Katana.Hokm4WsUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect err code " + str(err) +" " + error_string(err))
@@ -75,7 +75,7 @@ func process_events(_delta: float) -> void:
 	var event : KEvent.Event = events_queue.pop_front()
 	if event == null:
 		return
-	# print(KAccount._instance.MyAccount.username + " " +event.type)
+	print(KAccount._instance.MyAccount.username + " process " +event.type)
 	new_event.emit(event)	
 
 # Handles the open state and processes incoming messages

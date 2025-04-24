@@ -23,7 +23,11 @@ func request_user_data() -> void:
 	request_user_stats()
 
 func request_user_stats()->void:
-	self.userStat = await KAccount._instance.GetUserStatistics(str(user_id))
+	var result := await KAccount._instance.GetUserStatistics(str(user_id))
+	self.userStat = result[0]
+	var err:String = result[1]
+	if err != "":
+		return
 
 func _on_pressed()->void:
 	if userStat == null:

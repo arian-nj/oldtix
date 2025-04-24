@@ -39,9 +39,9 @@ func RefetchME()->bool:
 func GetUser(user_id:String)->AccountData:
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	add_child(http_req_node)
-	var req_url:= Katana.PersonUrl+user_id
+	var req_url:= Katana.CoreHttpUrl + Katana.PersonUrl + user_id
 	if user_id == "me":
-		req_url = Katana.MeUrl
+		req_url = Katana.CoreHttpUrl + Katana.MeUrl
 	
 	var err :int = http_req_node.request(req_url,AddAuthHeader(),HTTPClient.METHOD_GET)
 	
@@ -69,10 +69,10 @@ func GetUser(user_id:String)->AccountData:
 	me = JsonClassConverter.json_string_to_class(AccountData,body_byte.get_string_from_utf8())
 	return me
 
-func GetUserStatistics(user_id:String)->UserStatisticsData:
+func GetUserStatistics(user_id:String)->Array: # UserStatisticsData,String
 	var http_req_node:HTTPRequest = HTTPRequest.new()
 	add_child(http_req_node)
-	var req_url:= Katana.PersonUrl + user_id + Katana.PersonStatisticsAfter
+	var req_url:= Katana.CoreHttpUrl + Katana.PersonUrl + user_id + Katana.PersonStatisticsAfter
 	# if user_id == "me":
 	# 	req_url = Katana.MeUrl
 	
@@ -80,7 +80,7 @@ func GetUserStatistics(user_id:String)->UserStatisticsData:
 	
 	if err != OK:
 		print_debug("here1")
-		return null
+		return [null,"request failed"]
 	var response:Variant = await http_req_node.request_completed
 	http_req_node.queue_free()
 
@@ -91,7 +91,7 @@ func GetUserStatistics(user_id:String)->UserStatisticsData:
 	var response_code:int = response[1]
 	if response_code != HTTPClient.RESPONSE_OK:
 		print_debug(response_code)
-		return null
+		return [null,"response code is " + str(response_code)]
 	
 	# var _headers = response[2] # <-- not used
 	
@@ -99,4 +99,4 @@ func GetUserStatistics(user_id:String)->UserStatisticsData:
 
 	var me := UserStatisticsData.new()
 	me = JsonClassConverter.json_string_to_class(UserStatisticsData,body_byte.get_string_from_utf8())
-	return me
+	return [me,""]

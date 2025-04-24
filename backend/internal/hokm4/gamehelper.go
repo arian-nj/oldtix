@@ -126,6 +126,7 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Ca
 			return []cards.Card{}, err
 		}
 		humanPlayer.AddToEgress(socket.NewEvent(TypeNewCard, socket.EventMessage(data_byte)))
+		game.Logger.Info("giving " + strconv.Itoa(number) + " cards to " + strconv.Itoa(humanPlayer.UserId))
 
 	}
 	return remaining_cards, nil

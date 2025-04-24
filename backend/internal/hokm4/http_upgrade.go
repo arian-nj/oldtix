@@ -2,7 +2,6 @@ package hokm4
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -10,11 +9,50 @@ import (
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/pkg/validator"
+	"github.com/arian-nj/master-card/back/sqldb"
 )
 
 func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
 	user := server.ContextGetAuthenticatedUser(r)
+	activeGame, wasInAGame := app.Lobby.UserGames[user.ID]
 
+	if wasInAGame {
+		app.RejonGame(w, r, user, activeGame)
+	}
+	app.JoinGame(w, r, user)
+}
+func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, person *sqldb.Person, activeGame *GameState) {
+	// Upgrade Connection To Websocket
+	conn, err := socket.Upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		app.Logger.Error(err.Error())
+		return
+	}
+
+	client, err := socket.NewClient(conn)
+	if err != nil {
+		app.ReportServerError(r, err)
+		return
+	}
+	// hplayer := app.CreatePlayer(client, user.ID, coin_amount_int)
+	var Hplayer *HumanPlayer
+
+	for _, p := range activeGame.GetHumanPlayers() {
+		if p.UserId == person.ID {
+			Hplayer = p
+			break
+		}
+	}
+	Hplayer.Client = client
+	Hplayer.IsPlayng = true
+
+	app.RunReadWriteInBackground(Hplayer)
+	app.Logger.Info("new ws connection re-established " + strconv.Itoa(activeGame.BetAmount))
+	app.BackgroundSocketHandlers(Hplayer, activeGame.BetAmount)
+
+}
+
+func (app *ApplicationHokm4) JoinGame(w http.ResponseWriter, r *http.Request, person *sqldb.Person) {
 	// Coin Amount
 	coin_amount_string := r.URL.Query().Get("coin_amount")
 	coin_amount_int, err := strconv.Atoi(coin_amount_string)
@@ -30,7 +68,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 
 	tmpValidator.CheckField(validator.In(coin_amount_int, validBetAmounts...), "coin_amount", "this amount is not allowed")
 
-	tmpValidator.CheckField(coin_amount_int <= user.Coin, "coin_amount", "don't have enough coins")
+	tmpValidator.CheckField(coin_amount_int <= person.Coin, "coin_amount", "don't have enough coins")
 
 	// if user.Coin >= BET_AMOUNT_ONE {
 	// 	tmpValidator.CheckField(coin_amount_int != BET_NO_MONEY, "coin_amount", "you can't play a free game")
@@ -38,7 +76,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 
 	if tmpValidator.HasErrors() {
 		app.FailedValidation(w, r, tmpValidator)
-		log.Println(tmpValidator.Errors)
+		app.Logger.Error(fmt.Sprintln(tmpValidator.Errors))
 		return
 	}
 
@@ -54,30 +92,12 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		app.ReportServerError(r, err)
 		return
 	}
-	hplayer := app.CreatePlayer(client, user.ID, coin_amount_int)
-	app.RunReadWriteInBackground(hplayer)
+
+	Hplayer := NewHumanPlayer(person.ID, client, []cards.Card{}, true)
+
+	app.RunReadWriteInBackground(Hplayer)
 	app.Logger.Info("new ws connection established " + strconv.Itoa(coin_amount_int))
-	app.BackgroundSocketHandlers(hplayer, coin_amount_int)
-}
-
-func (app *ApplicationHokm4) CreatePlayer(client *socket.Client, userID int, coin_amount int) *HumanPlayer {
-	var player *HumanPlayer
-
-	activeGame, wasInAGame := app.Lobby.UserGames[userID]
-
-	if wasInAGame {
-		for _, p := range activeGame.GetHumanPlayers() {
-			if p.UserId == userID {
-				player = p
-				break
-			}
-		}
-		player.Client = client
-		player.IsPlayng = true
-	} else { // new game
-		player = NewHumanPlayer(userID, client, []cards.Card{}, true)
-	}
-	return player
+	app.BackgroundSocketHandlers(Hplayer, coin_amount_int)
 
 }
 

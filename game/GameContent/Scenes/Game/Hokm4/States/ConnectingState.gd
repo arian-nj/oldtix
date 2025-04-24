@@ -5,6 +5,7 @@ extends State
 
 
 func Enter()->void:
+	ws.hold_events()
 	status_label.text = "Connecting..."
 	var state:int = ws.socket.get_ready_state()
 	while state != WebSocketPeer.STATE_OPEN:

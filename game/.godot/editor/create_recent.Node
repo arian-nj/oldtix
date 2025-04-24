@@ -1,1 +1,6 @@
 Button
+Sprite2D
+Control
+Label
+VBoxContainer
+PanelContainer

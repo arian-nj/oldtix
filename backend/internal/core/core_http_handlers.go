@@ -88,6 +88,7 @@ func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 func (app *ApiApplication) getUserStatisticsData(w http.ResponseWriter, r *http.Request) {
 	user_param := chi.URLParam(r, "user_id")
 	user_int, err := strconv.Atoi(user_param)

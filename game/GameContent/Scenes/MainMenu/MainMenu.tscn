@@ -1,19 +1,22 @@
-[gd_scene load_steps=21 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=26 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Script" uid="uid://c6bkj7hlalo24" path="res://GameContent/Scenes/MainMenu/main_menu.gd" id="1_cdkru"]
 [ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="2_o2jf8"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="3_bbm5d"]
 [ext_resource type="Script" uid="uid://dxdp0uldpe775" path="res://GameContent/Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
-[ext_resource type="Texture2D" uid="uid://cxl83f86oi3b4" path="res://GameContent/assets/shapes/play_button_background.png" id="4_jcjvh"]
-[ext_resource type="Texture2D" uid="uid://dldiq53b4j7ba" path="res://GameContent/assets/shapes/user_data_background.png" id="6_vh2g8"]
+[ext_resource type="Texture2D" uid="uid://cq827b6fknw88" path="res://GameContent/assets/shapes/play_button_background.png" id="4_jcjvh"]
+[ext_resource type="Texture2D" uid="uid://bhc5sg3e7q2q5" path="res://GameContent/assets/shapes/user_data_background.png" id="6_vh2g8"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
 [ext_resource type="Script" uid="uid://cw6ov5aecyf86" path="res://GameContent/Scenes/MainMenu/CoinComponent.gd" id="8_52hew"]
 [ext_resource type="Script" uid="uid://dt3pgj8tbmf55" path="res://GameContent/Types/Games/CardData.gd" id="8_700qd"]
-[ext_resource type="Texture2D" uid="uid://caedcf6ps0e6i" path="res://GameContent/assets/shapes/coin.png" id="9_xwmnj"]
-[ext_resource type="Texture2D" uid="uid://cs5roy44jbjjl" path="res://GameContent/assets/icons/cross.png" id="11_5cl1r"]
+[ext_resource type="Texture2D" uid="uid://dawqfkkgehn3j" path="res://GameContent/assets/shapes/coin.png" id="9_xwmnj"]
+[ext_resource type="Texture2D" uid="uid://bdpkc7jn2fkrk" path="res://GameContent/assets/icons/cross.png" id="11_5cl1r"]
 [ext_resource type="Script" uid="uid://ufeh7ogg7h74" path="res://GameContent/Scenes/MainMenu/bet_amount_panel.gd" id="11_c1jlk"]
-[ext_resource type="Texture2D" uid="uid://dhpvdigmxwixs" path="res://GameContent/assets/shapes/bet_amount_background.png" id="13_x5g5h"]
+[ext_resource type="Script" uid="uid://bvtqkb0kt377r" path="res://GameContent/Scenes/MainMenu/Statistics.gd" id="12_66asg"]
+[ext_resource type="Script" uid="uid://c8bwnlli1aj1e" path="res://GameContent/Scenes/MainMenu/UserData/bouncy_line.gd" id="12_vu7bc"]
+[ext_resource type="Texture2D" uid="uid://c7jmupqp2h5bq" path="res://GameContent/assets/shapes/bet_amount_background.png" id="13_x5g5h"]
+[ext_resource type="Texture2D" uid="uid://dgt7xddebc3a8" path="res://GameContent/assets/icons/wrench.png" id="14_xn1pj"]
 
 [sub_resource type="Resource" id="Resource_700qd"]
 script = ExtResource("8_700qd")
@@ -21,7 +24,7 @@ suit = 0
 value = 14
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[sub_resource type="Resource" id="Resource_52hew"]
+[sub_resource type="Resource" id="Resource_xn1pj"]
 resource_local_to_scene = true
 script = ExtResource("8_700qd")
 suit = 1
@@ -50,6 +53,16 @@ corner_radius_top_left = 40
 corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npi4m"]
+bg_color = Color(0.328841, 0.691593, 0.396442, 1)
+corner_radius_top_left = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eaprf"]
+bg_color = Color(0.881083, 0.387903, 0.328054, 1)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1jlk"]
 content_margin_left = 10.0
@@ -221,7 +234,7 @@ offset_right = 35.5
 offset_bottom = 47.5
 grow_vertical = 2
 scale = Vector2(3, 3)
-card_data = SubResource("Resource_52hew")
+card_data = SubResource("Resource_xn1pj")
 
 [node name="Card3" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
 layout_mode = 1
@@ -281,7 +294,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 80
 text = "0"
 
-[node name="UserDataComponent" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "profilePanelContainer")]
+[node name="UserData" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("usernameLabel", "displaynameLabel", "profileButton", "profilePanelContainer", "statisticsSection")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -296,8 +309,9 @@ usernameLabel = NodePath("ProfileButton/VBoxContainer/Username")
 displaynameLabel = NodePath("ProfileButton/VBoxContainer/Displayname")
 profileButton = NodePath("ProfileButton")
 profilePanelContainer = NodePath("ProfileContainer")
+statisticsSection = NodePath("ProfileContainer/Statistics")
 
-[node name="ProfileButton" type="Button" parent="AspectRatioContainer/UI/UserDataComponent"]
+[node name="ProfileButton" type="Button" parent="AspectRatioContainer/UI/UserData"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -314,7 +328,7 @@ icon = ExtResource("6_vh2g8")
 flat = true
 expand_icon = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/UI/UserData/ProfileButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -330,14 +344,14 @@ grow_vertical = 2
 alignment = 1
 metadata/_edit_group_ = true
 
-[node name="Displayname" type="Label" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton/VBoxContainer"]
+[node name="Displayname" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileButton/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 50
 text = "Arian"
 
-[node name="Username" type="Label" parent="AspectRatioContainer/UI/UserDataComponent/ProfileButton/VBoxContainer"]
+[node name="Username" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileButton/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.521141, 0.521141, 0.521141, 1)
@@ -345,43 +359,320 @@ theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 30
 text = "@username"
 
-[node name="ProfileContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserDataComponent"]
+[node name="ProfileContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserData"]
 visible = false
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -10.0
-offset_right = 8.0
-offset_bottom = 3.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_700qd")
 
-[node name="ProfilePage" type="Control" parent="AspectRatioContainer/UI/UserDataComponent/ProfileContainer"]
+[node name="Statistics" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer" node_paths=PackedStringArray("WinLoseLine", "TrickWinLoseLine", "TurnWinLoseLine")]
 layout_mode = 2
+size_flags_vertical = 6
+script = ExtResource("12_66asg")
+WinLoseLine = NodePath("WLBouncyLine")
+TrickWinLoseLine = NodePath("TrickWLBouncyLine")
+TurnWinLoseLine = NodePath("TurnWLBouncyLine3")
 
-[node name="Button" type="Button" parent="AspectRatioContainer/UI/UserDataComponent/ProfileContainer/ProfilePage"]
+[node name="WLBouncyLine" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics" node_paths=PackedStringArray("MyLabel", "OtherLabel", "MyPanel", "OtherPanel")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -72.5
-offset_top = -66.0
-offset_right = 72.5
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 39.0
+offset_bottom = 39.0
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 80
+grow_vertical = 2
+size_flags_vertical = 2
+script = ExtResource("12_vu7bc")
+MyLabel = NodePath("Control/PanelContainer/Label")
+OtherLabel = NodePath("Control/PanelContainer2/Label")
+MyPanel = NodePath("Control/PanelContainer")
+OtherPanel = NodePath("Control/PanelContainer2")
+
+[node name="Control" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npi4m")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine/Control/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0 "
+
+[node name="PanelContainer2" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 30.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eaprf")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine/Control/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0"
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/WLBouncyLine"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.5
+offset_top = -134.5
+offset_right = 55.5
+offset_bottom = -63.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.877745, 0.708384, 0.630547, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "بازی"
+horizontal_alignment = 1
+
+[node name="TrickWLBouncyLine" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics" node_paths=PackedStringArray("MyLabel", "OtherLabel", "MyPanel", "OtherPanel")]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 233.0
+offset_bottom = 233.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 2
+script = ExtResource("12_vu7bc")
+MyLabel = NodePath("Control/PanelContainer/Label")
+OtherLabel = NodePath("Control/PanelContainer2/Label")
+MyPanel = NodePath("Control/PanelContainer")
+OtherPanel = NodePath("Control/PanelContainer2")
+
+[node name="Control" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npi4m")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine/Control/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0 "
+
+[node name="PanelContainer2" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 30.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eaprf")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine/Control/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0"
+
+[node name="Label2" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TrickWLBouncyLine"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.0
+offset_top = -134.5
+offset_right = 68.0
+offset_bottom = -63.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.877745, 0.708384, 0.630547, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "دست"
+horizontal_alignment = 1
+
+[node name="TurnWLBouncyLine3" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics" node_paths=PackedStringArray("MyLabel", "OtherLabel", "MyPanel", "OtherPanel")]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 424.0
+offset_bottom = 424.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 2
+script = ExtResource("12_vu7bc")
+MyLabel = NodePath("Control/PanelContainer/Label")
+OtherLabel = NodePath("Control/PanelContainer2/Label")
+MyPanel = NodePath("Control/PanelContainer")
+OtherPanel = NodePath("Control/PanelContainer2")
+
+[node name="Control" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npi4m")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3/Control/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0 "
+
+[node name="PanelContainer2" type="PanelContainer" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 30.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eaprf")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3/Control/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "0"
+
+[node name="Label3" type="Label" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Statistics/TurnWLBouncyLine3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.0
+offset_top = -134.5
+offset_right = 68.0
+offset_bottom = -63.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.877745, 0.708384, 0.630547, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "دور"
+horizontal_alignment = 1
+
+[node name="ProfilePanelDownButton" type="Button" parent="AspectRatioContainer/UI/UserData/ProfileContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 90
 text = "خونه"
 flat = true
 
-[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "firstBetLabel", "secondBetButton")]
+[node name="Control" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer"]
 visible = false
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="DisplayButton" type="Button" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.0
+offset_top = 140.0
+offset_right = 225.0
+offset_bottom = 218.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "DisplayName"
+icon = ExtResource("14_xn1pj")
+flat = true
+icon_alignment = 2
+
+[node name="UsernameButton" type="Button" parent="AspectRatioContainer/UI/UserData/ProfileContainer/Control"]
+layout_mode = 2
+offset_left = 184.0
+offset_top = 235.0
+offset_right = 505.0
+offset_bottom = 301.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+text = "Username"
+icon = ExtResource("14_xn1pj")
+flat = true
+icon_alignment = 2
+
+[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "firstBetLabel", "secondBetButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -397,6 +688,7 @@ firstBetLabel = NodePath("PanelContainer/VBoxContainer2/FirstBetButton/Label2")
 secondBetButton = NodePath("PanelContainer/VBoxContainer2/SecondBetButton")
 
 [node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/BetAmountPanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -480,5 +772,5 @@ size_flags_vertical = 3
 
 [connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="AspectRatioContainer/UI/MainMenu/PanelContainer/PlayTic2Button" to="AspectRatioContainer/UI/BetAmountPanel" method="_on_play_tic_2_button_pressed"]
-[connection signal="pressed" from="AspectRatioContainer/UI/UserDataComponent/ProfileContainer/ProfilePage/Button" to="AspectRatioContainer/UI/UserDataComponent" method="_on_button_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/UI/UserData/ProfileContainer/ProfilePanelDownButton" to="AspectRatioContainer/UI/UserData" method="_on_profile_panel_down_button_pressed"]
 [connection signal="pressed" from="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/Button" to="AspectRatioContainer/UI/BetAmountPanel" method="_on_button_pressed"]

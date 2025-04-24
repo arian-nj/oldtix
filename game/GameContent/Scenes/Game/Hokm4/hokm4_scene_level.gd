@@ -11,11 +11,13 @@ func _on_home_button_pressed() -> void:
 	ws.send_event(KEvent.TYPE_DISCONNECT)
 	
 func OnLoaded()->void:
-	connect_ws()	
+	print("start onload")
+	connect_ws()
+	print("end onload")
 
 func _on_disconnect()-> void:
 	await get_tree().create_timer(.5).timeout
-	connect_ws()	
+	connect_ws()
 
 func connect_ws()-> void:
 	var bm :int = level_parameters.get(SharedBetAmount)

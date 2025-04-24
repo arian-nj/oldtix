@@ -107,7 +107,7 @@ jobs:
       - name: Copy DB migration files to VPS
         uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
         with:
-          host: hokm.filelord.ir
+          host: core.filelord.ir
           username: filelord
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "./backend/db/*"
@@ -116,7 +116,7 @@ jobs:
       - name: Migrate DB
         uses: appleboy/ssh-action@v1
         with:
-          host: hokm.filelord.ir
+          host: core.filelord.ir
           username: filelord
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
@@ -128,7 +128,7 @@ jobs:
         with:
           name: tix-game
           file: docker-stack.yaml
-          host: hokm.filelord.ir
+          host: core.filelord.ir
           user: filelord
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile

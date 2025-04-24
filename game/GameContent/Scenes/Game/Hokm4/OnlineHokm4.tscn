@@ -6,16 +6,16 @@
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_d1yw2"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
 [ext_resource type="Script" uid="uid://c2hac1kxc4hd1" path="res://GameContent/Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
-[ext_resource type="Texture2D" uid="uid://i4q2pr8oxlov" path="res://GameContent/assets/icons/home.png" id="4_youex"]
+[ext_resource type="Texture2D" uid="uid://d1060350nvypy" path="res://GameContent/assets/icons/home.png" id="4_youex"]
 [ext_resource type="Script" uid="uid://ea2nqkryih34" path="res://GameContent/Katana/KatanaSocket.gd" id="5_48k1w"]
 [ext_resource type="Script" uid="uid://saluitmh1llq" path="res://GameContent/Scenes/Game/Hokm4/TurnScores.gd" id="5_bwnrb"]
 [ext_resource type="Script" uid="uid://ggywgqynjdcr" path="res://GameContent/Scenes/Game/Hokm4/TrickScore.gd" id="6_do6i4"]
-[ext_resource type="Script" uid="uid://coue7g2pwtieo" path="res://GameContent/Scenes/States/state_machine.gd" id="6_rcy6w"]
+[ext_resource type="Script" uid="uid://coue7g2pwtieo" path="res://GameContent/Scenes/StatesMachine/state_machine.gd" id="6_rcy6w"]
 [ext_resource type="PackedScene" uid="uid://bncwyablnlik8" path="res://GameContent/Scenes/Game/choose_hokm_panel/choose_hokm.tscn" id="7_d1yw2"]
 [ext_resource type="Script" uid="uid://c3iw070iycfax" path="res://GameContent/Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
 [ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd" id="9_uajja"]
-[ext_resource type="Texture2D" uid="uid://vlp3i4q5ybtu" path="res://GameContent/assets/name_background.png" id="10_7sva6"]
+[ext_resource type="Texture2D" uid="uid://cm8ak0tyj57l" path="res://GameContent/assets/name_background.png" id="10_7sva6"]
 [ext_resource type="Script" uid="uid://bnc0qns8r8xpq" path="res://GameContent/Scenes/Game/Hokm4/user_component.gd" id="11_5bin2"]
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/WaitState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
@@ -455,10 +455,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 64.0
-offset_top = -11.5
-offset_right = 104.0
-offset_bottom = 11.5
+offset_left = 98.0
+offset_top = -29.0
+offset_right = 138.0
+offset_bottom = 29.0
 grow_vertical = 2
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 50
@@ -635,13 +635,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_do6i4")
-MyTeamLabel = NodePath("PanelContainer/MyTeamPanel/MyTeamLabel")
-OtherTeamLabel = NodePath("PanelContainer/OtherTeamPanel/OtherTeamLabel")
-MyTeamPanel = NodePath("PanelContainer/MyTeamPanel")
-OtherTeamPanel = NodePath("PanelContainer/OtherTeamPanel")
+MyTeamLabel = NodePath("PanelControl/MyTeamPanel/MyTeamLabel")
+OtherTeamLabel = NodePath("PanelControl/OtherTeamPanel/OtherTeamLabel")
+MyTeamPanel = NodePath("PanelControl/MyTeamPanel")
+OtherTeamPanel = NodePath("PanelControl/OtherTeamPanel")
 table = NodePath("../AspectRatioContainer/Table")
 
-[node name="PanelContainer" type="Control" parent="TrickScore"]
+[node name="PanelControl" type="Control" parent="TrickScore"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -649,7 +649,7 @@ offset_top = 100.0
 offset_bottom = 200.0
 grow_horizontal = 2
 
-[node name="MyTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+[node name="MyTeamPanel" type="PanelContainer" parent="TrickScore/PanelControl"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -664,14 +664,14 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mcw6q")
 metadata/_edit_group_ = true
 
-[node name="MyTeamLabel" type="Label" parent="TrickScore/PanelContainer/MyTeamPanel"]
+[node name="MyTeamLabel" type="Label" parent="TrickScore/PanelControl/MyTeamPanel"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OtherTeamPanel" type="PanelContainer" parent="TrickScore/PanelContainer"]
+[node name="OtherTeamPanel" type="PanelContainer" parent="TrickScore/PanelControl"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -684,7 +684,7 @@ pivot_offset = Vector2(60, 0)
 theme_override_styles/panel = SubResource("StyleBoxFlat_d1yw2")
 metadata/_edit_group_ = true
 
-[node name="OtherTeamLabel" type="Label" parent="TrickScore/PanelContainer/OtherTeamPanel"]
+[node name="OtherTeamLabel" type="Label" parent="TrickScore/PanelControl/OtherTeamPanel"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "0"

@@ -59,6 +59,7 @@ func _ready()->void:
 	button_down.connect(_on_button_down)	
 	set_process(true)
 	load_assets()
+	await get_tree().create_timer(3).timeout
 
 func load_assets()->void:
 	# var file_name:String = get_assets_path()

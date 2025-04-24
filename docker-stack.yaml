@@ -55,14 +55,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.web.loadbalancer.server.port=4444"
-      - "traefik.http.routers.web.rule=Host(`hokm.filelord.ir`)"
+      - "traefik.http.routers.web.rule=Host(`core.filelord.ir`)"
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
     secrets:
       - secret-key
     environment:
       - CORE_HTTP_PORT=4444
-      - BASE_URL=https://hokm.filelord.ir
+      - BASE_URL=https://core.filelord.ir
       - SecretKey=/run/secrets/secret-key
       - DATABASE_URL=postgres://pgadmin:pgpass@db:5432/game?sslmode=disable
       - RELEASE_MODE=dev
