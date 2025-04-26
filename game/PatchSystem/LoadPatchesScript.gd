@@ -11,7 +11,7 @@ var config := ConfigFile.new()
 
 func _ready() -> void:
 	get_tree().change_scene_to_file.call_deferred("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
-	# lpErrorBorad.TryAgain.connect(do_request)
+	lpErrorBorad.TryAgain.connect(do_request)
 	# do_request()
 
 func do_request()->void:
@@ -69,7 +69,7 @@ func get_newest_version()-> String:
 	return ""
 
 func get_latest_version_number() -> Array:
-	var http_req_node:HTTPRequest = HTTPRequest.new()
+	var http_req_node:HTTPRequest = Katana.NewHttpRequest()
 	http_req_node.timeout = 5
 	self.add_child(http_req_node)
 	

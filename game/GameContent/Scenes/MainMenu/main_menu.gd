@@ -13,13 +13,13 @@ func _ready() -> void:
 	PlayButton.disabled = true
 	ContinueGameButton.visible = false
 
-	var http_req:HTTPRequest = HTTPRequest.new()
+	var http_req:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req)
 	http_req.request(Katana.Hokm4HttpUrl + Katana.ActiveGameUrl,KAccount._instance.AddAuthHeader())
 	http_req.request_completed.connect(_on_active_game_request_completed)
 
 	set_label("Waiting...")
-	http_req = HTTPRequest.new()
+	http_req = Katana.NewHttpRequest()
 	add_child(http_req)
 	http_req.request(Katana.CoreHttpUrl + Katana.StatusUrl)
 	http_req.request_completed.connect(_on_status_request_completed)

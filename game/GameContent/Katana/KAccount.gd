@@ -37,7 +37,7 @@ func RefetchME()->bool:
 	return true
 
 func GetUser(user_id:String)->AccountData:
-	var http_req_node:HTTPRequest = HTTPRequest.new()
+	var http_req_node:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req_node)
 	var req_url:= Katana.CoreHttpUrl + Katana.PersonUrl + user_id
 	if user_id == "me":
@@ -70,7 +70,7 @@ func GetUser(user_id:String)->AccountData:
 	return me
 
 func GetUserStatistics(user_id:String)->Array: # UserStatisticsData,String
-	var http_req_node:HTTPRequest = HTTPRequest.new()
+	var http_req_node:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req_node)
 	var req_url:= Katana.CoreHttpUrl + Katana.PersonUrl + user_id + Katana.PersonStatisticsAfter
 	# if user_id == "me":
