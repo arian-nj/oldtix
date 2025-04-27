@@ -26,12 +26,14 @@ func _on_new_event(e:KEvent.Event)->void:
 
 	elif e.type == KEvent.TYPE_YOUR_TURN:
 		status_label.text = "Your Turn"
+		table.me_player_panel.start_shader(InternalSetting.PLAYER_PLAY_WAIT)
 		table.isMyTurn = true
 		if table.last_card_played != null:
 			send_card_playend_event(table.last_card_played)
 
 	elif e.type == KEvent.TYPE_VALID_PLAY:
 		status_label.text = "Valid"
+		table.me_player_panel.stop_shader()
 		table.isMyTurn = false
 
 	elif e.type == KEvent.TYPE_INVALID_PLAY:
@@ -44,6 +46,7 @@ func _on_new_event(e:KEvent.Event)->void:
 
 	elif e.type == KEvent.TYPE_PLAY_TIMEOUT:
 		status_label.text = "Timeout"
+		table.me_player_panel.stop_shader()
 		table.isMyTurn = false
 		# print("time out " + e.data)
 		var new_card_data :CardData = JsonClassConverter.json_string_to_class(CardData,e.data)
@@ -62,7 +65,6 @@ func _on_new_event(e:KEvent.Event)->void:
 		status_label.text = "Turn Ended"
 		table.parse_game_data(e.data)
 		table.remove_played_cards()
-		
 	
 	elif e.type == KEvent.TYPE_END_TRICK:
 		status_label.text = "Trick Ended"
@@ -88,11 +90,12 @@ func send_card_playend_event(card:Card)->void:
 func other_turn_played_logic(data:String)->void:
 	# print(KAccount._instance.MyAccount.username," ==> ",data)
 	var card_played :CardPlayedData= JsonClassConverter.json_string_to_class(CardPlayedData,data)
-	# card_played.card
+	
 	var played_card :Card = null
 	for drawer in table.all_drawers:
 		if drawer.unique_string == card_played.player.player_unique:
-			played_card = drawer.play_others_card(card_played.card)
+			played_card = drawer.play_random_card(card_played.card)
 			break
+	
 	if played_card != null:
 		table.others_card_played.append(played_card)

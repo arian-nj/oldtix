@@ -7,7 +7,10 @@ class_name BetPanel extends Control
 @export var firstBetLabel:Label
 @export var secondBetButton:Button
 
+@export var continueGameButton:Button
+
 signal BetAmountChoosed(coin_amount:int)
+
 
 func _ready() -> void:
 	betVBoxContainer.visible = false
@@ -19,6 +22,33 @@ func _ready() -> void:
 
 	else:
 		firstBetButton.pressed.connect(fire_play_button.bind(10))
+	
+	playButton.disabled = true
+	continueGameButton.visible = false
+
+	send_active_game_request()
+
+func send_active_game_request()->void:
+	var http_req:HTTPRequest = Katana.NewHttpRequest()
+	add_child(http_req)
+	http_req.request(Katana.Hokm4HttpUrl + Katana.ActiveGameUrl,KAccount._instance.AddAuthHeader())
+	http_req.request_completed.connect(_on_active_game_request_completed)
+	await http_req.request_completed
+	http_req.queue_free()
+
+func _on_active_game_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
+	if response_code != HTTPClient.RESPONSE_OK:
+		ErrorBoard._instance.new_error("خطا در اتصال به بازی" + str(response_code),ErrorBoard.ErrorLevel)
+		ErrorBoard._instance.new_error("در حال تلاش دوباره",ErrorBoard.InfoLevel)
+		print_debug(str(response_code) +" response code ")
+		return
+	
+	var active_game:ActiveGameData = JsonClassConverter.json_string_to_class(ActiveGameData,body.get_string_from_utf8())
+	if active_game.is_active:
+		continueGameButton.visible = true
+	else:
+		playButton.disabled = false	
+		get_tree().create_timer(5).timeout.connect(send_active_game_request)
 
 
 func fire_play_button(coin_amount:int)->void:

@@ -1,0 +1,69 @@
+[gd_scene load_steps=16 format=3 uid="uid://dhrv6jw67x8qj"]
+
+[ext_resource type="Shader" uid="uid://dk26lm251in5r" path="res://GameContent/Scenes/Shaders/progress_shader.gdshader" id="1_d82vo"]
+[ext_resource type="Texture2D" uid="uid://cm8ak0tyj57l" path="res://GameContent/assets/name_background.png" id="1_wpi8x"]
+[ext_resource type="Script" uid="uid://bnc0qns8r8xpq" path="res://GameContent/Scenes/Game/Hokm4/user_component.gd" id="2_d82vo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2uis5"]
+resource_local_to_scene = true
+shader = ExtResource("1_d82vo")
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/min_val = 0.0
+shader_parameter/current_val = 0.0
+shader_parameter/max_val = 100.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7sva6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5bin2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4cut"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rc4y6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_78ieo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ylp6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c27fc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fnc6k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxtvm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3k2r3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4hy27"]
+
+[node name="MeUserComponent" type="Button"]
+material = SubResource("ShaderMaterial_2uis5")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.12
+offset_top = -149.0
+offset_right = 177.88
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
+text = "Display Name"
+icon = ExtResource("1_wpi8x")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("2_d82vo")
+start_color = Color(0, 0.60904, 0, 1)
+end_color = Color(0.414176, 0.0465716, 0, 1)
+metadata/_edit_vertical_guides_ = [1.0]

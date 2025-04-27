@@ -36,8 +36,10 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 
 	// Authenticated REST routes
 	mux.Group(func(authRouter chi.Router) {
+
 		authRouter.Use(app.Authenticate)
 		authRouter.Use(app.RequireAuthenticatedUser)
+
 		authRouter.Put("/update", app.updateUserData)
 		authRouter.Get("/me", app.getMeData)
 		authRouter.Get("/person/{user_id}", app.getUserData)

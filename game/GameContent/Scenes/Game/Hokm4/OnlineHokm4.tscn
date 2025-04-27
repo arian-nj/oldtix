@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=31 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/hokm4_scene_level.gd" id="1_i0n3b"]
 [ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="1_o4grb"]
@@ -15,8 +15,8 @@
 [ext_resource type="Script" uid="uid://c3iw070iycfax" path="res://GameContent/Scenes/Game/Hokm4/States/ConnectingState.gd" id="7_uxde4"]
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMaking.gd" id="8_ix53e"]
 [ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd" id="9_uajja"]
-[ext_resource type="Texture2D" uid="uid://cm8ak0tyj57l" path="res://GameContent/assets/name_background.png" id="10_7sva6"]
-[ext_resource type="Script" uid="uid://bnc0qns8r8xpq" path="res://GameContent/Scenes/Game/Hokm4/user_component.gd" id="11_5bin2"]
+[ext_resource type="PackedScene" uid="uid://dhrv6jw67x8qj" path="res://GameContent/Scenes/Game/user_component/user_component.tscn" id="10_7sva6"]
+[ext_resource type="Shader" uid="uid://dk26lm251in5r" path="res://GameContent/Scenes/Shaders/progress_shader.gdshader" id="11_5bin2"]
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/WaitState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/game_turn.gd" id="12_d5oqf"]
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/the_end.gd" id="16_tmsoy"]
@@ -34,27 +34,37 @@ fill_to = Vector2(0.507123, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsoy"]
 size = Vector2(345, 194)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7sva6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4cut"]
+resource_local_to_scene = true
+shader = ExtResource("11_5bin2")
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/min_val = 0.0
+shader_parameter/current_val = 0.0
+shader_parameter/max_val = 100.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5bin2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rc4y6"]
+resource_local_to_scene = true
+shader = ExtResource("11_5bin2")
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/min_val = 0.0
+shader_parameter/current_val = 0.0
+shader_parameter/max_val = 100.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4cut"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78ieo"]
+resource_local_to_scene = true
+shader = ExtResource("11_5bin2")
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/min_val = 0.0
+shader_parameter/current_val = 0.0
+shader_parameter/max_val = 100.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rc4y6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_78ieo"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ylp6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c27fc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fnc6k"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxtvm"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3k2r3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4hy27"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4ylp6"]
+resource_local_to_scene = true
+shader = ExtResource("11_5bin2")
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/min_val = 0.0
+shader_parameter/current_val = 0.0
+shader_parameter/max_val = 100.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcw6q"]
 bg_color = Color(0.145098, 0.72549, 0.352941, 1)
@@ -176,7 +186,8 @@ hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
 card_offset = 45.0
 card_scene = ExtResource("3_8tgkb")
-two_card_movment_dur = 0.3
+card_movment_dur = 0.15
+two_card_movment_dur = 0.2
 flip_card_dur = 0.09
 two_card_dur = 0.1
 uniqueLabel = NodePath("hand/Label")
@@ -239,7 +250,7 @@ hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
 card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.2
+card_movment_dur = 0.1
 two_card_movment_dur = 0.15
 flip_card_dur = 0.09
 two_card_dur = 0.1
@@ -303,7 +314,7 @@ hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
 card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.2
+card_movment_dur = 0.1
 two_card_movment_dur = 0.15
 flip_card_dur = 0.09
 two_card_dur = 0.1
@@ -365,7 +376,7 @@ hand = NodePath("hand")
 play_place = NodePath("PlayPlace")
 card_offset = 30.0
 card_scene = ExtResource("3_8tgkb")
-card_movment_dur = 0.2
+card_movment_dur = 0.1
 two_card_movment_dur = 0.15
 flip_card_dur = 0.09
 two_card_dur = 0.1
@@ -504,127 +515,56 @@ text = "The End"
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MeUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+[node name="MeUserComponent" parent="AspectRatioContainer/UsersPanel" instance=ExtResource("10_7sva6")]
+material = SubResource("ShaderMaterial_c4cut")
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -109.12
-offset_top = -149.0
-offset_right = 177.88
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
-text = "Display Name"
-icon = ExtResource("10_7sva6")
-flat = true
-icon_alignment = 1
-expand_icon = true
-script = ExtResource("11_5bin2")
+offset_left = -140.12
+offset_right = 146.88
 
-[node name="RightUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+[node name="RightUserComponent" parent="AspectRatioContainer/UsersPanel" instance=ExtResource("10_7sva6")]
+material = SubResource("ShaderMaterial_rc4y6")
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -233.12
+offset_left = -232.0
 offset_top = 73.0
-offset_right = 53.88
+offset_right = 55.0
 offset_bottom = 222.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
-theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
-text = "Display Name"
-icon = ExtResource("10_7sva6")
-flat = true
-icon_alignment = 1
-expand_icon = true
-script = ExtResource("11_5bin2")
 
-[node name="LeftUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+[node name="LeftUserComponent" parent="AspectRatioContainer/UsersPanel" instance=ExtResource("10_7sva6")]
+material = SubResource("ShaderMaterial_78ieo")
 layout_mode = 1
 anchors_preset = 4
+anchor_left = 0.0
 anchor_top = 0.5
+anchor_right = 0.0
 anchor_bottom = 0.5
+offset_left = 0.0
 offset_top = 73.0
 offset_right = 287.0
 offset_bottom = 222.0
+grow_horizontal = 1
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
-theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
-text = "Display Name"
-icon = ExtResource("10_7sva6")
-flat = true
-icon_alignment = 1
-expand_icon = true
-script = ExtResource("11_5bin2")
 
-[node name="TopUserComponent" type="Button" parent="AspectRatioContainer/UsersPanel"]
+[node name="TopUserComponent" parent="AspectRatioContainer/UsersPanel" instance=ExtResource("10_7sva6")]
+material = SubResource("ShaderMaterial_4ylp6")
 layout_mode = 1
 anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -109.12
-offset_right = 177.88
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = -73.12
+offset_top = 0.0
+offset_right = 213.88
 offset_bottom = 149.0
-grow_horizontal = 2
+grow_vertical = 1
 scale = Vector2(0.8, 0.8)
-theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_7sva6")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_5bin2")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_c4cut")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_rc4y6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_78ieo")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_4ylp6")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_c27fc")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_fnc6k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_bxtvm")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3k2r3")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_4hy27")
-text = "Display Name "
-icon = ExtResource("10_7sva6")
-flat = true
-icon_alignment = 1
-expand_icon = true
-script = ExtResource("11_5bin2")
 
 [node name="TrickScore" type="Control" parent="." node_paths=PackedStringArray("MyTeamLabel", "OtherTeamLabel", "MyTeamPanel", "OtherTeamPanel", "table")]
 layout_mode = 1

@@ -61,6 +61,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 			return err
 		}
 	}
+
 	for _, p := range game.Players {
 		p.SetCards([]cards.Card{})
 	}
@@ -96,6 +97,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 		game.Logger.Error(err.Error())
 		return err
 	}
+	time.Sleep(SETTING_WAIT_BEFORE_STARTING_NEW_TURN)
 
 	err = game.RunTurns()
 	if err != nil {
@@ -263,17 +265,18 @@ func (game *GameState) RunTurn() error {
 
 func (game *GameState) AddCoins(hplayer *HumanPlayer) error {
 	coin_to_add := 0
-	if game.BetAmount == 0 {
-		coin_to_add = 15
-	} else if game.BetAmount == 50 {
-		coin_to_add = 100
+	if hplayer.BetAmount == BET_NO_MONEY {
+		coin_to_add = BET_AMOUNT_ONE
+	} else if hplayer.BetAmount == BET_AMOUNT_ONE {
+		coin_to_add = BET_AMOUNT_ONE_WIN
+	} else if hplayer.BetAmount == BET_AMOUNT_TWO {
+		coin_to_add = BET_AMOUNT_TWO_WIN
 	}
 
 	err := game.Queries.AddCoinToPerson(context.Background(), sqldb.AddCoinToPersonParams{
 		Coin: coin_to_add,
 		ID:   hplayer.UserId,
 	})
-	game.Logger.Error(err.Error())
 	return err
 }
 
@@ -308,18 +311,6 @@ func (game *GameState) TheEnd() error {
 			UserID: humanPlayer.UserId,
 		}
 
-		if humanPlayer.GetTeamID() == TeamOne {
-			updateStaticsParams.TotalTricksWon = game.TeamOneTrickScore
-			updateStaticsParams.TotalTricksLost = game.TeamTwoTrickScore
-			updateStaticsParams.TotalTurnsWon = TeamOneTurnScores
-			updateStaticsParams.TotalTurnsLost = TeamTwoTurnScores
-		} else {
-			updateStaticsParams.TotalTurnsWon = TeamTwoTurnScores
-			updateStaticsParams.TotalTurnsLost = TeamOneTurnScores
-			updateStaticsParams.TotalTricksWon = game.TeamTwoTrickScore
-			updateStaticsParams.TotalTricksLost = game.TeamOneTrickScore
-		}
-
 		if winner_team == humanPlayer.GetTeamID() {
 			updateStaticsParams.Win = 1
 		} else {
@@ -332,6 +323,18 @@ func (game *GameState) TheEnd() error {
 				game.Logger.Error(err.Error())
 				return err
 			}
+		}
+
+		if humanPlayer.GetTeamID() == TeamOne {
+			updateStaticsParams.TotalTricksWon = game.TeamOneTrickScore
+			updateStaticsParams.TotalTricksLost = game.TeamTwoTrickScore
+			updateStaticsParams.TotalTurnsWon = TeamOneTurnScores
+			updateStaticsParams.TotalTurnsLost = TeamTwoTurnScores
+		} else {
+			updateStaticsParams.TotalTurnsWon = TeamTwoTurnScores
+			updateStaticsParams.TotalTurnsLost = TeamOneTurnScores
+			updateStaticsParams.TotalTricksWon = game.TeamTwoTrickScore
+			updateStaticsParams.TotalTricksLost = game.TeamOneTrickScore
 		}
 
 		// err := game.Queries.InsertHokm4Statistic(context.Background(), insertStatisticsParams)

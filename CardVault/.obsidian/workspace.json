@@ -32,18 +32,6 @@
             }
           },
           {
-            "id": "543d35767a13771e",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.8.10"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.8.10"
-            }
-          },
-          {
             "id": "eff3d8a363276b92",
             "type": "leaf",
             "state": {
@@ -55,8 +43,7 @@
               "title": "Game Flow Chart"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -201,7 +188,7 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "543d35767a13771e",
+  "active": "df0c19167d56ab38",
   "lastOpenFiles": [
     "CardGame/Game Flow Chart.md",
     "CardGame/V 1.0.0.md",

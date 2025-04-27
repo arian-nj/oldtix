@@ -48,7 +48,7 @@ func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, p
 
 	app.RunReadWriteInBackground(Hplayer)
 	app.Logger.Info("new ws connection re-established " + strconv.Itoa(activeGame.BetAmount))
-	app.BackgroundSocketHandlers(Hplayer, activeGame.BetAmount)
+	app.BackgroundSocketHandlers(Hplayer)
 
 }
 
@@ -70,9 +70,9 @@ func (app *ApplicationHokm4) JoinGame(w http.ResponseWriter, r *http.Request, pe
 
 	tmpValidator.CheckField(coin_amount_int <= person.Coin, "coin_amount", "don't have enough coins")
 
-	// if user.Coin >= BET_AMOUNT_ONE {
-	// 	tmpValidator.CheckField(coin_amount_int != BET_NO_MONEY, "coin_amount", "you can't play a free game")
-	// }
+	if person.Coin >= BET_AMOUNT_ONE {
+		tmpValidator.CheckField(coin_amount_int != BET_NO_MONEY, "coin_amount", "you can't play a free game")
+	}
 
 	if tmpValidator.HasErrors() {
 		app.FailedValidation(w, r, tmpValidator)
@@ -94,10 +94,11 @@ func (app *ApplicationHokm4) JoinGame(w http.ResponseWriter, r *http.Request, pe
 	}
 
 	Hplayer := NewHumanPlayer(person.ID, client, []cards.Card{}, true)
+	Hplayer.BetAmount = coin_amount_int
 
 	app.RunReadWriteInBackground(Hplayer)
 	app.Logger.Info("new ws connection established " + strconv.Itoa(coin_amount_int))
-	app.BackgroundSocketHandlers(Hplayer, coin_amount_int)
+	app.BackgroundSocketHandlers(Hplayer)
 
 }
 

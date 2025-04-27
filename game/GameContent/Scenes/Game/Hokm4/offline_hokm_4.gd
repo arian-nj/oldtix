@@ -12,9 +12,9 @@ func _ready() -> void:
 	var cd : CardData = CardData.new()
 	cd.suit = CardData.CardSuites.Heart
 	cd.value = 10
-	table.right_drawer.play_others_card(cd)
-	table.top_drawer.play_others_card(cd)
-	table.left_drawer.play_others_card(cd)
+	table.right_drawer.play_random_card(cd)
+	table.top_drawer.play_random_card(cd)
+	table.left_drawer.play_random_card(cd)
 
 # func _new_card() -> void:
 # 	var e := KEvent.Event.new()

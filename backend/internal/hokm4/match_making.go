@@ -11,7 +11,7 @@ import (
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
-var validBetAmounts = []int{BET_AMOUNT_ONE, BET_AMOUNT_TWO}
+var validBetAmounts = []int{BET_NO_MONEY, BET_AMOUNT_ONE, BET_AMOUNT_TWO}
 
 type Lobby struct {
 	MatchmakingQueueGlobal    chan *MatchmakingRequest
@@ -40,10 +40,9 @@ type MatchmakingRequest struct {
 	Timestamp time.Time
 }
 
-func NewMatchmakingRequest(hplayer *HumanPlayer, bet_amount int) *MatchmakingRequest {
+func NewMatchmakingRequest(hplayer *HumanPlayer) *MatchmakingRequest {
 	return &MatchmakingRequest{
 		Player:    hplayer,
-		BetAmount: bet_amount,
 		Timestamp: time.Now(),
 	}
 }
@@ -63,7 +62,7 @@ func (game *GameState) AddBotPlayerToGame(player *BotPlayer) {
 func (app *ApplicationHokm4) FilterMatchMkingByCoin() {
 	for {
 		newReq := <-app.Lobby.MatchmakingQueueGlobal
-		if newReq.BetAmount == BET_AMOUNT_ONE {
+		if newReq.BetAmount == BET_AMOUNT_ONE || newReq.BetAmount == BET_NO_MONEY {
 			app.Lobby.MatchmakingQueueForBetOne <- newReq
 		} else if newReq.BetAmount == BET_AMOUNT_TWO {
 			app.Lobby.MatchmakingQueueForBetTwo <- newReq
@@ -127,16 +126,16 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, be
 		}
 		app.Lobby.Mu.Unlock()
 
-		for _, p := range game.GetHumanPlayers() {
+		for _, hplayer := range game.GetHumanPlayers() {
 			err = app.Queries.AddCoinToPerson(context.Background(), sqldb.AddCoinToPersonParams{
-				Coin: -1 * betting_amount,
-				ID:   p.UserId,
+				Coin: -1 * hplayer.BetAmount,
+				ID:   hplayer.UserId,
 			})
 			if err != nil {
 				app.ReportError(err)
 				return
 			}
-			err = game.SendGameData(TypeMatchFound, p)
+			err = game.SendGameData(TypeMatchFound, hplayer)
 			if err != nil {
 				app.ReportError(err)
 				return

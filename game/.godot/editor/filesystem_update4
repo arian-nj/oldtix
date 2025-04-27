@@ -1,11 +1,7 @@
 res://PatchSystem/LoadPatcher.tscn
+res://GameContent/Scenes/Shaders/progress_shader.gdshader
 res://GameContent/Scenes/MainMenu/MainMenu.tscn
 res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
 res://GameContent/Scenes/Game/Card/card.tscn
-res://GameContent/Scenes/LoginMenu/LoginMenu.tscn
-res://GameContent/Katana/Katana.gd
-res://GameContent/Katana/KatanaSocket.gd
-res://PatchSystem/LoadPatchesScript.gd
-res://GameContent/Scenes/LoginMenu/login_functionality.gd
-res://GameContent/Katana/KAccount.gd
-res://GameContent/Scenes/MainMenu/main_menu.gd
+res://GameContent/Scenes/Game/user_component/user_component.tscn
+res://GameContent/Scenes/MainMenu/main_menu_canvas.gd

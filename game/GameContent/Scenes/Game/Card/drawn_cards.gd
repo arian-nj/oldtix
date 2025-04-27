@@ -97,7 +97,7 @@ func _card_played(card:Card)->void:
 
 # play card
 
-func play_others_card(card_data:CardData) -> Card:
+func play_random_card(card_data:CardData) -> Card:
 	var rand_card_variant :Variant = cards.pick_random()
 	if rand_card_variant == null:
 		return

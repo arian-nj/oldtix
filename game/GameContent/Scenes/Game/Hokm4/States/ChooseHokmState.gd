@@ -23,6 +23,7 @@ func Enter()->void:
 		chooseHokmPanel.HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.reset_all_suites()
 		is_hakem = true
+		table.me_player_panel.start_shader(InternalSetting.SETTING_PLAYER_CHOOSE_HOKM_WAIT)
 
 func Exit()->void:
 	ws.hold_events()
@@ -41,6 +42,7 @@ func _on_new_event(e:KEvent.Event)->void:
 
 	elif e.type == KEvent.TYPE_NEW_HOKM:
 		table.parse_game_data(e.data)
+		table.me_player_panel.stop_shader()
 		status_label.text = "Hokm Choosed"
 		if is_hakem:
 			var btn :SuiteButton = chooseHokmPanel.find_btn_from_suite(table.game_data.current_trick.hokm)

@@ -10,10 +10,11 @@ import (
 
 type HumanPlayer struct {
 	*PlayerCommon
-	UserId   int            `json:"user_id"`
-	Client   *socket.Client `json:"-"`
-	IsPlayng bool           `json:"is_playing"`
-	Game     *GameState     `json:"-"`
+	UserId    int            `json:"user_id"`
+	Client    *socket.Client `json:"-"`
+	IsPlayng  bool           `json:"is_playing"`
+	Game      *GameState     `json:"-"`
+	BetAmount int            `json:"-"`
 }
 
 func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_playng bool) *HumanPlayer {
@@ -39,7 +40,7 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
 }
 
 // events come here if not used go to GameEventCh
-func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_amount int) { // game is nil
+func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { // game is nil
 
 	app.BackgroundTask(func() {
 		for {
@@ -76,8 +77,7 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer, bet_
 							app.Logger.Error(err.Error())
 						}
 					} else {
-						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer, bet_amount)
-
+						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer)
 					}
 				default:
 					if hplayer.Game == nil {
