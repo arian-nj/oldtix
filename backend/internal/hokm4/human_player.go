@@ -56,17 +56,17 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 						app.ReportError(err)
 						return
 					}
-				case TypeGetMyCards:
-					var output struct {
-						NewCards []cards.Card `json:"cards"`
-					}
-					output.NewCards = hplayer.Cards
-					data_byte, err := json.Marshal(output)
-					if err != nil {
-						app.Logger.Error(err.Error())
-						continue
-					}
-					hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
+				// case TypeGetMyCards:
+				// 	var output struct {
+				// 		NewCards []cards.Card `json:"cards"`
+				// 	}
+				// 	output.NewCards = hplayer.Cards
+				// 	data_byte, err := json.Marshal(output)
+				// 	if err != nil {
+				// 		app.Logger.Error(err.Error())
+				// 		continue
+				// 	}
+				// 	hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
 				case TypeDisconnect:
 					hplayer.Client.Close()
 				case TypeMakeMatch:
@@ -76,6 +76,17 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 						if err != nil {
 							app.Logger.Error(err.Error())
 						}
+
+						var output struct {
+							NewCards []cards.Card `json:"cards"`
+						}
+						output.NewCards = hplayer.Cards
+						data_byte, err := json.Marshal(output)
+						if err != nil {
+							app.Logger.Error(err.Error())
+							continue
+						}
+						hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
 					} else {
 						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer)
 					}

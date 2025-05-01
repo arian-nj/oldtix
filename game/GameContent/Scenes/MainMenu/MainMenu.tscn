@@ -657,7 +657,7 @@ icon = ExtResource("14_xn1pj")
 flat = true
 icon_alignment = 2
 
-[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "playButton", "firstBetButton", "firstBetLabel", "secondBetButton", "continueGameButton")]
+[node name="BetAmountPanel" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("betVBoxContainer", "firstBetButton", "firstBetLabel", "secondBetButton", "playButton", "continueGameButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -667,10 +667,10 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("11_c1jlk")
 betVBoxContainer = NodePath("PanelContainer")
-playButton = NodePath("../MainMenu/PanelContainer/PlayTic2Button")
 firstBetButton = NodePath("PanelContainer/VBoxContainer2/FirstBetButton")
 firstBetLabel = NodePath("PanelContainer/VBoxContainer2/FirstBetButton/Label2")
 secondBetButton = NodePath("PanelContainer/VBoxContainer2/SecondBetButton")
+playButton = NodePath("../MainMenu/PanelContainer/PlayTic2Button")
 continueGameButton = NodePath("../MainMenu/PanelContainer/ContinueButton")
 
 [node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/UI/BetAmountPanel"]

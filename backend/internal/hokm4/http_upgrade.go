@@ -18,8 +18,9 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 
 	if wasInAGame {
 		app.RejonGame(w, r, user, activeGame)
+	} else {
+		app.JoinGame(w, r, user)
 	}
-	app.JoinGame(w, r, user)
 }
 func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, person *sqldb.Person, activeGame *GameState) {
 	// Upgrade Connection To Websocket
@@ -43,11 +44,13 @@ func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, p
 			break
 		}
 	}
+
 	Hplayer.Client = client
 	Hplayer.IsPlayng = true
 
 	app.RunReadWriteInBackground(Hplayer)
 	app.Logger.Info("new ws connection re-established " + strconv.Itoa(activeGame.BetAmount))
+
 	app.BackgroundSocketHandlers(Hplayer)
 
 }

@@ -33,6 +33,7 @@ CREATE TABLE public.hokm4_game (
     id bigint NOT NULL,
     team_one_tricks_score bigint DEFAULT 0 NOT NULL,
     team_two_tricks_score bigint DEFAULT 0 NOT NULL,
+    bet_amount bigint DEFAULT 0 NOT NULL,
     created_stamp timestamp with time zone DEFAULT now(),
     end_stamp timestamp with time zone
 );

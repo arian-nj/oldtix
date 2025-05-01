@@ -29,16 +29,17 @@ func (q *Queries) InsertGamePlayer(ctx context.Context, arg InsertGamePlayerPara
 }
 
 const insertHokm4Game = `-- name: InsertHokm4Game :one
-INSERT INTO hokm4_game DEFAULT VALUES RETURNING id, team_one_tricks_score, team_two_tricks_score, created_stamp, end_stamp
+INSERT INTO hokm4_game (bet_amount) VALUES ($1) RETURNING id, team_one_tricks_score, team_two_tricks_score, bet_amount, created_stamp, end_stamp
 `
 
-func (q *Queries) InsertHokm4Game(ctx context.Context) (Hokm4Game, error) {
-	row := q.db.QueryRow(ctx, insertHokm4Game)
+func (q *Queries) InsertHokm4Game(ctx context.Context, betAmount int) (Hokm4Game, error) {
+	row := q.db.QueryRow(ctx, insertHokm4Game, betAmount)
 	var i Hokm4Game
 	err := row.Scan(
 		&i.ID,
 		&i.TeamOneTricksScore,
 		&i.TeamTwoTricksScore,
+		&i.BetAmount,
 		&i.CreatedStamp,
 		&i.EndStamp,
 	)
@@ -82,6 +83,35 @@ func (q *Queries) InsertTurn(ctx context.Context, arg InsertTurnParams) (Turn, e
 	var i Turn
 	err := row.Scan(&i.TurnID, &i.TrickID, &i.Moves)
 	return i, err
+}
+
+const updateHokm4Endstamp = `-- name: UpdateHokm4Endstamp :exec
+UPDATE hokm4_game SET end_stamp = $1 WHERE id = $2
+`
+
+type UpdateHokm4EndstampParams struct {
+	EndStamp pgtype.Timestamptz
+	ID       int
+}
+
+func (q *Queries) UpdateHokm4Endstamp(ctx context.Context, arg UpdateHokm4EndstampParams) error {
+	_, err := q.db.Exec(ctx, updateHokm4Endstamp, arg.EndStamp, arg.ID)
+	return err
+}
+
+const updateHokm4Game = `-- name: UpdateHokm4Game :exec
+UPDATE hokm4_game SET team_one_tricks_score = $1, team_two_tricks_score = $2 WHERE id = $3
+`
+
+type UpdateHokm4GameParams struct {
+	TeamOneTricksScore int
+	TeamTwoTricksScore int
+	ID                 int
+}
+
+func (q *Queries) UpdateHokm4Game(ctx context.Context, arg UpdateHokm4GameParams) error {
+	_, err := q.db.Exec(ctx, updateHokm4Game, arg.TeamOneTricksScore, arg.TeamTwoTricksScore, arg.ID)
+	return err
 }
 
 const updateHokmTrick = `-- name: UpdateHokmTrick :exec

@@ -1,5 +1,4 @@
-extends Control
-class_name Game4Table
+class_name Game4Table extends Control
 
 signal MyCardPlayed(card:Card)
 
@@ -13,20 +12,48 @@ signal MyCardPlayed(card:Card)
 @export var top_player_panel:UserComponent
 @export var me_player_panel:UserComponent
 
+@export var allowedPlayArea:PlayArea
+
 var all_drawers :Array[CardDrawer]
 var table_draw_queue:Array[Callable]
 
 var last_card_played:Card = null
 var others_card_played:Array[Card]
 
+
+
+
 signal GameDataUpdated(game_data:GameData)
 
 var isMyTurn:bool = false
 
-func set_turn(b:bool)->void:
-	isMyTurn = b
-
 var game_data:GameData 
+
+func _ready() -> void:
+	game_data = GameData.new()
+	me_drawer.MyCardPlayed.connect(_on_card_played)
+
+	me_drawer.DrawerCardUp.connect(_on_card_up)
+	me_drawer.DrawerCardDown.connect(_on_card_down)
+
+	game_data.current_trick = TrickData.new()
+	
+	all_drawers.append(me_drawer)
+	all_drawers.append(right_drawer)
+	all_drawers.append(top_drawer)
+	all_drawers.append(left_drawer)
+	
+
+	for dra in all_drawers:
+		dra.AddToQueue.connect(push_callback)
+
+	run_actions()
+
+func _on_card_up()->void:
+	allowedPlayArea.turn_off()
+
+func _on_card_down()->void:
+	allowedPlayArea.turn_on()
 
 func clear_cards()->void:
 	push_callback(
@@ -43,6 +70,7 @@ func _clear_cards()->void:
 
 func remove_one_card(card:Card) -> void:
 	push_callback(
+		# card.disconnect
 		card.queue_free.call_deferred.bind()
 	)
 
@@ -52,21 +80,6 @@ func push_callback(c:Callable)->void:
 func _on_card_played(card:Card)->void:
 	MyCardPlayed.emit(card)
 
-func _ready() -> void:
-	game_data = GameData.new()
-	me_drawer.MyCardPlayed.connect(_on_card_played)
-	game_data.current_trick = TrickData.new()
-	
-	all_drawers.append(me_drawer)
-	all_drawers.append(right_drawer)
-	all_drawers.append(top_drawer)
-	all_drawers.append(left_drawer)
-	
-
-	for dra in all_drawers:
-		dra.AddToQueue.connect(push_callback)
-
-	run_actions()
 
 func set_player_to_hand()->void:
 	var meId := KAccount._instance.MyAccount.id
@@ -113,20 +126,20 @@ func run_actions()->void:
 			await get_tree().create_timer(.2).timeout
 		
 
-func new_cards_event(e:KEvent.Event)->void:
-	push_callback(_new_cards_event.bind(e))
+func new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
+	push_callback(_new_cards_event.bind(e,no_animation))
 
-func _new_cards_event(e:KEvent.Event)->void:
-	me_drawer.new_cards_event(e)
+func _new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
+	me_drawer.new_cards_event(e,no_animation)
 	me_drawer.break_action()
 
-	right_drawer.new_cards_event(e)
+	right_drawer.new_cards_event(e,no_animation)
 	right_drawer.break_action()
 
-	top_drawer.new_cards_event(e)
+	top_drawer.new_cards_event(e,no_animation)
 	top_drawer.break_action()
 
-	left_drawer.new_cards_event(e)
+	left_drawer.new_cards_event(e,no_animation)
 	left_drawer.break_action()
 
 func parse_game_data(json_string:String)->void:

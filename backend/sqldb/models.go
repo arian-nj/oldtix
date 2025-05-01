@@ -18,6 +18,7 @@ type Hokm4Game struct {
 	ID                 int
 	TeamOneTricksScore int
 	TeamTwoTricksScore int
+	BetAmount          int
 	CreatedStamp       pgtype.Timestamptz
 	EndStamp           pgtype.Timestamptz
 }

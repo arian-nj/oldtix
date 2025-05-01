@@ -11,9 +11,7 @@ func _on_home_button_pressed() -> void:
 	ws.send_event(KEvent.TYPE_DISCONNECT)
 	
 func OnLoaded()->void:
-	print("start onload")
 	connect_ws()
-	print("end onload")
 
 func _on_disconnect()-> void:
 	await get_tree().create_timer(.5).timeout

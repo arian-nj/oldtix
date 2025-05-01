@@ -1,5 +1,11 @@
 -- name: InsertHokm4Game :one
-INSERT INTO hokm4_game DEFAULT VALUES RETURNING *;
+INSERT INTO hokm4_game (bet_amount) VALUES ($1) RETURNING *;
+
+-- name: UpdateHokm4Game :exec
+UPDATE hokm4_game SET team_one_tricks_score = $1, team_two_tricks_score = $2 WHERE id = $3;
+
+-- name: UpdateHokm4Endstamp :exec
+UPDATE hokm4_game SET end_stamp = $1 WHERE id = $2;
 
 -- name: InsertGamePlayer :one
 INSERT INTO game_player (player_id, game_id,team) VALUES ($1,$2,$3) RETURNING *;

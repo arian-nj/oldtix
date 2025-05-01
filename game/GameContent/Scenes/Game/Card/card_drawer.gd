@@ -1,7 +1,11 @@
 class_name CardDrawer extends Control
 
 signal MyCardPlayed(card:Card)
-signal not_inplace(card:Card)
+
+signal DrawerCardUp()
+signal DrawerCardDown()
+
+signal NotInplaceSig(card:Card)
 signal AddToQueue(call:Callable)
 
 var unique_string:String :
@@ -9,7 +13,6 @@ var unique_string:String :
 		unique_string = value
 		uniqueLabel.text = value
 
-@export var selectable:bool = false
 @export var is_horizontal:bool
 @export var show_cards_value:bool
 
@@ -17,7 +20,6 @@ var unique_string:String :
 @export var hand: Control
 @export var play_place: Control
 
-@export var rot_max: float = 10.0
 @export var card_offset: float = 20.0
 @export var card_scene: PackedScene
 
@@ -43,15 +45,23 @@ var draw_queue :Array[Callable] = []
 var cards:Array[Card] = []
 var tween:Tween
 
-func new_tween()->Tween:
-	return create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-
 func _ready() -> void:
 	get_window().size_changed.connect(draw_cards)
 
+func append_card(card:Card)->void:
+	if !card.button_up.is_connected(DrawerCardUp.emit):
+		card.button_up.connect(DrawerCardUp.emit)
+	
+	if !card.button_down.is_connected(DrawerCardDown.emit):
+		card.button_down.connect(DrawerCardDown.emit)
+
+	cards.append(card)
+
+func new_tween()->Tween:
+	return create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+
 func push_callback(c:Callable)->void:
 	AddToQueue.emit(c)
-
 
 func break_action()->void:
 	self.push_callback(_break_action)
@@ -59,15 +69,15 @@ func break_action()->void:
 func _break_action()->String:
 	return "break"
 
-func new_cards_event(e:KEvent.Event)->void:
-	self.push_callback(_new_cards_event.bind(e))
+func new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
+	self.push_callback(_new_cards_event.bind(e,no_animation))
 
-func _new_cards_event(e:KEvent.Event)->void:
+func _new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
 	var json_data:Variant = JSON.parse_string(e.data)
 	var cards_json:Variant = json_data["cards"]
 	for card_json:Variant in cards_json:
 		create_card(card_json["suit"],card_json["value"])
-	draw_cards_and_sort()
+	draw_cards_and_sort(no_animation)
 	# print("cards size is : ",cards.size())
 
 
@@ -79,18 +89,17 @@ func _create_card(suite:CardData.CardSuites,value:int)->void:
 	c.card_data = CardData.new()
 	c.card_data.suit = suite
 	c.card_data.value = value
-	c.disabled = !selectable
 
 	add_child(c)
-	cards.append(c)
+	append_card(c)
 
-	c.card_played.connect(_card_played)
-	c.not_inplace.connect(func(card:Card)->void:
+	c.card_played.connect(_on_card_played)
+	c.NotInplaceSig.connect(func(card:Card)->void:
 		draw_cards()
-		not_inplace.emit(card)
+		self.NotInplaceSig.emit(card)
 		)
 
-func _card_played(card:Card)->void:
+func _on_card_played(card:Card)->void:
 	if isDrawn:
 		cards.erase(card)
 		MyCardPlayed.emit(card)
@@ -132,15 +141,13 @@ func _play_me_card(c:Card) -> void:
 	tween.parallel().tween_property(c,"global_position",play_place.global_position,card_movment_dur)
 	return
 	
-
-
-func draw_cards_and_sort() -> void:
-	push_callback(_draw_cards.bind(Vector2.ZERO,true))
+func draw_cards_and_sort(no_animation:bool=false) -> void:
+	push_callback(_draw_cards.bind(Vector2.ZERO,true,no_animation))
 
 func draw_cards() -> void:
 	push_callback(_draw_cards.bind())
 
-func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false) -> void:
+func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false,no_animation:bool=false) -> void:
 	if cards.is_empty():
 		return
 	# print(cards.size())
@@ -189,6 +196,8 @@ func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false) -> void:
 			
 			card.global_position = from_middle.global_position - card.size
 			delay = newCardsCounter * two_card_movment_dur
+			if no_animation :
+				delay = 0
 			
 			# Capture the current counter value for the tween callback.
 			newCardsCounter += 1
@@ -260,7 +269,8 @@ func sort_cards()->void:
 	cards.sort_custom(suite_sort)
 
 
-# sort filters
+### sort filters
+
 func suite_sort(a:Card,b:Card)->bool:
 	var a_suite_index:int = in_deck_suites.find(a.card_data.suit)
 	var b_suite_index :int = in_deck_suites.find(b.card_data.suit)
@@ -288,10 +298,10 @@ func sort_deck_suits(suits: Array[CardData.CardSuites]) -> Array[CardData.CardSu
 	# Create a new array to hold the sorted suits
 	var sorted_array: Array[CardData.CardSuites] = []
 	
-	# Determine the maximum length for interleaving
+	# Determine the maximum length
 	var max_length:int = max(red_suits.size(), black_suits.size())
 	
-	# Interleave red and black suits
+	# red and black suits
 	for i:int in range(max_length):
 		if black_suits.size() > red_suits.size():
 			if i < black_suits.size():

@@ -13,7 +13,7 @@ func Enter()->void:
 	is_hakem = false
 	got_cards_time = 0
 	status_label.text = "Choose Hokm"
-	ws.new_event.connect(_on_new_event)
+	ws.NewEventSig.connect(_on_new_event)
 	ws.open_events()
 	
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
@@ -27,11 +27,12 @@ func Enter()->void:
 
 func Exit()->void:
 	ws.hold_events()
-	ws.new_event.disconnect(_on_new_event)
+	ws.NewEventSig.disconnect(_on_new_event)
 	if chooseHokmPanel.HokmChoosed.is_connected(_on_hokm_choosed):
 		chooseHokmPanel.HokmChoosed.disconnect(_on_hokm_choosed)
 
 func _on_new_event(e:KEvent.Event)->void:
+	print(KAccount._instance.MyAccount.username + " choose hokm " +e.type)
 	if e.type == KEvent.TYPE_NEW_CARD:
 		print(str(KAccount._instance.MyAccount.id) + " got new card event")
 		table.new_cards_event(e)		

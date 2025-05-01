@@ -1,8 +1,12 @@
-ColorRect
-UserComponent
 Button
-Sprite2D
+PanelContainer
 Control
+ColorRect
+CustomRatioAspectContainer
+CollisionShape2D
+StaticBody2D
+CanvasModulate
+UserComponent
+Sprite2D
 Label
 VBoxContainer
-PanelContainer

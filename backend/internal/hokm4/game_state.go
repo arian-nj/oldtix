@@ -2,6 +2,7 @@ package hokm4
 
 import (
 	"context"
+	"fmt"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -31,12 +32,28 @@ type GameState struct {
 	*ApplicationHokm4 `json:"-"`
 	ID                int               `json:"id"`
 	Players           []PlayerInterface `json:"players"`
-	GameEventsCh      chan *GameEvent   `json:"-"`
 	CurrentTrick      *Trick            `json:"current_trick"`
-	Tricks            []*Trick          `json:"-"`
-	BetAmount         int               `json:"-"`
 	TeamOneTrickScore int               `json:"team_one_trick_score"`
 	TeamTwoTrickScore int               `json:"team_two_trick_score"`
+
+	Tricks       []*Trick        `json:"-"`
+	BetAmount    int             `json:"-"`
+	GameEventsCh chan *GameEvent `json:"-"`
+}
+
+func (gs *GameState) SaveGameStateData() error {
+	gs.Logger.Info("saving data")
+	err := gs.Queries.UpdateHokm4Game(context.Background(), sqldb.UpdateHokm4GameParams{
+		TeamOneTricksScore: gs.TeamOneTrickScore,
+		TeamTwoTricksScore: gs.TeamTwoTrickScore,
+		ID:                 gs.ID,
+	})
+	if err != nil {
+		gs.Logger.Error(err.Error())
+	} else {
+		gs.Logger.Info(fmt.Sprintf("saving is allright %d %d %d", gs.ID, gs.TeamOneTrickScore, gs.TeamTwoTrickScore))
+	}
+	return err
 }
 
 func (gs *GameState) GetHumanPlayers() (allHumanPlayers []*HumanPlayer) {
@@ -50,8 +67,8 @@ func (gs *GameState) GetHumanPlayers() (allHumanPlayers []*HumanPlayer) {
 	return allHumanPlayers
 }
 
-func (app *ApplicationHokm4) NewGameState() (*GameState, error) {
-	gameRow, err := app.Queries.InsertHokm4Game(context.Background())
+func (app *ApplicationHokm4) NewGameState(bet_amount int) (*GameState, error) {
+	gameRow, err := app.Queries.InsertHokm4Game(context.Background(), bet_amount)
 	if err != nil {
 		return nil, err
 	}

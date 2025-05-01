@@ -1,20 +1,17 @@
-class_name KatanaSocket
-extends Node
+class_name KatanaSocket extends Node
 
-signal new_event(e:KEvent.Event)
+signal DisconnectedSig
+signal NewEventSig(e:KEvent.Event)
+
 var pause :bool = true
-
+var state:int
 var events_queue:Array[KEvent.Event] = []
-signal Disconnected
-
-# func _on_new_event(e:KEvent.Event)->void:
-# 	pass
-
-func _ready() -> void:
-	set_process(false)
 
 # WebSocket instance
 var socket:WebSocketPeer = WebSocketPeer.new()
+
+func _ready() -> void:
+	set_process(false)
 
 func hold_events()->void:
 	pause = true
@@ -22,17 +19,11 @@ func hold_events()->void:
 func open_events()->void:
 	pause = false
 	
-# Sends an event through the WebSocket
 func send_event(event_type: String, event_data: String="") -> void:
 	var event:KEvent.Event = KEvent.Event.new()
 	event.type = event_type
 	event.data = event_data
 	socket.send_text(event.to_json())
-
-# Handles incoming events (to be extended)
-func _handle_event(event: KEvent.Event) -> void:
-	events_queue.append(event)
-
 
 func connect_to_game(coin_amount:int) -> void:
 	set_process(true)
@@ -44,8 +35,6 @@ func connect_to_game(coin_amount:int) -> void:
 		set_process(false)
 		# get_tree().create_timer()
 
-
-var state:int
 # Processes incoming WebSocket data
 func _process(_delta: float) -> void:
 	socket.poll()
@@ -64,6 +53,7 @@ func _process(_delta: float) -> void:
 	process_events(_delta)
 
 var time_passed:float
+
 func process_events(_delta: float) -> void:
 	time_passed += _delta
 	if pause:
@@ -76,7 +66,7 @@ func process_events(_delta: float) -> void:
 	if event == null:
 		return
 	print(KAccount._instance.MyAccount.username + " process " +event.type)
-	new_event.emit(event)	
+	NewEventSig.emit(event)	
 
 # Handles the open state and processes incoming messages
 func _handle_open_state() -> void:
@@ -88,6 +78,10 @@ func _handle_open_state() -> void:
 		else:
 			_handle_event(event)
 
+# Handles incoming events (to be extended)
+func _handle_event(event: KEvent.Event) -> void:
+	events_queue.push_back(event)
+
 # Handles the closed state
 func _handle_closed_state() -> void:
 	var code:int = socket.get_close_code()
@@ -95,13 +89,7 @@ func _handle_closed_state() -> void:
 	print("WebSocket closed with code: %d, reason: %s" % [code, reason])
 	ErrorBoard._instance.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorBoard.ErrorLevel)
 	set_process(false)
-	Disconnected.emit()
-	# get_tree().create_timer(1).timeout.connect(connect_to_game)
-	# var node_parent:Node = get_parent()
-	# if node_parent is SceneLevel:
-	# 	var scene_parent:SceneLevel = node_parent
-	# 	await  get_tree().create_timer(1).timeout
-	# 	scene_parent.manager_change_scene.emit(SceneManager.Levels.MainMenu)
+	DisconnectedSig.emit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:

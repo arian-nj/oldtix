@@ -1,12 +1,12 @@
 class_name BetPanel extends Control
 
 @export var betVBoxContainer:PanelContainer
-@export var playButton:Button
 
 @export var firstBetButton:Button
 @export var firstBetLabel:Label
 @export var secondBetButton:Button
 
+@export var playButton:Button
 @export var continueGameButton:Button
 
 signal BetAmountChoosed(coin_amount:int)
@@ -29,6 +29,7 @@ func _ready() -> void:
 	send_active_game_request()
 
 func send_active_game_request()->void:
+	print("sending request")
 	var http_req:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req)
 	http_req.request(Katana.Hokm4HttpUrl + Katana.ActiveGameUrl,KAccount._instance.AddAuthHeader())
@@ -41,6 +42,7 @@ func _on_active_game_request_completed(_result: int, response_code: int, _header
 		ErrorBoard._instance.new_error("خطا در اتصال به بازی" + str(response_code),ErrorBoard.ErrorLevel)
 		ErrorBoard._instance.new_error("در حال تلاش دوباره",ErrorBoard.InfoLevel)
 		print_debug(str(response_code) +" response code ")
+		get_tree().create_timer(5).timeout.connect(send_active_game_request)
 		return
 	
 	var active_game:ActiveGameData = JsonClassConverter.json_string_to_class(ActiveGameData,body.get_string_from_utf8())

@@ -5,13 +5,13 @@ extends State
 @export var status_label:Label
 
 func Enter()->void:
-	ws.new_event.connect(_on_new_event)
+	ws.NewEventSig.connect(_on_new_event)
 	ws.open_events()
 	table.MyCardPlayed.connect(on_me_card_played)
 
 func Exit()->void:
 	ws.hold_events()
-	ws.new_event.disconnect(_on_new_event)
+	ws.NewEventSig.disconnect(_on_new_event)
 	table.MyCardPlayed.disconnect(on_me_card_played)
 
 func _on_new_event(e:KEvent.Event)->void:
@@ -20,7 +20,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		table.parse_game_data(e.data)
 		var last_card := table.last_card_played
 		if last_card != null and is_instance_valid(last_card):
-			table.me_drawer.cards.append(last_card)
+			table.me_drawer.append_card(last_card)
 			table.me_drawer.draw_cards()
 			table.last_card_played = null
 
@@ -39,7 +39,7 @@ func _on_new_event(e:KEvent.Event)->void:
 	elif e.type == KEvent.TYPE_INVALID_PLAY:
 		status_label.text = "Invalid"
 		if table.last_card_played != null and is_instance_valid(table.last_card_played):
-			table.me_drawer.cards.append(table.last_card_played)
+			table.me_drawer.append_card(table.last_card_played)
 		table.last_card_played = null
 		table.me_drawer.draw_cards()
 		
@@ -52,7 +52,7 @@ func _on_new_event(e:KEvent.Event)->void:
 		var new_card_data :CardData = JsonClassConverter.json_string_to_class(CardData,e.data)
 		var played_card := table.me_drawer.play_me_card(new_card_data)
 		if table.last_card_played != null and is_instance_valid(table.last_card_played):
-			table.me_drawer.cards.append(table.last_card_played)
+			table.me_drawer.append_card(table.last_card_played)
 			table.me_drawer.draw_cards()
 		table.last_card_played = played_card
 
@@ -78,7 +78,7 @@ func on_me_card_played(card:Card)->void:
 	print("card played ",card.card_data.suit , " ", card.card_data.value)
 	if table.isMyTurn:
 		send_card_playend_event(card)
-	else:
+	elif table.last_card_played == null:
 		table.last_card_played = card
 	
 func send_card_playend_event(card:Card)->void:

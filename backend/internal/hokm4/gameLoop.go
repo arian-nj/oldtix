@@ -8,6 +8,7 @@ import (
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/sqldb"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
@@ -66,6 +67,8 @@ func (game *GameState) RunTrick(trick_number int) error {
 		p.SetCards([]cards.Card{})
 	}
 
+	time.Sleep(500 * time.Millisecond) //bad fix: some times TypeNewTrick get proccesed after TypeNewCard in sendCard(5,...)
+
 	allCards := cards.NewAllCards()
 	allCards, err = game.sendCards(5, allCards)
 	if err != nil {
@@ -122,7 +125,12 @@ func (game *GameState) RunTrick(trick_number int) error {
 	if err != nil {
 		game.Logger.Error(err.Error())
 	}
-	return err
+
+	err = game.SaveGameStateData()
+	if err != nil {
+		game.Logger.Error(err.Error())
+	}
+	return nil
 }
 
 func (game *GameState) RunTurns() error {
@@ -288,6 +296,11 @@ func (game *GameState) TheEnd() error {
 	for _, p := range game.Players {
 		p.AddToEgress(socket.NewEvent(TypeTheEnd, socket.EventMessage("")))
 	}
+
+	game.Queries.UpdateHokm4Endstamp(context.Background(), sqldb.UpdateHokm4EndstampParams{
+		EndStamp: pgtype.Timestamptz{Time: time.Now(), Valid: true},
+		ID:       game.ID,
+	})
 
 	// Statics
 	var winner_team Team

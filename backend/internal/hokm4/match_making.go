@@ -74,7 +74,7 @@ func (app *ApplicationHokm4) FilterMatchMkingByCoin() {
 
 func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, betting_amount int) {
 	for {
-		game, err := app.NewGameState()
+		game, err := app.NewGameState(betting_amount)
 		if err != nil {
 			app.ReportError(err)
 			return

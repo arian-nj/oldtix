@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cmt3jemho5vyb"]
 
-[ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/drawn_cards.gd" id="1_0mwao"]
+[ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/card_drawer.gd" id="1_0mwao"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="2_kp8tw"]
 
 [sub_resource type="Gradient" id="Gradient_0evr3"]

@@ -3,7 +3,7 @@
 - [x] Core Game Play ✅ 2025-02-13
 - [x] Core Game Play (Lol) ✅ 2025-03-12
 - [x] Auto Update ✅ 2025-02-23
-- [ ] Don't Look Like Shit
+- [x] Don't Look Like Shit ✅ 2025-04-27
 - [ ] Ship It
 # V 2.0.0 Social
 - [ ] pre made text chat 

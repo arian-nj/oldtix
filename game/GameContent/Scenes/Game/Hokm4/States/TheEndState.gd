@@ -10,7 +10,7 @@ extends State
 func Enter()->void:
 	ws.set_process(false)
 	status_label.text = "The End"
-	ws.new_event.connect(_on_new_event)
+	ws.NewEventSig.connect(_on_new_event)
 	ws.open_events()
 	win_panel.visible = true
 	trick_score_panel.end_game()
@@ -19,4 +19,4 @@ func _on_new_event(_e:KEvent.Event)->void:
 	pass
 
 func Exit()->void:
-	ws.new_event.disconnect(_on_new_event)
+	ws.NewEventSig.disconnect(_on_new_event)
