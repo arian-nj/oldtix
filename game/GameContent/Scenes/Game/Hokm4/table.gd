@@ -20,9 +20,6 @@ var table_draw_queue:Array[Callable]
 var last_card_played:Card = null
 var others_card_played:Array[Card]
 
-
-
-
 signal GameDataUpdated(game_data:GameData)
 
 var isMyTurn:bool = false

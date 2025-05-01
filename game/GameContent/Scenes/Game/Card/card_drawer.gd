@@ -13,6 +13,8 @@ var unique_string:String :
 		unique_string = value
 		uniqueLabel.text = value
 
+@export var isMe:bool
+
 @export var is_horizontal:bool
 @export var show_cards_value:bool
 
@@ -54,10 +56,14 @@ func append_card(card:Card)->void:
 	
 	if !card.button_down.is_connected(DrawerCardDown.emit):
 		card.button_down.connect(DrawerCardDown.emit)
+	
+	if isMe == false:
+		card.can_be_selected = false
 
 	cards.append(card)
+	
 
-func new_tween()->Tween:
+func _new_tween()->Tween:
 	return create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
 func push_callback(c:Callable)->void:
@@ -90,8 +96,8 @@ func _create_card(suite:CardData.CardSuites,value:int)->void:
 	c.card_data.suit = suite
 	c.card_data.value = value
 
-	add_child(c)
 	append_card(c)
+	add_child(c)
 
 	c.card_played.connect(_on_card_played)
 	c.NotInplaceSig.connect(func(card:Card)->void:
@@ -118,7 +124,7 @@ func play_random_card(card_data:CardData) -> Card:
 	return rand_card
 
 func _play_others_card(c:Card) -> void:
-	tween = new_tween()
+	tween = _new_tween()
 	tween.parallel().tween_property(c,"global_position",play_place.global_position,card_movment_dur)
 	tween.parallel().tween_property(c,"rotation_degrees",0,card_movment_dur)
 	c.prespective3DShader.flip_y(flip_card_dur, card_movment_dur/2, c.load_assets)
@@ -137,7 +143,7 @@ func play_me_card(card_data:CardData) -> Card:
 	return found_card
 
 func _play_me_card(c:Card) -> void:
-	tween = new_tween()
+	tween = _new_tween()
 	tween.parallel().tween_property(c,"global_position",play_place.global_position,card_movment_dur)
 	return
 	
@@ -204,7 +210,7 @@ func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false,no_animation:bool
 
 			if show_cards_value:
 				card.prespective3DShader.flip_y(flip_card_dur, movementDuration + delay, card.load_assets)
-			tween = new_tween()
+			tween = _new_tween()
 			tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 			tween.parallel().tween_property(card, "rotation_degrees", final_degree, movementDuration).set_delay(delay)
 		
@@ -215,7 +221,7 @@ func _draw_cards(_from_pos:= Vector2.ZERO,sort_flag:bool=false,no_animation:bool
 				card.global_position = final_pos
 			else:
 				movementDuration += i * (two_card_movment_dur / 4.0)
-				tween = new_tween()
+				tween = _new_tween()
 				tween.parallel().tween_property(card, "global_position", final_pos, movementDuration).set_delay(delay)
 		wait_time = movementDuration + delay
 

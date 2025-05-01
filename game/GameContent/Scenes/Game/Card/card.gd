@@ -21,24 +21,25 @@ var big_scale:Vector2
 
 var in_hand:bool
 var is_touching_area:bool
+@export var can_be_selected:bool = true
 
 func _ready()->void:
 	set_process(false)
 	default_scale = scale
 	big_scale = scale * 1.1
 
-	cardArea.body_entered.connect(_body_entered)
-	cardArea.body_exited.connect(_body_exited)
+	if can_be_selected:
+		cardArea.body_entered.connect(_body_entered)
+		cardArea.body_exited.connect(_body_exited)
 
-	button_up.connect(_on_button_up)
-	button_down.connect(_on_button_down)	
-	
+		button_up.connect(_on_button_up)
+		button_down.connect(_on_button_down)	
+		
 	set_process(true)
 	load_assets()
-	await get_tree().create_timer(3).timeout
 
 func _process(delta:float)->void:
-	if button_pressed:
+	if can_be_selected and button_pressed:
 		set_card_position()
 
 		prespective3DShader.calcute_shader()
@@ -55,9 +56,12 @@ func _body_exited(_body:Node2D)->void:
 	is_touching_area = false
 
 func _on_button_up() -> void:
+	print("hii")
 	if is_touching_area:
+		print("here1")
 		card_played.emit(self)
 	else :
+		print("here2")
 		NotInplaceSig.emit(self)
 	
 	prespective3DShader.set_shader(0,0)

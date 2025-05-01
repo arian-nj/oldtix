@@ -23,12 +23,12 @@
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/TheEndState.gd" id="16_tmsoy"]
 [ext_resource type="Script" uid="uid://bu2a3iuo1ja85" path="res://GameContent/Scenes/Game/win_panel.gd" id="17_mcw6q"]
 
-[sub_resource type="Gradient" id="Gradient_wqsup"]
+[sub_resource type="Gradient" id="Gradient_c4cut"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
 colors = PackedColorArray(0, 0.329412, 0, 1, 1.23335e-07, 0.196067, 0, 1, 0.0666667, 0.329412, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2hoqw"]
-gradient = SubResource("Gradient_wqsup")
+gradient = SubResource("Gradient_c4cut")
 fill_from = Vector2(0.478632, 0)
 fill_to = Vector2(0.507123, 1)
 
@@ -194,6 +194,7 @@ offset_bottom = -190.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("2_22pf8")
+isMe = true
 is_horizontal = true
 show_cards_value = true
 from_middle = NodePath("../../from_middle")
