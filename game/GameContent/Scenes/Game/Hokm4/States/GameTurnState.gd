@@ -7,15 +7,18 @@ extends State
 func Enter()->void:
 	ws.NewEventSig.connect(_on_new_event)
 	ws.open_events()
-	table.MyCardPlayed.connect(on_me_card_played)
+	table.me_drawer.MyCardPlayed.connect(on_me_card_played)
 
 func Exit()->void:
 	ws.hold_events()
 	ws.NewEventSig.disconnect(_on_new_event)
-	table.MyCardPlayed.disconnect(on_me_card_played)
+	table.me_drawer.MyCardPlayed.disconnect(on_me_card_played)
+
+var lock:bool = false
 
 func _on_new_event(e:KEvent.Event)->void:
 	if e.type == KEvent.TYPE_TURN_START:
+		lock = false
 		status_label.text = "Turn Started"
 		table.parse_game_data(e.data)
 		var last_card := table.last_card_played
@@ -32,6 +35,7 @@ func _on_new_event(e:KEvent.Event)->void:
 			send_card_playend_event(table.last_card_played)
 
 	elif e.type == KEvent.TYPE_VALID_PLAY:
+		lock = true
 		status_label.text = "Valid"
 		table.me_player_panel.stop_shader()
 		table.isMyTurn = false
@@ -41,10 +45,11 @@ func _on_new_event(e:KEvent.Event)->void:
 		if table.last_card_played != null and is_instance_valid(table.last_card_played):
 			table.me_drawer.append_card(table.last_card_played)
 		table.last_card_played = null
-		table.me_drawer.draw_cards()
+		table.me_drawer.draw_cards_and_sort()
 		
 
 	elif e.type == KEvent.TYPE_PLAY_TIMEOUT:
+		lock = true
 		status_label.text = "Timeout"
 		table.me_player_panel.stop_shader()
 		table.isMyTurn = false
@@ -69,17 +74,28 @@ func _on_new_event(e:KEvent.Event)->void:
 	elif e.type == KEvent.TYPE_END_TRICK:
 		status_label.text = "Trick Ended"
 		table.parse_game_data(e.data)
-		table.clear_cards()
+		table.clear_all_cards()
 		ws.hold_events()
 		Transition.emit(self,"wait_state")
 
 
 func on_me_card_played(card:Card)->void:
 	print("card played ",card.card_data.suit , " ", card.card_data.value)
+	if lock:
+		table.me_drawer.draw_cards()
+		return
+	
+	table.me_drawer.cards.erase(card)
 	if table.isMyTurn:
 		send_card_playend_event(card)
-	elif table.last_card_played == null:
-		table.last_card_played = card
+	else:
+		if table.last_card_played == null:
+			table.last_card_played = card
+		else:
+			table.me_drawer.append_card(table.last_card_played)
+			table.last_card_played = card
+			table.me_drawer.draw_cards_and_sort()
+
 	
 func send_card_playend_event(card:Card)->void:
 	table.last_card_played = card

@@ -3,7 +3,7 @@ extends Control
 @export var table:Game4Table
 
 func _ready() -> void:
-	table.MyCardPlayed.connect(_on_card_played)
+	table.me_drawer.MyCardPlayed.connect(_on_card_played)
 
 func _on_card_played(card:Card) -> void:
 	print(card.card_data.suit, " -- " ,card.card_data.value)

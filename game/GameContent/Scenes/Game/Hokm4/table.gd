@@ -1,7 +1,5 @@
 class_name Game4Table extends Control
 
-signal MyCardPlayed(card:Card)
-
 @export var me_drawer:CardDrawer
 @export var right_drawer:CardDrawer
 @export var top_drawer:CardDrawer
@@ -20,7 +18,7 @@ var table_draw_queue:Array[Callable]
 var last_card_played:Card = null
 var others_card_played:Array[Card]
 
-signal GameDataUpdated(game_data:GameData)
+signal GameDataUpdatedSig(game_data:GameData)
 
 var isMyTurn:bool = false
 
@@ -28,18 +26,16 @@ var game_data:GameData
 
 func _ready() -> void:
 	game_data = GameData.new()
-	me_drawer.MyCardPlayed.connect(_on_card_played)
+	game_data.current_trick = TrickData.new()
 
 	me_drawer.DrawerCardUp.connect(_on_card_up)
 	me_drawer.DrawerCardDown.connect(_on_card_down)
-
-	game_data.current_trick = TrickData.new()
 	
-	all_drawers.append(me_drawer)
-	all_drawers.append(right_drawer)
-	all_drawers.append(top_drawer)
-	all_drawers.append(left_drawer)
-	
+	all_drawers = [
+		me_drawer,
+		right_drawer,
+		top_drawer,
+		left_drawer]
 
 	for dra in all_drawers:
 		dra.AddToQueue.connect(push_callback)
@@ -52,12 +48,12 @@ func _on_card_up()->void:
 func _on_card_down()->void:
 	allowedPlayArea.turn_on()
 
-func clear_cards()->void:
+func clear_all_cards()->void:
 	push_callback(
-		_clear_cards.bind()
+		_clear_all_cards.bind()
 	)
 
-func _clear_cards()->void:
+func _clear_all_cards()->void:
 	for drawer_queue in all_drawers:
 		for c:Card in drawer_queue.cards:
 			if is_instance_valid(c):
@@ -73,9 +69,6 @@ func remove_one_card(card:Card) -> void:
 
 func push_callback(c:Callable)->void:
 	table_draw_queue.push_back(c)
-
-func _on_card_played(card:Card)->void:
-	MyCardPlayed.emit(card)
 
 
 func set_player_to_hand()->void:
@@ -141,7 +134,7 @@ func _new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
 
 func parse_game_data(json_string:String)->void:
 	game_data = JsonClassConverter.json_string_to_class(GameData,json_string)
-	GameDataUpdated.emit(game_data)
+	GameDataUpdatedSig.emit(game_data)
 
 func remove_played_cards()->void:
 	var cards_trash : Array[Card]

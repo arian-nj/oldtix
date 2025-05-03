@@ -2,12 +2,3 @@ res://PatchSystem/LoadPatcher.tscn
 res://GameContent/Scenes/Shaders/progress_shader.gdshader
 res://GameContent/Scenes/MainMenu/MainMenu.tscn
 res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
-res://test/deck.tscn
-res://GameContent/Scenes/Game/Card/card.tscn
-res://GameContent/Scenes/Game/chooseHokm/suite_button.tscn
-res://GameContent/Scenes/Game/Hokm4/table.gd
-res://GameContent/Katana/KatanaSocket.gd
-res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd
-res://GameContent/Scenes/Game/Card/card_drawer.gd
-res://GameContent/Scenes/Game/Card/card.gd
-res://GameContent/Types/Games/CardData.gd

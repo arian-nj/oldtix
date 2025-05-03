@@ -6,7 +6,7 @@ class_name TurnScores extends Control
 @export var table:Game4Table
 
 func _ready() -> void:
-	table.GameDataUpdated.connect(_game_data_updated)
+	table.GameDataUpdatedSig.connect(_game_data_updated)
 
 
 func _game_data_updated(game_data:GameData)->void:

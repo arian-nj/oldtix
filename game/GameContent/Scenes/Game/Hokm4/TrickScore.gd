@@ -16,7 +16,7 @@ func update_view_size()->void:
 	view_size = get_viewport().get_visible_rect().size
 
 func _ready() -> void:
-	table.GameDataUpdated.connect(_game_data_updated)
+	table.GameDataUpdatedSig.connect(_game_data_updated)
 	update_view_size()
 	get_viewport().size_changed.connect(update_view_size)
 

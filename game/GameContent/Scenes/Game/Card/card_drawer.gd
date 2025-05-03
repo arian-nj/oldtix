@@ -107,7 +107,6 @@ func _create_card(suite:CardData.CardSuites,value:int)->void:
 
 func _on_card_played(card:Card)->void:
 	if isDrawn:
-		cards.erase(card)
 		MyCardPlayed.emit(card)
 
 # play card
