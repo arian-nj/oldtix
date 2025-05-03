@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://cn8eprq2quc3f"]
 
-[ext_resource type="Shader" uid="uid://cjbre4q2cupfn" path="res://GameContent/Scenes/Game/Hokm/disolve_2d_shader.gdshader" id="1_is06r"]
+[ext_resource type="Shader" uid="uid://cjbre4q2cupfn" path="res://GameContent/Scenes/Game/chooseHokm/disolve_2d_shader.gdshader" id="1_is06r"]
 [ext_resource type="Texture2D" uid="uid://chsi12k6h6txe" path="res://GameContent/assets/Suites.png" id="1_taw70"]
-[ext_resource type="Script" uid="uid://by2n4x32cl6uu" path="res://GameContent/Scenes/Game/Hokm/suite_button.gd" id="3_kxwd4"]
+[ext_resource type="Script" uid="uid://by2n4x32cl6uu" path="res://GameContent/Scenes/Game/chooseHokm/suite_button.gd" id="3_kxwd4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_is06r"]
 

@@ -4,9 +4,13 @@ signal card_played(card:Card)
 
 signal NotInplaceSig(card:Card)
 
-@export var cardTexture:TextureRect
+@export var cardDrawingTextureRect:TextureRect
+@export var cardBackgroundTextureRect:TextureRect
+
 @export var prespective3DShader:Prescpective3DShader
-@export var atlasTexture:Texture2D
+@export var cardDrawingAtlasTexture:Texture2D
+
+@export var cardBackgroundTexture:Texture2D
 
 @export var cardArea:Area2D
 @export var swingComponent:SwingComponent
@@ -24,6 +28,7 @@ var is_touching_area:bool
 @export var can_be_selected:bool = true
 
 func _ready()->void:
+	prespective3DShader.all_textures.append_array([cardDrawingTextureRect,cardBackgroundTextureRect])
 	set_process(false)
 	default_scale = scale
 	big_scale = scale * 1.1
@@ -36,7 +41,10 @@ func _ready()->void:
 		button_down.connect(_on_button_down)	
 		
 	set_process(true)
-	load_assets()
+
+
+func flip_card()->void:
+	prespective3DShader.flip_y(1,0,load_assets)
 
 func _process(delta:float)->void:
 	if can_be_selected and button_pressed:
@@ -114,5 +122,6 @@ func suite_name() -> String:
 
 func load_assets()->void:
 	var region := Vector2((self.size.x * (card_data.value-2)),(self.size.y * (card_data.suit)))
-	var croped_image := atlasTexture.get_image().get_region(Rect2i(region,self.size))
-	cardTexture.texture = ImageTexture.create_from_image(croped_image)
+	var croped_image := cardDrawingAtlasTexture.get_image().get_region(Rect2i(region,self.size))
+	cardDrawingTextureRect.texture = ImageTexture.create_from_image(croped_image)
+	cardBackgroundTextureRect.texture = cardBackgroundTexture

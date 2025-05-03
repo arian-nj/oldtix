@@ -51,7 +51,6 @@ func get_newest_version()-> String:
 		
 		var domain := "cgame.storage.c2.liara.space"
 		var pack_url := "/patches/release/Tix_android_v"+new_version_string+".pck"
-		pack_url = "/patches/dev/TixGame_android.pck"
 		err = await downloadProgressBar.start_downloading(domain,pack_url)
 		if err != "":
 			return err

@@ -4,6 +4,10 @@ Status:
 
 Tags: [[card-game]] [[authentication]]
 
+# Endpoints
+/auth/guest
+/auth/register
+
 # Authentication
 how i should connect multiple auth methods to one user
 **person** table is main one

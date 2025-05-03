@@ -39,7 +39,7 @@ ratio = 0.5455
 script = ExtResource("1_6dnms")
 metadata/_custom_type_script = "uid://qtnu1lo5l4ls"
 
-[node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer", "right_player_panel", "left_player_panel", "top_player_panel", "me_player_panel", "allowedPlayArea")]
+[node name="Table" type="Control" parent="AspectRatioContainer" node_paths=PackedStringArray("me_drawer", "right_drawer", "top_drawer", "left_drawer", "allowedPlayArea")]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("2_jbf37")
@@ -47,10 +47,6 @@ me_drawer = NodePath("Hands/MeDrawCards")
 right_drawer = NodePath("Hands/RightDrawCards")
 top_drawer = NodePath("Hands/TopDrawCards")
 left_drawer = NodePath("Hands/LeftDrawCards")
-right_player_panel = NodePath("")
-left_player_panel = NodePath("")
-top_player_panel = NodePath("")
-me_player_panel = NodePath("")
 allowedPlayArea = NodePath("PlayArea")
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Table"]

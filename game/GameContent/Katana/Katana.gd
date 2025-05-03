@@ -11,7 +11,7 @@ static var Hokm4HttpUrl:String = "https://"+"hokm4.filelord.ir"
 static func change_debug_mode(new_debug:bool) -> void:
 	_debug = new_debug
 	if new_debug:
-		var local_ip := "192.168.216.205"
+		var local_ip := "192.168.157.205"
 		CoreHttpUrl = "http://" + local_ip +":4444"
 		Hokm4WsUrl =  "ws://" + local_ip + ":4445"
 		Hokm4HttpUrl =  "http://" + local_ip + ":4445"

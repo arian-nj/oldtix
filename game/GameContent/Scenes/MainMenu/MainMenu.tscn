@@ -728,6 +728,7 @@ theme_override_font_sizes/font_size = 80
 text = "10    ==>    25"
 
 [node name="SecondBetButton" type="Button" parent="AspectRatioContainer/UI/BetAmountPanel/PanelContainer/VBoxContainer2"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
