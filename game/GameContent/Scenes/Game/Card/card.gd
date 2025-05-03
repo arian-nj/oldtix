@@ -105,20 +105,6 @@ func change_scale(new_scale:Vector2)->void:
 	scale_tween.tween_property(self,"scale",new_scale,.3)
 
 ## assets
-func suite_name() -> String:
-	var sname:String = ""
-
-	match card_data.suit:
-		CardData.CardSuites.Club:
-			sname ="7"
-		CardData.CardSuites.Diamond:
-			sname ="4"
-		CardData.CardSuites.Heart:
-			sname ="2"
-		CardData.CardSuites.Spade:
-			sname ="5"
-	
-	return sname
 
 func load_assets()->void:
 	var region := Vector2((self.size.x * (card_data.value-2)),(self.size.y * (card_data.suit)))

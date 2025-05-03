@@ -65,7 +65,7 @@ func process_events(_delta: float) -> void:
 	var event : KEvent.Event = events_queue.pop_front()
 	if event == null:
 		return
-	print(KAccount._instance.MyAccount.username + " process " +event.type)
+	# print(KAccount._instance.MyAccount.username + " process " +event.type)
 	NewEventSig.emit(event)	
 
 # Handles the open state and processes incoming messages

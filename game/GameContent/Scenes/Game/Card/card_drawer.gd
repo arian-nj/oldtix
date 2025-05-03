@@ -254,21 +254,21 @@ var in_deck_suites:Array[CardData.CardSuites] = []
 func sort_cards()->void:
 	if cards.size() <= 2:
 		return
+
 	for i in range(cards.size()):
 		var c := cards[i]
 		if is_instance_valid(c):
 			continue
 		cards.remove_at(i)
-	in_deck_suites = []
 
-	# print_debug(cards.size())
+	in_deck_suites = []
 	for card:Card in cards:
 		if not in_deck_suites.has(card.card_data.suit):
 			in_deck_suites.append(card.card_data.suit)
-	
-
-	
+		
 	in_deck_suites = sort_deck_suits(in_deck_suites)
+	if isMe:
+		print_debug(in_deck_suites)
 
 	# for card in cards
 	cards.sort_custom(value_sort)

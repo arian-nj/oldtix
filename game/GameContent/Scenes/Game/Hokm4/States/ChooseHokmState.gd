@@ -32,9 +32,9 @@ func Exit()->void:
 		chooseHokmPanel.HokmChoosed.disconnect(_on_hokm_choosed)
 
 func _on_new_event(e:KEvent.Event)->void:
-	print(KAccount._instance.MyAccount.username + " choose hokm " +e.type)
+	# print(KAccount._instance.MyAccount.username + " choose hokm " +e.type)
 	if e.type == KEvent.TYPE_NEW_CARD:
-		print(str(KAccount._instance.MyAccount.id) + " got new card event")
+		# print(str(KAccount._instance.MyAccount.id) + " got new card event")
 		table.new_cards_event(e)		
 		got_cards_time += 1
 		if got_cards_time == 3:

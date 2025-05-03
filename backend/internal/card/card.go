@@ -10,10 +10,10 @@ type Suite int
 type CardValue int
 
 const ( // sync it with card/card.gd
-	DIMOND Suite = iota
-	HEART        = 1
-	SPADE        = 2
-	CLUB         = 3
+	HEART  Suite = iota
+	CLUB         = 1
+	DIMOND       = 2
+	SPADE        = 3
 )
 
 const (
