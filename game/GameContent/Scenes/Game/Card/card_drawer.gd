@@ -106,9 +106,12 @@ func _create_card(suite:CardData.CardSuites,value:int)->void:
 		)
 
 func _on_card_played(card:Card)->void:
+	print("here")
 	if isDrawn:
+		print("is Drawn")
 		MyCardPlayed.emit(card)
-
+	else :
+		print("not Drawn")
 # play card
 
 func play_random_card(card_data:CardData) -> Card:
@@ -266,9 +269,7 @@ func sort_cards()->void:
 			in_deck_suites.append(card.card_data.suit)
 		
 	in_deck_suites = sort_deck_suits(in_deck_suites)
-	if isMe:
-		print_debug(in_deck_suites)
-
+	
 	# for card in cards
 	cards.sort_custom(value_sort)
 	cards.sort_custom(suite_sort)

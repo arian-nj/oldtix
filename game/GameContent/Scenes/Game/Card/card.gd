@@ -60,12 +60,11 @@ func _body_exited(_body:Node2D)->void:
 	is_touching_area = false
 
 func _on_button_up() -> void:
-	print("hii")
+	print("up")
 	if is_touching_area:
 		print("here1")
 		card_played.emit(self)
 	else :
-		print("here2")
 		NotInplaceSig.emit(self)
 	
 	prespective3DShader.set_shader(0,0)

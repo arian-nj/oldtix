@@ -29,7 +29,6 @@ func _ready() -> void:
 	send_active_game_request()
 
 func send_active_game_request()->void:
-	print("sending request")
 	var http_req:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req)
 	http_req.request(Katana.Hokm4HttpUrl + Katana.ActiveGameUrl,KAccount._instance.AddAuthHeader())

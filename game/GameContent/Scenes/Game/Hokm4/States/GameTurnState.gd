@@ -28,6 +28,7 @@ func _on_new_event(e:KEvent.Event)->void:
 			table.last_card_played = null
 
 	elif e.type == KEvent.TYPE_YOUR_TURN:
+		lock = false
 		status_label.text = "Your Turn"
 		table.me_player_panel.start_shader(InternalSetting.PLAYER_PLAY_WAIT)
 		table.isMyTurn = true

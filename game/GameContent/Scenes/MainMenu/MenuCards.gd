@@ -6,7 +6,6 @@ func _ready() -> void:
 	get_tree().create_timer(1).timeout.connect(flip_cards)
 
 func flip_cards()->void:
-	print("fliping")
 	var new_val := randi_range(11,13)
 	for card_index in len(cards):
 		var card := cards[card_index]
