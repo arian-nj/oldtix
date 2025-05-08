@@ -31,8 +31,10 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 	// All routes
 	mux.Get("/status", app.status)
 	mux.Get("/version", app.getLatestVersion)
-	mux.Post("/register", app.register)
-	mux.Post("/token", app.createAuthenticationToken)
+	// mux.Post("/register", app.register)
+	// mux.Post("/token", app.createAuthenticationToken)
+	mux.Get("/auth/guest/create", app.createGuest)
+	mux.Post("/auth/guest/token", app.createGuestToken)
 
 	// Authenticated REST routes
 	mux.Group(func(authRouter chi.Router) {
@@ -42,6 +44,7 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 
 		authRouter.Put("/update", app.updateUserData)
 		authRouter.Get("/me", app.getMeData)
+
 		authRouter.Get("/person/{user_id}", app.getUserData)
 		authRouter.Get("/person/{user_id}/stat", app.getUserStatisticsData)
 	})

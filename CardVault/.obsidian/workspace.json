@@ -30,18 +30,6 @@
               "icon": "lucide-file",
               "title": "V 1.0.0"
             }
-          },
-          {
-            "id": "eff3d8a363276b92",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "CardGame/Game Flow Chart.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Game Flow Chart"
-            }
           }
         ]
       }
@@ -191,12 +179,12 @@
   "active": "df0c19167d56ab38",
   "lastOpenFiles": [
     "CardGame/Authentication.md",
-    "CardGame/Coin.md",
     "CardGame/V 1.0.0.md",
+    "CardGame/TO DO Card.md",
+    "CardGame/Coin.md",
+    "CardGame/Game Flow Chart.md",
     "6 - Main Notes/V 2.0.0.md",
     "Untitled",
-    "CardGame/TO DO Card.md",
-    "CardGame/Game Flow Chart.md",
     "CardGame/Release Pipe.md",
     "CardGame/Name.md",
     "CardGame/Music.md",

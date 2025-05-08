@@ -27,7 +27,7 @@ type Config struct {
 
 	BaseURL string
 	Jwt     struct {
-		SecretKey string
+		SecretKey []byte
 	}
 	DatabaseUrl string
 }
@@ -105,7 +105,7 @@ func readConfigs(http_port string) (*Config, error) {
 	if secret_key == "" {
 		return nil, fmt.Errorf("can't read secret key from .env : %s", secret_key)
 	}
-	cfg.Jwt.SecretKey = secret_key
+	cfg.Jwt.SecretKey = []byte(secret_key)
 
 	database_url := os.Getenv("DATABASE_URL")
 	if database_url == "" {

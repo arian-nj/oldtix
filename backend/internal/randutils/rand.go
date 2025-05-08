@@ -2,7 +2,7 @@ package randutils
 
 import (
 	"crypto/rand"
-	"encoding/base32"
+	"encoding/base64"
 	"math/big"
 )
 
@@ -12,7 +12,8 @@ func GenerateRandomString(length int) string {
 	if err != nil {
 		panic(err)
 	}
-	return base32.StdEncoding.EncodeToString(randomBytes)[:length]
+
+	return base64.URLEncoding.EncodeToString(randomBytes)[:length]
 }
 
 func GenerateRandomNumber(max_num int) int {

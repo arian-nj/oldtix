@@ -45,10 +45,8 @@ _data = {
 
 [node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim")]
 script = ExtResource("1_bwd3w")
-current_level = NodePath("Loading")
+current_level = NodePath("LoginScene")
 anim = NodePath("AnimationPlayer")
-
-[node name="Loading" parent="." instance=ExtResource("2_2qq82")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -73,3 +71,5 @@ metadata/_edit_use_anchors_ = true
 [node name="ErrorChecker" type="Node" parent="."]
 script = ExtResource("1_8htr5")
 metadata/_custom_type_script = "uid://cp42g4to36wr"
+
+[node name="LoginScene" parent="." instance=ExtResource("2_2qq82")]

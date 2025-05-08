@@ -1,4 +1,10 @@
+res://GameContent/Scenes/LoginMenu/auth_panel.gd
 res://PatchSystem/LoadPatcher.tscn
 res://GameContent/Scenes/Shaders/progress_shader.gdshader
 res://GameContent/Scenes/MainMenu/MainMenu.tscn
 res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
+res://GameContent/Scenes/SceneManager/SceneManager.tscn
+res://GameContent/Scenes/LoginMenu/LoginMenu.tscn
+res://GameContent/Scenes/Game/Card/card.gd
+res://GameContent/Scenes/MainMenu/MenuCards.gd
+res://GameContent/Scenes/Game/Card/shader_script.gd

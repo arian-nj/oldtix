@@ -42,10 +42,6 @@ func _ready()->void:
 		
 	set_process(true)
 
-
-func flip_card()->void:
-	prespective3DShader.flip_y(1,0,load_assets)
-
 func _process(delta:float)->void:
 	if can_be_selected and button_pressed:
 		set_card_position()

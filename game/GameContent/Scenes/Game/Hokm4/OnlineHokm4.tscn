@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=32 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/hokm4_scene_level.gd" id="1_i0n3b"]
 [ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="1_o4grb"]
@@ -33,9 +33,6 @@ fill_from = Vector2(0.478632, 0)
 fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4cut"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsoy"]
-size = Vector2(345, 194)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4cut"]
 resource_local_to_scene = true
@@ -162,16 +159,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_c4cut")
 max_trans = 0.3
-
-[node name="PlayZone" type="StaticBody2D" parent="AspectRatioContainer/Table"]
-visible = false
-modulate = Color(0.0674377, 0.0674377, 0.0674377, 1)
-position = Vector2(378, 899)
-collision_layer = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AspectRatioContainer/Table/PlayZone"]
-position = Vector2(-6, -128)
-shape = SubResource("RectangleShape2D_tmsoy")
 
 [node name="Hands" type="Control" parent="AspectRatioContainer/Table"]
 layout_mode = 1

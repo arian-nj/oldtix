@@ -2,15 +2,15 @@
 SELECT * FROM person
 WHERE id = $1 LIMIT 1;
 
--- name: GetPersonByUsername :one
-SELECT * FROM person
-WHERE username = $1 LIMIT 1;
+-- -- name: GetPersonByUsername :one
+-- SELECT * FROM person
+-- WHERE username = $1 LIMIT 1;
 
 -- name: InsertPerson :one
 INSERT INTO person (
-  username,display_name,hashed_password,coin
+  display_name,coin
 ) VALUES (
-  $1,$2,$3,$4
+  $1,$2
 )
 RETURNING *;
 
@@ -31,6 +31,7 @@ INSERT INTO user_statistic (
   $1
 ) 
 RETURNING *;
+
 -- name: UpdateUserStatistics :exec
 UPDATE user_statistic
 SET 
@@ -45,3 +46,13 @@ WHERE user_id = $7;
 
 -- name: GetPersonStatisticsById :one
 SELECT * FROM user_statistic WHERE user_id = $1;
+
+-- name: InsertGuestPerson :one
+INSERT INTO guest_person (
+    uid_string,user_id
+  ) VALUES (
+    $1,$2
+  ) RETURNING *;
+
+-- name: GetGuestPersonByUid :one
+SELECT * FROM guest_person WHERE uid_string = $1;

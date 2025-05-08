@@ -11,6 +11,7 @@ CREATE TABLE trick (
   team_one_turn_score BIGINT Not NULL DEFAULT 0,
   team_two_turn_score BIGINT Not NULL DEFAULT 0,
   
+  
   CONSTRAINT fk_game FOREIGN KEY (game_id) REFERENCES hokm4_game(id)
 );
 

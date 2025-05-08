@@ -36,17 +36,14 @@ func set_shader(rot_x:float,rot_y:float)->void:
 
 func flip_y(duration:float,delay:float,callme:Callable)->void:
 	var tween:Tween = create_tween()
-
 	for texture in all_textures:
 		var mat:ShaderMaterial= texture.material
 		tween.parallel().tween_property(mat,"shader_parameter/y_rot",90,duration).set_delay(delay)
 		
 		if tween.finished.is_connected(callme) == false:
 			tween.finished.connect(callme)
-		
 		tween.finished.connect(func()->void:
 			var new_tween:Tween = create_tween()
 			mat.set_shader_parameter("y_rot",-90)
 			new_tween.tween_property(mat,"shader_parameter/y_rot",0,duration)
-
 		)

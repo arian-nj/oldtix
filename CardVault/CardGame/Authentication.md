@@ -6,7 +6,10 @@ Tags: [[card-game]] [[authentication]]
 
 # Endpoints
 /auth/guest
+	check uid and send to server
+	server create or send back token
 /auth/register
+/auth/
 
 # Authentication
 how i should connect multiple auth methods to one user

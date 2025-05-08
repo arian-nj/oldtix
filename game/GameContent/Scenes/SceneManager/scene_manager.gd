@@ -9,7 +9,7 @@ enum Levels{
 	MainMenu,
 }
 
-func _ready() -> void:
+func _ready() -> void:	
 	KAccount.instanciate()
 	self.add_child(KAccount._instance)
 	ErrorBoard.instanciate()

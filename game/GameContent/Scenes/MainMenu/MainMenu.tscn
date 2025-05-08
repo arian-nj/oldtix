@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://bqn77wpg3cj3y"]
+[gd_scene load_steps=26 format=3 uid="uid://bqn77wpg3cj3y"]
 
 [ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="2_o2jf8"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="3_bbm5d"]
 [ext_resource type="Script" uid="uid://dxdp0uldpe775" path="res://GameContent/Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
 [ext_resource type="Texture2D" uid="uid://cq827b6fknw88" path="res://GameContent/assets/shapes/play_button_background.png" id="4_jcjvh"]
+[ext_resource type="Script" uid="uid://ccl6qmuyn6agt" path="res://GameContent/Scenes/MainMenu/MenuCards.gd" id="5_xn1pj"]
 [ext_resource type="Texture2D" uid="uid://bhc5sg3e7q2q5" path="res://GameContent/assets/shapes/user_data_background.png" id="6_vh2g8"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="7_tw3df"]
 [ext_resource type="Script" uid="uid://cw6ov5aecyf86" path="res://GameContent/Scenes/MainMenu/CoinComponent.gd" id="8_52hew"]
@@ -20,26 +21,26 @@
 [sub_resource type="Resource" id="Resource_700qd"]
 script = ExtResource("8_700qd")
 suit = 0
-value = 14
+value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="Resource" id="Resource_66asg"]
 resource_local_to_scene = true
 script = ExtResource("8_700qd")
 suit = 1
-value = 14
+value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="Resource" id="Resource_bbm5d"]
 script = ExtResource("8_700qd")
 suit = 2
-value = 14
+value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="Resource" id="Resource_5cl1r"]
 script = ExtResource("8_700qd")
 suit = 3
-value = 14
+value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_700qd"]
@@ -179,7 +180,7 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="Cards" type="Control" parent="AspectRatioContainer/UI"]
+[node name="Cards" type="Control" parent="AspectRatioContainer/UI" node_paths=PackedStringArray("cards")]
 layout_mode = 1
 anchor_left = 0.5
 anchor_top = 0.2
@@ -193,6 +194,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("5_xn1pj")
+cards = [NodePath("Card"), NodePath("Card2"), NodePath("Card3"), NodePath("Card4")]
 metadata/_edit_group_ = true
 
 [node name="Card" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]

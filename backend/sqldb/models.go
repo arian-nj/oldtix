@@ -14,6 +14,12 @@ type GamePlayer struct {
 	Team     int
 }
 
+type GuestPerson struct {
+	ID        int
+	UserID    int
+	UidString string
+}
+
 type Hokm4Game struct {
 	ID                 int
 	TeamOneTricksScore int
@@ -24,13 +30,11 @@ type Hokm4Game struct {
 }
 
 type Person struct {
-	ID             int
-	Created        pgtype.Timestamptz
-	Username       string
-	DisplayName    pgtype.Text
-	HashedPassword string
-	Bio            pgtype.Text
-	Coin           int
+	ID          int
+	DisplayName pgtype.Text
+	Bio         pgtype.Text
+	Coin        int
+	Created     pgtype.Timestamptz
 }
 
 type Trick struct {

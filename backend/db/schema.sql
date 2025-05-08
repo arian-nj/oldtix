@@ -26,6 +26,36 @@ CREATE TABLE public.game_player (
 
 
 --
+-- Name: guest_person; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.guest_person (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    uid_string text NOT NULL
+);
+
+
+--
+-- Name: guest_person_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.guest_person_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: guest_person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.guest_person_id_seq OWNED BY public.guest_person.id;
+
+
+--
 -- Name: hokm4_game; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -64,12 +94,10 @@ ALTER SEQUENCE public.hokm4_game_id_seq OWNED BY public.hokm4_game.id;
 
 CREATE TABLE public.person (
     id bigint NOT NULL,
-    created timestamp with time zone DEFAULT now(),
-    username text NOT NULL,
     display_name text,
-    hashed_password text NOT NULL,
     bio text,
-    coin bigint NOT NULL
+    coin bigint NOT NULL,
+    created timestamp with time zone DEFAULT now()
 );
 
 
@@ -201,6 +229,13 @@ ALTER SEQUENCE public.user_statistic_id_seq OWNED BY public.user_statistic.id;
 
 
 --
+-- Name: guest_person id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.guest_person ALTER COLUMN id SET DEFAULT nextval('public.guest_person_id_seq'::regclass);
+
+
+--
 -- Name: hokm4_game id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -241,6 +276,14 @@ ALTER TABLE ONLY public.user_statistic ALTER COLUMN id SET DEFAULT nextval('publ
 
 ALTER TABLE ONLY public.game_player
     ADD CONSTRAINT game_player_pkey PRIMARY KEY (player_id, game_id);
+
+
+--
+-- Name: guest_person guest_person_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.guest_person
+    ADD CONSTRAINT guest_person_pkey PRIMARY KEY (id);
 
 
 --
@@ -324,6 +367,14 @@ ALTER TABLE ONLY public.turn
 
 
 --
+-- Name: guest_person guest_person_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.guest_person
+    ADD CONSTRAINT guest_person_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.person(id);
+
+
+--
 -- Name: user_statistic user_statistic_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -346,4 +397,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20250417174013'),
     ('20250417174043'),
     ('20250417174107'),
-    ('20250417174129');
+    ('20250417174129'),
+    ('20250504104006');

@@ -27,8 +27,19 @@ func (q *Queries) AddCoinToPerson(ctx context.Context, arg AddCoinToPersonParams
 	return err
 }
 
+const getGuestPersonByUid = `-- name: GetGuestPersonByUid :one
+SELECT id, user_id, uid_string FROM guest_person WHERE uid_string = $1
+`
+
+func (q *Queries) GetGuestPersonByUid(ctx context.Context, uidString string) (GuestPerson, error) {
+	row := q.db.QueryRow(ctx, getGuestPersonByUid, uidString)
+	var i GuestPerson
+	err := row.Scan(&i.ID, &i.UserID, &i.UidString)
+	return i, err
+}
+
 const getPerson = `-- name: GetPerson :one
-SELECT id, created, username, display_name, hashed_password, bio, coin FROM person
+SELECT id, display_name, bio, coin, created FROM person
 WHERE id = $1 LIMIT 1
 `
 
@@ -37,32 +48,10 @@ func (q *Queries) GetPerson(ctx context.Context, id int) (Person, error) {
 	var i Person
 	err := row.Scan(
 		&i.ID,
-		&i.Created,
-		&i.Username,
 		&i.DisplayName,
-		&i.HashedPassword,
 		&i.Bio,
 		&i.Coin,
-	)
-	return i, err
-}
-
-const getPersonByUsername = `-- name: GetPersonByUsername :one
-SELECT id, created, username, display_name, hashed_password, bio, coin FROM person
-WHERE username = $1 LIMIT 1
-`
-
-func (q *Queries) GetPersonByUsername(ctx context.Context, username string) (Person, error) {
-	row := q.db.QueryRow(ctx, getPersonByUsername, username)
-	var i Person
-	err := row.Scan(
-		&i.ID,
 		&i.Created,
-		&i.Username,
-		&i.DisplayName,
-		&i.HashedPassword,
-		&i.Bio,
-		&i.Coin,
 	)
 	return i, err
 }
@@ -88,38 +77,53 @@ func (q *Queries) GetPersonStatisticsById(ctx context.Context, userID int) (User
 	return i, err
 }
 
+const insertGuestPerson = `-- name: InsertGuestPerson :one
+INSERT INTO guest_person (
+    uid_string,user_id
+  ) VALUES (
+    $1,$2
+  ) RETURNING id, user_id, uid_string
+`
+
+type InsertGuestPersonParams struct {
+	UidString string
+	UserID    int
+}
+
+func (q *Queries) InsertGuestPerson(ctx context.Context, arg InsertGuestPersonParams) (GuestPerson, error) {
+	row := q.db.QueryRow(ctx, insertGuestPerson, arg.UidString, arg.UserID)
+	var i GuestPerson
+	err := row.Scan(&i.ID, &i.UserID, &i.UidString)
+	return i, err
+}
+
 const insertPerson = `-- name: InsertPerson :one
+
 INSERT INTO person (
-  username,display_name,hashed_password,coin
+  display_name,coin
 ) VALUES (
-  $1,$2,$3,$4
+  $1,$2
 )
-RETURNING id, created, username, display_name, hashed_password, bio, coin
+RETURNING id, display_name, bio, coin, created
 `
 
 type InsertPersonParams struct {
-	Username       string
-	DisplayName    pgtype.Text
-	HashedPassword string
-	Coin           int
+	DisplayName pgtype.Text
+	Coin        int
 }
 
+// -- name: GetPersonByUsername :one
+// SELECT * FROM person
+// WHERE username = $1 LIMIT 1;
 func (q *Queries) InsertPerson(ctx context.Context, arg InsertPersonParams) (Person, error) {
-	row := q.db.QueryRow(ctx, insertPerson,
-		arg.Username,
-		arg.DisplayName,
-		arg.HashedPassword,
-		arg.Coin,
-	)
+	row := q.db.QueryRow(ctx, insertPerson, arg.DisplayName, arg.Coin)
 	var i Person
 	err := row.Scan(
 		&i.ID,
-		&i.Created,
-		&i.Username,
 		&i.DisplayName,
-		&i.HashedPassword,
 		&i.Bio,
 		&i.Coin,
+		&i.Created,
 	)
 	return i, err
 }

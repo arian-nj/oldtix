@@ -6,8 +6,8 @@ extends CanvasLayer
 @export var lpErrorBorad:LPErrorPanel
 
 var server_url := "https://core.filelord.ir"
-var patch_user_config_address := "user://version.cfg"
-var config := ConfigFile.new()
+var patch_user_config_address := "user://VersionConfig.cfg"
+var versionConfig := ConfigFile.new()
 
 func _ready() -> void:
 	get_tree().change_scene_to_file.call_deferred("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
@@ -54,13 +54,13 @@ func get_newest_version()-> String:
 		err = await downloadProgressBar.start_downloading(domain,pack_url)
 		if err != "":
 			return err
-	config.set_value("player", "version",new_version_string)
+	versionConfig.set_value("player", "version",new_version_string)
 	
 	var success := ProjectSettings.load_resource_pack("user://system.pck")
 	if !success:
 		print_debug("loading failed")
 		return "can't load resource pack"
-	config.save(patch_user_config_address)
+	versionConfig.save(patch_user_config_address)
 	var change_success := get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 	if change_success != OK:
 		print_debug("change scene failed")
@@ -68,7 +68,7 @@ func get_newest_version()-> String:
 	return ""
 
 func get_latest_version_number() -> Array:
-	var http_req_node:HTTPRequest = Katana.NewHttpRequest()
+	var http_req_node:HTTPRequest = HTTPRequest.new()
 	http_req_node.timeout = 5
 	self.add_child(http_req_node)
 	
@@ -100,11 +100,11 @@ func get_latest_version_number() -> Array:
 	return [version_string,""]
 
 func get_local_version()->Array:
-	var load_err := config.load(patch_user_config_address)
+	var load_err := versionConfig.load(patch_user_config_address)
 	if load_err != OK:
-		load_err = config.save(patch_user_config_address)
+		load_err = versionConfig.save(patch_user_config_address)
 		if load_err != OK:
 			return ["","can't save file code "+str(load_err)]
 
-	var old_version :String = config.get_value("player", "version","0.0.0")
+	var old_version :String = versionConfig.get_value("player", "version","0.0.0")
 	return [old_version,""]

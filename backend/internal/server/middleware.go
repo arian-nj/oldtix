@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pascaldekloe/jwt"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (app *CommonGlobals) RecoverPanic(next http.Handler) http.Handler {
@@ -23,44 +23,105 @@ func (app *CommonGlobals) RecoverPanic(next http.Handler) http.Handler {
 	})
 }
 
-func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, token string) *http.Request {
-	claims, err := jwt.HMACCheck([]byte(token), []byte(app.Config.Jwt.SecretKey))
+// func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, token string) *http.Request {
+// 	claims, err := jwt.HMACCheck([]byte(token), []byte(app.Config.Jwt.SecretKey))
+// 	if err != nil {
+// 		app.invalidAuthenticationToken(w, r)
+// 		return nil
+// 	}
+
+// 	if !claims.Valid(time.Now()) {
+// 		app.invalidAuthenticationToken(w, r)
+// 		return nil
+// 	}
+
+// 	if claims.Issuer != app.Config.BaseURL {
+// 		app.invalidAuthenticationToken(w, r)
+// 		return nil
+// 	}
+
+// 	if !claims.AcceptAudience(app.Config.BaseURL) {
+// 		app.invalidAuthenticationToken(w, r)
+// 		return nil
+// 	}
+
+// 	userID, err := strconv.Atoi(claims.Subject)
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return nil
+// 	}
+
+// 	user, err := app.Queries.GetPerson(r.Context(), userID)
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return nil
+// 	}
+
+// 	if user.ID != 0 {
+// 		return ContextSetAuthenticatedUser(r, &user)
+// 	}
+// 	return nil
+// }
+
+func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, tokenString string) *http.Request {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return app.Config.Jwt.SecretKey, nil
+	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 	if err != nil {
 		app.invalidAuthenticationToken(w, r)
 		return nil
 	}
 
-	if !claims.Valid(time.Now()) {
-		app.invalidAuthenticationToken(w, r)
-		return nil
-	}
-
-	if claims.Issuer != app.Config.BaseURL {
-		app.invalidAuthenticationToken(w, r)
-		return nil
-	}
-
-	if !claims.AcceptAudience(app.Config.BaseURL) {
-		app.invalidAuthenticationToken(w, r)
-		return nil
-	}
-
-	userID, err := strconv.Atoi(claims.Subject)
+	expireAt, err := token.Claims.GetExpirationTime()
 	if err != nil {
+		app.ServerError(w, r, err)
+		return nil
+	}
+	if expireAt.Time.Unix() < time.Now().Unix() {
+
+		app.invalidAuthenticationToken(w, r)
+		return nil
+	}
+
+	notBefore, err := token.Claims.GetNotBefore()
+	if err != nil {
+		app.ServerError(w, r, err)
+		return nil
+	}
+
+	if notBefore.Time.Unix() > time.Now().Unix() {
+		app.invalidAuthenticationToken(w, r)
+		return nil
+	}
+
+	sub, err := token.Claims.GetSubject()
+
+	if err != nil {
+		app.Logger.Info("here")
+		app.ServerError(w, r, err)
+		return nil
+	}
+
+	userID, err := strconv.Atoi(sub)
+	if err != nil {
+		app.Logger.Info("here")
 		app.ServerError(w, r, err)
 		return nil
 	}
 
 	user, err := app.Queries.GetPerson(r.Context(), userID)
 	if err != nil {
+		app.Logger.Info("here")
 		app.ServerError(w, r, err)
 		return nil
 	}
 
-	if user.ID != 0 {
-		return ContextSetAuthenticatedUser(r, &user)
+	if user.ID == 0 {
+		app.Logger.Info("here")
+		app.invalidAuthenticationToken(w, r)
 	}
-	return nil
+	return ContextSetAuthenticatedUser(r, &user)
+
 }
 
 func (app *CommonGlobals) Authenticate(next http.Handler) http.Handler {
