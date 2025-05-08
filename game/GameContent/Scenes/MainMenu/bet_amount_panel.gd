@@ -28,6 +28,17 @@ func _ready() -> void:
 
 	send_active_game_request()
 
+const start_time := 1.0
+const max_time := 10.0
+
+var current_wait_time := start_time
+
+func time_new_active_game()->void:
+	get_tree().create_timer(current_wait_time).timeout.connect(send_active_game_request)
+	current_wait_time = current_wait_time*2
+	if current_wait_time > max_time:
+		current_wait_time = max_time
+
 func send_active_game_request()->void:
 	var http_req:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req)
@@ -41,7 +52,7 @@ func _on_active_game_request_completed(_result: int, response_code: int, _header
 		ErrorBoard._instance.new_error("خطا در اتصال به بازی" + str(response_code),ErrorBoard.ErrorLevel)
 		ErrorBoard._instance.new_error("در حال تلاش دوباره",ErrorBoard.InfoLevel)
 		print_debug(str(response_code) +" response code ")
-		get_tree().create_timer(5).timeout.connect(send_active_game_request)
+		time_new_active_game()
 		return
 	
 	var active_game:ActiveGameData = JsonClassConverter.json_string_to_class(ActiveGameData,body.get_string_from_utf8())
@@ -49,7 +60,8 @@ func _on_active_game_request_completed(_result: int, response_code: int, _header
 		continueGameButton.visible = true
 	else:
 		playButton.disabled = false	
-		get_tree().create_timer(5).timeout.connect(send_active_game_request)
+		time_new_active_game()
+		return
 
 
 func fire_play_button(coin_amount:int)->void:

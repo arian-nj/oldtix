@@ -24,7 +24,7 @@ suit = 0
 value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[sub_resource type="Resource" id="Resource_66asg"]
+[sub_resource type="Resource" id="Resource_xn1pj"]
 resource_local_to_scene = true
 script = ExtResource("8_700qd")
 suit = 1
@@ -222,7 +222,7 @@ offset_right = 35.5
 offset_bottom = 47.5
 grow_vertical = 2
 scale = Vector2(3, 3)
-card_data = SubResource("Resource_66asg")
+card_data = SubResource("Resource_xn1pj")
 
 [node name="Card3" parent="AspectRatioContainer/UI/Cards" instance=ExtResource("7_tw3df")]
 layout_mode = 1
