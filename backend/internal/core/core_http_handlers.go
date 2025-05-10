@@ -201,7 +201,7 @@ func (app *ApiApplication) updateUserData(w http.ResponseWriter, r *http.Request
 func createToken(userId int) *jwt.Token {
 	claims := jwt.RegisteredClaims{
 		Subject:   strconv.Itoa(userId),
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(JWTExpiryDuration)),
 		NotBefore: jwt.NewNumericDate(time.Now()),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 	}

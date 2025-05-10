@@ -8,12 +8,12 @@ enum Levels{
 	GameHokm4,
 	MainMenu,
 }
-
-func _ready() -> void:	
+func _init() -> void:
 	KAccount.instanciate()
 	self.add_child(KAccount._instance)
 	ErrorBoard.instanciate()
-	
+
+func _ready() -> void:	
 	current_level.manager_change_scene.connect(handle_level_change)
 	current_level.OnLoaded()
 
@@ -57,4 +57,3 @@ func handle_level_change(change_level_to:Levels)->void:
 
 func transfer_data_between_scenes(old_scene:SceneLevel,new_scene:SceneLevel) -> void:
 	new_scene.load_level_parameters(old_scene.level_parameters)
-

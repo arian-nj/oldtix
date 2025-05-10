@@ -3,22 +3,26 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
 	core_api "github.com/arian-nj/master-card/back/internal/core"
 	"github.com/arian-nj/master-card/back/internal/server"
 )
 
 func main() {
+
 	globalStructs, poll, err := server.NewCommonGlobals("CORE_HTTP_PORT")
 	if err != nil {
 		log.Panic(err)
 	}
 	defer poll.Close()
 
-	err = poll.Ping(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	err = poll.Ping(ctx)
 	if err != nil {
 		panic(err)
 	}
+	cancel()
 
 	app := core_api.NewApiApplication(globalStructs)
 	if app.ReleaseMode == "" {
