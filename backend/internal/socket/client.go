@@ -76,6 +76,8 @@ func (client *Client) Close() error {
 func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
 	defer func() {
 		client.State = CLOSED
+		client.Cancel()
+		client.Close()
 	}()
 
 	for {
@@ -103,6 +105,8 @@ func (client *Client) ReadMessage(l *zap.Logger, ctx context.Context) error {
 func (client *Client) WriteMessage(l *zap.Logger, ctx context.Context) error {
 	defer func() {
 		client.State = CLOSED
+		client.Cancel()
+		client.Close()
 	}()
 
 	pingTicker := time.NewTicker(pingInterval)

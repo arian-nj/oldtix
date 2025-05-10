@@ -2,7 +2,9 @@ package hokm4
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"runtime/debug"
 	"strconv"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
@@ -10,6 +12,7 @@ import (
 	"github.com/arian-nj/master-card/back/internal/socket"
 	"github.com/arian-nj/master-card/back/pkg/validator"
 	"github.com/arian-nj/master-card/back/sqldb"
+	"github.com/gorilla/websocket"
 )
 
 func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Request) {
@@ -108,8 +111,6 @@ func (app *ApplicationHokm4) JoinGame(w http.ResponseWriter, r *http.Request, pe
 func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer) {
 	player.Client.State = socket.OPEN
 	app.BackgroundTask(func() { // read messages
-		defer player.Client.Close()
-		defer app.Logger.Error(fmt.Sprintf("read disconnect %d", player.UserId))
 		defer func() {
 			if player != nil {
 				player.IsPlayng = false
@@ -118,7 +119,12 @@ func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer) {
 
 		err := player.Client.ReadMessage(app.Logger, player.Client.CancelCtx)
 		if err != nil {
-			app.ReportError(err)
+			if e, ok := err.(*websocket.CloseError); ok {
+				if !websocket.IsCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure, websocket.CloseNormalClosure) {
+					app.Logger.Error("read err code :" + strconv.Itoa(e.Code) + " => " + err.Error())
+					log.Println(string(debug.Stack()))
+				}
+			}
 			return
 		}
 	})
@@ -130,18 +136,9 @@ func (app *ApplicationHokm4) RunReadWriteInBackground(player *HumanPlayer) {
 			}
 		}()
 
-		defer func() {
-			err := player.Client.Close()
-			if err != nil {
-				app.Logger.Error(err.Error())
-			} else {
-				app.Logger.Error(fmt.Sprintf("write disconnect %d", player.UserId))
-			}
-		}()
-
 		err := player.Client.WriteMessage(app.Logger, player.Client.CancelCtx)
 		if err != nil {
-			app.ReportError(err)
+			app.Logger.Error("write err := " + err.Error())
 			return
 		}
 	})
