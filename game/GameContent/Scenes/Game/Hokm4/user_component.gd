@@ -37,7 +37,7 @@ func request_user_data() -> void:
 	if user_id == 0:
 		self.text = "Bot"
 		return
-	var userData := await KAccount._instance.GetUser(str(user_id))
+	var userData := await KClient._instance.GetUser(str(user_id))
 	if userData == null:
 		self.text = "Bot"
 	else:
@@ -46,7 +46,7 @@ func request_user_data() -> void:
 	request_user_stats()
 
 func request_user_stats()->void:
-	var result := await KAccount._instance.GetUserStatistics(str(user_id))
+	var result := await KClient._instance.GetUserStatistics(str(user_id))
 	self.userStat = result[0]
 	var err:String = result[1]
 	if err != "":

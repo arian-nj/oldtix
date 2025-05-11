@@ -72,7 +72,7 @@ extends PanelContainer
 # 		ErrorBoard._instance.new_error("You're In",ErrorBoard.SuccessLevel)
 # 		var tokenBodyJson :Variant = JSON.parse_string(body.get_string_from_utf8())
 # 		var new_token:String = tokenBodyJson["token"]	
-# 		KAccount._instance.set_token(new_token)
+# 		KClient._instance.set_token(new_token)
 # 		self.visible = false
 
 

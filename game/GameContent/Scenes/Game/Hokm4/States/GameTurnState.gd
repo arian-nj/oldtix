@@ -105,11 +105,13 @@ func send_card_playend_event(card:Card)->void:
 	ws.send_event(KEvent.TYPE_TURN_PLAYED,card_played_string)
 
 func other_turn_played_logic(data:String)->void:
-	# print(KAccount._instance.MyAccount.username," ==> ",data)
+	# print(KClient._instance.MyAccount.username," ==> ",data)
+	print(data)
 	var card_played :CardPlayedData= JsonClassConverter.json_string_to_class(CardPlayedData,data)
 	
 	var played_card :Card = null
 	for drawer in table.all_drawers:
+		# print(str(KClient._instance.MyAccount.id) + " " + drawer.unique_string)
 		if drawer.unique_string == card_played.player.player_unique:
 			played_card = drawer.play_random_card(card_played.card)
 			break

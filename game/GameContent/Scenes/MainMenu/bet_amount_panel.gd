@@ -15,7 +15,7 @@ signal BetAmountChoosed(coin_amount:int)
 func _ready() -> void:
 	betVBoxContainer.visible = false
 	secondBetButton.pressed.connect(fire_play_button.bind(250))
-	if KAccount._instance.MyAccount.coin < 10:
+	if KClient._instance.MyAccount.coin < 10:
 		firstBetLabel.text = "0 -> 10"
 		firstBetButton.pressed.connect(fire_play_button.bind(0))
 		secondBetButton.disabled = true
@@ -42,16 +42,15 @@ func time_new_active_game()->void:
 func send_active_game_request()->void:
 	var http_req:HTTPRequest = Katana.NewHttpRequest()
 	add_child(http_req)
-	http_req.request(Katana.Hokm4HttpUrl + Katana.ActiveGameUrl,KAccount._instance.AddAuthHeader())
+	http_req.request(Katana._instance.Hokm4HttpUrl + Katana._instance.ActiveGameUrl,KClient._instance.AddAuthHeader())
 	http_req.request_completed.connect(_on_active_game_request_completed)
 	await http_req.request_completed
 	http_req.queue_free()
 
 func _on_active_game_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray)->void:
 	if response_code != HTTPClient.RESPONSE_OK:
-		ErrorBoard._instance.new_error("خطا در اتصال به بازی" + str(response_code),ErrorBoard.ErrorLevel)
-		ErrorBoard._instance.new_error("در حال تلاش دوباره",ErrorBoard.InfoLevel)
-		print_debug(str(response_code) +" response code ")
+		Katana._instance.logger.error("خطا در اتصال به بازی" + str(response_code))
+		Katana._instance.logger.info("در حال تلاش دوباره")
 		time_new_active_game()
 		return
 	

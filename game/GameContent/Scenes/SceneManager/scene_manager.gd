@@ -8,15 +8,10 @@ enum Levels{
 	GameHokm4,
 	MainMenu,
 }
-func _init() -> void:
-	KAccount.instanciate()
-	self.add_child(KAccount._instance)
-	ErrorBoard.instanciate()
 
 func _ready() -> void:	
 	current_level.manager_change_scene.connect(handle_level_change)
 	current_level.OnLoaded()
-
 
 func handle_level_change(change_level_to:Levels)->void:
 	# var start_time:float = Time.get_unix_time_from_system() 

@@ -12,7 +12,7 @@ func _extract_auth_config(args:PackedStringArray)->String:
 
 
 func _ready() -> void:
-	Katana.change_debug_mode(true)
+	Katana._instance.change_debug_mode(true)
 
 	var args := OS.get_cmdline_args()
 	var new_auth_path := _extract_auth_config(args)
@@ -23,7 +23,7 @@ func _ready() -> void:
 	var uid_string :String = ""
 	var load_err := authConfig.load(auth_config_address)
 	if load_err != OK:
-		uid_string = await KAccount._instance.get_new_guest_uid()
+		uid_string = await KClient._instance.get_new_guest_uid()
 		if uid_string == "":
 			print_debug("new guest uid is empty")
 			return
@@ -38,11 +38,11 @@ func _ready() -> void:
 
 	if uid_string == "":
 		print_debug("no guest uid")
-		ErrorBoard._instance.new_error("no guest uid",ErrorBoard.ErrorLevel)
+		Katana._instance.logger.error("no guest uid")
 		return
-	var is_ok := await KAccount._instance.setup_token(uid_string)
+	var is_ok := await KClient._instance.setup_token(uid_string)
 	if is_ok:
-		ErrorBoard._instance.new_error("Logged in",ErrorBoard.SuccessLevel)
+		Katana._instance.logger.success("Logged in")
 
 
 

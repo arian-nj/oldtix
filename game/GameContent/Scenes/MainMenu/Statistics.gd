@@ -5,11 +5,11 @@ class_name StatisticsSection extends Control
 @export var TurnWinLoseLine:BouncyLine
 
 func get_animate_statistics() -> void:
-	var result := await KAccount._instance.GetUserStatistics(str(KAccount._instance.MyAccount.id))
+	var result := await KClient._instance.GetUserStatistics(str(KClient._instance.MyAccount.id))
 	var userStatistics:UserStatisticsData = result[0]
 	var err:String = result[1]
 	if err != "":
-		ErrorBoard._instance.new_error(err,ErrorBoard.ErrorLevel)
+		Katana._instance.logger.error(err)
 	if userStatistics == null:
 		return
 	

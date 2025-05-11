@@ -72,7 +72,8 @@ func push_callback(c:Callable)->void:
 
 
 func set_player_to_hand()->void:
-	var meId := KAccount._instance.MyAccount.id
+	print("here 1")
+	var meId := KClient._instance.MyAccount.id
 
 	var mePlayer : PlayerData = null
 	var beforeMe : Array[PlayerData]

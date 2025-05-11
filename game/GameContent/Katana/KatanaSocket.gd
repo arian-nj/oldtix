@@ -11,7 +11,7 @@ var events_queue:Array[KEvent.Event] = []
 var socket:WebSocketPeer = WebSocketPeer.new()
 
 func _ready() -> void:
-	set_process(false)
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func hold_events()->void:
 	pause = true
@@ -26,13 +26,11 @@ func send_event(event_type: String, event_data: String="") -> void:
 	socket.send_text(event.to_json())
 
 func connect_to_game(coin_amount:int) -> void:
-	set_process(true)
 	print("Starting connection...")
-	var ws_url:String = Katana.Hokm4WsUrl + "/ws?auth_token=" + KAccount._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
+	var ws_url:String = Katana._instance.Hokm4WsUrl + "/ws?auth_token=" + KClient._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
 	var err:int = socket.connect_to_url(ws_url)
 	if err != OK:
 		print("Unable to connect err code " + str(err) +" " + error_string(err))
-		set_process(false)
 		# get_tree().create_timer()
 
 # Processes incoming WebSocket data
@@ -65,7 +63,7 @@ func process_events(_delta: float) -> void:
 	var event : KEvent.Event = events_queue.pop_front()
 	if event == null:
 		return
-	# print(KAccount._instance.MyAccount.username + " process " +event.type)
+	# print(KClient._instance.MyAccount.username + " process " +event.type)
 	NewEventSig.emit(event)	
 
 # Handles the open state and processes incoming messages
@@ -87,7 +85,7 @@ func _handle_closed_state() -> void:
 	var code:int = socket.get_close_code()
 	var reason:String = socket.get_close_reason()
 	print("WebSocket closed with code: %d, reason: %s" % [code, reason])
-	ErrorBoard._instance.new_error("WebSocket closed with code: %d, reason: %s" % [code, reason],ErrorBoard.ErrorLevel)
+	Katana._instance.logger.error("WebSocket closed with code: %d, reason: %s" % [code, reason])
 	set_process(false)
 	DisconnectedSig.emit()
 

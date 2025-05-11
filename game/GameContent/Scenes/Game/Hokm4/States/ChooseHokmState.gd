@@ -17,8 +17,8 @@ func Enter()->void:
 	ws.open_events()
 	
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
-	# print("my account ",KAccount.MyAccount.id," hakem account id ",hakem_player.UserId)
-	if KAccount._instance.MyAccount.id == hakem_player.user_id:
+	# print("my account ",KClient.MyAccount.id," hakem account id ",hakem_player.UserId)
+	if KClient._instance.MyAccount.id == hakem_player.user_id:
 		# HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.reset_all_suites()
@@ -32,9 +32,9 @@ func Exit()->void:
 		chooseHokmPanel.HokmChoosed.disconnect(_on_hokm_choosed)
 
 func _on_new_event(e:KEvent.Event)->void:
-	# print(KAccount._instance.MyAccount.username + " choose hokm " +e.type)
+	# print(KClient._instance.MyAccount.username + " choose hokm " +e.type)
 	if e.type == KEvent.TYPE_NEW_CARD:
-		# print(str(KAccount._instance.MyAccount.id) + " got new card event")
+		# print(str(KClient._instance.MyAccount.id) + " got new card event")
 		table.new_cards_event(e)		
 		got_cards_time += 1
 		if got_cards_time == 3:

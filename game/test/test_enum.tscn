@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dej6lw7mohwes"]
+
+[ext_resource type="Script" uid="uid://cyqmykvo8sipl" path="res://test/test_enum_iter.gd" id="1_fy08v"]
+
+[node name="TestEnum" type="Node2D"]
+script = ExtResource("1_fy08v")

@@ -13,13 +13,13 @@ func _ready() -> void:
 	profilePanelContainer.visible = false
 	profileButton.pressed.connect(_on_profile_pressed)
 	resized.connect(_on_resize)
-	KAccount._instance.MeChanged.connect(set_user_display_name_label)
+	KClient._instance.MeChanged.connect(set_user_display_name_label)
 	set_user_display_name_label()
 
 
 func set_user_display_name_label()->void:
-	displaynameLabel.text = KAccount._instance.MyAccount.display_name
-	usernameLabel.text = "@"+KAccount._instance.MyAccount.username
+	displaynameLabel.text = KClient._instance.MyAccount.display_name
+	usernameLabel.text = "@"+KClient._instance.MyAccount.username
 
 func _on_resize()->void:
 	if profilePanelContainer.visible:

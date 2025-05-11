@@ -4,8 +4,9 @@ extends SceneLevel
 @export var betPanel:BetPanel
 
 func _ready() -> void:
-	if await KAccount._instance.RefetchME() == false:
-		ErrorBoard._instance.new_error("can't get me",ErrorBoard.ErrorLevel)
+	if await KClient._instance.RefetchME() == false:
+		Katana._instance.logger.error("can't get me")
+
 	resized.connect(aspectRationContainer._on_aspect)
 	betPanel.BetAmountChoosed.connect(_on_bet_amount_choosed)
 
