@@ -23,4 +23,4 @@ func connect_ws()-> void:
 		print_debug("fialed to get" + SharedBetAmount)
 		return
 	var bm_int:int = int(bm)
-	ws.connect_to_game(bm_int)
+	ws.connect_to_game(bm_int,30)

@@ -1,37 +1,36 @@
 extends State
 
-@export var ws:KatanaSocket
+@export var ksocket:KatanaSocket
 @export var status_label:Label
 @export var table:Game4Table
 
 
 func Enter()->void:
 	status_label.text = "looking for opponent"
-	ws.NewEventSig.connect(_on_new_event)
-	ws.open_events()
-	ws.send_event(KEvent.TYPE_MAKE_MATCH,"me")
+	ksocket.send_event(KEvent.TYPE_MAKE_MATCH,"me")
 
-func _on_new_event(e:KEvent.Event)->void:
-	if e.type == KEvent.TYPE_MATCH_FOUND:
-		ws.hold_events()
-		table.parse_game_data(e.data)
+func _process(_delta:float)->void:
+	var new_event := ksocket.get_latest_event()
+	if new_event == null:
+		return
+	
+	if new_event.type == KEvent.TYPE_MATCH_FOUND:
+		table.parse_game_data(new_event.data)
 		table.set_player_to_hand()
 
 		status_label.text = "waiting new trick"
-		Transition.emit(self,"wait_state")
+		StateTransition.emit(self,"wait_state")
 
-	elif e.type == KEvent.TYPE_REJOIN_MATCH:
+	elif new_event.type == KEvent.TYPE_REJOIN_MATCH:
 		print("rejoining request")
 		status_label.text = "rejoining"
-		table.parse_game_data(e.data)
+		table.parse_game_data(new_event.data)
 		table.set_player_to_hand()
 		
-	elif e.type == KEvent.TYPE_GET_MY_CARDS: # move it to game turn
+	elif new_event.type == KEvent.TYPE_GET_MY_CARDS: # move it to game turn
 		status_label.text = "Fetching cards"
-		table.new_cards_event(e,true)
+		table.new_cards_event(new_event,true)
 		status_label.text = "Wait for new turn"
-		Transition.emit(self,"game_turn")
-
-func Exit()->void:
-	ws.hold_events()
-	ws.NewEventSig.disconnect(_on_new_event)
+		StateTransition.emit(self,"game_turn")
+	else:
+		ksocket.push_event(new_event)

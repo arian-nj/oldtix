@@ -1,10 +1,13 @@
 extends Node
 class_name State
 
-signal Transition(state:State,new_state_name:String)
+signal StateTransition(state:State,new_state_name:String)
+
+func _init() -> void:
+    set_process(false)
 
 func Enter()->void:
-    Transition.is_null()
+    StateTransition.is_null()
     pass
 
 func Exit()->void:

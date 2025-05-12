@@ -22,11 +22,11 @@ func start_shader(timer_time:int) -> void:
 	mat.set_shader_parameter("fill_color",start_color)
 	
 	tween = create_tween()	
-	tween.finished.connect(stop_shader)
+	tween.finished.connect(stop_timer_shader)
 	tween.parallel().tween_property(mat,"shader_parameter/current_val",90,timer_time)
 	tween.parallel().tween_property(mat,"shader_parameter/fill_color",end_color,timer_time)	
 
-func stop_shader()->void:
+func stop_timer_shader()->void:
 	if tween:
 		tween.kill()
 	tween = create_tween()

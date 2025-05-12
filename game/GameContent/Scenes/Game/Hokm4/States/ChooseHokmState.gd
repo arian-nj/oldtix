@@ -1,7 +1,8 @@
 ### DONT TOUCH THIS IF YOU DON'T KNOW HOW IT'S WORKING i don't have no clue
+## I have been touching myself. know i can see.
 extends State
 
-@export var ws:KatanaSocket
+@export var ksocket:KatanaSocket
 @export var status_label:Label
 @export var table:Game4Table
 @export var chooseHokmPanel:ChooseHokmPanel
@@ -13,9 +14,7 @@ func Enter()->void:
 	is_hakem = false
 	got_cards_time = 0
 	status_label.text = "Choose Hokm"
-	ws.NewEventSig.connect(_on_new_event)
-	ws.open_events()
-	
+
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
 	# print("my account ",KClient.MyAccount.id," hakem account id ",hakem_player.UserId)
 	if KClient._instance.MyAccount.id == hakem_player.user_id:
@@ -26,25 +25,27 @@ func Enter()->void:
 		table.me_player_panel.start_shader(InternalSetting.SETTING_PLAYER_CHOOSE_HOKM_WAIT)
 
 func Exit()->void:
-	ws.hold_events()
-	ws.NewEventSig.disconnect(_on_new_event)
-	if chooseHokmPanel.HokmChoosed.is_connected(_on_hokm_choosed):
-		chooseHokmPanel.HokmChoosed.disconnect(_on_hokm_choosed)
+	pass
 
-func _on_new_event(e:KEvent.Event)->void:
-	# print(KClient._instance.MyAccount.username + " choose hokm " +e.type)
-	if e.type == KEvent.TYPE_NEW_CARD:
-		# print(str(KClient._instance.MyAccount.id) + " got new card event")
-		table.new_cards_event(e)		
+func _process(_delta: float) -> void:
+	var new_event := ksocket.get_latest_event()
+	if new_event == null:
+		return
+	print(KClient._instance.MyAccount.id , " ",new_event.type)
+	
+	if new_event.type == KEvent.TYPE_NEW_CARD:
+		table.new_cards_event(new_event)		
 		got_cards_time += 1
+		# print(str(KClient._instance.MyAccount.id) +"new cards given " , str(got_cards_time))
+		print(got_cards_time)
 		if got_cards_time == 3:
-			ws.hold_events()
-			Transition.emit(self,"game_turn")
-
-	elif e.type == KEvent.TYPE_NEW_HOKM:
-		table.parse_game_data(e.data)
-		table.me_player_panel.stop_shader()
+			StateTransition.emit(self,"game_turn")
+	elif new_event.type == KEvent.TYPE_NEW_HOKM:
+		table.parse_game_data(new_event.data)
+		table.me_player_panel.stop_timer_shader()
+		
 		status_label.text = "Hokm Choosed"
+
 		if is_hakem:
 			var btn :SuiteButton = chooseHokmPanel.find_btn_from_suite(table.game_data.current_trick.hokm)
 			btn.pressed.emit()
@@ -53,11 +54,9 @@ func _on_new_event(e:KEvent.Event)->void:
 			var btn :SuiteButton = chooseHokmPanel.find_btn_from_suite(table.game_data.current_trick.hokm)
 			btn.pressed.emit()
 
-	# else:
-		# print_debug(e.type)
-
-
+	else:
+		ksocket.push_event(new_event)
 
 # only runs if hakem panel is shown and hakem choosed hokm
 func _on_hokm_choosed(Hokm:CardData.CardSuites)->void:
-	ws.send_event(KEvent.TYPE_PLAYER_SELECTED_HOKM,str(Hokm))
+	ksocket.send_event(KEvent.TYPE_PLAYER_SELECTED_HOKM,str(Hokm))

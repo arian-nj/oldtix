@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
 [ext_resource type="Script" uid="uid://c2hac1kxc4hd1" path="res://GameContent/Scenes/Game/Hokm4/table.gd" id="4_qoslj"]
 [ext_resource type="Texture2D" uid="uid://d1060350nvypy" path="res://GameContent/assets/icons/home.png" id="4_youex"]
-[ext_resource type="Script" uid="uid://ea2nqkryih34" path="res://GameContent/Katana/KatanaSocket.gd" id="5_48k1w"]
 [ext_resource type="Script" uid="uid://saluitmh1llq" path="res://GameContent/Scenes/Game/Hokm4/TurnScores.gd" id="5_bwnrb"]
 [ext_resource type="PackedScene" uid="uid://c7deai8nljb4u" path="res://GameContent/Componets/Game/play_area.tscn" id="5_c4cut"]
 [ext_resource type="Script" uid="uid://ggywgqynjdcr" path="res://GameContent/Scenes/Game/Hokm4/TrickScore.gd" id="6_do6i4"]
@@ -22,6 +21,7 @@
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/GameTurnState.gd" id="12_d5oqf"]
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/TheEndState.gd" id="16_tmsoy"]
 [ext_resource type="Script" uid="uid://bu2a3iuo1ja85" path="res://GameContent/Scenes/Game/Hokm4/win_panel.gd" id="17_mcw6q"]
+[ext_resource type="Script" uid="uid://durgkp45b668u" path="res://GameContent/Katana/KatanaSocketAdaptor.gd" id="22_c4cut"]
 
 [sub_resource type="Gradient" id="Gradient_c4cut"]
 offsets = PackedFloat32Array(0, 0.540084, 1)
@@ -99,7 +99,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_o4grb")
 script = ExtResource("1_i0n3b")
-ws = NodePath("WebSocket")
+ws = NodePath("KatanaSocket")
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 layout_mode = 1
@@ -682,49 +682,49 @@ grow_vertical = 2
 text = "Loading..."
 horizontal_alignment = 1
 
-[node name="WebSocket" type="Node" parent="."]
-script = ExtResource("5_48k1w")
-
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("6_rcy6w")
 initial_state = NodePath("connecting")
 
-[node name="connecting" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label")]
+[node name="connecting" type="Node" parent="StateMachine" node_paths=PackedStringArray("ksocket", "status_label")]
 script = ExtResource("7_uxde4")
-ws = NodePath("../../WebSocket")
+ksocket = NodePath("../../KatanaSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 
-[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
+[node name="match_making" type="Node" parent="StateMachine" node_paths=PackedStringArray("ksocket", "status_label", "table")]
 script = ExtResource("8_ix53e")
-ws = NodePath("../../WebSocket")
+ksocket = NodePath("../../KatanaSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 
-[node name="wait_state" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table")]
+[node name="wait_state" type="Node" parent="StateMachine" node_paths=PackedStringArray("ksocket", "status_label", "table")]
 script = ExtResource("12_cf8qb")
-ws = NodePath("../../WebSocket")
+ksocket = NodePath("../../KatanaSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 
-[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "chooseHokmPanel")]
+[node name="choose_hokm" type="Node" parent="StateMachine" node_paths=PackedStringArray("ksocket", "status_label", "table", "chooseHokmPanel")]
 script = ExtResource("9_uajja")
-ws = NodePath("../../WebSocket")
+ksocket = NodePath("../../KatanaSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 chooseHokmPanel = NodePath("../../AspectRatioContainer/Table/ChooseHokm")
 
-[node name="game_turn" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "table", "status_label")]
+[node name="game_turn" type="Node" parent="StateMachine" node_paths=PackedStringArray("ksocket", "table", "status_label")]
 script = ExtResource("12_d5oqf")
-ws = NodePath("../../WebSocket")
+ksocket = NodePath("../../KatanaSocket")
 table = NodePath("../../AspectRatioContainer/Table")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 
-[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "win_panel", "trick_score_panel")]
+[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("status_label", "table", "win_panel", "trick_score_panel")]
 script = ExtResource("16_tmsoy")
-ws = NodePath("../../WebSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 win_panel = NodePath("../../AspectRatioContainer/WinPanel")
 trick_score_panel = NodePath("../../TrickScore")
+
+[node name="KatanaSocket" type="Node" parent="."]
+script = ExtResource("22_c4cut")
+metadata/_custom_type_script = "uid://durgkp45b668u"
 
 [connection signal="pressed" from="UILayer/UI/HomeButton" to="." method="_on_home_button_pressed"]
