@@ -141,6 +141,9 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingRequest, be
 				return
 			}
 		}
-		app.RunGameInBackground(game)
+		app.BackgroundTask(func() {
+			game.RunGame()
+
+		})
 	}
 }

@@ -1,4 +1,3 @@
-res://GameContent/Scenes/StatesMachine/state_machine.gd
 res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
 res://GameContent/Scenes/Shaders/progress_shader.gdshader
 res://GameContent/Scenes/SceneManager/SceneManager.tscn
@@ -6,5 +5,3 @@ res://GameContent/Scenes/LoginMenu/LoginMenu.tscn
 res://GameContent/Scenes/Game/Card/card.tscn
 res://GameContent/Componets/Game/play_area.tscn
 res://test/test_enum.tscn
-res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd
-res://GameContent/Scenes/Game/Hokm4/States/GameTurnState.gd

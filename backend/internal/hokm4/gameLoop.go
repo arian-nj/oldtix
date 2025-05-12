@@ -11,21 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (app *ApplicationHokm4) RunGameInBackground(game *GameState) {
-	app.BackgroundTask(func() {
-
-		// defer func() {
-		// 	for _, p := range game.GetHumanPlayers() {
-		// 		delete(app.Lobby.UserGames, p.UserId)
-		// 		p.Client.Close()
-		// 	}
-		// }()
-
-		game.RunGame()
-
-	})
-}
-
 func (game *GameState) RunGame() {
 	for i := range 5 { // run tricks
 		err := game.RunTrick(i)

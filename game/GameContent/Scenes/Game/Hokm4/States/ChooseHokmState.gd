@@ -16,7 +16,6 @@ func Enter()->void:
 	status_label.text = "Choose Hokm"
 
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
-	# print("my account ",KClient.MyAccount.id," hakem account id ",hakem_player.UserId)
 	if KClient._instance.MyAccount.id == hakem_player.user_id:
 		# HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.HokmChoosed.connect(_on_hokm_choosed)
@@ -31,13 +30,10 @@ func _process(_delta: float) -> void:
 	var new_event := ksocket.get_latest_event()
 	if new_event == null:
 		return
-	print(KClient._instance.MyAccount.id , " ",new_event.type)
 	
 	if new_event.type == KEvent.TYPE_NEW_CARD:
 		table.new_cards_event(new_event)		
 		got_cards_time += 1
-		# print(str(KClient._instance.MyAccount.id) +"new cards given " , str(got_cards_time))
-		print(got_cards_time)
 		if got_cards_time == 3:
 			StateTransition.emit(self,"game_turn")
 	elif new_event.type == KEvent.TYPE_NEW_HOKM:

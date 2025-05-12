@@ -80,7 +80,7 @@ func _process(_delta: float) -> void:
 
 
 func on_me_card_played(card:Card)->void:
-	print("card played ",card.card_data.suit , " ", card.card_data.value)
+	# print("card played ",card.card_data.suit , " ", card.card_data.value)
 	if lock:
 		table.me_drawer.draw_cards()
 		return
@@ -105,7 +105,7 @@ func send_card_playend_event(card:Card)->void:
 
 func other_turn_played_logic(data:String)->void:
 	# print(KClient._instance.MyAccount.username," ==> ",data)
-	print(data)
+	# print(data)
 	var card_played :CardPlayedData= JsonClassConverter.json_string_to_class(CardPlayedData,data)
 	
 	var played_card :Card = null

@@ -28,7 +28,6 @@ func _physics_process(delta: float) -> void:
 		current_state.Physics_Update(delta)
 
 func on_child_transition(state:State,new_state_name:String)->void:
-	print("handeling changing scene ",state," ",current_state)
 	if state != current_state:
 		return
 	
