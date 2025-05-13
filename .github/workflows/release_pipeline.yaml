@@ -104,14 +104,14 @@ jobs:
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
-      # - name: Copy DB migration files to VPS
-      #   uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
-      #   with:
-      #     host: core.filelord.ir
-      #     username: deploy
-      #     key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-      #     source: "./backend/db/*"
-      #     target: "~/"
+      - name: Copy DB migration files to VPS
+        uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
+        with:
+          host: core.filelord.ir
+          username: deploy
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          source: "./backend/db/*"
+          target: "~/"
         
       - name: Migrate DB
         uses: appleboy/ssh-action@v1
@@ -171,8 +171,8 @@ jobs:
 
       - name: Android pck
         run: |
-          echo ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
-          mkdir -v -p ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}
+          echo ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
+          mkdir -v -p ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
           ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
                 
       - name: Upload PCK to S3
