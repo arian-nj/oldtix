@@ -104,25 +104,25 @@ jobs:
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
-      - name: Copy DB migration files to VPS
-        uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
-        with:
-          host: core.filelord.ir
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          source: "./backend/db/*"
-          target: "~/"
+      # - name: Copy DB migration files to VPS
+      #   uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
+      #   with:
+      #     host: core.filelord.ir
+      #     username: deploy
+      #     key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+      #     source: "./backend/db/*"
+      #     target: "~/"
         
-      - name: Migrate DB
-        uses: appleboy/ssh-action@v1
-        with:
-          host: core.filelord.ir
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          script: |
-            cd backend
-            dbmate -u "postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable" up
-            cd ..
+      # - name: Migrate DB
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: core.filelord.ir
+      #     username: deploy
+      #     key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+      #     script: |
+      #       cd backend
+      #       dbmate -u "postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable" up
+      #       cd ..
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
