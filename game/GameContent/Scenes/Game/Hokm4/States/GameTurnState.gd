@@ -27,7 +27,7 @@ func _process(_delta: float) -> void:
 			table.me_drawer.draw_cards()
 			table.last_card_played = null
 
-	elif new_event.type == KEvent.TYPE_YOUR_TURN:
+	elif new_event.type == KEvent.TYPE_YOUR_TURN:		
 		lock = false
 		status_label.text = "Your Turn"
 		table.me_player_panel.start_shader(InternalSetting.PLAYER_PLAY_WAIT)

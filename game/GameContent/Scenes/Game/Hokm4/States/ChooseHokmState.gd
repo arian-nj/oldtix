@@ -16,7 +16,7 @@ func Enter()->void:
 	status_label.text = "Choose Hokm"
 
 	var hakem_player := table.game_data.players[table.game_data.current_trick.hakem_index]
-	if KClient._instance.MyAccount.id == hakem_player.user_id and table.rejoined == false:
+	if KClient._instance.MyAccount.id == hakem_player.user_id and table.rejoining == false:
 		# HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.HokmChoosed.connect(_on_hokm_choosed)
 		chooseHokmPanel.reset_all_suites()
@@ -36,9 +36,11 @@ func _process(_delta: float) -> void:
 		got_cards_time += 1
 		if got_cards_time == 3:
 			StateTransition.emit(self,"game_turn")
+
 	elif new_event.type == KEvent.TYPE_NEW_CARD_ONE:
-		table.new_cards_event(new_event)		
+		table.new_cards_event(new_event,true)		
 		StateTransition.emit(self,"game_turn")
+	
 	elif new_event.type == KEvent.TYPE_NEW_HOKM:
 		table.parse_game_data(new_event.data)
 		table.me_player_panel.stop_timer_shader()

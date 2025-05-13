@@ -41,6 +41,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	game.CurrentTrick.TurnStarterIndex = game.CurrentTrick.HakemIndex
 
 	for _, p := range game.GetHumanPlayers() {
+		p.AllEvents = []*socket.Event{}
 		err := game.SendGameData(TypeNewTrick, p)
 		if err != nil {
 			game.Logger.Error(err.Error())

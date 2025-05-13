@@ -22,7 +22,7 @@ func _process(_delta:float)->void:
 		StateTransition.emit(self,"wait_state")
 
 	elif new_event.type == KEvent.TYPE_REJOIN_MATCH:
-		table.rejoined = true
+		table.rejoining = true
 		print("rejoining request")
 		table.parse_game_data(new_event.data)
 		table.set_player_to_hand()

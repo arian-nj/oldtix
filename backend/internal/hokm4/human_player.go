@@ -34,7 +34,10 @@ func (hplayer *HumanPlayer) AddToEgress(e *socket.Event, write_to_events bool) {
 	}()
 
 	if write_to_events {
-		if e.Type != TypeNewCard && e.Type != TypeRejoinMatch && e.Type != TypeMatchFound {
+		if e.Type != TypeNewCard &&
+			e.Type != TypeNewCardOne &&
+			e.Type != TypeRejoinMatch &&
+			e.Type != TypeMatchFound {
 			hplayer.AllEvents = append(hplayer.AllEvents, e)
 		}
 	}
@@ -62,13 +65,7 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 						if err != nil {
 							app.Logger.Error(err.Error())
 						}
-						// output.NewCards = hplayer.Cards
-						// data_byte, err := json.Marshal(output)
-						// if err != nil {
-						// 	app.Logger.Error(err.Error())
-						// 	continue
-						// }
-						// hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
+
 						for _, e := range hplayer.AllEvents {
 							hplayer.AddToEgress(e, false)
 						}
