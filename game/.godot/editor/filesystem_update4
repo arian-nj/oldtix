@@ -15,3 +15,5 @@ res://GameContent/Katana/KatanaSocketAdaptor.gd
 res://GameContent/Scenes/Game/Hokm4/hokm4_scene_level.gd
 res://GameContent/Katana/KEvent.gd
 res://GameContent/Scenes/Game/Hokm4/States/GameTurnState.gd
+res://PatchSystem/LoadPatchesScript.gd
+res://GameContent/Scenes/LoginMenu/auth_panel.gd

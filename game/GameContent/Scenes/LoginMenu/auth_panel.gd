@@ -3,11 +3,12 @@ class_name AuthPanel extends PanelContainer
 @onready var authConfig := ConfigFile.new()
 var auth_config_address := "user://AuthConfig.cfg"
 
+var config_arg_name:="--auth_config"
+
 func _extract_auth_config(args:PackedStringArray)->String:
-	var arg_name:="--auth_config"
 	for arg:String in args:
-		if arg.begins_with(arg_name):
-			return arg.substr(len(arg_name)+1)
+		if arg.begins_with(config_arg_name):
+			return arg.substr(len(config_arg_name)+1)
 	return ""
 
 
