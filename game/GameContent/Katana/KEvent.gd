@@ -25,10 +25,10 @@ class Event:
 		return true
 
 
-const TYPE_CHAT:String = "chat"
-const TYPE_GAME_DATA:String = "game_data"
-const TYPE_GET_DATA:String = "get_data"
+# const TYPE_CHAT:String = "chat"
+# const TYPE_GAME_DATA:String = "game_data"
 const TYPE_NEW_CARD:String = "new_card"
+const TYPE_NEW_CARD_ONE:String = "new_card_one"
 const TYPE_PLAYER_SELECTED_HOKM:String = "player_selected_hokm"
 const TYPE_NEW_HOKM:String = "new_hokm"
 
@@ -36,8 +36,6 @@ const TYPE_MAKE_MATCH:String = "make_match"
 const TYPE_DISCONNECT:String = "disconnect"
 const TYPE_MATCH_FOUND:String = "found_match"
 const TYPE_REJOIN_MATCH:String = "rejoin_match"
-
-const TYPE_GET_MY_CARDS:String = "get_my_cards"
 
 const TYPE_NEW_TRICK:String = "new_trick"
 const TYPE_END_TRICK:String = "end_trick"

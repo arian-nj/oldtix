@@ -1,20 +1,18 @@
 package hokm4
 
 import (
-	"encoding/json"
-	"log"
-
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
 )
 
 type HumanPlayer struct {
 	*PlayerCommon
-	UserId    int            `json:"user_id"`
-	Client    *socket.Client `json:"-"`
-	IsPlayng  bool           `json:"is_playing"`
-	Game      *GameState     `json:"-"`
-	BetAmount int            `json:"-"`
+	UserId    int             `json:"user_id"`
+	Client    *socket.Client  `json:"-"`
+	IsPlayng  bool            `json:"is_playing"`
+	Game      *GameState      `json:"-"`
+	BetAmount int             `json:"-"`
+	AllEvents []*socket.Event `json:"-"`
 }
 
 func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_playng bool) *HumanPlayer {
@@ -26,17 +24,20 @@ func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_pl
 	}
 }
 
-func (hplayer *HumanPlayer) AddToEgress(e *socket.Event) {
+func (hplayer *HumanPlayer) AddToEgress(e *socket.Event, write_to_events bool) {
 	if hplayer.Client != nil && hplayer.Client.State != socket.OPEN {
 		return
 	}
-	if e.Type == TypeRejoinMatch {
-		log.Println("sending rejoin")
-	}
+
 	go func() {
 		hplayer.Client.Egres <- *e
-
 	}()
+
+	if write_to_events {
+		if e.Type != TypeNewCard && e.Type != TypeRejoinMatch && e.Type != TypeMatchFound {
+			hplayer.AllEvents = append(hplayer.AllEvents, e)
+		}
+	}
 }
 
 // events come here if not used go to GameEventCh
@@ -47,26 +48,6 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 			select {
 			case new_event := <-hplayer.Client.NewEvents:
 				switch new_event.Type {
-				case TypeGetData:
-					if hplayer.Game == nil {
-						break
-					}
-					err := hplayer.Game.SendGameData(TypeGameData, hplayer)
-					if err != nil {
-						app.ReportError(err)
-						return
-					}
-				// case TypeGetMyCards:
-				// 	var output struct {
-				// 		NewCards []cards.Card `json:"cards"`
-				// 	}
-				// 	output.NewCards = hplayer.Cards
-				// 	data_byte, err := json.Marshal(output)
-				// 	if err != nil {
-				// 		app.Logger.Error(err.Error())
-				// 		continue
-				// 	}
-				// 	hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
 				case TypeDisconnect:
 					hplayer.Client.Close()
 				case TypeMakeMatch:
@@ -77,16 +58,20 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 							app.Logger.Error(err.Error())
 						}
 
-						var output struct {
-							NewCards []cards.Card `json:"cards"`
-						}
-						output.NewCards = hplayer.Cards
-						data_byte, err := json.Marshal(output)
+						err = activeGame.sendCardsToEgres(hplayer.Cards, hplayer, TypeNewCardOne)
 						if err != nil {
 							app.Logger.Error(err.Error())
-							continue
 						}
-						hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
+						// output.NewCards = hplayer.Cards
+						// data_byte, err := json.Marshal(output)
+						// if err != nil {
+						// 	app.Logger.Error(err.Error())
+						// 	continue
+						// }
+						// hplayer.AddToEgress(socket.NewEvent(TypeGetMyCards, socket.EventMessage(data_byte)))
+						for _, e := range hplayer.AllEvents {
+							hplayer.AddToEgress(e, false)
+						}
 					} else {
 						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer)
 					}

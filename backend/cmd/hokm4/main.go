@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/arian-nj/master-card/back/internal/hokm4"
 	"github.com/arian-nj/master-card/back/internal/server"
@@ -15,10 +16,12 @@ func main() {
 	}
 	defer poll.Close()
 
-	err = poll.Ping(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	err = poll.Ping(ctx)
 	if err != nil {
 		panic(err)
 	}
+	cancel()
 
 	app := hokm4.NewHokm4Application(globalStructs)
 	app.Config.HTTPPort = 4445

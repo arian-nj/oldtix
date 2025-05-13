@@ -16,7 +16,7 @@ func NewBotPlayer(player_cards []cards.Card) *BotPlayer {
 	}
 }
 
-func (bplayer *BotPlayer) AddToEgress(e *socket.Event) {
+func (bplayer *BotPlayer) AddToEgress(e *socket.Event, write_to_events bool) {
 }
 
 func (bplayer *BotPlayer) BackgroundSocketHandlers(game *GameState) {

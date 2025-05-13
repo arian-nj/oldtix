@@ -197,7 +197,7 @@ func (game *GameState) RunTurn() error {
 		turn_played_event := socket.NewEvent(TypeTurnPlayed, socket.EventMessage(b_data))
 		for _, player := range game.Players {
 			if player != playing_player {
-				player.AddToEgress(turn_played_event)
+				player.AddToEgress(turn_played_event, true)
 			}
 		}
 
@@ -279,7 +279,7 @@ func (game *GameState) TheEnd() error {
 	}
 
 	for _, p := range game.Players {
-		p.AddToEgress(socket.NewEvent(TypeTheEnd, socket.EventMessage("")))
+		p.AddToEgress(socket.NewEvent(TypeTheEnd, socket.EventMessage("")), true)
 	}
 
 	game.Queries.UpdateHokm4Endstamp(context.Background(), sqldb.UpdateHokm4EndstampParams{

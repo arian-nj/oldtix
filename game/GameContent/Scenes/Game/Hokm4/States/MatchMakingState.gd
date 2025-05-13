@@ -22,15 +22,12 @@ func _process(_delta:float)->void:
 		StateTransition.emit(self,"wait_state")
 
 	elif new_event.type == KEvent.TYPE_REJOIN_MATCH:
+		table.rejoined = true
 		print("rejoining request")
-		status_label.text = "rejoining"
 		table.parse_game_data(new_event.data)
 		table.set_player_to_hand()
-		
-	elif new_event.type == KEvent.TYPE_GET_MY_CARDS: # move it to game turn
-		status_label.text = "Fetching cards"
-		table.new_cards_event(new_event,true)
-		status_label.text = "Wait for new turn"
-		StateTransition.emit(self,"game_turn")
+
+		status_label.text = "rejoining"
+		StateTransition.emit(self,"wait_state")
 	else:
 		ksocket.push_event(new_event)

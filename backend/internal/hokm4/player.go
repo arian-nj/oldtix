@@ -9,7 +9,7 @@ import (
 type PlayerInterface interface {
 	// for sake of de-coupling i created this Chunky interface even used setters and getters
 	// feature me remove them if you can
-	AddToEgress(e *socket.Event)
+	AddToEgress(e *socket.Event, write_to_events bool)
 	// PlayCard(game *GameState) (cardIndex int, err error)
 	GetTeamID() Team
 	SetTeamID(team_id Team)

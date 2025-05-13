@@ -19,8 +19,5 @@ func _on_disconnect()-> void:
 
 func connect_ws()-> void:
 	var bm :Variant = level_parameters.get(SharedBetAmount)
-	if bm == null:
-		print_debug("fialed to get" + SharedBetAmount)
-		return
-	var bm_int:int = int(bm)
-	ws.connect_to_game(bm_int,30)
+	
+	ws.connect_to_game(bm,30)

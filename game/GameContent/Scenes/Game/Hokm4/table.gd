@@ -1,5 +1,7 @@
 class_name Game4Table extends Control
 
+@export var rejoined:bool = false
+
 @export var me_drawer:CardDrawer
 @export var right_drawer:CardDrawer
 @export var top_drawer:CardDrawer

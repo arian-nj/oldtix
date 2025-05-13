@@ -42,10 +42,13 @@ func get_latest_event() -> KEvent.Event:
 func push_event(e:KEvent.Event) -> void:
 	events_queue.push_front(e)
 
-func connect_to_game(coin_amount:int,p_timeout : int) -> void:
+## coin_amount : can be null or int
+func connect_to_game(coin_amount:Variant,p_timeout : int) -> void: 
 	_timeout = p_timeout
 	_start = Time.get_unix_time_from_system()
-	var ws_url:String = Katana._instance.Hokm4WsUrl + "/ws?auth_token=" + KClient._instance.Auth_Token +"&coin_amount=" + str(coin_amount)
+	var ws_url:String = Katana._instance.Hokm4WsUrl + "/ws?auth_token=" + KClient._instance.Auth_Token
+	if coin_amount != null:
+		ws_url += "&coin_amount=" + str(coin_amount)
 	var err := _ws.connect_to_url(ws_url)
 	if err != OK:
 		Katana._instance.logger.error("Error connecting to host %s" % ws_url)

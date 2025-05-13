@@ -95,7 +95,7 @@ func (game *GameState) SendGameData(message_turn socket.EventType, p *HumanPlaye
 	if err != nil {
 		return err
 	}
-	p.AddToEgress(socket.NewEvent(message_turn, socket.EventMessage(game_data)))
+	p.AddToEgress(socket.NewEvent(message_turn, socket.EventMessage(game_data)), true)
 	return nil
 }
 
@@ -117,20 +117,25 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Ca
 			continue
 		}
 
-		var output struct {
-			NewCards []cards.Card `json:"cards"`
-		}
-		output.NewCards = randomCards
-		data_byte, err := json.Marshal(output)
+		err = game.sendCardsToEgres(randomCards, humanPlayer, TypeNewCard)
 		if err != nil {
-			return []cards.Card{}, err
+			return nil, err
 		}
-		humanPlayer.AddToEgress(socket.NewEvent(TypeNewCard, socket.EventMessage(data_byte)))
-		// game.Logger.Info("giving " + strconv.Itoa(number) + " cards to " + strconv.Itoa(humanPlayer.UserId))
-
 	}
 	return remaining_cards, nil
 
+}
+func (game *GameState) sendCardsToEgres(randomCards []cards.Card, humanPlayer *HumanPlayer, eventType socket.EventType) error {
+	var output struct {
+		NewCards []cards.Card `json:"cards"`
+	}
+	output.NewCards = randomCards
+	data_byte, err := json.Marshal(output)
+	if err != nil {
+		return err
+	}
+	humanPlayer.AddToEgress(socket.NewEvent(eventType, socket.EventMessage(data_byte)), true)
+	return nil
 }
 
 func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
@@ -188,7 +193,7 @@ Outerloop:
 }
 
 func (game *GameState) WaitForPlayerToPlayCard(playing_player PlayerInterface) (cardIndex int, err error) {
-	playing_player.AddToEgress(socket.NewEvent(TypeYourTurn, socket.EventMessage("")))
+	playing_player.AddToEgress(socket.NewEvent(TypeYourTurn, socket.EventMessage("")), true)
 
 	var NewTicker *time.Ticker
 	NewTicker = time.NewTicker(SETTING_BOT_PLAY_WAIT)
@@ -228,12 +233,12 @@ OuterLoop:
 
 			// app.Logger.Debug(card_played.String())
 			if !isValid {
-				new_game_event.Player.AddToEgress(socket.NewEvent(TypeInvalidPlay, socket.EventMessage("")))
+				new_game_event.Player.AddToEgress(socket.NewEvent(TypeInvalidPlay, socket.EventMessage("")), true)
 				// app.Logger.Debug("move not valid")
 				continue
 			}
 			cardIndex = newCardIndex
-			new_game_event.Player.AddToEgress(socket.NewEvent(TypeValidPlay, socket.EventMessage("")))
+			new_game_event.Player.AddToEgress(socket.NewEvent(TypeValidPlay, socket.EventMessage("")), true)
 			break OuterLoop
 
 		case <-NewTicker.C:
@@ -244,7 +249,7 @@ OuterLoop:
 			if err != nil {
 				return -1, err
 			}
-			playing_player.AddToEgress(socket.NewEvent(TypePlayTimeout, socket.EventMessage(data_byte)))
+			playing_player.AddToEgress(socket.NewEvent(TypePlayTimeout, socket.EventMessage(data_byte)), true)
 			break OuterLoop
 		}
 	}
