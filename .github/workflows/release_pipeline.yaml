@@ -108,7 +108,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
         with:
           host: core.filelord.ir
-          username: filelord
+          username: deploy
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "./backend/db/*"
           target: "~/"
@@ -117,7 +117,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: core.filelord.ir
-          username: filelord
+          username: deploy
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
             cd backend
@@ -129,7 +129,7 @@ jobs:
           name: tix-game
           file: docker-stack.yaml
           host: core.filelord.ir
-          user: filelord
+          user: deploy
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
 
