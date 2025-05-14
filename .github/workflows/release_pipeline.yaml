@@ -98,7 +98,16 @@ jobs:
         uses: actions/checkout/@v4
         with: 
           token: ${{secrets.READ_TOKEN}}
-        
+
+      - name: Debug SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: core.filelord.ir
+          username: deploy
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          script: |
+            echo "SSH works!"
+
       - name: create env file
         run: |
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
