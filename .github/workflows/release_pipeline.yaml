@@ -94,6 +94,11 @@ jobs:
       # - build_and_push_hokm_image
       # - godot_export
     steps:
+      - name: Check SSH connectivity
+        run: |
+          apt-get install -y netcat
+          nc -vz core.filelord.ir 22
+        
       - name: Checkout code
         uses: actions/checkout/@v4
         with: 
