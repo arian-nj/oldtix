@@ -105,6 +105,10 @@ jobs:
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
 
+      - name: test secret
+        run: |
+          echo "test"
+          echo "${{ secrets.PASSWORD }}"
       - name: ssh test
         uses: appleboy/ssh-action@v1
         with:
