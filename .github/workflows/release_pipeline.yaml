@@ -22,77 +22,77 @@ env:
   # EXPORT_NAME: "android-pck"
 
 jobs:
-  # run_tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Setup Go
-  #       uses: actions/setup-go@v5
-  #       with:
-  #         go-version: '1.24.x'
-  #     - name: Install dependencies
-  #       run: go get .
-  #     - name: Test with the Go CLI
-  #       run: go test ./...
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+      - name: Install dependencies
+        run: go get .
+      - name: Test with the Go CLI
+        run: go test ./...
   
-  # build_and_push_core_image:
-  #   runs-on: ubuntu-latest
-  #   # needs:
-  #     # - run_tests
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token:  ${{ secrets.read_token }}
+  build_and_push_core_image:
+    runs-on: ubuntu-latest
+    # needs:
+      # - run_tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token:  ${{ secrets.read_token }}
 
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: https://ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GHCR_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
-  #     - name: Core Build and push Docker image
-  #       uses: docker/build-push-action@v6
-  #       with:
-  #         context: .
-  #         push: true
-  #         file: core.Dockerfile
-  #         tags: |
-  #           ghcr.io/arian-nj/tix-core:latest
-  #           ghcr.io/arian-nj/tix-core:${{ github.sha }}
-  # build_and_push_hokm_image:
-  #   runs-on: ubuntu-latest
-  #   # needs:
-  #     # - run_tests
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token:  ${{ secrets.read_token }}
+      - name: Core Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          file: core.Dockerfile
+          tags: |
+            ghcr.io/arian-nj/tix-core:latest
+            ghcr.io/arian-nj/tix-core:${{ github.sha }}
+  build_and_push_hokm_image:
+    runs-on: ubuntu-latest
+    # needs:
+      # - run_tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token:  ${{ secrets.read_token }}
 
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: https://ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GHCR_TOKEN }}
-  #     - name: Hokm4 Build and push Docker image
-  #       uses: docker/build-push-action@v6
-  #       with:
-  #         context: .
-  #         push: true
-  #         file: hokm4.Dockerfile
-  #         tags: |
-  #           ghcr.io/arian-nj/tix-hokm4:latest
-  #           ghcr.io/arian-nj/tix-hokm4:${{ github.sha }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Hokm4 Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          file: hokm4.Dockerfile
+          tags: |
+            ghcr.io/arian-nj/tix-hokm4:latest
+            ghcr.io/arian-nj/tix-hokm4:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: 
-      # - build_and_push_core_image
-      # - build_and_push_hokm_image
-      # - godot_export
+    needs: 
+      - build_and_push_core_image
+      - build_and_push_hokm_image
+      - godot_export
     steps:
       - name: Checkout code
         uses: actions/checkout/@v4
@@ -105,17 +105,13 @@ jobs:
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
 
-      - name: test secret
-        run: |
-          echo "test"
-          echo "${{ secrets.PASSWORD }}"
       - name: ssh test
         uses: appleboy/ssh-action@v1
         with:
           host: core.filelord.ir
           username: deploy
-          # key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          # password: ${{ secrets.PASSWORD }}
           port: 22
           script: |
             cd backend
@@ -157,48 +153,48 @@ jobs:
           registry_pass: ${{ secrets.GHCR_TOKEN }}
           summary: true
 
-  # godot_export:
-  #   runs-on: ubuntu-22.04
-  #   container:
-  #     image: debian:bookworm-slim
+  godot_export:
+    runs-on: ubuntu-22.04
+    container:
+      image: debian:bookworm-slim
     
-  #   steps:
-  #     - name: setting env variable
-  #       run: |
-  #         echo "MAIN_FOLDER=$(pwd)" >> $GITHUB_ENV
-  #     - name: install dependencies
-  #       run: apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync && rm -rf /var/lib/apt/lists/*
+    steps:
+      - name: setting env variable
+        run: |
+          echo "MAIN_FOLDER=$(pwd)" >> $GITHUB_ENV
+      - name: install dependencies
+        run: apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git git-lfs unzip wget tar zip adb openjdk-17-jdk-headless rsync && rm -rf /var/lib/apt/lists/*
 
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token:  ${{ secrets.read_token }}
-  #         lfs: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token:  ${{ secrets.read_token }}
+          lfs: true
 
-  #     - name: Setup Godot
-  #       run: |
-  #           wget -q -O godot_linux.zip https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64.zip
-  #           unzip godot_linux.zip
-  #           mv Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64 godotcmd
+      - name: Setup Godot
+        run: |
+            wget -q -O godot_linux.zip https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64.zip
+            unzip godot_linux.zip
+            mv Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64 godotcmd
 
-  #           wget -q -O godot_export_template.tpz https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_export_templates.tpz
-  #           mkdir -v -p ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
-  #           unzip godot_export_template.tpz -d ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
-  #           mv ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/templates/* ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/
+            wget -q -O godot_export_template.tpz https://github.com/godotengine/godot-builds/releases/download/${{env.GODOT_VERSION}}-stable/Godot_v${{env.GODOT_VERSION}}-stable_export_templates.tpz
+            mkdir -v -p ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
+            unzip godot_export_template.tpz -d ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable
+            mv ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/templates/* ~/.local/share/godot/export_templates/${{env.GODOT_VERSION}}.stable/
 
 
-  #     - name: Android pck
-  #       run: |
-  #         echo ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
-  #         mkdir -v -p ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
-  #         ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
+      - name: Android pck
+        run: |
+          echo ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
+          mkdir -v -p ${{ env.MAIN_FOLDER }}/${{env.EXPORT_FOLDER_ANDROID}}
+          ./godotcmd ${{ env.GODOT_PROJRCT_LOCATION }} --headless --quiet --export-pack AndroidPck ${{env.MAIN_FOLDER}}/${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck
                 
-  #     - name: Upload PCK to S3
-  #       env:
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
-  #       run: |
-  #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" 
-  #         unzip awscliv2.zip
-  #         ./aws/install
-  #         aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/release/${{env.APPLICATION_NAME}}_android_v${{ inputs.project_version }}.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
+      - name: Upload PCK to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" 
+          unzip awscliv2.zip
+          ./aws/install
+          aws s3 cp ${{env.EXPORT_FOLDER_ANDROID}}/${{env.APPLICATION_NAME}}_android.pck s3://${{ secrets.S3_BUCKET_NAME }}/patches/release/${{env.APPLICATION_NAME}}_android_v${{ inputs.project_version }}.pck --endpoint-url ${{ secrets.S3_ENDPOINT }}
