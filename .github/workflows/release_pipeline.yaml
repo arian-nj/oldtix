@@ -102,7 +102,7 @@ jobs:
       - name: Debug SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: core.filelord.ir
+          host: 89.42.199.213:22
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
