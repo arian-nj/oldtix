@@ -94,11 +94,6 @@ jobs:
       # - build_and_push_hokm_image
       # - godot_export
     steps:
-      - name: Check SSH connectivity
-        run: |
-          apt-get install -y netcat
-          nc -vz core.filelord.ir 22
-        
       - name: Checkout code
         uses: actions/checkout/@v4
         with: 
@@ -109,6 +104,20 @@ jobs:
             echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
             echo "PROJECT_VERSION=${{ inputs.project_version }}" >> ./envfile
             cat ./envfile
+
+      - name: ssh test
+        uses: appleboy/ssh-action@v1
+        with:
+          host: core.filelord.ir
+          username: deploy
+          # key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd backend
+            dbmate -u "postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable" up
+            cd ..
+
       - name: Copy DB migration files to VPS
         uses: appleboy/scp-action@v0.1.7 # Use a specific version or check for latest
         with:
