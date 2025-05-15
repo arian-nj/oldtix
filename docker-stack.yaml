@@ -70,7 +70,6 @@ services:
   #     - VERSION=${VERSION}
 
 volumes:
-  postgres_data:
   letsencrypt:
 
 secrets:

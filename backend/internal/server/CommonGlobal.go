@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"sync"
@@ -108,6 +109,7 @@ func readConfigs(http_port string) (*Config, error) {
 	cfg.Jwt.SecretKey = []byte(secret_key)
 
 	database_url := os.Getenv("DATABASE_URL")
+	log.Println("database url is ", database_url)
 	if database_url == "" {
 		return nil, fmt.Errorf("can't read database url from .env : %s", database_url)
 	}
