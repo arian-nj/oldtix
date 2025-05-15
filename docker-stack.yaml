@@ -31,22 +31,6 @@ services:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
   
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: pgadmin
-      POSTGRES_PASSWORD: pgpass
-      POSTGRES_DB: game
-    ports:
-      - 0.0.0.0:5432:5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data  # Keeps data persistent
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   core_api:
     image: ghcr.io/arian-nj/tix-core:${GIT_COMMIT_HASH}
     build:
@@ -64,7 +48,7 @@ services:
       - CORE_HTTP_PORT=4444
       - BASE_URL=https://core.filelord.ir
       - SecretKey=/run/secrets/secret-key
-      - DATABASE_URL=postgres://pgadmin:pgpass@db:5432/game?sslmode=disable
+      - DATABASE_URL=/run/secrets/db-url
       - RELEASE_MODE=dev
       - VERSION=0.2.0
       - PROJECT_VERSION=${PROJECT_VERSION}
@@ -81,7 +65,7 @@ services:
   #     - HTTP_PORT=${HOKM4_HTTP_PORT}
   #     - BASE_URL=${BASE_URL}
   #     - SecretKey=${SecretKey}
-  #     - DATABASE_URL=${DATABASE_URL}
+  #     - DATABASE_URL=/run/secrets/db-url
   #     - RELEASE_MODE=${RELEASE_MODE}
   #     - VERSION=${VERSION}
 
