@@ -10,7 +10,7 @@ tasks:
     #  - '**/*.go'
     #  - exclude: sqldb/*.go
     cmds:
-      - CORE_HTTP_PORT=4444 BASE_URL=https://core.filelord.ir DATABASE_URL=postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable RELEASE_MODE=dev VERSION=0.2.0 PROJECT_VERSION=1.0.0 SecretKey=sdasfdgewfef go run ./cmd/core/.
+      - CORE_HTTP_PORT=4444 BASE_URL=https://core.filelord.ir DATABASE_URL_FILE=postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable RELEASE_MODE=dev VERSION=0.2.0 PROJECT_VERSION=1.0.0 SecretKey=sdasfdgewfef go run ./cmd/core/.
       
   
   run_hokm_4:
@@ -22,7 +22,7 @@ tasks:
     #  - '**/*.go'
     #  - exclude: sqldb/*.go
     cmds:
-      - HOKM4_HTTP_PORT=4445 BASE_URL=https://core.filelord.ir DATABASE_URL=postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable RELEASE_MODE=dev VERSION=0.2.0 PROJECT_VERSION=1.0.0 SecretKey=sdasfdgewfef go run ./cmd/hokm4/.
+      - HOKM4_HTTP_PORT=4445 BASE_URL=https://core.filelord.ir DATABASE_URL_FILE=postgres://pgadmin:pgpass@127.0.0.1:5432/game?sslmode=disable RELEASE_MODE=dev VERSION=0.2.0 PROJECT_VERSION=1.0.0 SecretKey=sdasfdgewfef go run ./cmd/hokm4/.
   
   clean_task:
     desc: clear task cache

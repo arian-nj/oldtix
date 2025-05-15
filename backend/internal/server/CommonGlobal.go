@@ -102,18 +102,18 @@ func readConfigs(http_port string) (*Config, error) {
 	}
 	cfg.BaseURL = base_url
 
-	secret_key := os.Getenv("SecretKey")
+	secret_key := os.Getenv("SECRET_KEY_FILE")
 	if secret_key == "" {
 		return nil, fmt.Errorf("can't read secret key from .env : %s", secret_key)
 	}
 	cfg.Jwt.SecretKey = []byte(secret_key)
 
-	database_url := os.Getenv("DATABASE_URL")
-	log.Println("database url is ", database_url)
-	if database_url == "" {
-		return nil, fmt.Errorf("can't read database url from .env : %s", database_url)
+	DATABASE_URL_FILE := os.Getenv("DATABASE_URL_FILE")
+	log.Println("database url is ", DATABASE_URL_FILE)
+	if DATABASE_URL_FILE == "" {
+		return nil, fmt.Errorf("can't read database url from .env : %s", DATABASE_URL_FILE)
 	}
-	cfg.DatabaseUrl = database_url
+	cfg.DatabaseUrl = DATABASE_URL_FILE
 
 	return cfg, nil
 }

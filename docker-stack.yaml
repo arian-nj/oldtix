@@ -48,8 +48,8 @@ services:
     environment:
       - CORE_HTTP_PORT=4444
       - BASE_URL=https://core.filelord.ir
-      - SecretKey=/run/secrets/secret-key
-      - DATABASE_URL=/run/secrets/db-url
+      - SECRET_KEY_FILE=/run/secrets/secret-key
+      - DATABASE_URL_FILE=/run/secrets/db-url
       - RELEASE_MODE=dev
       - VERSION=0.2.0
       - PROJECT_VERSION=${PROJECT_VERSION}
@@ -65,8 +65,8 @@ services:
   #   environment:
   #     - HTTP_PORT=${HOKM4_HTTP_PORT}
   #     - BASE_URL=${BASE_URL}
-  #     - SecretKey=${SecretKey}
-  #     - DATABASE_URL=${DATABASE_URL}
+  #     - SECRET_KEY_FILE=${SecretKey}
+  #     - DATABASE_URL_FILE=${DATABASE_URL_FILE}
   #     - RELEASE_MODE=${RELEASE_MODE}
   #     - VERSION=${VERSION}
 

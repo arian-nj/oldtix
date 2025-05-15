@@ -372,7 +372,7 @@ func (app *ApiApplication) createGuestToken(w http.ResponseWriter, r *http.Reque
 // 	}
 
 // 	token := createToken(person.ID)
-// 	tokenString, err := token.SignedString([]byte(app.Config.Jwt.SecretKey))
+// 	tokenString, err := token.SignedString([]byte(app.Config.Jwt.SECRET_KEY_FILE))
 // 	if err != nil {
 // 		app.ServerError(w, r, err)
 // 		return
