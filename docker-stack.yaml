@@ -77,3 +77,5 @@ volumes:
 secrets:
   secret-key: 
     external: true
+  db-url: 
+    external: true
