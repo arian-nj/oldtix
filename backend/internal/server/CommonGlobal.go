@@ -74,7 +74,7 @@ func NewCommonGlobals(http_port string) (*CommonGlobals, *pgxpool.Pool, error) {
 	}
 	Glob.Config = cfg
 
-	queries, poll, err := dbconf.SetupDB()
+	queries, poll, err := dbconf.SetupDB(cfg.DatabaseUrl)
 	if err != nil {
 		return nil, nil, err
 	}

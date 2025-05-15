@@ -2,19 +2,14 @@ package dbconf
 
 import (
 	"context"
-	"os"
 
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func SetupDB() (*sqldb.Queries, *pgxpool.Pool, error) {
+func SetupDB(db_url string) (*sqldb.Queries, *pgxpool.Pool, error) {
 
-	DbConnStr := os.Getenv("DATABASE_URL")
-	if DbConnStr == "" {
-		panic(DbConnStr)
-	}
-	conn, err := pgxpool.New(context.Background(), DbConnStr)
+	conn, err := pgxpool.New(context.Background(), db_url)
 	if err != nil {
 		return nil, nil, err
 	}
