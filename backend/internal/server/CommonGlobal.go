@@ -2,9 +2,9 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/arian-nj/master-card/back/internal/dbconf"
@@ -102,19 +102,36 @@ func readConfigs(http_port string) (*Config, error) {
 	}
 	cfg.BaseURL = base_url
 
-	secret_key := os.Getenv("SECRET_KEY_FILE")
-	if secret_key == "" {
-		return nil, fmt.Errorf("can't read secret key from .env : %s", secret_key)
+	//
+	SECRET_KEY_FILE := os.Getenv("SECRET_KEY_FILE")
+	if SECRET_KEY_FILE == "" {
+		return nil, fmt.Errorf("can't read secret key from .env : %s", SECRET_KEY_FILE)
 	}
-	cfg.Jwt.SecretKey = []byte(secret_key)
 
-	DATABASE_URL_FILE := os.Getenv("DATABASE_URL_FILE")
-	data, err := os.ReadFile(DATABASE_URL_FILE)
+	secret_key_data, err := os.ReadFile(SECRET_KEY_FILE)
 	if err != nil {
-		log.Fatalf("cannot read database URL secret: %v", err)
+		return nil, fmt.Errorf("cannot read secret key secret file: %v", err)
 	}
-	databaseURL := string(data)
-	log.Println("database url is ", databaseURL)
+	secretKey := string(secret_key_data)
+	secretKey = strings.TrimSpace(secretKey)
+
+	if secretKey == "" {
+		return nil, fmt.Errorf("secret key is empty")
+	}
+	cfg.Jwt.SecretKey = []byte(SECRET_KEY_FILE)
+
+	//
+	DATABASE_URL_FILE := os.Getenv("DATABASE_URL_FILE")
+	if DATABASE_URL_FILE == "" {
+		return nil, fmt.Errorf("database_url_file is empty")
+	}
+
+	db_url_data, err := os.ReadFile(DATABASE_URL_FILE)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read database URL secret file: %v", err)
+	}
+	databaseURL := string(db_url_data)
+	databaseURL = strings.TrimSpace(databaseURL)
 	if databaseURL == "" {
 		return nil, fmt.Errorf("can't read database url from .env : %s", DATABASE_URL_FILE)
 	}
