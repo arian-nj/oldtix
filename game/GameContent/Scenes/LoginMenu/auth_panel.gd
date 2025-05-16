@@ -13,7 +13,10 @@ func _extract_auth_config(args:PackedStringArray)->String:
 
 
 func _ready() -> void:
-	Katana._instance.change_debug_mode(true)
+	var os_args := OS.get_cmdline_args()
+	for arg in os_args:
+		if arg == "--dev":
+			Katana._instance.change_debug_mode(true)
 
 	var args := OS.get_cmdline_args()
 	var new_auth_path := _extract_auth_config(args)
