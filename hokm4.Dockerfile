@@ -31,6 +31,6 @@ RUN chown appuser:appuser ./hokm4_server
 
 USER appuser
 
-EXPOSE 4444
+EXPOSE 4445
 
 CMD [ "./hokm4_server" ]
