@@ -55,6 +55,7 @@ services:
     deploy:
       update_config:
         order: start-first
+
   hokm4:
     build:
       context: .
@@ -75,6 +76,9 @@ services:
       - DATABASE_URL_FILE=/run/secrets/db-url
       - RELEASE_MODE=dev
       - PROJECT_VERSION=${PROJECT_VERSION}
+    deploy:
+      update_config:
+        order: start-first
 
 volumes:
   postgres_data:
