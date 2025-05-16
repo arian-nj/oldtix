@@ -87,7 +87,7 @@ func readConfigs(http_port string) (*Config, error) {
 	var cfg *Config = new(Config)
 	port := os.Getenv(http_port)
 	if port == "" {
-		return nil, fmt.Errorf("can't read port from .env %s", port)
+		return nil, fmt.Errorf("port env is empty")
 	}
 
 	port_int, err := strconv.Atoi(port)

@@ -71,7 +71,7 @@ services:
       - secret-key
       - db-url
     environment:
-      - CORE_HTTP_PORT=4445
+      - HOKM4_HTTP_PORT=4445
       - BASE_URL=https://hokm4.filelord.ir
       - SECRET_KEY_FILE=/run/secrets/secret-key
       - DATABASE_URL_FILE=/run/secrets/db-url

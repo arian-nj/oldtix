@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/V 1.0.0.md",
+                "file": "CardGame/TO DO Card.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "V 1.0.0"
+              "title": "TO DO Card"
             }
           }
         ]
@@ -172,23 +172,25 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
   "active": "306f445d69d164d6",
   "lastOpenFiles": [
-    "CardGame/Game Flow Chart.md",
-    "CardGame/Name.md",
-    "CardGame/Reconnection.md",
-    "CardGame/Release Pipe.md",
-    "CardGame/TO DO Card.md",
     "CardGame/V 1.0.0.md",
+    "CardGame/TO DO Card.md",
+    "CardGame/Concepts/Reconnection.md",
+    "CardGame/Concepts/Name.md",
+    "CardGame/Music.md",
+    "CardGame/Game Flow Chart.md",
+    "CardGame/Concepts/Coin.md",
+    "CardGame/Concepts/Authentication.md",
+    "CardGame/Concepts",
+    "CardGame/Release Pipe.md",
     "Untitled.md",
-    "CardGame/Authentication.md",
-    "CardGame/Coin.md",
     "6 - Main Notes/V 2.0.0.md",
     "Untitled",
-    "CardGame/Music.md",
     "5 - Templates/Full Note.md"
   ]
 }
