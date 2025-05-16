@@ -57,6 +57,7 @@ services:
         order: start-first
 
   hokm4:
+    image: ghcr.io/arian-nj/tix-hokm4:${GIT_COMMIT_HASH}
     build:
       context: .
       dockerfile: hokm4.Dockerfile
