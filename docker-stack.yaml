@@ -38,10 +38,10 @@ services:
       dockerfile: core.Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.web.loadbalancer.server.port=4444"
-      - "traefik.http.routers.web.rule=Host(`core.filelord.ir`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.services.core_api.loadbalancer.server.port=4444"
+      - "traefik.http.routers.core_api.rule=Host(`core.filelord.ir`)"
+      - "traefik.http.routers.core_api.entrypoints=websecure"
+      - "traefik.http.routers.core_api.tls.certresolver=myresolver"
     secrets:
       - secret-key
       - db-url
@@ -63,10 +63,10 @@ services:
       dockerfile: hokm4.Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.web.loadbalancer.server.port=4445"
-      - "traefik.http.routers.web.rule=Host(`hokm4.filelord.ir`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.services.hokm4_api.loadbalancer.server.port=4445"
+      - "traefik.http.routers.hokm4_api.rule=Host(`hokm4.filelord.ir`)"
+      - "traefik.http.routers.hokm4_api.entrypoints=websecure"
+      - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
     secrets:
       - secret-key
       - db-url
