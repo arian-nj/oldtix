@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CardGame/TO DO Card.md",
+                "file": "CardGame/V 1.0.0.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "TO DO Card"
+              "title": "V 1.0.0"
             }
           }
         ]
@@ -178,8 +178,8 @@
   },
   "active": "306f445d69d164d6",
   "lastOpenFiles": [
-    "CardGame/V 1.0.0.md",
     "CardGame/TO DO Card.md",
+    "CardGame/V 1.0.0.md",
     "CardGame/Concepts/Reconnection.md",
     "CardGame/Concepts/Name.md",
     "CardGame/Music.md",

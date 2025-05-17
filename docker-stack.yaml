@@ -53,6 +53,9 @@ services:
       - RELEASE_MODE=dev
       - PROJECT_VERSION=${PROJECT_VERSION}
     deploy:
+      placement:
+        constraints:
+          - node.role == manager
       update_config:
         order: start-first
 

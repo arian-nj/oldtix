@@ -5,4 +5,7 @@ res://GameContent/Scenes/LoginMenu/LoginMenu.tscn
 res://GameContent/Scenes/Game/Card/card.tscn
 res://GameContent/Componets/Game/play_area.tscn
 res://test/test_enum.tscn
-res://GameContent/Scenes/LoginMenu/auth_panel.gd
+res://GameContent/Scenes/Game/Hokm4/table.gd
+res://GameContent/Scenes/Game/Hokm4/States/GameTurnState.gd
+res://GameContent/Scenes/Game/Card/card.gd
+res://GameContent/Scenes/Game/Card/shader_script.gd

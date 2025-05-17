@@ -1,3 +1,4 @@
+@tool
 class_name Card extends Button
 
 signal card_played(card:Card)
@@ -7,7 +8,7 @@ signal NotInplaceSig(card:Card)
 @export var cardDrawingTextureRect:TextureRect
 @export var cardBackgroundTextureRect:TextureRect
 
-@export var prespective3DShader:Prescpective3DShader
+@export var prespective3DShader:CardShader
 @export var cardDrawingAtlasTexture:Texture2D
 
 @export var cardBackgroundTexture:Texture2D

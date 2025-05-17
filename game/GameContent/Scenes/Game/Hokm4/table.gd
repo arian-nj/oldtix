@@ -59,6 +59,7 @@ func _clear_all_cards()->void:
 	for drawer_queue in all_drawers:
 		for c:Card in drawer_queue.cards:
 			if is_instance_valid(c):
+				
 				remove_one_card(c)
 		drawer_queue.cards = []
 		

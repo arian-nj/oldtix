@@ -1,4 +1,5 @@
-class_name Prescpective3DShader extends Control
+class_name CardShader extends Control
+
 
 var all_textures:Array[TextureRect]
 
