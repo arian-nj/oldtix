@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_4t5hd"]
 [ext_resource type="Script" uid="uid://c8yhikus38yc" path="res://PatchSystem/download_progress_control.gd" id="3_g0i2y"]
 [ext_resource type="Script" uid="uid://be2vor2nor6hu" path="res://PatchSystem/LPEroorScript.gd" id="4_574je"]
-[ext_resource type="Texture2D" uid="uid://fecfi8cv65io" path="res://PatchSystem/LoadPatcherreturn.png" id="5_hopgu"]
+[ext_resource type="Texture2D" uid="uid://60shhtk6frv1" path="res://PatchSystem/LoadPatcherreturn.png" id="5_hopgu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_574je"]
 bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)

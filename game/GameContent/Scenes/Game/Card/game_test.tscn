@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cmt3jemho5vyb"]
+[gd_scene load_steps=6 format=3 uid="uid://cmt3jemho5vyb"]
 
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/card_drawer.gd" id="1_0mwao"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="2_kp8tw"]
@@ -14,9 +14,6 @@ fill_to = Vector2(0.507123, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7263d"]
 size = Vector2(94, 137)
-
-[sub_resource type="Resource" id="Resource_verbi"]
-metadata/__load_path__ = "res://GameContent/Scenes/Game/choose_hokm.tscn"
 
 [node name="CanvasLayer" type="CanvasLayer"]
 
