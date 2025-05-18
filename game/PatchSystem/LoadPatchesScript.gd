@@ -63,7 +63,9 @@ func get_newest_version()-> String:
 	if !success:
 		print_debug("loading failed")
 		return "can't load resource pack"
+
 	versionConfig.save(patch_user_config_address)
+
 	var change_success := get_tree().change_scene_to_file("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 	if change_success != OK:
 		print_debug("change scene failed")
