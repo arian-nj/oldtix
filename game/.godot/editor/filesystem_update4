@@ -7,3 +7,4 @@ res://GameContent/Componets/Game/play_area.tscn
 res://PatchSystem/LoadPatcher.tscn
 res://GameContent/Scenes/MainMenu/MainMenu.tscn
 res://GameContent/Scenes/Game/UserComponent/user_component.tscn
+res://GameContent/Katana/KatanaSocketAdaptor.gd
