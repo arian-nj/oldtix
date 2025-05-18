@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7deai8nljb4u"]
 
-[ext_resource type="Script" uid="uid://do0nmm5ejrq58" path="res://test/card_playing_area.gd" id="1_i4q5v"]
+[ext_resource type="Script" uid="uid://do0nmm5ejrq58" path="res://GameContent/Scenes/Game/Hokm4/card_playing_area.gd" id="1_i4q5v"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i4q5v"]
 

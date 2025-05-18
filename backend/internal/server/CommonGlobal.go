@@ -56,17 +56,10 @@ func NewCommonGlobals(http_port string) (*CommonGlobals, *pgxpool.Pool, error) {
 	config.EncoderConfig = encoderConfig
 
 	logger, err := config.Build()
-
-	// logger, err :=
 	if err != nil {
 		return nil, nil, err
 	}
 	Glob.Logger = logger
-
-	// err = godotenv.Load()
-	// if err != nil {
-	// 	return nil, nil, fmt.Errorf("error loading .env file")
-	// }
 
 	cfg, err = readConfigs(http_port)
 	if err != nil {
@@ -103,39 +96,49 @@ func readConfigs(http_port string) (*Config, error) {
 	cfg.BaseURL = base_url
 
 	//
-	SECRET_KEY_FILE := os.Getenv("SECRET_KEY_FILE")
-	if SECRET_KEY_FILE == "" {
-		return nil, fmt.Errorf("can't read secret key from .env : %s", SECRET_KEY_FILE)
-	}
+	secretKeyFile := os.Getenv("SECRET_KEY_FILE")
+	if secretKeyFile != "" {
+		secret_key_data, err := os.ReadFile(secretKeyFile)
+		if err != nil {
+			return nil, fmt.Errorf("cannot read secret key secret file: %v", err)
+		}
+		secretKey := string(secret_key_data)
+		secretKey = strings.TrimSpace(secretKey)
 
-	secret_key_data, err := os.ReadFile(SECRET_KEY_FILE)
-	if err != nil {
-		return nil, fmt.Errorf("cannot read secret key secret file: %v", err)
-	}
-	secretKey := string(secret_key_data)
-	secretKey = strings.TrimSpace(secretKey)
+		if secretKey == "" {
+			return nil, fmt.Errorf("secret key is empty")
+		}
+		cfg.Jwt.SecretKey = []byte(secretKeyFile)
 
-	if secretKey == "" {
-		return nil, fmt.Errorf("secret key is empty")
+	} else {
+		secretKey := os.Getenv("SECRET_KEY")
+		if secretKey == "" {
+			return nil, fmt.Errorf("SECRET_KEY env var is empty")
+		}
+		cfg.Jwt.SecretKey = []byte(secretKey)
+
 	}
-	cfg.Jwt.SecretKey = []byte(SECRET_KEY_FILE)
 
 	//
-	DATABASE_URL_FILE := os.Getenv("DATABASE_URL_FILE")
-	if DATABASE_URL_FILE == "" {
-		return nil, fmt.Errorf("database_url_file is empty")
+	databaseURLFile := os.Getenv("DATABASE_URL_FILE")
+	if databaseURLFile != "" {
+		db_url_data, err := os.ReadFile(databaseURLFile)
+		if err != nil {
+			return nil, fmt.Errorf("cannot read database URL secret file: %v", err)
+		}
+		databaseURL := string(db_url_data)
+		databaseURL = strings.TrimSpace(databaseURL)
+		if databaseURL == "" {
+			return nil, fmt.Errorf("can't read database url from .env : %s", databaseURLFile)
+		}
+		cfg.DatabaseUrl = databaseURL
+	} else {
+		databaseURL := os.Getenv("DATABASE_URL")
+		if databaseURL == "" {
+			return nil, fmt.Errorf("DATABASE_URL env var is empty")
+		}
+		cfg.DatabaseUrl = databaseURL
 	}
-
-	db_url_data, err := os.ReadFile(DATABASE_URL_FILE)
-	if err != nil {
-		return nil, fmt.Errorf("cannot read database URL secret file: %v", err)
-	}
-	databaseURL := string(db_url_data)
-	databaseURL = strings.TrimSpace(databaseURL)
-	if databaseURL == "" {
-		return nil, fmt.Errorf("can't read database url from .env : %s", DATABASE_URL_FILE)
-	}
-	cfg.DatabaseUrl = databaseURL
 
 	return cfg, nil
 }
