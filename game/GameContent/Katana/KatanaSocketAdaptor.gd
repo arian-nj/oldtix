@@ -17,7 +17,7 @@ signal closed()
 signal received_error_signal(p_exception:int)
 
 ## emitted when socket receives a message.
-signal received(p_bytes:PackedByteArray) 
+# signal received(p_bytes:PackedByteArray) 
 
 ## check is socket connected.
 func is_connected_to_host() -> bool:

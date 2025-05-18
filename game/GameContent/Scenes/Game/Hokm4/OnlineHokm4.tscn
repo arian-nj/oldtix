@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://n05vugmvpycb" path="res://GameContent/Scenes/Game/Hokm4/States/MatchMakingState.gd" id="8_ix53e"]
 [ext_resource type="Script" uid="uid://csx74232tejx5" path="res://GameContent/Scenes/Game/Hokm4/States/ChooseHokmState.gd" id="9_uajja"]
 [ext_resource type="PackedScene" uid="uid://dhrv6jw67x8qj" path="res://GameContent/Scenes/Game/UserComponent/user_component.tscn" id="10_7sva6"]
-[ext_resource type="Shader" uid="uid://dk26lm251in5r" path="res://GameContent/Scenes/Shaders/progress_shader.gdshader" id="11_5bin2"]
+[ext_resource type="Shader" uid="uid://cw2qg2hugnute" path="res://GameContent/Scenes/Shaders/progress_shader.gdshader" id="11_5bin2"]
 [ext_resource type="Script" uid="uid://cpuwy5dcull11" path="res://GameContent/Scenes/Game/Hokm4/States/WaitState.gd" id="12_cf8qb"]
 [ext_resource type="Script" uid="uid://ty6018y5r7sa" path="res://GameContent/Scenes/Game/Hokm4/States/GameTurnState.gd" id="12_d5oqf"]
 [ext_resource type="Script" uid="uid://cu0d2xl18a76d" path="res://GameContent/Scenes/Game/Hokm4/States/TheEndState.gd" id="16_tmsoy"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=26 format=3 uid="uid://bqn77wpg3cj3y"]
 
-[ext_resource type="Script" uid="uid://bhd1hxpt4n03a" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
+[ext_resource type="Script" uid="uid://dmndrqu1x6x1u" path="res://GameContent/Scenes/MainMenu/main_menu_canvas.gd" id="1_c7oo3"]
 [ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="2_o2jf8"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="3_bbm5d"]
 [ext_resource type="Script" uid="uid://dxdp0uldpe775" path="res://GameContent/Scenes/MainMenu/UserData/user_data.gd" id="4_1k8vq"]
