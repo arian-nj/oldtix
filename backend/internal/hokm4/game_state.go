@@ -2,7 +2,6 @@ package hokm4
 
 import (
 	"context"
-	"fmt"
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
@@ -42,16 +41,14 @@ type GameState struct {
 }
 
 func (gs *GameState) SaveGameStateData() error {
-	gs.Logger.Info("saving data")
 	err := gs.Queries.UpdateHokm4Game(context.Background(), sqldb.UpdateHokm4GameParams{
 		TeamOneTricksScore: gs.TeamOneTrickScore,
 		TeamTwoTricksScore: gs.TeamTwoTrickScore,
 		ID:                 gs.ID,
 	})
+
 	if err != nil {
 		gs.Logger.Error(err.Error())
-	} else {
-		gs.Logger.Info(fmt.Sprintf("saving is allright %d %d %d", gs.ID, gs.TeamOneTrickScore, gs.TeamTwoTrickScore))
 	}
 	return err
 }

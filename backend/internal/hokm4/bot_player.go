@@ -10,9 +10,9 @@ type BotPlayer struct {
 	*PlayerCommon
 }
 
-func NewBotPlayer(player_cards []cards.Card) *BotPlayer {
+func NewBotPlayer() *BotPlayer {
 	return &BotPlayer{
-		PlayerCommon: NewPlayerCommon(player_cards),
+		PlayerCommon: NewPlayerCommon([]cards.Card{}),
 	}
 }
 

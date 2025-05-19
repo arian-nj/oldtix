@@ -70,7 +70,7 @@ func (app *ApplicationHokm4) BackgroundSocketHandlers(hplayer *HumanPlayer) { //
 							hplayer.AddToEgress(e, false)
 						}
 					} else {
-						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingRequest(hplayer)
+						app.Lobby.MatchmakingQueueGlobal <- NewMatchmakingTicket(hplayer)
 					}
 				default:
 					if hplayer.Game == nil {

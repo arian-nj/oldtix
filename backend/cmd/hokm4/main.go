@@ -29,7 +29,7 @@ func main() {
 	chiRouter := app.Hokm4Router()
 
 	app.BackgroundTask(func() {
-		app.FilterMatchMkingByCoin()
+		app.FilterMatchMakingByCoin()
 	})
 
 	app.BackgroundTask(func() {

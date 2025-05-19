@@ -119,13 +119,11 @@ func (app *ApiApplication) getUserData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var output struct {
-		Username    string `json:"username"`
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
 		Coin        int    `json:"coin"`
 	}
 
-	output.Username = "remove me"
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String
 	output.Coin = user.Coin
@@ -141,13 +139,11 @@ func (app *ApiApplication) getMeData(w http.ResponseWriter, r *http.Request) {
 
 	var output struct {
 		ID          int    `json:"id"`
-		Username    string `json:"username"`
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
 		Coin        int    `json:"coin"`
 	}
 	output.ID = user.ID
-	output.Username = "remove me to getMeData"
 	output.DisplayName = user.DisplayName.String
 	output.Bio = user.Bio.String
 	output.Coin = user.Coin
@@ -215,7 +211,7 @@ func (app *ApiApplication) createGuest(w http.ResponseWriter, r *http.Request) {
 	newRandString := randutils.GenerateRandomString(128)
 	_, err := app.CreateNewGuest(newRandString)
 	if err != nil {
-		app.BadRequest(w, r, err)
+		app.ServerError(w, r, err)
 		return
 	}
 

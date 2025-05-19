@@ -1,6 +1,5 @@
 extends Control
 
-@export var usernameLabel:Label
 @export var displaynameLabel:Label
 
 @export var profileButton:Button
@@ -19,7 +18,6 @@ func _ready() -> void:
 
 func set_user_display_name_label()->void:
 	displaynameLabel.text = KClient._instance.MyAccount.display_name
-	usernameLabel.text = "@"+KClient._instance.MyAccount.username
 
 func _on_resize()->void:
 	if profilePanelContainer.visible:

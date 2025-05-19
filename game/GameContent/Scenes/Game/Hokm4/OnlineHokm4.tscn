@@ -716,8 +716,9 @@ ksocket = NodePath("../../KatanaSocket")
 table = NodePath("../../AspectRatioContainer/Table")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 
-[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("status_label", "table", "win_panel", "trick_score_panel")]
+[node name="the_end" type="Node" parent="StateMachine" node_paths=PackedStringArray("ws", "status_label", "table", "win_panel", "trick_score_panel")]
 script = ExtResource("16_tmsoy")
+ws = NodePath("../../KatanaSocket")
 status_label = NodePath("../../UILayer/UI/StatusLabel")
 table = NodePath("../../AspectRatioContainer/Table")
 win_panel = NodePath("../../AspectRatioContainer/WinPanel")
