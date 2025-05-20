@@ -43,16 +43,8 @@ suit = 3
 value = 13
 metadata/_custom_type_script = "uid://dt3pgj8tbmf55"
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_700qd"]
-bg_color = Color(0.0516501, 0.0343745, 0.0274843, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xn1pj"]
+bg_color = Color(0.113725, 0.133333, 0.160784, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npi4m"]
 bg_color = Color(0.328841, 0.691593, 0.396442, 1)
@@ -339,14 +331,13 @@ theme_override_font_sizes/font_size = 50
 text = "Arian"
 
 [node name="ProfileContainer" type="PanelContainer" parent="AspectRatioContainer/UI/UserData"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_700qd")
+theme_override_styles/panel = SubResource("StyleBoxFlat_xn1pj")
 
 [node name="Statistics" type="Control" parent="AspectRatioContainer/UI/UserData/ProfileContainer" node_paths=PackedStringArray("WinLoseLine", "TrickWinLoseLine", "TurnWinLoseLine")]
 layout_mode = 2

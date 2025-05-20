@@ -1,4 +1,4 @@
-class_name StatisticsSection extends PanelContainer
+class_name StatisticsSection extends Control
 
 @export var WinLoseLine:BouncyLine
 @export var TrickWinLoseLine:BouncyLine

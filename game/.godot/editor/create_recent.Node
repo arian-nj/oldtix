@@ -1,8 +1,8 @@
 PanelContainer
+Control
 KatanaSocket
 KClient
 Katana
-Control
 Button
 TextureRect
 ColorRect
