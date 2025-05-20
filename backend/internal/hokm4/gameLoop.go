@@ -75,6 +75,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 			return err
 		}
 	}
+
 	// send rest of cards
 	allCards, err = game.sendCards(4, allCards)
 	if err != nil {

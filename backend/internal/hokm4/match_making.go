@@ -54,6 +54,7 @@ func (game *GameState) AddHumanPlayerToGame(player *HumanPlayer) error {
 		Team:     int(player.TeamId),
 	})
 	game.Players = append(game.Players, player)
+	player.Game = game
 	return err
 }
 
@@ -86,7 +87,11 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingTicket, bet
 
 		foundHumanPlayers := app.WaitForPlayers(matchesChan)
 		for _, humanPlayer := range foundHumanPlayers {
-			game.AddHumanPlayerToGame(humanPlayer)
+			err := game.AddHumanPlayerToGame(humanPlayer)
+			if err != nil {
+				app.ReportError(err)
+				return
+			}
 		}
 		numberOfBots := MAX_PLAYERS - len(foundHumanPlayers)
 		if numberOfBots > 0 {

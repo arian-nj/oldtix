@@ -139,6 +139,7 @@ func (game *GameState) sendCardsToEgres(randomCards []cards.Card, humanPlayer *H
 }
 
 func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
+	game.Logger.Info("start wait to choose hokm")
 
 	var new_hokm cards.Suite
 	hakemPlayer := game.Players[game.CurrentTrick.HakemIndex]
@@ -146,28 +147,41 @@ func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
 	var choose_hokm_ticker *time.Ticker
 
 	choose_hokm_ticker = time.NewTicker(SETTING_BOT_CHOOSE_HOKM_WAIT)
-	humanHakemPlayer, ok := hakemPlayer.(*HumanPlayer)
-	if ok && humanHakemPlayer.IsPlayng {
+	humanHakemPlayer, isHakemHuman := hakemPlayer.(*HumanPlayer)
+	if isHakemHuman && humanHakemPlayer.IsPlayng {
 		choose_hokm_ticker = time.NewTicker(SETTING_PLAYER_CHOOSE_HOKM_WAIT)
 	}
 
 	defer choose_hokm_ticker.Stop()
 
+	game.Logger.Info("start loop")
 Outerloop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
+			game.Logger.Info("here 1")
+			if !isHakemHuman {
+				continue
+			}
+			game.Logger.Info("here 2")
+
 			if new_game_event.event.Type != TypePlayerSelectedHokm {
 				continue
 			}
-			if new_game_event.Player != hakemPlayer {
+			game.Logger.Info("here 3")
+
+			if new_game_event.Player.UserId != humanHakemPlayer.UserId {
 				continue
 			}
+			game.Logger.Info("here 4")
+
 			hokm_data := new_game_event.event.Data
 			if new_game_event.event.Data == nil {
 				game.Logger.Info("no data")
 				continue
 			}
+			game.Logger.Info("here 5")
+
 			hokm_int, err := strconv.Atoi(string(*hokm_data))
 			if err != nil {
 				game.Logger.Error(fmt.Sprintf("trying to set %s as hokm", string(*hokm_data)))
