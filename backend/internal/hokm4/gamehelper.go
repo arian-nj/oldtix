@@ -54,28 +54,6 @@ func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards
 	return cardIndex, true
 }
 
-func (game *GameState) WhoWinsLastTurn() *PlayerCardPlayed {
-
-	HokmSuite := game.CurrentTrick.Hokm
-
-	Winner := game.CurrentTrick.CurrentTurn.CardsPlayed[0]
-	for _, pc := range game.CurrentTrick.CurrentTurn.CardsPlayed {
-		if Winner.Card.Suit == HokmSuite {
-			if pc.Card.Suit == HokmSuite && pc.Card.Value >= Winner.Card.Value {
-				Winner = pc
-			}
-		} else {
-			if pc.Card.Suit == HokmSuite {
-				Winner = pc
-			} else if pc.Card.Suit == Winner.Card.Suit && pc.Card.Value > Winner.Card.Value {
-				Winner = pc
-			}
-		}
-	}
-
-	return Winner
-}
-
 // hokm
 // zamineh
 // number
@@ -139,7 +117,6 @@ func (game *GameState) sendCardsToEgres(randomCards []cards.Card, humanPlayer *H
 }
 
 func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
-	game.Logger.Info("start wait to choose hokm")
 
 	var new_hokm cards.Suite
 	hakemPlayer := game.Players[game.CurrentTrick.HakemIndex]
@@ -154,33 +131,27 @@ func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
 
 	defer choose_hokm_ticker.Stop()
 
-	game.Logger.Info("start loop")
 Outerloop:
 	for {
 		select {
 		case new_game_event := <-game.GameEventsCh:
-			game.Logger.Info("here 1")
 			if !isHakemHuman {
 				continue
 			}
-			game.Logger.Info("here 2")
 
 			if new_game_event.event.Type != TypePlayerSelectedHokm {
 				continue
 			}
-			game.Logger.Info("here 3")
 
 			if new_game_event.Player.UserId != humanHakemPlayer.UserId {
 				continue
 			}
-			game.Logger.Info("here 4")
 
 			hokm_data := new_game_event.event.Data
 			if new_game_event.event.Data == nil {
 				game.Logger.Info("no data")
 				continue
 			}
-			game.Logger.Info("here 5")
 
 			hokm_int, err := strconv.Atoi(string(*hokm_data))
 			if err != nil {

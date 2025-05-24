@@ -111,7 +111,7 @@ func SelectLowestCard(cards *[]Card, wanted_suite Suite) Card {
 	playedSuiteCards := ExtractSuiteCards(cards, wanted_suite)
 	lowest := playedSuiteCards[0]
 	for _, c := range playedSuiteCards {
-		if c.Value > lowest.Value {
+		if c.Value < lowest.Value {
 			lowest = c
 		}
 	}
