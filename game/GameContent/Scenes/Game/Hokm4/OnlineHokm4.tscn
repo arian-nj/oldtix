@@ -159,6 +159,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_c4cut")
 max_trans = 0.3
+x_percentage = 0.4
 
 [node name="Hands" type="Control" parent="AspectRatioContainer/Table"]
 layout_mode = 1

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d33b993643c47408",
+        "id": "0bfd42b19a55726a",
         "type": "tabs",
         "children": [
           {
-            "id": "306f445d69d164d6",
+            "id": "1be82530f82635e4",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -30,8 +30,33 @@
               "icon": "lucide-file",
               "title": "V 1.0.0"
             }
+          },
+          {
+            "id": "a9aa2c4d35e2a547",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "6 - Main Notes/Telegram.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Telegram"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -104,6 +129,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "6 - Main Notes/Telegram.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,7 +139,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for Telegram"
             }
           },
           {
@@ -176,12 +202,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "306f445d69d164d6",
+  "active": "a9aa2c4d35e2a547",
   "lastOpenFiles": [
+    "CardGame/V 1.0.0.md",
+    "6 - Main Notes/Telegram.md",
+    "CardGame/Game Flow Chart.md",
     "CardGame/TO DO Card.md",
     "CardGame/Release Pipe.md",
-    "CardGame/Game Flow Chart.md",
-    "CardGame/V 1.0.0.md",
     "CardGame/Concepts/Reconnection.md",
     "CardGame/Concepts/Name.md",
     "CardGame/Music.md",
