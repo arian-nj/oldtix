@@ -10,6 +10,7 @@ import (
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/pkg/hokm4engine"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -60,7 +61,7 @@ func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards
 
 type GameStateOut struct {
 	*GameState
-	YourTeam Team `json:"your_team"`
+	YourTeam hokm4engine.Team `json:"your_team"`
 }
 
 func (game *GameState) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
@@ -171,13 +172,13 @@ Outerloop:
 
 	err := game.Queries.UpdateHokmTrick(context.Background(), sqldb.UpdateHokmTrickParams{
 		Hokm:    pgtype.Int8{Int64: int64(game.CurrentTrick.Hokm), Valid: true},
-		TrickID: game.CurrentTrick.id,
+		TrickID: game.CurrentTrick.ID,
 	})
 
 	return new_hokm, err
 }
 
-func (game *GameState) WaitForPlayerToPlayCard(playing_player PlayerInterface) (cardIndex int, err error) {
+func (game *GameState) WaitForPlayerToPlayCard(playing_player hokm4engine.PlayerInterface) (cardIndex int, err error) {
 	playing_player.AddToEgress(socket.NewEvent(TypeYourTurn, socket.EventMessage("")), true)
 
 	var NewTicker *time.Ticker

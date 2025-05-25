@@ -7,6 +7,7 @@ import (
 
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/pkg/hokm4engine"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -32,11 +33,16 @@ func (game *GameState) RunTrick(trick_number int) error {
 	var err error
 
 	HakemIndex := game.DeclareHakemIndex(trick_number)
-	game.CurrentTrick, err = game.NewTrick(HakemIndex)
+
+	trickRow, err := game.Queries.InsertTrick(context.Background(), sqldb.InsertTrickParams{
+		GameID:     game.ID,
+		HakemIndex: HakemIndex,
+	})
 	if err != nil {
 		game.Logger.Error(err.Error())
 		return err
 	}
+	game.CurrentTrick = game.NewTrick(trickRow.TrickID, HakemIndex)
 	game.Tricks = append(game.Tricks, game.CurrentTrick)
 	game.CurrentTrick.TurnStarterIndex = game.CurrentTrick.HakemIndex
 
@@ -130,10 +136,10 @@ func (game *GameState) RunTurns() error {
 		if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE || game.CurrentTrick.TeamTwoTurnScore >= SETTING_WINNIG_TURN_SCORE {
 			if game.CurrentTrick.TeamOneTurnScore >= SETTING_WINNIG_TURN_SCORE {
 				game.TeamOneTrickScore += 1
-				game.CurrentTrick.WinnerTeam = TeamOne
+				game.CurrentTrick.WinnerTeam = hokm4engine.TeamOne
 			} else {
 				game.TeamTwoTrickScore += 1
-				game.CurrentTrick.WinnerTeam = TeamTwo
+				game.CurrentTrick.WinnerTeam = hokm4engine.TeamTwo
 			}
 			break
 		}
@@ -143,7 +149,7 @@ func (game *GameState) RunTurns() error {
 
 func (game *GameState) RunTurn() error {
 	// new Turn
-	game.CurrentTrick.CurrentTurn = NewTurn()
+	game.CurrentTrick.CurrentTurn = hokm4engine.NewTurn()
 
 	// game starts
 	for _, p := range game.GetHumanPlayers() {
@@ -156,9 +162,9 @@ func (game *GameState) RunTurn() error {
 	// Actual game
 
 	// Playing Order
-	to_play_order := []PlayerInterface{}
-	before_ward := []PlayerInterface{}
-	after_ward := []PlayerInterface{}
+	to_play_order := []hokm4engine.PlayerInterface{}
+	before_ward := []hokm4engine.PlayerInterface{}
+	after_ward := []hokm4engine.PlayerInterface{}
 	var starterFound = false
 
 	for player_index, p := range game.Players {
@@ -187,7 +193,7 @@ func (game *GameState) RunTurn() error {
 			return err
 		}
 		currentTurn := game.CurrentTrick.CurrentTurn
-		new_card_player := NewPlayerCardPlayed(playing_player, playing_player.GetCards()[cardIndex])
+		new_card_player := hokm4engine.NewPlayerCardPlayed(playing_player, playing_player.GetCards()[cardIndex])
 
 		// Brodcast played card
 		b_data, err := json.Marshal(new_card_player)
@@ -210,7 +216,7 @@ func (game *GameState) RunTurn() error {
 
 	// Decide who wins Turn
 	Winner := game.WhoWinsLastTurn()
-	if Winner.Player.GetTeamID() == TeamOne {
+	if Winner.Player.GetTeamID() == hokm4engine.TeamOne {
 		game.CurrentTrick.TeamOneTurnScore += 1
 	} else {
 		game.CurrentTrick.TeamTwoTurnScore += 1
@@ -239,7 +245,7 @@ func (game *GameState) RunTurn() error {
 	}
 	_, err = game.Queries.InsertTurn(context.Background(), sqldb.InsertTurnParams{
 		Moves:   string(data_byte),
-		TrickID: game.CurrentTrick.id,
+		TrickID: game.CurrentTrick.ID,
 	})
 	if err != nil {
 		game.Logger.Error(err.Error())
@@ -248,7 +254,7 @@ func (game *GameState) RunTurn() error {
 	err = game.Queries.UpdateTurnScores(context.Background(), sqldb.UpdateTurnScoresParams{
 		TeamOneTurnScore: game.CurrentTrick.TeamOneTurnScore,
 		TeamTwoTurnScore: game.CurrentTrick.TeamTwoTurnScore,
-		TrickID:          game.CurrentTrick.id,
+		TrickID:          game.CurrentTrick.ID,
 	})
 	if err != nil {
 		game.Logger.Error(err.Error())
@@ -290,11 +296,11 @@ func (game *GameState) TheEnd() error {
 	})
 
 	// Statics
-	var winner_team Team
+	var winner_team hokm4engine.Team
 	if game.TeamOneTrickScore > game.TeamTwoTrickScore {
-		winner_team = TeamOne
+		winner_team = hokm4engine.TeamOne
 	} else {
-		winner_team = TeamTwo
+		winner_team = hokm4engine.TeamTwo
 	}
 
 	TeamOneTurnScores := 0
@@ -325,7 +331,7 @@ func (game *GameState) TheEnd() error {
 			}
 		}
 
-		if humanPlayer.GetTeamID() == TeamOne {
+		if humanPlayer.GetTeamID() == hokm4engine.TeamOne {
 			updateStaticsParams.TotalTricksWon = game.TeamOneTrickScore
 			updateStaticsParams.TotalTricksLost = game.TeamTwoTrickScore
 			updateStaticsParams.TotalTurnsWon = TeamOneTurnScores

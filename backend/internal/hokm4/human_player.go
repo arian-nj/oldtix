@@ -3,10 +3,11 @@ package hokm4
 import (
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/pkg/hokm4engine"
 )
 
 type HumanPlayer struct {
-	*PlayerCommon
+	*hokm4engine.PlayerCommon
 	UserId    int             `json:"user_id"`
 	Client    *socket.Client  `json:"-"`
 	IsPlayng  bool            `json:"is_playing"`
@@ -17,7 +18,7 @@ type HumanPlayer struct {
 
 func NewHumanPlayer(userId int, client *socket.Client, cards []cards.Card, is_playng bool) *HumanPlayer {
 	return &HumanPlayer{
-		PlayerCommon: NewPlayerCommon(cards),
+		PlayerCommon: hokm4engine.NewPlayerCommon(cards),
 		UserId:       userId,
 		Client:       client,
 		IsPlayng:     is_playng,

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/arian-nj/master-card/back/internal/socket"
+	"github.com/arian-nj/master-card/back/pkg/hokm4engine"
 	"github.com/arian-nj/master-card/back/sqldb"
 )
 
@@ -100,10 +101,10 @@ func (app *ApplicationHokm4) MatchUsers(matchesChan chan *MatchmakingTicket, bet
 			}
 		}
 
-		game.Players[0].SetTeamID(TeamOne)
-		game.Players[1].SetTeamID(TeamTwo)
-		game.Players[2].SetTeamID(TeamOne)
-		game.Players[3].SetTeamID(TeamTwo)
+		game.Players[0].SetTeamID(hokm4engine.TeamOne)
+		game.Players[1].SetTeamID(hokm4engine.TeamTwo)
+		game.Players[2].SetTeamID(hokm4engine.TeamOne)
+		game.Players[3].SetTeamID(hokm4engine.TeamTwo)
 
 		app.Lobby.Mu.Lock()
 		for _, p := range game.GetHumanPlayers() {
@@ -212,10 +213,10 @@ func (app *ApplicationHokm4) MatchUsers3(matchesChan chan *MatchmakingTicket, be
 		game.AddBotPlayerToGame()
 		game.AddBotPlayerToGame()
 
-		game.Players[0].SetTeamID(TeamOne)
-		game.Players[1].SetTeamID(TeamTwo)
-		game.Players[2].SetTeamID(TeamOne)
-		game.Players[3].SetTeamID(TeamTwo)
+		game.Players[0].SetTeamID(hokm4engine.TeamOne)
+		game.Players[1].SetTeamID(hokm4engine.TeamTwo)
+		game.Players[2].SetTeamID(hokm4engine.TeamOne)
+		game.Players[3].SetTeamID(hokm4engine.TeamTwo)
 
 		app.Lobby.Mu.Lock()
 		for _, p := range game.GetHumanPlayers() {

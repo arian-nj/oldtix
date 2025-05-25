@@ -1,9 +1,16 @@
-package hokm4
+package hokm4engine
 
 import (
 	cards "github.com/arian-nj/master-card/back/internal/card"
 	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/socket"
+)
+
+type Team int
+
+const (
+	TeamOne Team = iota
+	TeamTwo
 )
 
 type PlayerInterface interface {
