@@ -11,7 +11,7 @@ type HumanPlayer struct {
 	UserId    int             `json:"user_id"`
 	Client    *socket.Client  `json:"-"`
 	IsPlayng  bool            `json:"is_playing"`
-	Game      *GameState      `json:"-"`
+	Game      *Room           `json:"-"`
 	BetAmount int             `json:"-"`
 	AllEvents []*socket.Event `json:"-"`
 }

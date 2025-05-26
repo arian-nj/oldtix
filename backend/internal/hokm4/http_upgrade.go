@@ -25,7 +25,7 @@ func (app *ApplicationHokm4) WsUpgradeHandler(w http.ResponseWriter, r *http.Req
 		app.JoinGame(w, r, user)
 	}
 }
-func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, person *sqldb.Person, activeGame *GameState) {
+func (app *ApplicationHokm4) RejonGame(w http.ResponseWriter, r *http.Request, person *sqldb.Person, activeGame *Room) {
 	// Upgrade Connection To Websocket
 	conn, err := socket.Upgrader.Upgrade(w, r, nil)
 	if err != nil {

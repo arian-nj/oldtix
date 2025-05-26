@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) RunGame() {
+func (game *Room) RunGame() {
 	for i := range 5 { // run tricks
 		err := game.RunTrick(i)
 		if err != nil {
@@ -29,7 +29,7 @@ func (game *GameState) RunGame() {
 	}
 }
 
-func (game *GameState) RunTrick(trick_number int) error {
+func (game *Room) RunTrick(trick_number int) error {
 	var err error
 
 	HakemIndex := game.DeclareHakemIndex(trick_number)
@@ -126,7 +126,7 @@ func (game *GameState) RunTrick(trick_number int) error {
 	return nil
 }
 
-func (game *GameState) RunTurns() error {
+func (game *Room) RunTurns() error {
 	for range 13 {
 		err := game.RunTurn()
 		if err != nil {
@@ -147,7 +147,7 @@ func (game *GameState) RunTurns() error {
 	return nil
 }
 
-func (game *GameState) RunTurn() error {
+func (game *Room) RunTurn() error {
 	// new Turn
 	game.CurrentTrick.CurrentTurn = hokm4engine.NewTurn()
 
@@ -264,14 +264,12 @@ func (game *GameState) RunTurn() error {
 
 }
 
-func (game *GameState) AddCoins(hplayer *HumanPlayer) error {
+func (game *Room) AddCoins(hplayer *HumanPlayer) error {
 	coin_to_add := 0
 	if hplayer.BetAmount == BET_NO_MONEY {
 		coin_to_add = BET_AMOUNT_ONE
 	} else if hplayer.BetAmount == BET_AMOUNT_ONE {
 		coin_to_add = BET_AMOUNT_ONE_WIN
-	} else if hplayer.BetAmount == BET_AMOUNT_TWO {
-		coin_to_add = BET_AMOUNT_TWO_WIN
 	}
 
 	err := game.Queries.AddCoinToPerson(context.Background(), sqldb.AddCoinToPersonParams{
@@ -281,7 +279,7 @@ func (game *GameState) AddCoins(hplayer *HumanPlayer) error {
 	return err
 }
 
-func (game *GameState) TheEnd() error {
+func (game *Room) TheEnd() error {
 	for _, p := range game.GetHumanPlayers() {
 		delete(game.Lobby.UserGames, p.UserId)
 	}

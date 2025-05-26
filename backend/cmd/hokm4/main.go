@@ -36,9 +36,9 @@ func main() {
 		app.MatchUsers(app.Lobby.MatchmakingQueueForBetOne, hokm4.BET_AMOUNT_ONE)
 	})
 
-	app.BackgroundTask(func() {
-		app.MatchUsers(app.Lobby.MatchmakingQueueForBetTwo, hokm4.BET_AMOUNT_TWO)
-	})
+	// app.BackgroundTask(func() {
+	// 	app.MatchUsers(app.Lobby.MatchmakingQueueForBetTwo, hokm4.BET_AMOUNT_TWO)
+	// })
 
 	err = app.ServeHTTP(chiRouter, app.Config.HTTPPort)
 	if err != nil {

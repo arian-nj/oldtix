@@ -15,7 +15,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (game *GameState) DeclareHakemIndex(trick_number int) int {
+func (game *Room) DeclareHakemIndex(trick_number int) int {
 	var HakemIndex int
 	if trick_number == 0 { // if first trick
 		// HakemIndex = randutils.GenerateRandomNumber(len(game.Players))
@@ -33,7 +33,7 @@ func (game *GameState) DeclareHakemIndex(trick_number int) int {
 
 // have card
 // same suite as first card if not first move
-func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards.Card) (int, bool) {
+func (game *Room) ValidateAndDoMove(player *HumanPlayer, played_card *cards.Card) (int, bool) {
 	// game.Logger.Debug("new card " + card.String())
 	cardIndex, haveCard := cards.IsCardInCards(played_card, &player.Cards)
 	if !haveCard {
@@ -60,14 +60,14 @@ func (game *GameState) ValidateAndDoMove(player *HumanPlayer, played_card *cards
 // number
 
 type GameStateOut struct {
-	*GameState
+	*Room
 	YourTeam hokm4engine.Team `json:"your_team"`
 }
 
-func (game *GameState) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
+func (game *Room) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
 	gsOut := GameStateOut{
-		GameState: game,
-		YourTeam:  p.TeamId,
+		Room:     game,
+		YourTeam: p.TeamId,
 	}
 	// send game data
 	game_data, err := json.Marshal(gsOut)
@@ -78,7 +78,7 @@ func (game *GameState) SendGameData(message_turn socket.EventType, p *HumanPlaye
 	return nil
 }
 
-func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Card, error) {
+func (game *Room) sendCards(number int, all_cards []cards.Card) ([]cards.Card, error) {
 	var remaining_cards []cards.Card = all_cards
 
 	for _, p := range game.Players {
@@ -104,7 +104,7 @@ func (game *GameState) sendCards(number int, all_cards []cards.Card) ([]cards.Ca
 	return remaining_cards, nil
 
 }
-func (game *GameState) sendCardsToEgres(randomCards []cards.Card, humanPlayer *HumanPlayer, eventType socket.EventType) error {
+func (game *Room) sendCardsToEgres(randomCards []cards.Card, humanPlayer *HumanPlayer, eventType socket.EventType) error {
 	var output struct {
 		NewCards []cards.Card `json:"cards"`
 	}
@@ -117,7 +117,7 @@ func (game *GameState) sendCardsToEgres(randomCards []cards.Card, humanPlayer *H
 	return nil
 }
 
-func (game *GameState) WaitToChooseHokm() (cards.Suite, error) {
+func (game *Room) WaitToChooseHokm() (cards.Suite, error) {
 
 	var new_hokm cards.Suite
 	hakemPlayer := game.Players[game.CurrentTrick.HakemIndex]
@@ -178,7 +178,7 @@ Outerloop:
 	return new_hokm, err
 }
 
-func (game *GameState) WaitForPlayerToPlayCard(playing_player hokm4engine.PlayerInterface) (cardIndex int, err error) {
+func (game *Room) WaitForPlayerToPlayCard(playing_player hokm4engine.PlayerInterface) (cardIndex int, err error) {
 	playing_player.AddToEgress(socket.NewEvent(TypeYourTurn, socket.EventMessage("")), true)
 
 	var NewTicker *time.Ticker
