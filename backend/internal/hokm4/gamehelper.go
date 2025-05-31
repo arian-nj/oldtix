@@ -64,9 +64,9 @@ type GameStateOut struct {
 	YourTeam hokm4engine.Team `json:"your_team"`
 }
 
-func (game *Room) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
+func (room *Room) SendGameData(message_turn socket.EventType, p *HumanPlayer) error {
 	gsOut := GameStateOut{
-		Room:     game,
+		Room:     room,
 		YourTeam: p.TeamId,
 	}
 	// send game data

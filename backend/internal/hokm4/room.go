@@ -22,12 +22,12 @@ func NewGameEvent(event *socket.Event, player *HumanPlayer) *GameEvent {
 }
 
 type Room struct {
-	*ApplicationHokm4             `json:"-"`
-	*hokm4engine.Hokm4EngineState `json:"-"`
-	ID                            int             `json:"id"`
-	UID                           string          `json:"uid"`
-	BetAmount                     int             `json:"-"`
-	GameEventsCh                  chan *GameEvent `json:"-"`
+	*ApplicationHokm4 `json:"-"`
+	*hokm4engine.Hokm4EngineState
+	ID           int             `json:"id"`
+	UID          string          `json:"uid"`
+	BetAmount    int             `json:"-"`
+	GameEventsCh chan *GameEvent `json:"-"`
 }
 
 func (app *ApplicationHokm4) NewRoom(bet_amount int) (*Room, error) {

@@ -81,7 +81,7 @@ func set_player_to_hand()->void:
 	var mePlayer : PlayerData = null
 	var beforeMe : Array[PlayerData]
 	var afterMe : Array[PlayerData]
-
+	print(game_data.players)
 	for player in game_data.players:
 		if player.user_id == meId:
 			mePlayer = player
@@ -137,6 +137,7 @@ func _new_cards_event(e:KEvent.Event,no_animation:bool=false)->void:
 	left_drawer.break_action()
 
 func parse_game_data(json_string:String)->void:
+	print(json_string)
 	game_data = JsonClassConverter.json_string_to_class(GameData,json_string)
 	GameDataUpdatedSig.emit(game_data)
 
