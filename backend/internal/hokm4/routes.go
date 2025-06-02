@@ -25,7 +25,7 @@ func (app *ApplicationHokm4) Hokm4Router() *chi.Mux {
 	mux.MethodNotAllowed(app.MethodNotAllowed)
 
 	mux.Use(app.RecoverPanic)
-
+	mux.Use(app.CorsMiddlewareFunc)
 	// Authenticated websocket routes
 	mux.Group(func(r chi.Router) {
 		r.Use(app.AuthenticateQuery)

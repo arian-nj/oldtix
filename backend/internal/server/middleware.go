@@ -22,6 +22,28 @@ func (app *CommonGlobals) RecoverPanic(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+func (app *CommonGlobals) CorsMiddlewareFunc(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		// In a production environment, you might want to restrict the origin:
+		// w.Header().Set("Access-Control-Allow-Origin", "https://your-specific-domain.com")
+		w.Header().Set("Access-Control-Allow-Origin", "*") // Allow any origin
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true") // Optional
+
+		// Handle preflight OPTIONS requests
+		if r.Method == http.MethodOptions {
+			// You can add more logic here if needed, e.g., checking specific headers
+			// for the preflight request.
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// Call the next handler in the chain
+		next.ServeHTTP(w, r)
+	})
+}
 
 // func (app *CommonGlobals) ValidateToken(w http.ResponseWriter, r *http.Request, token string) *http.Request {
 // 	claims, err := jwt.HMACCheck([]byte(token), []byte(app.Config.Jwt.SecretKey))

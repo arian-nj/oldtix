@@ -1,0 +1,11 @@
+127.0.0.1:8443 {
+    reverse_proxy localhost:3000
+    tls internal
+}
+
+127.0.0.1:4446 {
+    reverse_proxy localhost:4444
+    tls internal
+}
+
+

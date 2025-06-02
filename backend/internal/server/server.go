@@ -22,6 +22,7 @@ const (
 	defaultShutdownPeriod = 30 * time.Second
 )
 
+// TODO: Get and Handle Upper context
 func (glob *CommonGlobals) ServeHTTP(router *chi.Mux, port int) error {
 
 	stdLogger, err := zap.NewStdLogAt(glob.Logger, zapcore.WarnLevel)

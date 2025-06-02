@@ -15,6 +15,35 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: bot_user; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bot_user (
+    id bigint NOT NULL,
+    tg_id text NOT NULL
+);
+
+
+--
+-- Name: bot_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bot_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bot_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bot_user_id_seq OWNED BY public.bot_user.id;
+
+
+--
 -- Name: game_player; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -125,7 +154,7 @@ ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 --
 
 CREATE TABLE public.schema_migrations (
-    version character varying(128) NOT NULL
+    version character varying NOT NULL
 );
 
 
@@ -229,6 +258,13 @@ ALTER SEQUENCE public.user_statistic_id_seq OWNED BY public.user_statistic.id;
 
 
 --
+-- Name: bot_user id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bot_user ALTER COLUMN id SET DEFAULT nextval('public.bot_user_id_seq'::regclass);
+
+
+--
 -- Name: guest_person id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -268,6 +304,22 @@ ALTER TABLE ONLY public.turn ALTER COLUMN turn_id SET DEFAULT nextval('public.tu
 --
 
 ALTER TABLE ONLY public.user_statistic ALTER COLUMN id SET DEFAULT nextval('public.user_statistic_id_seq'::regclass);
+
+
+--
+-- Name: bot_user bot_user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bot_user
+    ADD CONSTRAINT bot_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bot_user bot_user_tg_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bot_user
+    ADD CONSTRAINT bot_user_tg_id_key UNIQUE (tg_id);
 
 
 --
@@ -398,4 +450,8 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20250417174043'),
     ('20250417174107'),
     ('20250417174129'),
-    ('20250504104006');
+    ('20250504104006'),
+    ('20250601070008'),
+    ('20250601075712'),
+    ('20250601081430'),
+    ('20250601082252');

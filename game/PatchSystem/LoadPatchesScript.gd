@@ -14,6 +14,8 @@ func _ready() -> void:
 	for arg in os_args:
 		if arg == "--dev":
 			get_tree().change_scene_to_file.call_deferred("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
+	
+	get_tree().change_scene_to_file.call_deferred("res://GameContent/Scenes/SceneManager/SceneManager.tscn")
 	lpErrorBorad.TryAgain.connect(do_request)
 	do_request()
 

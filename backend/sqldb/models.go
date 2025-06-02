@@ -8,6 +8,11 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type BotUser struct {
+	ID   int
+	TgID string
+}
+
 type GamePlayer struct {
 	PlayerID int
 	GameID   int

@@ -19,9 +19,9 @@ func change_debug_mode(new_debug:bool) -> void:
 	_debug = new_debug
 	if new_debug:
 		var local_ip := "127.0.0.1"
-		CoreHttpUrl = "http://" + local_ip +":4444"
-		Hokm4WsUrl =  "ws://" + local_ip + ":4445"
-		Hokm4HttpUrl =  "http://" + local_ip + ":4445"
+		CoreHttpUrl = "https://" + local_ip +":4446"
+		Hokm4WsUrl =  "wss://" + local_ip + ":4445"
+		Hokm4HttpUrl =  "https://" + local_ip + ":4445"
 
 ## Consts
 # static var RegisterUrl:= "/register"

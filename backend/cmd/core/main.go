@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+
 	globalStructs, poll, err := server.NewCommonGlobals("CORE_HTTP_PORT")
 	if err != nil {
 		log.Panic(err)

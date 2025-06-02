@@ -122,7 +122,7 @@ func get_new_guest_uid() -> String:
 	
 	var response_code:int = res[1]
 	if response_code != HTTPClient.RESPONSE_CREATED:
-		print_debug("response code: ", str(response_code) + " "+ body_string)
+		Katana._instance.logger.error("response code: "+ str(response_code) + " "+ body_string)
 		Katana._instance.logger.error("uid failed with rc: "+str(result))
 	
 

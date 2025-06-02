@@ -27,6 +27,7 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 	mux.MethodNotAllowed(app.MethodNotAllowed)
 
 	mux.Use(app.RecoverPanic)
+	mux.Use(app.CorsMiddlewareFunc)
 
 	// All routes
 	mux.Get("/status", app.status)

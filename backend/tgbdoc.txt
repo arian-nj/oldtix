@@ -1,0 +1,1927 @@
+package bot // import "github.com/go-telegram/bot"
+
+
+VARIABLES
+
+var (
+	ErrorForbidden       = errors.New("forbidden")
+	ErrorBadRequest      = errors.New("bad request")
+	ErrorUnauthorized    = errors.New("unauthorized")
+	ErrorTooManyRequests = errors.New("too many requests")
+	ErrorNotFound        = errors.New("not found")
+	ErrorConflict        = errors.New("conflict")
+)
+
+FUNCTIONS
+
+func EscapeMarkdown(s string) string
+    EscapeMarkdown escapes special symbols for Telegram MarkdownV2 syntax
+
+func EscapeMarkdownUnescaped(s string) string
+    EscapeMarkdownUnescaped escapes unescaped special symbols for Telegram
+    Markdown v2 syntax
+
+func False() *bool
+    False and True returns the pointer to bool
+
+func IsMigrateError(err error) bool
+func IsTooManyRequestsError(err error) bool
+func RandomString(n int) string
+    RandomString returns random a-zA-Z string with n length
+
+func True() *bool
+    True and False returns the pointer to bool
+
+
+TYPES
+
+type AddStickerToSetParams struct {
+	UserID  int64               `json:"user_id"`
+	Name    string              `json:"name"`
+	Sticker models.InputSticker `json:"sticker"`
+}
+
+type AllowedUpdates []string
+
+type AnswerCallbackQueryParams struct {
+	CallbackQueryID string `json:"callback_query_id"`
+	Text            string `json:"text,omitempty"`
+	ShowAlert       bool   `json:"show_alert,omitempty"`
+	URL             string `json:"url,omitempty"`
+	CacheTime       int    `json:"cache_time,omitempty"`
+}
+
+type AnswerInlineQueryParams struct {
+	InlineQueryID string                           `json:"inline_query_id"`
+	Results       []models.InlineQueryResult       `json:"results"`
+	CacheTime     int                              `json:"cache_time,omitempty"`
+	IsPersonal    bool                             `json:"is_personal,omitempty"`
+	NextOffset    string                           `json:"next_offset,omitempty"`
+	Button        *models.InlineQueryResultsButton `json:"button,omitempty"`
+}
+
+type AnswerPreCheckoutQueryParams struct {
+	PreCheckoutQueryID string `json:"pre_checkout_query_id"`
+	OK                 bool   `json:"ok"`
+	ErrorMessage       string `json:"error_message,omitempty"`
+}
+
+type AnswerShippingQueryParams struct {
+	ShippingQueryID string                  `json:"shipping_query_id"`
+	OK              bool                    `json:"ok"`
+	ShippingOptions []models.ShippingOption `json:"shipping_options,omitempty"`
+	ErrorMessage    string                  `json:"error_message,omitempty"`
+}
+
+type AnswerWebAppQueryParams struct {
+	WebAppQueryID string                   `json:"web_app_query_id"`
+	Result        models.InlineQueryResult `json:"result"`
+}
+
+type ApproveChatJoinRequestParams struct {
+	ChatID any   `json:"chat_id"`
+	UserID int64 `json:"user_id"`
+}
+
+type BanChatMemberParams struct {
+	ChatID         any   `json:"chat_id"`
+	UserID         int64 `json:"user_id"`
+	UntilDate      int   `json:"until_date,omitempty"`
+	RevokeMessages bool  `json:"revoke_messages,omitempty"`
+}
+
+type BanChatSenderChatParams struct {
+	ChatID       any `json:"chat_id"`
+	SenderChatID int `json:"sender_chat_id"`
+}
+
+type Bot struct {
+	// Has unexported fields.
+}
+    Bot represents Telegram Bot main object
+
+func New(token string, options ...Option) (*Bot, error)
+    New creates new Bot instance
+
+func (b *Bot) AddStickerToSet(ctx context.Context, params *AddStickerToSetParams) (bool, error)
+    AddStickerToSet https://core.telegram.org/bots/api#addstickertoset
+
+func (b *Bot) AnswerCallbackQuery(ctx context.Context, params *AnswerCallbackQueryParams) (bool, error)
+    AnswerCallbackQuery https://core.telegram.org/bots/api#answercallbackquery
+
+func (b *Bot) AnswerInlineQuery(ctx context.Context, params *AnswerInlineQueryParams) (bool, error)
+    AnswerInlineQuery https://core.telegram.org/bots/api#answerinlinequery
+
+func (b *Bot) AnswerPreCheckoutQuery(ctx context.Context, params *AnswerPreCheckoutQueryParams) (bool, error)
+    AnswerPreCheckoutQuery
+    https://core.telegram.org/bots/api#answerprecheckoutquery
+
+func (b *Bot) AnswerShippingQuery(ctx context.Context, params *AnswerShippingQueryParams) (bool, error)
+    AnswerShippingQuery https://core.telegram.org/bots/api#answershippingquery
+
+func (b *Bot) AnswerWebAppQuery(ctx context.Context, params *AnswerWebAppQueryParams) (*models.SentWebAppMessage, error)
+    AnswerWebAppQuery https://core.telegram.org/bots/api#answerwebappquery
+
+func (b *Bot) ApproveChatJoinRequest(ctx context.Context, params *ApproveChatJoinRequestParams) (bool, error)
+    ApproveChatJoinRequest
+    https://core.telegram.org/bots/api#approvechatjoinrequest
+
+func (b *Bot) BanChatMember(ctx context.Context, params *BanChatMemberParams) (bool, error)
+    BanChatMember https://core.telegram.org/bots/api#banchatmember
+
+func (b *Bot) BanChatSenderChat(ctx context.Context, params *BanChatSenderChatParams) (bool, error)
+    BanChatSenderChat https://core.telegram.org/bots/api#banchatsenderchat
+
+func (b *Bot) Close(ctx context.Context) (bool, error)
+    Close https://core.telegram.org/bots/api#close
+
+func (b *Bot) CloseForumTopic(ctx context.Context, params *CloseForumTopicParams) (bool, error)
+    CloseForumTopic https://core.telegram.org/bots/api#closeforumtopic
+
+func (b *Bot) CloseGeneralForumTopic(ctx context.Context, params *CloseGeneralForumTopicParams) (bool, error)
+    CloseGeneralForumTopic
+    https://core.telegram.org/bots/api#closegeneralforumtopic
+
+func (b *Bot) ConvertGiftToStars(ctx context.Context, params *ConvertGiftToStarsParams) (bool, error)
+    ConvertGiftToStars https://core.telegram.org/bots/api#convertgifttostars
+
+func (b *Bot) CopyMessage(ctx context.Context, params *CopyMessageParams) (*models.MessageID, error)
+    CopyMessage https://core.telegram.org/bots/api#copymessage
+
+func (b *Bot) CopyMessages(ctx context.Context, params *CopyMessagesParams) ([]models.MessageID, error)
+    CopyMessages https://core.telegram.org/bots/api#copymessages
+
+func (b *Bot) CreateChatInviteLink(ctx context.Context, params *CreateChatInviteLinkParams) (*models.ChatInviteLink, error)
+    CreateChatInviteLink https://core.telegram.org/bots/api#createchatinvitelink
+
+func (b *Bot) CreateChatSubscriptionInviteLink(ctx context.Context, params *CreateChatSubscriptionInviteLinkParams) (*models.ChatInviteLink, error)
+    CreateChatSubscriptionInviteLink
+    https://core.telegram.org/bots/api#createchatsubscriptioninvitelink
+
+func (b *Bot) CreateForumTopic(ctx context.Context, params *CreateForumTopicParams) (*models.ForumTopic, error)
+    CreateForumTopic https://core.telegram.org/bots/api#createforumtopic
+
+func (b *Bot) CreateInvoiceLink(ctx context.Context, params *CreateInvoiceLinkParams) (string, error)
+    CreateInvoiceLink https://core.telegram.org/bots/api#createinvoicelink
+
+func (b *Bot) CreateNewStickerSet(ctx context.Context, params *CreateNewStickerSetParams) (bool, error)
+    CreateNewStickerSet https://core.telegram.org/bots/api#createnewstickerset
+
+func (b *Bot) DeclineChatJoinRequest(ctx context.Context, params *DeclineChatJoinRequestParams) (bool, error)
+    DeclineChatJoinRequest
+    https://core.telegram.org/bots/api#declinechatjoinrequest
+
+func (b *Bot) DeleteBusinessMessages(ctx context.Context, params *DeleteBusinessMessagesParams) (bool, error)
+    DeleteBusinessMessages
+    https://core.telegram.org/bots/api#deletebusinessmessages
+
+func (b *Bot) DeleteChatPhoto(ctx context.Context, params *DeleteChatPhotoParams) (bool, error)
+    DeleteChatPhoto https://core.telegram.org/bots/api#deletechatphoto
+
+func (b *Bot) DeleteChatStickerSet(ctx context.Context, params *DeleteChatStickerSetParams) (bool, error)
+    DeleteChatStickerSet https://core.telegram.org/bots/api#deletechatstickerset
+
+func (b *Bot) DeleteForumTopic(ctx context.Context, params *DeleteForumTopicParams) (bool, error)
+    DeleteForumTopic
+    https://core.telegram.org/bots/api#unpinallforumtopicmessages
+
+func (b *Bot) DeleteMessage(ctx context.Context, params *DeleteMessageParams) (bool, error)
+    DeleteMessage https://core.telegram.org/bots/api#deletemessage
+
+func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) (bool, error)
+    DeleteMessages https://core.telegram.org/bots/api#deletemessages
+
+func (b *Bot) DeleteMyCommands(ctx context.Context, params *DeleteMyCommandsParams) (bool, error)
+    DeleteMyCommands https://core.telegram.org/bots/api#deletemycommands
+
+func (b *Bot) DeleteStickerFromSet(ctx context.Context, params *DeleteStickerFromSetParams) (bool, error)
+    DeleteStickerFromSet https://core.telegram.org/bots/api#deletestickerfromset
+
+func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetParams) (bool, error)
+    DeleteStickerSet https://core.telegram.org/bots/api#deletestickerset
+
+func (b *Bot) DeleteStory(ctx context.Context, params *DeleteStoryParams) (bool, error)
+    DeleteStory https://core.telegram.org/bots/api#deletestory
+
+func (b *Bot) DeleteWebhook(ctx context.Context, params *DeleteWebhookParams) (bool, error)
+    DeleteWebhook https://core.telegram.org/bots/api#deletewebhook
+
+func (b *Bot) EditChatInviteLink(ctx context.Context, params *EditChatInviteLinkParams) (*models.ChatInviteLink, error)
+    EditChatInviteLink https://core.telegram.org/bots/api#editchatinvitelink
+
+func (b *Bot) EditChatSubscriptionInviteLink(ctx context.Context, params *EditChatSubscriptionInviteLinkParams) (*models.ChatInviteLink, error)
+    EditChatSubscriptionInviteLink
+    https://core.telegram.org/bots/api#editchatsubscriptioninvitelink
+
+func (b *Bot) EditForumTopic(ctx context.Context, params *EditForumTopicParams) (bool, error)
+    EditForumTopic https://core.telegram.org/bots/api#editforumtopic
+
+func (b *Bot) EditGeneralForumTopic(ctx context.Context, params *EditGeneralForumTopicParams) (bool, error)
+    EditGeneralForumTopic
+    https://core.telegram.org/bots/api#editgeneralforumtopic
+
+func (b *Bot) EditMessageCaption(ctx context.Context, params *EditMessageCaptionParams) (*models.Message, error)
+    EditMessageCaption https://core.telegram.org/bots/api#editmessagecaption
+
+func (b *Bot) EditMessageLiveLocation(ctx context.Context, params *EditMessageLiveLocationParams) (*models.Message, error)
+    EditMessageLiveLocation
+    https://core.telegram.org/bots/api#editmessagelivelocation
+
+func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*models.Message, error)
+    EditMessageMedia https://core.telegram.org/bots/api#editmessagemedia
+
+func (b *Bot) EditMessageReplyMarkup(ctx context.Context, params *EditMessageReplyMarkupParams) (*models.Message, error)
+    EditMessageReplyMarkup
+    https://core.telegram.org/bots/api#editmessagereplymarkup
+
+func (b *Bot) EditMessageText(ctx context.Context, params *EditMessageTextParams) (*models.Message, error)
+    EditMessageText https://core.telegram.org/bots/api#editmessagetext
+
+func (b *Bot) EditStory(ctx context.Context, params *EditStoryParams) (*models.Story, error)
+    EditStory https://core.telegram.org/bots/api#editstory
+
+func (b *Bot) EditUserStarSubscription(ctx context.Context, params *EditUserStarSubscriptionParams) (bool, error)
+    EditUserStarSubscription
+    https://core.telegram.org/bots/api#edituserstarsubscription
+
+func (b *Bot) ExportChatInviteLink(ctx context.Context, params *ExportChatInviteLinkParams) (string, error)
+    ExportChatInviteLink https://core.telegram.org/bots/api#exportchatinvitelink
+
+func (b *Bot) FileDownloadLink(f *models.File) string
+    FileDownloadLink returns the file download link
+
+func (b *Bot) ForwardMessage(ctx context.Context, params *ForwardMessageParams) (*models.Message, error)
+    ForwardMessage https://core.telegram.org/bots/api#forwardmessage
+
+func (b *Bot) ForwardMessages(ctx context.Context, params *ForwardMessagesParams) ([]models.MessageID, error)
+    ForwardMessages https://core.telegram.org/bots/api#forwardmessages
+
+func (b *Bot) GetAvailableGifts(ctx context.Context) (*models.Gifts, error)
+    GetAvailableGifts https://core.telegram.org/bots/api#getavailablegifts
+
+func (b *Bot) GetBusinessAccountGifts(ctx context.Context, params *GetBusinessAccountGiftsParams) (*models.OwnedGifts, error)
+    GetBusinessAccountGifts
+    https://core.telegram.org/bots/api#getbusinessaccountgifts
+
+func (b *Bot) GetBusinessAccountStarBalance(ctx context.Context, params *GetBusinessAccountStarBalanceParams) (*models.StarAmount, error)
+    GetBusinessAccountStarBalance
+    https://core.telegram.org/bots/api#getbusinessaccountstarbalance
+
+func (b *Bot) GetBusinessConnection(ctx context.Context, params *GetBusinessConnectionParams) (*models.BusinessConnection, error)
+    GetBusinessConnection
+    https://core.telegram.org/bots/api#getbusinessconnection
+
+func (b *Bot) GetChat(ctx context.Context, params *GetChatParams) (*models.ChatFullInfo, error)
+    GetChat https://core.telegram.org/bots/api#getchat
+
+func (b *Bot) GetChatAdministrators(ctx context.Context, params *GetChatAdministratorsParams) ([]models.ChatMember, error)
+    GetChatAdministrators
+    https://core.telegram.org/bots/api#getchatadministrators
+
+func (b *Bot) GetChatMember(ctx context.Context, params *GetChatMemberParams) (*models.ChatMember, error)
+    GetChatMember https://core.telegram.org/bots/api#getchatmember
+
+func (b *Bot) GetChatMemberCount(ctx context.Context, params *GetChatMemberCountParams) (int, error)
+    GetChatMemberCount https://core.telegram.org/bots/api#getchatmembercount
+
+func (b *Bot) GetChatMenuButton(ctx context.Context, params *GetChatMenuButtonParams) (models.MenuButton, error)
+    GetChatMenuButton https://core.telegram.org/bots/api#getchatmenubutton
+
+func (b *Bot) GetCustomEmojiStickers(ctx context.Context, params *GetCustomEmojiStickersParams) ([]*models.Sticker, error)
+    GetCustomEmojiStickers
+    https://core.telegram.org/bots/api#getcustomemojistickers
+
+func (b *Bot) GetFile(ctx context.Context, params *GetFileParams) (*models.File, error)
+    GetFile https://core.telegram.org/bots/api#getfile
+
+func (b *Bot) GetForumTopicIconStickers(ctx context.Context) ([]*models.Sticker, error)
+    GetForumTopicIconStickers
+    https://core.telegram.org/bots/api#getforumtopiciconstickers
+
+func (b *Bot) GetGameHighScores(ctx context.Context, params *GetGameHighScoresParams) ([]*models.GameHighScore, error)
+    GetGameHighScores https://core.telegram.org/bots/api#getgamehighscores
+
+func (b *Bot) GetMe(ctx context.Context) (*models.User, error)
+    GetMe https://core.telegram.org/bots/api#getme
+
+func (b *Bot) GetMyCommands(ctx context.Context, params *GetMyCommandsParams) ([]models.BotCommand, error)
+    GetMyCommands https://core.telegram.org/bots/api#getmycommands
+
+func (b *Bot) GetMyDefaultAdministratorRights(ctx context.Context, params *GetMyDefaultAdministratorRightsParams) (*models.ChatAdministratorRights, error)
+    GetMyDefaultAdministratorRights
+    https://core.telegram.org/bots/api#getmydefaultadministratorrights
+
+func (b *Bot) GetMyDescription(ctx context.Context, params *GetMyDescriptionParams) (models.BotDescription, error)
+    GetMyDescription https://core.telegram.org/bots/api#getmydescription
+
+func (b *Bot) GetMyName(ctx context.Context, params *GetMyNameParams) (models.BotName, error)
+    GetMyName https://core.telegram.org/bots/api#getmyname
+
+func (b *Bot) GetMyShortDescription(ctx context.Context, params *GetMyShortDescriptionParams) (models.BotShortDescription, error)
+    GetMyShortDescription
+    https://core.telegram.org/bots/api#getmyshortdescription
+
+func (b *Bot) GetStarTransactions(ctx context.Context, params *GetStarTransactionsParams) (*models.StarTransactions, error)
+    GetStarTransactions https://core.telegram.org/bots/api#getstartransactions
+
+func (b *Bot) GetStickerSet(ctx context.Context, params *GetStickerSetParams) (*models.StickerSet, error)
+    GetStickerSet https://core.telegram.org/bots/api#getstickerset
+
+func (b *Bot) GetUserChatBoosts(ctx context.Context, params *GetUserChatBoostsParams) (*models.UserChatBoosts, error)
+    GetUserChatBoosts https://core.telegram.org/bots/api#getuserchatboosts
+
+func (b *Bot) GetUserProfilePhotos(ctx context.Context, params *GetUserProfilePhotosParams) (*models.UserProfilePhotos, error)
+    GetUserProfilePhotos https://core.telegram.org/bots/api#getuserprofilephotos
+
+func (b *Bot) GetWebhookInfo(ctx context.Context) (*models.WebhookInfo, error)
+    GetWebhookInfo https://core.telegram.org/bots/api#getwebhookinfo
+
+func (b *Bot) GiftPremiumSubscription(ctx context.Context, params *GiftPremiumSubscriptionParams) (bool, error)
+    GiftPremiumSubscription
+    https://core.telegram.org/bots/api#giftpremiumsubscription
+
+func (b *Bot) HideGeneralForumTopic(ctx context.Context, params *HideGeneralForumTopicParams) (bool, error)
+    HideGeneralForumTopic
+    https://core.telegram.org/bots/api#hidegeneralforumtopic
+
+func (b *Bot) ID() int64
+    ID returns the bot ID
+
+func (b *Bot) LeaveChat(ctx context.Context, params *LeaveChatParams) (bool, error)
+    LeaveChat https://core.telegram.org/bots/api#leavechat
+
+func (b *Bot) Logout(ctx context.Context) (bool, error)
+    Logout https://core.telegram.org/bots/api#logout
+
+func (b *Bot) PinChatMessage(ctx context.Context, params *PinChatMessageParams) (bool, error)
+    PinChatMessage https://core.telegram.org/bots/api#pinchatmessage
+
+func (b *Bot) PostStory(ctx context.Context, params *PostStoryParams) (*models.Story, error)
+    PostStory https://core.telegram.org/bots/api#poststory
+
+func (b *Bot) ProcessUpdate(ctx context.Context, upd *models.Update)
+    ProcessUpdate allows you to process update
+
+func (b *Bot) PromoteChatMember(ctx context.Context, params *PromoteChatMemberParams) (bool, error)
+    PromoteChatMember https://core.telegram.org/bots/api#promotechatmember
+
+func (b *Bot) ReadBusinessMessage(ctx context.Context, params *ReadBusinessMessageParams) (bool, error)
+    ReadBusinessMessage https://core.telegram.org/bots/api#readbusinessmessage
+
+func (b *Bot) RefundStarPayment(ctx context.Context, params *RefundStarPaymentParams) (bool, error)
+    RefundStarPayment https://core.telegram.org/bots/api#refundstarpayment
+
+func (b *Bot) RegisterHandler(handlerType HandlerType, pattern string, matchType MatchType, f HandlerFunc, m ...Middleware) string
+
+func (b *Bot) RegisterHandlerMatchFunc(matchFunc MatchFunc, f HandlerFunc, m ...Middleware) string
+
+func (b *Bot) RegisterHandlerRegexp(handlerType HandlerType, re *regexp.Regexp, f HandlerFunc, m ...Middleware) string
+
+func (b *Bot) RemoveBusinessAccountProfilePhoto(ctx context.Context, params *RemoveBusinessAccountProfilePhotoParams) (bool, error)
+    RemoveBusinessAccountProfilePhoto
+    https://core.telegram.org/bots/api#removebusinessaccountprofilephoto
+
+func (b *Bot) RemoveChatVerification(ctx context.Context, params *RemoveChatVerificationParams) (bool, error)
+    RemoveChatVerification
+    https://core.telegram.org/bots/api#removechatverification
+
+func (b *Bot) RemoveUserVerification(ctx context.Context, params *RemoveUserVerificationParams) (bool, error)
+    RemoveUserVerification
+    https://core.telegram.org/bots/api#removeuserverification
+
+func (b *Bot) ReopenForumTopic(ctx context.Context, params *ReopenForumTopicParams) (bool, error)
+    ReopenForumTopic https://core.telegram.org/bots/api#reopenforumtopic
+
+func (b *Bot) ReopenGeneralForumTopic(ctx context.Context, params *ReopenGeneralForumTopicParams) (bool, error)
+    ReopenGeneralForumTopic
+    https://core.telegram.org/bots/api#reopengeneralforumtopic
+
+func (b *Bot) ReplaceStickerInSet(ctx context.Context, params *ReplaceStickerInSetParams) (bool, error)
+    ReplaceStickerInSet https://core.telegram.org/bots/api#replacestickerinset
+
+func (b *Bot) RestrictChatMember(ctx context.Context, params *RestrictChatMemberParams) (bool, error)
+    RestrictChatMember https://core.telegram.org/bots/api#restrictchatmember
+
+func (b *Bot) RevokeChatInviteLink(ctx context.Context, params *RevokeChatInviteLinkParams) (*models.ChatInviteLink, error)
+    RevokeChatInviteLink https://core.telegram.org/bots/api#revokechatinvitelink
+
+func (b *Bot) SavePreparedInlineMessage(ctx context.Context, params *SavePreparedInlineMessageParams) (*models.PreparedInlineMessage, error)
+    SavePreparedInlineMessage
+    https://core.telegram.org/bots/api#savepreparedinlinemessage
+
+func (b *Bot) SendAnimation(ctx context.Context, params *SendAnimationParams) (*models.Message, error)
+    SendAnimation https://core.telegram.org/bots/api#sendanimation
+
+func (b *Bot) SendAudio(ctx context.Context, params *SendAudioParams) (*models.Message, error)
+    SendAudio https://core.telegram.org/bots/api#sendaudio
+
+func (b *Bot) SendChatAction(ctx context.Context, params *SendChatActionParams) (bool, error)
+    SendChatAction https://core.telegram.org/bots/api#sendchataction
+
+func (b *Bot) SendContact(ctx context.Context, params *SendContactParams) (*models.Message, error)
+    SendContact https://core.telegram.org/bots/api#sendcontact
+
+func (b *Bot) SendDice(ctx context.Context, params *SendDiceParams) (*models.Message, error)
+    SendDice https://core.telegram.org/bots/api#senddice
+
+func (b *Bot) SendDocument(ctx context.Context, params *SendDocumentParams) (*models.Message, error)
+    SendDocument https://core.telegram.org/bots/api#senddocument
+
+func (b *Bot) SendGame(ctx context.Context, params *SendGameParams) (*models.Message, error)
+    SendGame https://core.telegram.org/bots/api#sendgame
+
+func (b *Bot) SendGift(ctx context.Context, params *SendGiftParams) (bool, error)
+    SendGift https://core.telegram.org/bots/api#sendgift
+
+func (b *Bot) SendInvoice(ctx context.Context, params *SendInvoiceParams) (*models.Message, error)
+    SendInvoice https://core.telegram.org/bots/api#sendinvoice
+
+func (b *Bot) SendLocation(ctx context.Context, params *SendLocationParams) (*models.Message, error)
+    SendLocation https://core.telegram.org/bots/api#sendlocation
+
+func (b *Bot) SendMediaGroup(ctx context.Context, params *SendMediaGroupParams) ([]*models.Message, error)
+    SendMediaGroup https://core.telegram.org/bots/api#sendmediagroup
+
+func (b *Bot) SendMessage(ctx context.Context, params *SendMessageParams) (*models.Message, error)
+    SendMessage https://core.telegram.org/bots/api#sendmessage
+
+func (b *Bot) SendPaidMedia(ctx context.Context, params *SendPaidMediaParams) (*models.Message, error)
+    SendPaidMedia https://core.telegram.org/bots/api#sendpaidmedia
+
+func (b *Bot) SendPhoto(ctx context.Context, params *SendPhotoParams) (*models.Message, error)
+    SendPhoto https://core.telegram.org/bots/api#sendphoto
+
+func (b *Bot) SendPoll(ctx context.Context, params *SendPollParams) (*models.Message, error)
+    SendPoll https://core.telegram.org/bots/api#sendpoll
+
+func (b *Bot) SendSticker(ctx context.Context, params *SendStickerParams) (*models.Message, error)
+    SendSticker https://core.telegram.org/bots/api#sendsticker
+
+func (b *Bot) SendVenue(ctx context.Context, params *SendVenueParams) (*models.Message, error)
+    SendVenue https://core.telegram.org/bots/api#sendvenue
+
+func (b *Bot) SendVideo(ctx context.Context, params *SendVideoParams) (*models.Message, error)
+    SendVideo https://core.telegram.org/bots/api#sendvideo
+
+func (b *Bot) SendVideoNote(ctx context.Context, params *SendVideoNoteParams) (*models.Message, error)
+    SendVideoNote https://core.telegram.org/bots/api#sendvideonote
+
+func (b *Bot) SendVoice(ctx context.Context, params *SendVoiceParams) (*models.Message, error)
+    SendVoice https://core.telegram.org/bots/api#sendvoice
+
+func (b *Bot) SetBusinessAccountBio(ctx context.Context, params *SetBusinessAccountBioParams) (bool, error)
+    SetBusinessAccountBio
+    https://core.telegram.org/bots/api#setbusinessaccountbio
+
+func (b *Bot) SetBusinessAccountGiftSettings(ctx context.Context, params *SetBusinessAccountGiftSettingsParams) (bool, error)
+    SetBusinessAccountGiftSettings
+    https://core.telegram.org/bots/api#setbusinessaccountgiftsettings
+
+func (b *Bot) SetBusinessAccountName(ctx context.Context, params *SetBusinessAccountNameParams) (bool, error)
+    SetBusinessAccountName
+    https://core.telegram.org/bots/api#setbusinessaccountname
+
+func (b *Bot) SetBusinessAccountProfilePhoto(ctx context.Context, params *SetBusinessAccountProfilePhotoParams) (bool, error)
+    SetBusinessAccountProfilePhoto
+    https://core.telegram.org/bots/api#setbusinessaccountprofilephoto
+
+func (b *Bot) SetBusinessAccountUsername(ctx context.Context, params *SetBusinessAccountUsernameParams) (bool, error)
+    SetBusinessAccountUsername
+    https://core.telegram.org/bots/api#setbusinessaccountusername
+
+func (b *Bot) SetChatAdministratorCustomTitle(ctx context.Context, params *SetChatAdministratorCustomTitleParams) (bool, error)
+    SetChatAdministratorCustomTitle
+    https://core.telegram.org/bots/api#setchatadministratorcustomtitle
+
+func (b *Bot) SetChatDescription(ctx context.Context, params *SetChatDescriptionParams) (bool, error)
+    SetChatDescription https://core.telegram.org/bots/api#setchatdescription
+
+func (b *Bot) SetChatMenuButton(ctx context.Context, params *SetChatMenuButtonParams) (bool, error)
+    SetChatMenuButton https://core.telegram.org/bots/api#setchatmenubutton
+
+func (b *Bot) SetChatPermissions(ctx context.Context, params *SetChatPermissionsParams) (bool, error)
+    SetChatPermissions https://core.telegram.org/bots/api#setchatpermissions
+
+func (b *Bot) SetChatPhoto(ctx context.Context, params *SetChatPhotoParams) (bool, error)
+    SetChatPhoto https://core.telegram.org/bots/api#setchatphoto
+
+func (b *Bot) SetChatStickerSet(ctx context.Context, params *SetChatStickerSetParams) (bool, error)
+    SetChatStickerSet https://core.telegram.org/bots/api#setchatstickerset
+
+func (b *Bot) SetChatTitle(ctx context.Context, params *SetChatTitleParams) (bool, error)
+    SetChatTitle https://core.telegram.org/bots/api#setchattitle
+
+func (b *Bot) SetCustomEmojiStickerSetThumbnail(ctx context.Context, params *SetCustomEmojiStickerSetThumbnailParams) (bool, error)
+    SetCustomEmojiStickerSetThumbnail
+    https://core.telegram.org/bots/api#setcustomemojistickersetthumbnail
+
+func (b *Bot) SetGameScore(ctx context.Context, params *SetGameScoreParams) (*models.Message, error)
+    SetGameScore https://core.telegram.org/bots/api#setgamescore
+
+func (b *Bot) SetMessageReaction(ctx context.Context, params *SetMessageReactionParams) (bool, error)
+    SetMessageReaction https://core.telegram.org/bots/api#setmessagereaction
+
+func (b *Bot) SetMyCommands(ctx context.Context, params *SetMyCommandsParams) (bool, error)
+    SetMyCommands https://core.telegram.org/bots/api#setmycommands
+
+func (b *Bot) SetMyDefaultAdministratorRights(ctx context.Context, params *SetMyDefaultAdministratorRightsParams) (bool, error)
+    SetMyDefaultAdministratorRights
+    https://core.telegram.org/bots/api#setmydefaultadministratorrights
+
+func (b *Bot) SetMyDescription(ctx context.Context, params *SetMyDescriptionParams) (bool, error)
+    SetMyDescription https://core.telegram.org/bots/api#setmydescription
+
+func (b *Bot) SetMyName(ctx context.Context, params *SetMyNameParams) (bool, error)
+    SetMyName https://core.telegram.org/bots/api#setmyname
+
+func (b *Bot) SetMyShortDescription(ctx context.Context, params *SetMyShortDescriptionParams) (bool, error)
+    SetMyShortDescription
+    https://core.telegram.org/bots/api#setmyshortdescription
+
+func (b *Bot) SetPassportDataErrors(ctx context.Context, params *SetPassportDataErrorsParams) (bool, error)
+    SetPassportDataErrors
+    https://core.telegram.org/bots/api#setpassportdataerrors
+
+func (b *Bot) SetStickerEmojiList(ctx context.Context, params *SetStickerEmojiListParams) (bool, error)
+    SetStickerEmojiList https://core.telegram.org/bots/api#setstickeremojilist
+
+func (b *Bot) SetStickerKeywords(ctx context.Context, params *SetStickerKeywordsParams) (bool, error)
+    SetStickerKeywords https://core.telegram.org/bots/api#setstickerkeywords
+
+func (b *Bot) SetStickerMaskPosition(ctx context.Context, params *SetStickerMaskPositionParams) (bool, error)
+    SetStickerMaskPosition
+    https://core.telegram.org/bots/api#setstickermaskposition
+
+func (b *Bot) SetStickerPositionInSet(ctx context.Context, params *SetStickerPositionInSetParams) (bool, error)
+    SetStickerPositionInSet
+    https://core.telegram.org/bots/api#setstickerpositioninset
+
+func (b *Bot) SetStickerSetThumbnail(ctx context.Context, params *SetStickerSetThumbnailParams) (bool, error)
+    SetStickerSetThumbnail
+    https://core.telegram.org/bots/api#setstickersetthumbnail
+
+func (b *Bot) SetStickerSetTitle(ctx context.Context, params *SetStickerSetTitleParams) (bool, error)
+    SetStickerSetTitle https://core.telegram.org/bots/api#setstickermaskposition
+
+func (b *Bot) SetToken(token string)
+    SetToken sets the bot token
+
+func (b *Bot) SetUserEmojiStatus(ctx context.Context, params *SetUserEmojiStatusParams) (bool, error)
+    SetUserEmojiStatus https://core.telegram.org/bots/api#setuseremojistatus
+
+func (b *Bot) SetWebhook(ctx context.Context, params *SetWebhookParams) (bool, error)
+    SetWebhook https://core.telegram.org/bots/api#setwebhook
+
+func (b *Bot) Start(ctx context.Context)
+    Start the bot
+
+func (b *Bot) StartWebhook(ctx context.Context)
+    StartWebhook starts the Bot with webhook mode
+
+func (b *Bot) StopMessageLiveLocation(ctx context.Context, params *StopMessageLiveLocationParams) (*models.Message, error)
+    StopMessageLiveLocation
+    https://core.telegram.org/bots/api#stopmessagelivelocation
+
+func (b *Bot) StopPoll(ctx context.Context, params *StopPollParams) (*models.Poll, error)
+    StopPoll https://core.telegram.org/bots/api#stoppoll
+
+func (b *Bot) Token() string
+    Token returns the bot token
+
+func (b *Bot) TransferBusinessAccountStars(ctx context.Context, params *TransferBusinessAccountStarsParams) (bool, error)
+    TransferBusinessAccountStars
+    https://core.telegram.org/bots/api#transferbusinessaccountstars
+
+func (b *Bot) TransferGift(ctx context.Context, params *TransferGiftParams) (bool, error)
+    TransferGift https://core.telegram.org/bots/api#transfergift
+
+func (b *Bot) UnbanChatMember(ctx context.Context, params *UnbanChatMemberParams) (bool, error)
+    UnbanChatMember https://core.telegram.org/bots/api#unbanchatmember
+
+func (b *Bot) UnbanChatSenderChat(ctx context.Context, params *UnbanChatSenderChatParams) (bool, error)
+    UnbanChatSenderChat https://core.telegram.org/bots/api#unbanchatsenderchat
+
+func (b *Bot) UnhideGeneralForumTopic(ctx context.Context, params *UnhideGeneralForumTopicParams) (bool, error)
+    UnhideGeneralForumTopic
+    https://core.telegram.org/bots/api#unhidegeneralforumtopic
+
+func (b *Bot) UnpinAllChatMessages(ctx context.Context, params *UnpinAllChatMessagesParams) (bool, error)
+    UnpinAllChatMessages https://core.telegram.org/bots/api#unpinallchatmessages
+
+func (b *Bot) UnpinAllForumTopicMessages(ctx context.Context, params *UnpinAllForumTopicMessagesParams) (bool, error)
+    UnpinAllForumTopicMessages
+    https://core.telegram.org/bots/api#deleteforumtopic
+
+func (b *Bot) UnpinAllGeneralForumTopicMessages(ctx context.Context, params *UnpinAllGeneralForumTopicMessagesParams) (bool, error)
+    UnpinAllGeneralForumTopicMessages
+    https://core.telegram.org/bots/api#unpinallgeneralforumtopicmessages
+
+func (b *Bot) UnpinChatMessage(ctx context.Context, params *UnpinChatMessageParams) (bool, error)
+    UnpinChatMessage https://core.telegram.org/bots/api#unpinchatmessage
+
+func (b *Bot) UnregisterHandler(id string)
+
+func (b *Bot) UpgradeGift(ctx context.Context, params *UpgradeGiftParams) (bool, error)
+    UpgradeGift https://core.telegram.org/bots/api#upgradegift
+
+func (b *Bot) UploadStickerFile(ctx context.Context, params *UploadStickerFileParams) (*models.File, error)
+    UploadStickerFile https://core.telegram.org/bots/api#uploadstickerfile
+
+func (b *Bot) VerifyChat(ctx context.Context, params *VerifyChatParams) (bool, error)
+    VerifyChat https://core.telegram.org/bots/api#verifychat
+
+func (b *Bot) VerifyUser(ctx context.Context, params *VerifyUserParams) (bool, error)
+    VerifyUser https://core.telegram.org/bots/api#verifyuser
+
+func (b *Bot) WebhookHandler() http.HandlerFunc
+
+type CloseForumTopicParams struct {
+	ChatID          any `json:"chat_id"`
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+type CloseGeneralForumTopicParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type ConvertGiftToStarsParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	OwnedGiftID          string `json:"owned_gift_id"`
+}
+    ConvertGiftToStarsParams
+    https://core.telegram.org/bots/api#convertgifttostars
+
+type CopyMessageParams struct {
+	ChatID                any                     `json:"chat_id"`
+	MessageThreadID       int                     `json:"message_thread_id,omitempty"`
+	FromChatID            any                     `json:"from_chat_id"`
+	MessageID             int                     `json:"message_id"`
+	VideoStartTimestamp   int                     `json:"video_start_timestamp,omitempty"`
+	Caption               string                  `json:"caption,omitempty"`
+	ParseMode             models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity  `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                    `json:"show_caption_above_media,omitempty"`
+	DisableNotification   bool                    `json:"disable_notification,omitempty"`
+	ProtectContent        bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                    `json:"allow_paid_broadcast,omitempty"`
+	ReplyParameters       *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    CopyMessageParams https://core.telegram.org/bots/api#copymessage
+
+type CopyMessagesParams struct {
+	ChatID              any   `json:"chat_id"`
+	MessageThreadID     int   `json:"message_thread_id,omitempty"`
+	FromChatID          any   `json:"from_chat_id"`
+	MessageIDs          []int `json:"message_ids"`
+	DisableNotification bool  `json:"disable_notification,omitempty"`
+	ProtectContent      bool  `json:"protect_content,omitempty"`
+	RemoveCaption       bool  `json:"remove_caption,omitempty"`
+}
+    CopyMessagesParams https://core.telegram.org/bots/api#copymessages
+
+type CreateChatInviteLinkParams struct {
+	ChatID             any    `json:"chat_id"`
+	Name               string `json:"name,omitempty"`
+	ExpireDate         int    `json:"expire_date,omitempty"`
+	MemberLimit        int    `json:"member_limit,omitempty"`
+	CreatesJoinRequest bool   `json:"creates_join_request,omitempty"`
+}
+
+type CreateChatSubscriptionInviteLinkParams struct {
+	ChatID             any    `json:"chat_id"`
+	Name               string `json:"name,omitempty"`
+	SubscriptionPeriod int    `json:"subscription_period"`
+	SubscriptionPrice  int    `json:"subscription_price"`
+}
+
+type CreateForumTopicParams struct {
+	ChatID            any    `json:"chat_id"`
+	Name              string `json:"name"`
+	IconColor         int    `json:"icon_color,omitempty"`
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+}
+
+type CreateInvoiceLinkParams struct {
+	BusinessConnectionID      string                `json:"business_connection_id,omitempty"`
+	Title                     string                `json:"title"`
+	Description               string                `json:"description"`
+	Payload                   string                `json:"payload"`
+	ProviderToken             string                `json:"provider_token,omitempty"`
+	Currency                  string                `json:"currency"`
+	Prices                    []models.LabeledPrice `json:"prices"`
+	SubscriptionPeriod        int                   `json:"subscription_period,omitempty"`
+	MaxTipAmount              int                   `json:"max_tip_amount,omitempty"`
+	SuggestedTipAmounts       []int                 `json:"suggested_tip_amounts,omitempty"`
+	ProviderData              string                `json:"provider_data,omitempty"`
+	PhotoURL                  string                `json:"photo_url,omitempty"`
+	PhotoSize                 int                   `json:"photo_size,omitempty"`
+	PhotoWidth                int                   `json:"photo_width,omitempty"`
+	PhotoHeight               int                   `json:"photo_height,omitempty"`
+	NeedName                  bool                  `json:"need_name,omitempty"`
+	NeedPhoneNumber           bool                  `json:"need_phone_number,omitempty"`
+	NeedEmail                 bool                  `json:"need_email,omitempty"`
+	NeedShippingAddress       bool                  `json:"need_shipping_address,omitempty"`
+	SendPhoneNumberToProvider bool                  `json:"send_phone_number_to_provider,omitempty"`
+	SendEmailToProvider       bool                  `json:"send_email_to_provider,omitempty"`
+	IsFlexible                bool                  `json:"is_flexible,omitempty"`
+}
+
+type CreateNewStickerSetParams struct {
+	UserID          int64                 `json:"user_id"`
+	Name            string                `json:"name"`
+	Title           string                `json:"title"`
+	Stickers        []models.InputSticker `json:"stickers"`
+	StickerType     string                `json:"sticker_type,omitempty"`
+	NeedsRepainting bool                  `json:"needs_repainting,omitempty"`
+}
+
+type DebugHandler func(format string, args ...any)
+
+type DeclineChatJoinRequestParams struct {
+	ChatID any   `json:"chat_id"`
+	UserID int64 `json:"user_id"`
+}
+
+type DeleteBusinessMessagesParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	MessageIDs           []int  `json:"message_ids"`
+}
+    DeleteBusinessMessagesParams
+    https://core.telegram.org/bots/api#deletebusinessmessages
+
+type DeleteChatPhotoParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type DeleteChatStickerSetParams struct {
+	ChatID         any    `json:"chat_id"`
+	StickerSetName string `json:"sticker_set_name"`
+}
+
+type DeleteForumTopicParams struct {
+	ChatID          any `json:"chat_id"`
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+type DeleteMessageParams struct {
+	ChatID    any `json:"chat_id"`
+	MessageID int `json:"message_id"`
+}
+    DeleteMessageParams https://core.telegram.org/bots/api#deletemessage
+
+type DeleteMessagesParams struct {
+	ChatID     any   `json:"chat_id"`
+	MessageIDs []int `json:"message_ids"`
+}
+    DeleteMessagesParams https://core.telegram.org/bots/api#deletemessages
+
+type DeleteMyCommandsParams struct {
+	Scope        models.BotCommandScope `json:"scope,omitempty"`
+	LanguageCode string                 `json:"language_code,omitempty"`
+}
+
+type DeleteStickerFromSetParams struct {
+	Sticker string `json:"sticker"`
+}
+
+type DeleteStickerSetParams struct {
+	Name string `json:"name"`
+}
+
+type DeleteStoryParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	StoryID              int    `json:"story_id"`
+}
+    DeleteStoryParams https://core.telegram.org/bots/api#deletestory
+
+type DeleteWebhookParams struct {
+	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
+}
+
+type EditChatInviteLinkParams struct {
+	ChatID             any    `json:"chat_id"`
+	InviteLink         string `json:"invite_link"`
+	Name               string `json:"name,omitempty"`
+	ExpireDate         int    `json:"expire_date,omitempty"`
+	MemberLimit        int    `json:"member_limit,omitempty"`
+	CreatesJoinRequest bool   `json:"creates_join_request,omitempty"`
+}
+
+type EditChatSubscriptionInviteLinkParams struct {
+	ChatID     any    `json:"chat_id"`
+	InviteLink string `json:"invite_link"`
+	Name       string `json:"name,omitempty"`
+}
+
+type EditForumTopicParams struct {
+	ChatID            any    `json:"chat_id"`
+	MessageThreadID   int    `json:"message_thread_id"`
+	Name              string `json:"name,omitempty"`
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+}
+
+type EditGeneralForumTopicParams struct {
+	ChatID any    `json:"chat_id"`
+	Name   string `json:"name"`
+}
+
+type EditMessageCaptionParams struct {
+	BusinessConnectionID  string                 `json:"business_connection_id,omitempty"`
+	ChatID                any                    `json:"chat_id,omitempty"`
+	MessageID             int                    `json:"message_id,omitempty"`
+	InlineMessageID       string                 `json:"inline_message_id,omitempty"`
+	Caption               string                 `json:"caption,omitempty"`
+	ParseMode             models.ParseMode       `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                   `json:"k,omitempty"`
+	DisableWebPagePreview bool                   `json:"disable_web_page_preview,omitempty"`
+	ReplyMarkup           models.ReplyMarkup     `json:"reply_markup,omitempty"`
+}
+
+type EditMessageLiveLocationParams struct {
+	BusinessConnectionID string             `json:"business_connection_id,omitempty"`
+	ChatID               any                `json:"chat_id,omitempty"`
+	MessageID            int                `json:"message_id,omitempty"`
+	InlineMessageID      string             `json:"inline_message_id,omitempty"`
+	Latitude             float64            `json:"latitude"`
+	Longitude            float64            `json:"longitude"`
+	LivePeriod           int                `json:"live_period,omitempty"`
+	HorizontalAccuracy   float64            `json:"horizontal_accuracy,omitempty"`
+	Heading              int                `json:"heading,omitempty"`
+	ProximityAlertRadius int                `json:"proximity_alert_radius,omitempty"`
+	ReplyMarkup          models.ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+type EditMessageMediaParams struct {
+	BusinessConnectionID string             `json:"business_connection_id,omitempty"`
+	ChatID               any                `json:"chat_id,omitempty"`
+	MessageID            int                `json:"message_id,omitempty"`
+	InlineMessageID      string             `json:"inline_message_id,omitempty"`
+	Media                models.InputMedia  `json:"media"`
+	ReplyMarkup          models.ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+type EditMessageReplyMarkupParams struct {
+	BusinessConnectionID string             `json:"business_connection_id,omitempty"`
+	ChatID               any                `json:"chat_id,omitempty"`
+	MessageID            int                `json:"message_id,omitempty"`
+	InlineMessageID      string             `json:"inline_message_id,omitempty"`
+	ReplyMarkup          models.ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+type EditMessageTextParams struct {
+	BusinessConnectionID string                     `json:"business_connection_id,omitempty"`
+	ChatID               any                        `json:"chat_id,omitempty"`
+	MessageID            int                        `json:"message_id,omitempty"`
+	InlineMessageID      string                     `json:"inline_message_id,omitempty"`
+	Text                 string                     `json:"text"`
+	ParseMode            models.ParseMode           `json:"parse_mode,omitempty"`
+	Entities             []models.MessageEntity     `json:"entities,omitempty"`
+	LinkPreviewOptions   *models.LinkPreviewOptions `json:"link_preview_options,omitempty"`
+	ReplyMarkup          models.ReplyMarkup         `json:"reply_markup,omitempty"`
+}
+    EditMessageTextParams https://core.telegram.org/bots/api#editmessagetext
+
+type EditStoryParams struct {
+	BusinessConnectionID string                   `json:"business_connection_id"`
+	StoryID              int                      `json:"story_id"`
+	Content              models.InputStoryContent `json:"content"`
+	Caption              string                   `json:"caption,omitempty"`
+	ParseMode            models.ParseMode         `json:"parse_mode,omitempty"`
+	CaptionEntities      []models.MessageEntity   `json:"caption_entities,omitempty"`
+	Areas                []models.StoryArea       `json:"areas,omitempty"`
+}
+    EditStoryParams https://core.telegram.org/bots/api#editstory
+
+type EditUserStarSubscriptionParams struct {
+	UserID                  int64  `json:"user_id"`
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+	IsCanceled              bool   `json:"is_canceled"`
+}
+    EditUserStarSubscriptionParams
+    https://core.telegram.org/bots/api#edituserstarsubscription
+
+type ErrorsHandler func(err error)
+
+type ExportChatInviteLinkParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type ForwardMessageParams struct {
+	ChatID              any  `json:"chat_id"`
+	MessageThreadID     int  `json:"message_thread_id,omitempty"`
+	FromChatID          any  `json:"from_chat_id"`
+	VideoStartTimestamp int  `json:"video_start_timestamp,omitempty"`
+	DisableNotification bool `json:"disable_notification,omitempty"`
+	ProtectContent      bool `json:"protect_content,omitempty"`
+	MessageID           int  `json:"message_id"`
+}
+    ForwardMessageParams https://core.telegram.org/bots/api#forwardmessage
+
+type ForwardMessagesParams struct {
+	ChatID              any   `json:"chat_id"`
+	MessageThreadID     int   `json:"message_thread_id,omitempty"`
+	FromChatID          any   `json:"from_chat_id"`
+	MessageIDs          []int `json:"message_ids"`
+	DisableNotification bool  `json:"disable_notification,omitempty"`
+	ProtectContent      bool  `json:"protect_content,omitempty"`
+}
+    ForwardMessagesParams https://core.telegram.org/bots/api#forwardmessages
+
+type GetBusinessAccountGiftsParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	ExcludeUnsaved       bool   `json:"exclude_unsaved,omitempty"`
+	ExcludeSaved         bool   `json:"exclude_saved,omitempty"`
+	ExcludeUnlimited     bool   `json:"exclude_unlimited,omitempty"`
+	ExcludeLimited       bool   `json:"exclude_limited,omitempty"`
+	ExcludeUnique        bool   `json:"exclude_unique,omitempty"`
+	SortByPrice          bool   `json:"sort_by_price,omitempty"`
+	Offset               string `json:"offset,omitempty"`
+	Limit                int    `json:"limit,omitempty"`
+}
+    GetBusinessAccountGiftsParams
+    https://core.telegram.org/bots/api#getbusinessaccountgifts
+
+type GetBusinessAccountStarBalanceParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+}
+    GetBusinessAccountStarBalanceParams
+    https://core.telegram.org/bots/api#getbusinessaccountstarbalance
+
+type GetBusinessConnectionParams struct {
+	BusinessConnectionID any `json:"business_connection_id"`
+}
+    GetBusinessConnectionParams
+    https://core.telegram.org/bots/api#getbusinessconnection
+
+type GetChatAdministratorsParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type GetChatMemberCountParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type GetChatMemberParams struct {
+	ChatID any   `json:"chat_id"`
+	UserID int64 `json:"user_id"`
+}
+
+type GetChatMenuButtonParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type GetChatParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type GetCustomEmojiStickersParams struct {
+	CustomEmojiIDs []string `json:"custom_emoji_ids"`
+}
+
+type GetFileParams struct {
+	FileID string `json:"file_id"`
+}
+
+type GetGameHighScoresParams struct {
+	UserID          int64 `json:"user_id"`
+	ChatID          any   `json:"chat_id,omitempty"`
+	MessageID       int   `json:"message_id,omitempty"`
+	InlineMessageID int   `json:"inline_message_id,omitempty"`
+}
+
+type GetMyCommandsParams struct {
+	Scope        models.BotCommandScope `json:"scope,omitempty"`
+	LanguageCode string                 `json:"language_code,omitempty"`
+}
+
+type GetMyDefaultAdministratorRightsParams struct {
+	ForChannels bool `json:"for_channels,omitempty"`
+}
+
+type GetMyDescriptionParams struct {
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+type GetMyNameParams struct {
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+type GetMyShortDescriptionParams struct {
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+type GetStarTransactionsParams struct {
+	Offset int `json:"offset,omitempty"`
+	Limit  int `json:"limit,omitempty"`
+}
+
+type GetStickerSetParams struct {
+	Name string `json:"name"`
+}
+
+type GetUserChatBoostsParams struct {
+	ChatID any `json:"chat_id"`
+	UserID int `json:"user_id"`
+}
+    GetUserChatBoostsParams https://core.telegram.org/bots/api#getuserchatboosts
+
+type GetUserProfilePhotosParams struct {
+	UserID int64 `json:"user_id"`
+	Offset int   `json:"offset,omitempty"`
+	Limit  int   `json:"limit,omitempty"`
+}
+
+type GiftPremiumSubscriptionParams struct {
+	UserID        int64                  `json:"user_id"`
+	MonthCount    int                    `json:"month_count"`
+	StarCount     int                    `json:"star_count"`
+	Text          string                 `json:"text,omitempty"`
+	TextParseMode string                 `json:"text_parse_mode,omitempty"`
+	TextEntities  []models.MessageEntity `json:"text_entities,omitempty"`
+}
+    GiftPremiumSubscriptionParams
+    https://core.telegram.org/bots/api#giftpremiumsubscription
+
+type HandlerFunc func(ctx context.Context, bot *Bot, update *models.Update)
+
+type HandlerType int
+
+const (
+	HandlerTypeMessageText HandlerType = iota
+	HandlerTypeCallbackQueryData
+	HandlerTypeCallbackQueryGameShortName
+	HandlerTypePhotoCaption
+)
+type HideGeneralForumTopicParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type HttpClient interface {
+	Do(*http.Request) (*http.Response, error)
+}
+
+type LeaveChatParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type MatchFunc func(update *models.Update) bool
+
+type MatchType int
+
+const (
+	MatchTypeExact MatchType = iota
+	MatchTypePrefix
+	MatchTypeContains
+	MatchTypeCommand
+	MatchTypeCommandStartOnly
+)
+type Middleware func(next HandlerFunc) HandlerFunc
+
+type MigrateError struct {
+	Message         string
+	MigrateToChatID int
+}
+
+func (e *MigrateError) Error() string
+
+type Option func(b *Bot)
+    Option is a function that configures a bot.
+
+func UseTestEnvironment() Option
+    UseTestEnvironment allows to use test environment
+
+func WithAllowedUpdates(params AllowedUpdates) Option
+    WithAllowedUpdates allows to set custom params for getUpdates method
+
+func WithCallbackQueryDataHandler(pattern string, matchType MatchType, handler HandlerFunc) Option
+    WithCallbackQueryDataHandler allows to set handler for incoming callback
+    query Also you can use *bot.RegisterHandler function after bot creation
+
+func WithCheckInitTimeout(timeout time.Duration) Option
+    WithCheckInitTimeout allows to redefine CheckInitTimeout
+
+func WithDebug() Option
+    WithDebug allows to enable debug mode. In debug mode, all requests and
+    responses are logged by debug handler
+
+func WithDebugHandler(handler DebugHandler) Option
+    WithDebugHandler allows to set handler for debug messages
+
+func WithDefaultHandler(handler HandlerFunc) Option
+    WithDefaultHandler allows to set default handler for incoming updates
+
+func WithErrorsHandler(handler ErrorsHandler) Option
+    WithErrorsHandler allows to set handler for errors
+
+func WithHTTPClient(pollTimeout time.Duration, client HttpClient) Option
+    WithHTTPClient allows to set custom http client
+
+func WithInitialOffset(offset int64) Option
+    WithInitialOffset allows to set initial offset for getUpdates method
+
+func WithMessageTextHandler(pattern string, matchType MatchType, handler HandlerFunc) Option
+    WithMessageTextHandler allows to set handler for incoming text messages Also
+    you can use *bot.RegisterHandler function after bot creation
+
+func WithMiddlewares(middlewares ...Middleware) Option
+    WithMiddlewares allows to set middlewares for each incoming request
+
+func WithNotAsyncHandlers() Option
+    WithNotAsyncHandlers allows to run handlers in the main goroutine
+
+func WithPhotoCaptionHandler(pattern string, matchType MatchType, handler HandlerFunc) Option
+    WithPhotoCaptionHandler allows to set handler for incoming photos with
+    caption Also you can use *bot.RegisterHandler function after bot creation
+
+func WithServerURL(serverURL string) Option
+    WithServerURL allows to set custom server url
+
+func WithSkipGetMe() Option
+    WithSkipGetMe allows skip call GetMe on bot init
+
+func WithUpdatesChannelCap(cap int) Option
+    WithUpdatesChannelCap allows setting custom capacity for the Updates channel
+
+func WithWebhookSecretToken(webhookSecretToken string) Option
+    WithWebhookSecretToken allows setting X-Telegram-Bot-Api-Secret-Token sent
+    from Telegram servers
+
+func WithWorkers(workers int) Option
+    WithWorkers allows setting the number of workers that are processing the
+    Updates channel
+
+type PinChatMessageParams struct {
+	ChatID              any  `json:"chat_id"`
+	MessageID           int  `json:"message_id"`
+	DisableNotification bool `json:"disable_notification,omitempty"`
+}
+
+type PostStoryParams struct {
+	BusinessConnectionID string                   `json:"business_connection_id"`
+	Content              models.InputStoryContent `json:"content"`
+	ActivePeriod         int                      `json:"active_period"`
+	Caption              string                   `json:"caption,omitempty"`
+	ParseMode            models.ParseMode         `json:"parse_mode,omitempty"`
+	CaptionEntities      []models.MessageEntity   `json:"caption_entities,omitempty"`
+	Areas                []models.StoryArea       `json:"areas,omitempty"`
+	PostToChatPage       bool                     `json:"post_to_chat_page,omitempty"`
+	ProtectContent       bool                     `json:"protect_content,omitempty"`
+}
+    PostStoryParams https://core.telegram.org/bots/api#poststory
+
+type PromoteChatMemberParams struct {
+	ChatID              any   `json:"chat_id" rules:"required,chat_id"`
+	UserID              int64 `json:"user_id" rules:"required"`
+	IsAnonymous         bool  `json:"is_anonymous,omitempty"`
+	CanManageChat       bool  `json:"can_manage_chat,omitempty"`
+	CanDeleteMessages   bool  `json:"can_delete_messages,omitempty"`
+	CanManageVideoChats bool  `json:"can_manage_video_chats,omitempty"`
+	CanRestrictMembers  bool  `json:"can_restrict_members,omitempty"`
+	CanPromoteMembers   bool  `json:"can_promote_members,omitempty"`
+	CanChangeInfo       bool  `json:"can_change_info,omitempty"`
+	CanInviteUsers      bool  `json:"can_invite_users,omitempty"`
+	CanPostMessages     bool  `json:"can_post_messages,omitempty"`
+	CanEditMessages     bool  `json:"can_edit_messages,omitempty"`
+	CanPinMessages      bool  `json:"can_pin_messages,omitempty"`
+	CanPostStories      bool  `json:"can_post_stories,omitempty"`
+	CanEditStories      bool  `json:"can_edit_stories,omitempty"`
+	CanDeleteStories    bool  `json:"can_delete_stories,omitempty"`
+	CanManageTopics     bool  `json:"can_manage_topics,omitempty"`
+}
+
+type ReadBusinessMessageParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	ChatID               int    `json:"chat_id"`
+	MessageID            int    `json:"message_id"`
+}
+    ReadBusinessMessageParams
+    https://core.telegram.org/bots/api#readbusinessmessage
+
+type RefundStarPaymentParams struct {
+	UserID                  int64  `json:"user_id"`
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+}
+
+type RemoveBusinessAccountProfilePhotoParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	IsPublic             bool   `json:"is_public,omitempty"`
+}
+    RemoveBusinessAccountProfilePhotoParams
+    https://core.telegram.org/bots/api#removebusinessaccountprofilephoto
+
+type RemoveChatVerificationParams struct {
+	ChatID any `json:"chat_id"`
+}
+    RemoveChatVerificationParams
+    https://core.telegram.org/bots/api#removechatverification
+
+type RemoveUserVerificationParams struct {
+	UserID int64 `json:"user_id"`
+}
+    RemoveUserVerificationParams
+    https://core.telegram.org/bots/api#removeuserverification
+
+type ReopenForumTopicParams struct {
+	ChatID          any `json:"chat_id"`
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+type ReopenGeneralForumTopicParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type ReplaceStickerInSetParams struct {
+	UserID     int64               `json:"user_id"`
+	Name       string              `json:"name"`
+	OldSticker string              `json:"old_sticker"`
+	Sticker    models.InputSticker `json:"sticker"`
+}
+
+type RestrictChatMemberParams struct {
+	ChatID                        any                     `json:"chat_id"`
+	UserID                        int64                   `json:"user_id"`
+	Permissions                   *models.ChatPermissions `json:"permissions,omitempty"`
+	UseIndependentChatPermissions bool                    `json:"use_independent_chat_permissions,omitempty"`
+	UntilDate                     int                     `json:"until_date,omitempty"`
+}
+
+type RevokeChatInviteLinkParams struct {
+	ChatID     any    `json:"chat_id"`
+	InviteLink string `json:"invite_link"`
+}
+
+type SavePreparedInlineMessageParams struct {
+	UserID            int64                    `json:"user_id"`
+	Result            models.InlineQueryResult `json:"result"`
+	AllowUserChats    bool                     `json:"allow_user_chats,omitempty"`
+	AllowBotChats     bool                     `json:"allow_bot_chats,omitempty"`
+	AllowGroupChats   bool                     `json:"allow_group_chats,omitempty"`
+	AllowChannelChats bool                     `json:"allow_channel_chats,omitempty"`
+}
+    SavePreparedInlineMessageParams
+    https://core.telegram.org/bots/api#savepreparedinlinemessage
+
+type SendAnimationParams struct {
+	BusinessConnectionID  string                  `json:"business_connection_id,omitempty"`
+	ChatID                any                     `json:"chat_id"`
+	MessageThreadID       int                     `json:"message_thread_id,omitempty"`
+	Animation             models.InputFile        `json:"animation"`
+	Duration              int                     `json:"duration,omitempty"`
+	Width                 int                     `json:"width,omitempty"`
+	Height                int                     `json:"height,omitempty"`
+	Thumbnail             models.InputFile        `json:"thumbnail,omitempty"`
+	Caption               string                  `json:"caption,omitempty"`
+	ParseMode             models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity  `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                    `json:"show_caption_above_media,omitempty"`
+	HasSpoiler            bool                    `json:"has_spoiler,omitempty"`
+	DisableNotification   bool                    `json:"disable_notification,omitempty"`
+	ProtectContent        bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID       string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters       *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendAnimationParams https://core.telegram.org/bots/api#sendanimation
+
+type SendAudioParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Audio                models.InputFile        `json:"audio"`
+	Caption              string                  `json:"caption,omitempty"`
+	ParseMode            models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities      []models.MessageEntity  `json:"caption_entities,omitempty"`
+	Duration             int                     `json:"duration,omitempty"`
+	Performer            string                  `json:"performer,omitempty"`
+	Title                string                  `json:"title,omitempty"`
+	Thumbnail            models.InputFile        `json:"thumbnail,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendAudioParams https://core.telegram.org/bots/api#sendaudio
+
+type SendChatActionParams struct {
+	BusinessConnectionID string            `json:"business_connection_id,omitempty"`
+	ChatID               any               `json:"chat_id"`
+	MessageThreadID      int               `json:"message_thread_id,omitempty"`
+	Action               models.ChatAction `json:"action"`
+}
+
+type SendContactParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	PhoneNumber          string                  `json:"phone_number"`
+	FirstName            string                  `json:"first_name"`
+	LastName             string                  `json:"last_name,omitempty"`
+	VCard                string                  `json:"vcard,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendContactParams https://core.telegram.org/bots/api#sendcontact
+
+type SendDiceParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Emoji                string                  `json:"emoji,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendDiceParams https://core.telegram.org/bots/api#senddice
+
+type SendDocumentParams struct {
+	BusinessConnectionID        string                  `json:"business_connection_id,omitempty"`
+	ChatID                      any                     `json:"chat_id"`
+	MessageThreadID             int                     `json:"message_thread_id,omitempty"`
+	Document                    models.InputFile        `json:"document"`
+	Thumbnail                   models.InputFile        `json:"thumbnail,omitempty"`
+	Caption                     string                  `json:"caption,omitempty"`
+	ParseMode                   models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities             []models.MessageEntity  `json:"caption_entities,omitempty"`
+	DisableContentTypeDetection bool                    `json:"disable_content_type_detection,omitempty"`
+	DisableNotification         bool                    `json:"disable_notification,omitempty"`
+	ProtectContent              bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast          bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID             string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters             *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup                 models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendDocumentParams https://core.telegram.org/bots/api#senddocument
+
+type SendGameParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	GameShorName         string                  `json:"game_short_name"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendGameParams https://core.telegram.org/bots/api#sendgame
+
+type SendGiftParams struct {
+	UserID        int64                  `json:"user_id"`
+	ChatID        any                    `json:"chat_id,omitempty"`
+	GiftID        string                 `json:"gift_id"`
+	PayForUpgrade bool                   `json:"pay_for_upgrade,omitempty"`
+	Text          string                 `json:"text,omitempty"`
+	TextParseMode models.ParseMode       `json:"text_parse_mode,omitempty"`
+	TextEntities  []models.MessageEntity `json:"text_entities,omitempty"`
+}
+    SendGiftParams https://core.telegram.org/bots/api#sendgift
+
+type SendInvoiceParams struct {
+	ChatID                    any                     `json:"chat_id"`
+	MessageThreadID           int                     `json:"message_thread_id,omitempty"`
+	Title                     string                  `json:"title"`
+	Description               string                  `json:"description"`
+	Payload                   string                  `json:"payload"`
+	ProviderToken             string                  `json:"provider_token,omitempty"`
+	Currency                  string                  `json:"currency"`
+	Prices                    []models.LabeledPrice   `json:"prices"`
+	MaxTipAmount              int                     `json:"max_tip_amount,omitempty"`
+	SuggestedTipAmounts       []int                   `json:"suggested_tip_amounts,omitempty"`
+	StartParameter            string                  `json:"start_parameter,omitempty"`
+	ProviderData              string                  `json:"provider_data,omitempty"`
+	PhotoURL                  string                  `json:"photo_url,omitempty"`
+	PhotoSize                 int                     `json:"photo_size,omitempty"`
+	PhotoWidth                int                     `json:"photo_width,omitempty"`
+	PhotoHeight               int                     `json:"photo_height,omitempty"`
+	NeedName                  bool                    `json:"need_name,omitempty"`
+	NeedPhoneNumber           bool                    `json:"need_phone_number,omitempty"`
+	NeedEmail                 bool                    `json:"need_email,omitempty"`
+	NeedShippingAddress       bool                    `json:"need_shipping_address,omitempty"`
+	SendPhoneNumberToProvider bool                    `json:"send_phone_number_to_provider,omitempty"`
+	SendEmailToProvider       bool                    `json:"send_email_to_provider,omitempty"`
+	IsFlexible                bool                    `json:"is_flexible,omitempty"`
+	DisableNotification       bool                    `json:"disable_notification,omitempty"`
+	ProtectContent            bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast        bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID           string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters           *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup               models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendInvoiceParams https://core.telegram.org/bots/api#sendinvoice
+
+type SendLocationParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Latitude             float64                 `json:"latitude"`
+	Longitude            float64                 `json:"longitude"`
+	HorizontalAccuracy   float64                 `json:"horizontal_accuracy,omitempty"`
+	LivePeriod           int                     `json:"live_period,omitempty"`
+	Heading              int                     `json:"heading,omitempty"`
+	ProximityAlertRadius int                     `json:"proximity_alert_radius,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendLocationParams https://core.telegram.org/bots/api#sendlocation
+
+type SendMediaGroupParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Media                []models.InputMedia     `json:"media"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+}
+    SendMediaGroupParams https://core.telegram.org/bots/api#sendmediagroup
+
+type SendMessageParams struct {
+	BusinessConnectionID string                     `json:"business_connection_id,omitempty"`
+	ChatID               any                        `json:"chat_id"`
+	MessageThreadID      int                        `json:"message_thread_id,omitempty"`
+	Text                 string                     `json:"text"`
+	ParseMode            models.ParseMode           `json:"parse_mode,omitempty"`
+	Entities             []models.MessageEntity     `json:"entities,omitempty"`
+	LinkPreviewOptions   *models.LinkPreviewOptions `json:"link_preview_options,omitempty"`
+	DisableNotification  bool                       `json:"disable_notification,omitempty"`
+	ProtectContent       bool                       `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                       `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                     `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters    `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup         `json:"reply_markup,omitempty"`
+}
+    SendMessageParams https://core.telegram.org/bots/api#sendmessage
+
+type SendPaidMediaParams struct {
+	BusinessConnectionID  string                  `json:"business_connection_id,omitempty"`
+	ChatID                any                     `json:"chat_id"`
+	StarCount             int                     `json:"star_count"`
+	Media                 []models.InputPaidMedia `json:"media"`
+	Payload               string                  `json:"payload,omitempty"`
+	Caption               string                  `json:"caption,omitempty"`
+	ParseMode             models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity  `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                    `json:"show_caption_above_media,omitempty"`
+	DisableNotification   bool                    `json:"disable_notification,omitempty"`
+	ProtectContent        bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                    `json:"allow_paid_broadcast,omitempty"`
+	ReplyParameters       *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendPaidMediaParams https://core.telegram.org/bots/api#sendpaidmedia
+
+type SendPhotoParams struct {
+	BusinessConnectionID  string                  `json:"business_connection_id,omitempty"`
+	ChatID                any                     `json:"chat_id"`
+	MessageThreadID       int                     `json:"message_thread_id,omitempty"`
+	Photo                 models.InputFile        `json:"photo"`
+	Caption               string                  `json:"caption,omitempty"`
+	ParseMode             models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity  `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                    `json:"show_caption_above_media,omitempty"`
+	HasSpoiler            bool                    `json:"has_spoiler,omitempty"`
+	DisableNotification   bool                    `json:"disable_notification,omitempty"`
+	ProtectContent        bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID       string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters       *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendPhotoParams https://core.telegram.org/bots/api#sendphoto
+
+type SendPollParams struct {
+	BusinessConnectionID  string                   `json:"business_connection_id,omitempty"`
+	ChatID                any                      `json:"chat_id"`
+	MessageThreadID       int                      `json:"message_thread_id,omitempty"`
+	Question              string                   `json:"question"`
+	QuestionParseMode     models.ParseMode         `json:"question_parse_mode,omitempty"`
+	QuestionEntities      []models.MessageEntity   `json:"question_entities,omitempty"`
+	Options               []models.InputPollOption `json:"options"`
+	IsAnonymous           *bool                    `json:"is_anonymous,omitempty"`
+	Type                  string                   `json:"type,omitempty"`
+	AllowsMultipleAnswers bool                     `json:"allows_multiple_answers,omitempty"`
+	CorrectOptionID       int                      `json:"correct_option_id"`
+	Explanation           string                   `json:"explanation,omitempty"`
+	ExplanationParseMode  string                   `json:"explanation_parse_mode,omitempty"`
+	ExplanationEntities   []models.MessageEntity   `json:"explanation_entities,omitempty"`
+	OpenPeriod            int                      `json:"open_period,omitempty"`
+	CloseDate             int                      `json:"close_date,omitempty"`
+	IsClosed              bool                     `json:"is_closed,omitempty"`
+	DisableNotification   bool                     `json:"disable_notification,omitempty"`
+	ProtectContent        bool                     `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                     `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID       string                   `json:"message_effect_id,omitempty"`
+	ReplyParameters       *models.ReplyParameters  `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup       `json:"reply_markup,omitempty"`
+}
+    SendPollParams https://core.telegram.org/bots/api#sendpoll
+
+type SendStickerParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Sticker              models.InputFile        `json:"sticker"`
+	Emoji                string                  `json:"emoji,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendStickerParams https://core.telegram.org/bots/api#sendsticker
+
+type SendVenueParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Latitude             float64                 `json:"latitude"`
+	Longitude            float64                 `json:"longitude"`
+	Title                string                  `json:"title"`
+	Address              string                  `json:"address"`
+	FoursquareID         string                  `json:"foursquare_id,omitempty"`
+	FoursquareType       string                  `json:"foursquare_type,omitempty"`
+	GooglePlaceID        string                  `json:"google_place_id,omitempty"`
+	GooglePlaceType      string                  `json:"google_place_type,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendVenueParams https://core.telegram.org/bots/api#sendvenue
+
+type SendVideoNoteParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	VideoNote            models.InputFile        `json:"video_note"`
+	Duration             int                     `json:"duration,omitempty"`
+	Length               int                     `json:"length,omitempty"`
+	Thumbnail            models.InputFile        `json:"thumbnail,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendVideoNoteParams https://core.telegram.org/bots/api#sendvideonote
+
+type SendVideoParams struct {
+	BusinessConnectionID  string                  `json:"business_connection_id,omitempty"`
+	ChatID                any                     `json:"chat_id"`
+	MessageThreadID       int                     `json:"message_thread_id,omitempty"`
+	Video                 models.InputFile        `json:"video"`
+	Duration              int                     `json:"duration,omitempty"`
+	Width                 int                     `json:"width,omitempty"`
+	Height                int                     `json:"height,omitempty"`
+	Thumbnail             models.InputFile        `json:"thumbnail,omitempty"`
+	Cover                 models.InputFile        `json:"cover,omitempty"`
+	StartTimestamp        int                     `json:"start_timestamp,omitempty"`
+	Caption               string                  `json:"caption,omitempty"`
+	ParseMode             models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities       []models.MessageEntity  `json:"caption_entities,omitempty"`
+	ShowCaptionAboveMedia bool                    `json:"show_caption_above_media,omitempty"`
+	HasSpoiler            bool                    `json:"has_spoiler,omitempty"`
+	SupportsStreaming     bool                    `json:"supports_streaming,omitempty"`
+	DisableNotification   bool                    `json:"disable_notification,omitempty"`
+	ProtectContent        bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast    bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID       string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters       *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup           models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendVideoParams https://core.telegram.org/bots/api#sendvideo
+
+type SendVoiceParams struct {
+	BusinessConnectionID string                  `json:"business_connection_id,omitempty"`
+	ChatID               any                     `json:"chat_id"`
+	MessageThreadID      int                     `json:"message_thread_id,omitempty"`
+	Voice                models.InputFile        `json:"voice"`
+	Caption              string                  `json:"caption,omitempty"`
+	ParseMode            models.ParseMode        `json:"parse_mode,omitempty"`
+	CaptionEntities      []models.MessageEntity  `json:"caption_entities,omitempty"`
+	Duration             int                     `json:"duration,omitempty"`
+	DisableNotification  bool                    `json:"disable_notification,omitempty"`
+	ProtectContent       bool                    `json:"protect_content,omitempty"`
+	AllowPaidBroadcast   bool                    `json:"allow_paid_broadcast,omitempty"`
+	MessageEffectID      string                  `json:"message_effect_id,omitempty"`
+	ReplyParameters      *models.ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup          models.ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+    SendVoiceParams https://core.telegram.org/bots/api#sendvoice
+
+type SetBusinessAccountBioParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	Bio                  string `json:"bio,omitempty"`
+}
+    SetBusinessAccountBioParams
+    https://core.telegram.org/bots/api#setbusinessaccountbio
+
+type SetBusinessAccountGiftSettingsParams struct {
+	BusinessConnectionID string                   `json:"business_connection_id"`
+	ShowGiftButton       bool                     `json:"show_gift_button"`
+	AcceptedGiftTypes    models.AcceptedGiftTypes `json:"accepted_gift_types"`
+}
+    SetBusinessAccountGiftSettingsParams
+    https://core.telegram.org/bots/api#setbusinessaccountgiftsettings
+
+type SetBusinessAccountNameParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	FirstName            string `json:"first_name"`
+	LastName             string `json:"last_name,omitempty"`
+}
+    SetBusinessAccountNameParams
+    https://core.telegram.org/bots/api#setbusinessaccountname
+
+type SetBusinessAccountProfilePhotoParams struct {
+	BusinessConnectionID string                   `json:"business_connection_id"`
+	Photo                models.InputProfilePhoto `json:"photo"`
+	IsPublic             bool                     `json:"is_public,omitempty"`
+}
+    SetBusinessAccountProfilePhotoParams
+    https://core.telegram.org/bots/api#setbusinessaccountprofilephoto
+
+type SetBusinessAccountUsernameParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	Username             string `json:"username,omitempty"`
+}
+    SetBusinessAccountUsernameParams
+    https://core.telegram.org/bots/api#setbusinessaccountusername
+
+type SetChatAdministratorCustomTitleParams struct {
+	ChatID      any    `json:"chat_id"`
+	UserID      int64  `json:"user_id"`
+	CustomTitle string `json:"custom_title"`
+}
+
+type SetChatDescriptionParams struct {
+	ChatID      any    `json:"chat_id"`
+	Description string `json:"description"`
+}
+
+type SetChatMenuButtonParams struct {
+	ChatID     any                    `json:"chat_id,omitempty"`
+	MenuButton models.InputMenuButton `json:"menu_button"`
+}
+
+type SetChatPermissionsParams struct {
+	ChatID                        any                    `json:"chat_id"`
+	Permissions                   models.ChatPermissions `json:"permissions"`
+	UseIndependentChatPermissions bool                   `json:"use_independent_chat_permissions,omitempty"`
+}
+
+type SetChatPhotoParams struct {
+	ChatID any              `json:"chat_id"`
+	Photo  models.InputFile `json:"photo"`
+}
+
+type SetChatStickerSetParams struct {
+	ChatID         any    `json:"chat_id"`
+	StickerSetName string `json:"sticker_set_name"`
+}
+
+type SetChatTitleParams struct {
+	ChatID any    `json:"chat_id"`
+	Title  string `json:"title"`
+}
+
+type SetCustomEmojiStickerSetThumbnailParams struct {
+	Name          string `json:"name"`
+	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
+}
+
+type SetGameScoreParams struct {
+	UserID             int64 `json:"user_id"`
+	Score              int   `json:"score"`
+	Force              bool  `json:"force,omitempty"`
+	DisableEditMessage bool  `json:"disable_edit_message,omitempty"`
+	ChatID             any   `json:"chat_id,omitempty"`
+	MessageID          int   `json:"message_id,omitempty"`
+	InlineMessageID    int   `json:"inline_message_id,omitempty"`
+}
+
+type SetMessageReactionParams struct {
+	ChatID    any                   `json:"chat_id"`
+	MessageID int                   `json:"message_id"`
+	Reaction  []models.ReactionType `json:"reaction,omitempty"`
+	IsBig     *bool                 `json:"is_big,omitempty"`
+}
+    SetMessageReactionParams
+    https://core.telegram.org/bots/api#setmessagereaction
+
+type SetMyCommandsParams struct {
+	Commands     []models.BotCommand    `json:"commands"`
+	Scope        models.BotCommandScope `json:"scope,omitempty"`
+	LanguageCode string                 `json:"language_code,omitempty"`
+}
+
+type SetMyDefaultAdministratorRightsParams struct {
+	Rights      *models.ChatAdministratorRights `json:"rights,omitempty"`
+	ForChannels bool                            `json:"for_channels,omitempty"`
+}
+
+type SetMyDescriptionParams struct {
+	Description  string `json:"description,omitempty"`
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+type SetMyNameParams struct {
+	Name         string `json:"name,omitempty"`
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+type SetMyShortDescriptionParams struct {
+	ShortDescription string `json:"short_description,omitempty"`
+	LanguageCode     string `json:"language_code,omitempty"`
+}
+
+type SetPassportDataErrorsParams struct {
+	UserID int64                         `json:"user_id"`
+	Errors []models.PassportElementError `json:"errors"`
+}
+
+type SetStickerEmojiListParams struct {
+	Sticker   string   `json:"sticker"`
+	EmojiList []string `json:"emoji_list"`
+}
+
+type SetStickerKeywordsParams struct {
+	Sticker  string   `json:"sticker"`
+	Keywords []string `json:"keywords"`
+}
+
+type SetStickerMaskPositionParams struct {
+	Sticker      string              `json:"sticker"`
+	MaskPosition models.MaskPosition `json:"mask_position"`
+}
+
+type SetStickerPositionInSetParams struct {
+	Sticker  string `json:"sticker"`
+	Position int    `json:"position"`
+}
+
+type SetStickerSetThumbnailParams struct {
+	Name      string           `json:"name"`
+	UserID    int64            `json:"user_id"`
+	Thumbnail models.InputFile `json:"thumbnail,omitempty"`
+	Format    string           `json:"format"`
+}
+
+type SetStickerSetTitleParams struct {
+	Name  string `json:"name"`
+	Title string `json:"title"`
+}
+
+type SetUserEmojiStatusParams struct {
+	UserID                    int64  `json:"user_id"`
+	EmojiStatusCustomEmojiID  string `json:"emoji_status_custom_emoji_id,omitempty"`
+	EmojiStatusExpirationDate int    `json:"emoji_status_expiration_date,omitempty"`
+}
+    SetUserEmojiStatusParams
+    https://core.telegram.org/bots/api#setuseremojistatus
+
+type SetWebhookParams struct {
+	URL                string           `json:"url"`
+	Certificate        models.InputFile `json:"certificate,omitempty"`
+	IPAddress          string           `json:"ip_address,omitempty"`
+	MaxConnections     int              `json:"max_connections,omitempty"`
+	AllowedUpdates     []string         `json:"allowed_updates,omitempty"`
+	DropPendingUpdates bool             `json:"drop_pending_updates,omitempty"`
+	SecretToken        string           `json:"secret_token,omitempty"`
+}
+
+type StopMessageLiveLocationParams struct {
+	BusinessConnectionID string             `json:"business_connection_id,omitempty"`
+	ChatID               any                `json:"chat_id,omitempty"`
+	MessageID            int                `json:"message_id,omitempty"`
+	InlineMessageID      string             `json:"inline_message_id,omitempty"`
+	ReplyMarkup          models.ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+type StopPollParams struct {
+	BusinessConnectionID string             `json:"business_connection_id,omitempty"`
+	ChatID               any                `json:"chat_id"`
+	MessageID            int                `json:"message_id"`
+	ReplyMarkup          models.ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+type TooManyRequestsError struct {
+	Message    string
+	RetryAfter int
+}
+
+func (e *TooManyRequestsError) Error() string
+
+type TransferBusinessAccountStarsParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	StarCount            int    `json:"star_count"`
+}
+    TransferBusinessAccountStarsParams
+    https://core.telegram.org/bots/api#transferbusinessaccountstars
+
+type TransferGiftParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	OwnedGiftID          string `json:"owned_gift_id"`
+	NewOwnerChatID       int    `json:"new_owner_chat_id"`
+	StarCount            int    `json:"star_count"`
+}
+    TransferGiftParams https://core.telegram.org/bots/api#transfergift
+
+type UnbanChatMemberParams struct {
+	ChatID       any   `json:"chat_id"`
+	UserID       int64 `json:"user_id"`
+	OnlyIfBanned bool  `json:"only_if_banned,omitempty"`
+}
+
+type UnbanChatSenderChatParams struct {
+	ChatID       any `json:"chat_id"`
+	SenderChatID int `json:"sender_chat_id"`
+}
+
+type UnhideGeneralForumTopicParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type UnpinAllChatMessagesParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type UnpinAllForumTopicMessagesParams struct {
+	ChatID          any `json:"chat_id"`
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+type UnpinAllGeneralForumTopicMessagesParams struct {
+	ChatID any `json:"chat_id"`
+}
+
+type UnpinChatMessageParams struct {
+	ChatID    any `json:"chat_id"`
+	MessageID int `json:"message_id,omitempty"`
+}
+
+type UpgradeGiftParams struct {
+	BusinessConnectionID string `json:"business_connection_id"`
+	OwnedGiftID          string `json:"owned_gift_id"`
+	KeepOriginalDetails  bool   `json:"keep_original_details,omitempty"`
+	StarCount            int    `json:"star_count,omitempty"`
+}
+    UpgradeGiftParams https://core.telegram.org/bots/api#upgradegift
+
+type UploadStickerFileParams struct {
+	UserID        int64            `json:"user_id"`
+	Sticker       models.InputFile `json:"sticker"`
+	StickerFormat string           `json:"sticker_format"`
+}
+
+type VerifyChatParams struct {
+	ChatID            any    `json:"chat_id"`
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+    VerifyChatParams https://core.telegram.org/bots/api#verifychat
+
+type VerifyUserParams struct {
+	UserID            int64  `json:"user_id"`
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+    VerifyUserParams https://core.telegram.org/bots/api#verifyuser
+
+type WebAppUser struct {
+	ID                    int64  `json:"id"`
+	IsBot                 bool   `json:"is_bot"`
+	FirstName             string `json:"first_name"`
+	LastName              string `json:"last_name"`
+	Username              string `json:"username"`
+	LanguageCode          string `json:"language_code"`
+	IsPremium             bool   `json:"is_premium"`
+	AddedToAttachmentMenu bool   `json:"added_to_attachment_menu"`
+	AllowsWriteToPM       bool   `json:"allows_write_to_pm"`
+	PhotoURL              string `json:"photo_url"`
+}
+    WebAppUser represents user model from webapp request
+
+func ValidateWebappRequest(values url.Values, token string) (user *WebAppUser, ok bool)
+    ValidateWebappRequest validates request from webapp
+

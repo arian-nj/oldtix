@@ -1,4 +1,1 @@
-res://GameContent/Scenes/Game/Hokm4/OnlineHokm4.tscn
-res://GameContent/Scenes/Shaders/progress_shader.gdshader
-res://GameContent/Scenes/Game/Hokm4/table.gd
-res://GameContent/Scenes/Game/Hokm4/States/MatchMakingState.gd
+res://GameContent/Katana/Katana.gd
