@@ -1,1 +1,3 @@
-res://GameContent/Katana/Katana.gd
+res://GameContent/Scenes/Shaders/progress_shader.gdshader
+res://GameContent/Scenes/SceneManager/SceneManager.tscn
+res://GameContent/Scenes/SceneManager/scene_manager.gd

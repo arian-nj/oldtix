@@ -3,6 +3,7 @@ class_name SceneManager
 
 @export var current_level:SceneLevel
 @export var anim :AnimationPlayer
+@export var scene_holder:Control
 
 enum Levels{
 	GameHokm4,
@@ -34,7 +35,7 @@ func handle_level_change(change_level_to:Levels)->void:
 	current_level.visible = false
 	anim.play("fade_in")
 	await anim.animation_finished
-	add_child(next_level)
+	scene_holder.add_child(next_level)
 	transfer_data_between_scenes(current_level,next_level)
 	next_level.visible = true
 	anim.play("fade_out")

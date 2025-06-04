@@ -3,6 +3,6 @@
 	  <h1>Hello ${Le}</h1>
 	  <h3>${gt}</h3>
 	  <p>Fuck You</p>
-	  <a href="/game/MasterCard.html/">Play Game</a>
+	  <a href="/game/mini.html/">Play Game</a>
   </div>
 `;ct(document.querySelector("#counter"));

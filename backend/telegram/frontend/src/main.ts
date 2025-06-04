@@ -23,7 +23,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 	  <h1>Hello ${full_name}</h1>
 	  <h3>${username}</h3>
 	  <p>Fuck You</p>
-	  <a href="/game/MasterCard.html/">Play Game</a>
+	  <a href="/game/mini.html/">Play Game</a>
   </div>
 `
 

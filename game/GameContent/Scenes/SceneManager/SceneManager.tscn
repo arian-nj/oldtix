@@ -45,10 +45,11 @@ _data = {
 &"fade_out": SubResource("Animation_kgchd")
 }
 
-[node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim")]
+[node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim", "scene_holder")]
 script = ExtResource("1_bwd3w")
 current_level = NodePath("LoginScene")
 anim = NodePath("AnimationPlayer")
+scene_holder = NodePath("LoginScene")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

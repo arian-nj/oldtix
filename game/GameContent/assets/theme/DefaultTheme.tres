@@ -1,6 +1,0 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c8fmduh1xr41s"]
-
-[ext_resource type="FontFile" uid="uid://cgalx4l6r0yb6" path="res://GameContent/assets/fonts/Lilita_One/LilitaOne-Regular.ttf" id="1_uwjan"]
-
-[resource]
-default_font = ExtResource("1_uwjan")

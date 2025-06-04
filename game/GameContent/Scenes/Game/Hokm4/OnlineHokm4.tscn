@@ -1,7 +1,6 @@
-[gd_scene load_steps=32 format=3 uid="uid://2hbpasghk6l6"]
+[gd_scene load_steps=31 format=3 uid="uid://2hbpasghk6l6"]
 
 [ext_resource type="Script" uid="uid://i4rap2craiyo" path="res://GameContent/Scenes/Game/Hokm4/hokm4_scene_level.gd" id="1_i0n3b"]
-[ext_resource type="Theme" uid="uid://c8fmduh1xr41s" path="res://GameContent/assets/theme/DefaultTheme.tres" id="1_o4grb"]
 [ext_resource type="Script" uid="uid://cmw6v07ja4ks7" path="res://GameContent/Scenes/Game/Card/card_drawer.gd" id="2_22pf8"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_d1yw2"]
 [ext_resource type="PackedScene" uid="uid://bd5brlxcojtaw" path="res://GameContent/Scenes/Game/Card/card.tscn" id="3_8tgkb"]
@@ -97,7 +96,6 @@ offset_right = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_o4grb")
 script = ExtResource("1_i0n3b")
 ws = NodePath("KatanaSocket")
 

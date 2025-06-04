@@ -3,3 +3,4 @@
 files/*
 .env
 .release.env
+.cache/*
