@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://diswtcr1glloo"]
+[gd_scene load_steps=8 format=3 uid="uid://diswtcr1glloo"]
 
 [ext_resource type="Script" uid="uid://c03bodhrlnldf" path="res://GameContent/Scenes/LoginMenu/LoginMenu_canvas.gd" id="1_f2nl5"]
 [ext_resource type="Script" uid="uid://qtnu1lo5l4ls" path="res://GameContent/Scenes/MainMenu/aspect_ratio_container.gd" id="2_ipa2s"]
 [ext_resource type="Texture2D" uid="uid://cq827b6fknw88" path="res://GameContent/assets/shapes/play_button_background.png" id="3_2nj4o"]
 [ext_resource type="Script" uid="uid://c8q2tdmbjbevr" path="res://GameContent/Scenes/LoginMenu/login_functionality.gd" id="3_43ica"]
 [ext_resource type="Script" uid="uid://cmwyya0u83jsx" path="res://GameContent/Scenes/LoginMenu/auth_panel.gd" id="3_hoql6"]
+[ext_resource type="Script" uid="uid://5pbibpjt7oj1" path="res://GameContent/Scenes/LoginMenu/telegram_auth.gd" id="6_ou8cm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43ica"]
 bg_color = Color(0.133333, 0.133333, 0.133333, 1)
@@ -160,6 +161,12 @@ size_flags_horizontal = 3
 [node name="Control2" type="Control" parent="CustomRatioAspectContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="TelegramAuth" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_ou8cm")
 
 [connection signal="pressed" from="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/LocalButton" to="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel" method="_on_local_button_pressed"]
 [connection signal="pressed" from="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel/MarginContainer/HBoxContainer/RegisterButton" to="CustomRatioAspectContainer/VBoxContainer/HBoxContainer/LoginPanel" method="_on_register_button_pressed"]

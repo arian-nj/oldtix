@@ -1,30 +1,17 @@
 import './style.css'
-import { setupCounter } from './counter.ts'
 import WebApp from '@twa-dev/sdk'
 
 WebApp.ready()
 
-fetch("/api/open?" + WebApp.initData)
-
-let full_name = ""
-let username = WebApp.initDataUnsafe.user?.username == undefined ? "no username" : `@${WebApp.initDataUnsafe.user.username}`
-
-if (WebApp.initDataUnsafe.user?.first_name !== undefined) {
-	full_name += WebApp.initDataUnsafe.user?.first_name
-}
-
-
-if (WebApp.initDataUnsafe.user?.last_name !== undefined) {
-	full_name += WebApp.initDataUnsafe.user?.last_name
-}
-
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-	  <h1>Hello ${full_name}</h1>
-	  <h3>${username}</h3>
-	  <p>Fuck You</p>
-	  <a href="/game/mini.html/">Play Game</a>
-  </div>
+	<div class="game-container">
+	  <iframe src="/game/mini.html" frameborder="0"></iframe>
+	</div>
 `
+function getInitdata(message: String) {
+	console.log(`message from getTelegram Said: ${message}`)
+	return WebApp.initData
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+(window as any).getInitdata = getInitdata
+

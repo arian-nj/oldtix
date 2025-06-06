@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://0t55dgj7g3jk"]
+[gd_scene load_steps=4 format=3 uid="uid://0t55dgj7g3jk"]
 
 [ext_resource type="Script" uid="uid://xmqpfebw4yt5" path="res://GameContent/Scenes/ErrorBoard/error_board.gd" id="1_v1w4m"]
 [ext_resource type="PackedScene" uid="uid://d2rvktqkwuq7c" path="res://GameContent/Scenes/ErrorBoard/error_row_container.tscn" id="2_v1w4m"]
+[ext_resource type="Theme" uid="uid://bf84bce653ldw" path="res://GameContent/DefaultTheme.tres" id="3_6sdmf"]
 
 [node name="ErrorBoard" type="CanvasLayer" node_paths=PackedStringArray("VContainer")]
 layer = 9
@@ -20,3 +21,4 @@ offset_bottom = -570.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("3_6sdmf")

@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://c6gfbvcn354fp"]
+[gd_scene load_steps=11 format=3 uid="uid://c6gfbvcn354fp"]
 
 [ext_resource type="Script" uid="uid://cp42g4to36wr" path="res://GameContent/Scenes/SceneManager/CheckErrors.gd" id="1_8htr5"]
 [ext_resource type="Script" uid="uid://doc3jv3q07w3o" path="res://GameContent/Scenes/SceneManager/scene_manager.gd" id="1_bwd3w"]
 [ext_resource type="PackedScene" uid="uid://diswtcr1glloo" path="res://GameContent/Scenes/LoginMenu/LoginMenu.tscn" id="2_2qq82"]
 [ext_resource type="PackedScene" uid="uid://0t55dgj7g3jk" path="res://GameContent/Scenes/ErrorBoard/error_board.tscn" id="3_mv5ew"]
+[ext_resource type="Theme" uid="uid://bf84bce653ldw" path="res://GameContent/DefaultTheme.tres" id="5_c4cas"]
 [ext_resource type="Script" uid="uid://dge7c8h5xr51y" path="res://GameContent/Katana/KatanaClient.gd" id="5_cnt2b"]
 [ext_resource type="Script" uid="uid://cv2gfqh3n3sbf" path="res://GameContent/Katana/Katana.gd" id="5_orr6a"]
 
@@ -47,9 +48,9 @@ _data = {
 
 [node name="SceneManager" type="Node" node_paths=PackedStringArray("current_level", "anim", "scene_holder")]
 script = ExtResource("1_bwd3w")
-current_level = NodePath("LoginScene")
+current_level = NodePath("SceneHolder/LoginScene")
 anim = NodePath("AnimationPlayer")
-scene_holder = NodePath("LoginScene")
+scene_holder = NodePath("SceneHolder")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -69,8 +70,6 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0)
 metadata/_edit_use_anchors_ = true
 
-[node name="ErrorBoard" parent="." instance=ExtResource("3_mv5ew")]
-
 [node name="ErrorChecker" type="Node" parent="."]
 script = ExtResource("1_8htr5")
 metadata/_custom_type_script = "uid://cp42g4to36wr"
@@ -83,4 +82,17 @@ metadata/_custom_type_script = "uid://cv2gfqh3n3sbf"
 script = ExtResource("5_cnt2b")
 metadata/_custom_type_script = "uid://dge7c8h5xr51y"
 
-[node name="LoginScene" parent="." instance=ExtResource("2_2qq82")]
+[node name="SceneHolder" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("5_c4cas")
+
+[node name="LoginScene" parent="SceneHolder" instance=ExtResource("2_2qq82")]
+layout_mode = 1
+
+[node name="ErrorBoard" parent="SceneHolder" instance=ExtResource("3_mv5ew")]
