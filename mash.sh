@@ -72,9 +72,9 @@ generate_sqlc() {
 
 build_frontend() {
 	echo "Building frontend"
-	cd ./backend/telegram/frontend/
+	cd ./frontend/
 	npm run build
-	cd ../../..
+	cd ..
 }
 
 COMMAND=$1

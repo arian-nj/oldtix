@@ -46,43 +46,6 @@ func (app *ApplicationTelegram) StartTelegramBot(ctx context.Context) error {
 	return nil
 }
 
-//
-// func (app *ApplicationTelegram) StartWebApp(ctx context.Context) {
-// 	subbedFS, errSubFS := fs.Sub(staticContent, "static")
-// 	if errSubFS != nil {
-// 		app.Logger.Panic(fmt.Errorf("failed to create sub fs: %w", errSubFS).Error())
-// 	}
-// 	app.subbedFS = subbedFS
-//
-// 	ln, errLn := net.Listen("tcp", "0.0.0.0"+":"+strconv.Itoa(app.Config.HTTPPort))
-// 	if errLn != nil {
-// 		app.Logger.Panic(fmt.Errorf("failed to listen: %w", errLn).Error())
-// 	}
-// 	defer ln.Close()
-//
-// 	mux := http.NewServeMux()
-// 	// mux.HandleFunc("/api/open", app.handlerAPIOpen)
-// 	mux.Handle("/", http.FileServer(http.FS(app.subbedFS)))
-//
-// 	server := http.Server{
-// 		Handler: mux,
-// 	}
-//
-// 	go func() {
-// 		<-ctx.Done()
-// 		app.Logger.Info("server stopping")
-// 		server.Shutdown(context.Background())
-// 	}()
-//
-// 	app.Logger.Info(fmt.Errorf("server started at %s", ln.Addr().String()).Error())
-// 	errServe := server.Serve(ln)
-// 	if errServe != nil && !errors.Is(errServe, http.ErrServerClosed) {
-// 		app.Logger.Error(fmt.Sprintf("error serve: %v", errServe))
-// 	}
-//
-// }
-//
-
 func (app *ApplicationTelegram) WebsiteRoutes() *chi.Mux {
 	subbedFS, errSubFS := fs.Sub(staticContent, "static")
 	if errSubFS != nil {
@@ -106,12 +69,13 @@ func (app *ApplicationTelegram) WebsiteRoutes() *chi.Mux {
 	return mux
 }
 
-func (app *ApplicationTelegram) HandlerAPIOpen(rw http.ResponseWriter, req *http.Request) {
-	user, ok := bot.ValidateWebappRequest(req.URL.Query(), app.botToken)
-	if !ok {
-		http.Error(rw, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	app.Logger.Error(fmt.Sprintf("%v", user))
-}
+//
+// func (app *ApplicationTelegram) HandlerAPIOpen(rw http.ResponseWriter, req *http.Request) {
+// 	user, ok := bot.ValidateWebappRequest(req.URL.Query(), app.botToken)
+// 	if !ok {
+// 		http.Error(rw, "unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+//
+// 	app.Logger.Error(fmt.Sprintf("%v", user))
+// }

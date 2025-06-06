@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/arian-nj/master-card/back/internal/hokm4"
+	"github.com/arian-nj/master-card/back/hokm4"
 	"github.com/arian-nj/master-card/back/internal/server"
 )
 

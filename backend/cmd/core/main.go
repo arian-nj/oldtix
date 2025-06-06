@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	core_api "github.com/arian-nj/master-card/back/internal/core"
+	core_api "github.com/arian-nj/master-card/back/core"
 	"github.com/arian-nj/master-card/back/internal/server"
 )
 
