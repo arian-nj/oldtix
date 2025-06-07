@@ -17,8 +17,10 @@ services:
       - "traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=treafik-strip"
+
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/treafik"
+      - "traefik.http.routers.traefik.middlewares=mid-stripprefix"
     ports:
       - mode: host
         protocol: tcp
@@ -43,7 +45,11 @@ services:
       - "traefik.http.routers.core_api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.core_api.entrypoints=websecure"
       - "traefik.http.routers.core_api.tls.certresolver=myresolver"
-      - "traefik.http.routers.core-api.middlewares=api-strip"
+
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.core_api.middlewares=mid-stripprefix"
+
     secrets:
       - secret-key
     environment:
@@ -71,7 +77,11 @@ services:
       - "traefik.http.routers.hokm4_api.rule=PathPrefix(`/hokm4`)"
       - "traefik.http.routers.hokm4_api.entrypoints=websecure"
       - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
-      - "traefik.http.routers.hokm4_api.middlewares=hokm4-strip"
+
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/treafik"
+      - "traefik.http.routers.hokm4_api.middlewares=mid-stripprefix"
+
 
     secrets:
       - secret-key
