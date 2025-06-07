@@ -27,8 +27,10 @@ func change_debug_mode(new_debug:bool) -> void:
 # static var RegisterUrl:= "/register"
 # static var TokenUrl:=  "/token"
 
-var CreateGuestRand := "/auth/guest/create"
-var GetGuestToken := "/auth/guest/token"
+# var CreateGuestRand := "/auth/guest/create"
+# var GetGuestToken := "/auth/guest/token"
+
+var GetTelegramToken := "/auth/telegram/token"
 
 var PersonUrl:= "/person/"
 var MeUrl:= "/me"

@@ -119,7 +119,6 @@ func readConfigs(http_port string) (*Config, error) {
 
 	}
 
-	//
 	databaseURLFile := os.Getenv("DATABASE_URL_FILE")
 	if databaseURLFile != "" {
 		db_url_data, err := os.ReadFile(databaseURLFile)

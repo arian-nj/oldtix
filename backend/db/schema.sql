@@ -20,7 +20,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.bot_user (
     id bigint NOT NULL,
-    tg_id text NOT NULL
+    tg_id text NOT NULL,
+    person_id bigint
 );
 
 
@@ -403,6 +404,14 @@ ALTER TABLE ONLY public.game_player
 
 
 --
+-- Name: bot_user fk_person; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bot_user
+    ADD CONSTRAINT fk_person FOREIGN KEY (person_id) REFERENCES public.person(id);
+
+
+--
 -- Name: game_player fk_player; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -454,4 +463,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20250601070008'),
     ('20250601075712'),
     ('20250601081430'),
-    ('20250601082252');
+    ('20250601082252'),
+    ('20250607081626');

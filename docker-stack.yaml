@@ -14,7 +14,7 @@ services:
       - "--api.dashboard=true"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.filelord.ir`)"
+      - "traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
       - "traefik.http.routers.traefik.service=api@internal"
@@ -39,17 +39,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.core_api.loadbalancer.server.port=4444"
-      - "traefik.http.routers.core_api.rule=Host(`core.filelord.ir`)"
+      - "traefik.http.routers.core_api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.core_api.entrypoints=websecure"
       - "traefik.http.routers.core_api.tls.certresolver=myresolver"
     secrets:
       - secret-key
-      - db-url
     environment:
       - CORE_HTTP_PORT=4444
       - BASE_URL=https://core.filelord.ir
       - SECRET_KEY_FILE=/run/secrets/secret-key
-      - DATABASE_URL_FILE=/run/secrets/db-url
+      - DATABASE_URL=postgres://pgadmin:sdoi32dfEF03Rf3f3g@db:5432/game?sslmode=disable
       - RELEASE_MODE=dev
       - PROJECT_VERSION=${PROJECT_VERSION}
     deploy:
@@ -67,22 +66,37 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.hokm4_api.loadbalancer.server.port=4445"
-      - "traefik.http.routers.hokm4_api.rule=Host(`hokm4.filelord.ir`)"
+      - "traefik.http.routers.hokm4_api.rule=PathPrefix(`/hokm4`)"
       - "traefik.http.routers.hokm4_api.entrypoints=websecure"
       - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
     secrets:
       - secret-key
-      - db-url
     environment:
       - HOKM4_HTTP_PORT=4445
       - BASE_URL=https://hokm4.filelord.ir
       - SECRET_KEY_FILE=/run/secrets/secret-key
-      - DATABASE_URL_FILE=/run/secrets/db-url
+      - DATABASE_URL=postgres://pgadmin:sdoi32dfEF03Rf3f3g@db:5432/game?sslmode=disable
       - RELEASE_MODE=dev
       - PROJECT_VERSION=${PROJECT_VERSION}
     deploy:
       update_config:
         order: start-first
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: sdoi32dfEF03Rf3f3g
+      POSTGRES_DB: game
+    ports:
+      - 0.0.0.0:5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Keeps data persistent
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
@@ -90,6 +104,4 @@ volumes:
 
 secrets:
   secret-key: 
-    external: true
-  db-url: 
     external: true

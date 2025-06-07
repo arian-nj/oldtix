@@ -7,7 +7,20 @@ package sqldb
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const getBotUser = `-- name: GetBotUser :one
+SELECT id, tg_id, person_id FROM bot_user WHERE tg_id = $1
+`
+
+func (q *Queries) GetBotUser(ctx context.Context, tgID string) (BotUser, error) {
+	row := q.db.QueryRow(ctx, getBotUser, tgID)
+	var i BotUser
+	err := row.Scan(&i.ID, &i.TgID, &i.PersonID)
+	return i, err
+}
 
 const insertBotUser = `-- name: InsertBotUser :one
 INSERT INTO bot_user (
@@ -15,12 +28,27 @@ INSERT INTO bot_user (
 ) VALUES (
 	$1
 ) ON CONFLICT DO NOTHING
-RETURNING id, tg_id
+RETURNING id, tg_id, person_id
 `
 
 func (q *Queries) InsertBotUser(ctx context.Context, tgID string) (BotUser, error) {
 	row := q.db.QueryRow(ctx, insertBotUser, tgID)
 	var i BotUser
-	err := row.Scan(&i.ID, &i.TgID)
+	err := row.Scan(&i.ID, &i.TgID, &i.PersonID)
 	return i, err
+}
+
+const updateBotUsersPersonId = `-- name: UpdateBotUsersPersonId :exec
+UPDATE bot_user 
+SET person_id = $1 WHERE tg_id = $2
+`
+
+type UpdateBotUsersPersonIdParams struct {
+	PersonID pgtype.Int8
+	TgID     string
+}
+
+func (q *Queries) UpdateBotUsersPersonId(ctx context.Context, arg UpdateBotUsersPersonIdParams) error {
+	_, err := q.db.Exec(ctx, updateBotUsersPersonId, arg.PersonID, arg.TgID)
+	return err
 }

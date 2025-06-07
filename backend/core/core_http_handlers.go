@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/arian-nj/master-card/back/internal/randutils"
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/arian-nj/master-card/back/pkg/request"
 	"github.com/arian-nj/master-card/back/pkg/response"
 	"github.com/arian-nj/master-card/back/pkg/validator"
 	"github.com/arian-nj/master-card/back/sqldb"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-telegram/bot"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5"
 )
@@ -207,55 +207,35 @@ func createToken(userId int) *jwt.Token {
 	return token
 }
 
-func (app *ApiApplication) createGuest(w http.ResponseWriter, r *http.Request) {
-	newRandString := randutils.GenerateRandomString(128)
-	_, err := app.CreateNewGuest(newRandString)
+const botToken = "8052428016:AAFl8AjzSiIG3owcVIm-tSpGQ0iq_IHo78Q"
+
+func (app *ApiApplication) createTelegramToken(w http.ResponseWriter, r *http.Request) {
+	user, ok := bot.ValidateWebappRequest(r.URL.Query(), botToken)
+	if !ok {
+		app.BadRequest(w, r, fmt.Errorf("telegram init data is invalid"))
+		return
+	}
+
+	botUserRow, err := app.Queries.GetBotUser(r.Context(), strconv.Itoa(int(user.ID)))
 	if err != nil {
 		app.ServerError(w, r, err)
 		return
 	}
-
-	var output struct {
-		UIDString string `json:"uid_string"`
-	}
-	output.UIDString = newRandString
-
-	err = response.JSON(w, http.StatusCreated, output)
-	if err != nil {
-		app.ServerError(w, r, err)
-		return
-	}
-}
-func (app *ApiApplication) createGuestToken(w http.ResponseWriter, r *http.Request) {
-	var input struct {
-		UIDString string              `json:"uid_string"`
-		validator validator.Validator `json:"-"`
-	}
-
-	err := request.DecodeJSON(w, r, &input)
-	if err != nil {
-		app.BadRequest(w, r, err)
-		return
-	}
-	input.validator.CheckField(input.UIDString != "", "uid_string", "uid can't be empty")
-	if input.validator.HasErrors() {
-		app.FailedValidation(w, r, input.validator)
-		return
-	}
-
-	guestPersonRow, err := app.Queries.GetGuestPersonByUid(r.Context(), input.UIDString)
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			input.validator.AddFieldError("uid_string", "no user found")
-			app.FailedValidation(w, r, input.validator)
+	var personRow sqldb.Person
+	if botUserRow.PersonID.Int64 == 0 {
+		personRow, err = app.CreateBrandNewPerson(user.FirstName + " " + user.LastName)
+		if err != nil {
+			app.ServerError(w, r, err)
 			return
-		} else {
+		}
+	} else {
+		personRow, err = app.Queries.GetPerson(r.Context(), int(botUserRow.PersonID.Int64))
+		if err != nil {
 			app.ServerError(w, r, err)
 			return
 		}
 	}
-
-	token := createToken(guestPersonRow.UserID)
+	token := createToken(personRow.ID)
 	tokenString, err := token.SignedString(app.Config.Jwt.SecretKey)
 	if err != nil {
 		app.ServerError(w, r, err)
@@ -269,8 +249,74 @@ func (app *ApiApplication) createGuestToken(w http.ResponseWriter, r *http.Reque
 		app.ServerError(w, r, err)
 		return
 	}
+
+	app.Logger.Error(fmt.Sprintf("%v", user))
 }
 
+// func (app *ApiApplication) CreateGuest(w http.ResponseWriter, r *http.Request) {
+// 	newRandString := randutils.GenerateRandomString(128)
+// 	_, err := app.CreateNewGuest(newRandString)
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return
+// 	}
+//
+// 	var output struct {
+// 		UIDString string `json:"uid_string"`
+// 	}
+// 	output.UIDString = newRandString
+//jjh
+// 	err = response.JSON(w, http.StatusCreated, output)
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return
+// 	}
+// }
+// func (app *ApiApplication) CreateGuestToken(w http.ResponseWriter, r *http.Request) {
+// 	var input struct {
+// 		UIDString string              `json:"uid_string"`
+// 		validator validator.Validator `json:"-"`
+// 	}
+//
+// 	err := request.DecodeJSON(w, r, &input)
+// 	if err != nil {
+// 		app.BadRequest(w, r, err)
+// 		return
+// 	}
+// 	input.validator.CheckField(input.UIDString != "", "uid_string", "uid can't be empty")
+// 	if input.validator.HasErrors() {
+// 		app.FailedValidation(w, r, input.validator)
+// 		return
+// 	}
+//
+// 	guestPersonRow, err := app.Queries.GetGuestPersonByUid(r.Context(), input.UIDString)
+// 	if err != nil {
+// 		if errors.Is(err, pgx.ErrNoRows) {
+// 			input.validator.AddFieldError("uid_string", "no user found")
+// 			app.FailedValidation(w, r, input.validator)
+// 			return
+// 		} else {
+// 			app.ServerError(w, r, err)
+// 			return
+// 		}
+// 	}
+//
+// 	token := createToken(guestPersonRow.UserID)
+// 	tokenString, err := token.SignedString(app.Config.Jwt.SecretKey)
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return
+// 	}
+//
+// 	err = response.JSON(w, http.StatusOK, JWTTokenOutput{
+// 		Token: tokenString,
+// 	})
+// 	if err != nil {
+// 		app.ServerError(w, r, err)
+// 		return
+// 	}
+// }
+//
 // Auth
 
 // func (app *ApiApplication) register(w http.ResponseWriter, r *http.Request) {

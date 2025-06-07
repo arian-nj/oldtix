@@ -9,8 +9,9 @@ import (
 )
 
 type BotUser struct {
-	ID   int
-	TgID string
+	ID       int
+	TgID     string
+	PersonID pgtype.Int8
 }
 
 type GamePlayer struct {

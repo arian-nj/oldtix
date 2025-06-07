@@ -34,8 +34,9 @@ func (app *ApiApplication) CoreRoutes() *chi.Mux {
 	mux.Get("/version", app.getLatestVersion)
 	// mux.Post("/register", app.register)
 	// mux.Post("/token", app.createAuthenticationToken)
-	mux.Get("/auth/guest/create", app.createGuest)
-	mux.Post("/auth/guest/token", app.createGuestToken)
+	// mux.Get("/auth/guest/create", app.createGuest)
+	// mux.Post("/auth/guest/token", app.createGuestToken)
+	mux.Get("/auth/telegram/token", app.createTelegramToken)
 
 	// Authenticated REST routes
 	mux.Group(func(authRouter chi.Router) {

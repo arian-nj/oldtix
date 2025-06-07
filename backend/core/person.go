@@ -8,16 +8,16 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (app *ApiApplication) CreateBrandNewPerson(displayname string) (*sqldb.Person, error) {
+func (app *ApiApplication) CreateBrandNewPerson(displayname string) (sqldb.Person, error) {
 	personRow, err := app.Queries.InsertPerson(context.Background(), sqldb.InsertPersonParams{
 		DisplayName: pgtype.Text{String: displayname, Valid: true},
 		Coin:        50,
 	})
 	if err != nil {
-		return &personRow, err
+		return personRow, err
 	}
 	_, err = app.Queries.InsertUserStatistic(context.Background(), personRow.ID)
-	return &personRow, err
+	return personRow, err
 }
 
 func (app *ApiApplication) CreateNewGuest(uid_string string) (*sqldb.GuestPerson, error) {

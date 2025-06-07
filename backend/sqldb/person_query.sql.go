@@ -103,8 +103,7 @@ INSERT INTO person (
   display_name,coin
 ) VALUES (
   $1,$2
-)
-RETURNING id, display_name, bio, coin, created
+) RETURNING id, display_name, bio, coin, created
 `
 
 type InsertPersonParams struct {

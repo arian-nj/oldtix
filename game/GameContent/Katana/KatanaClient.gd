@@ -164,11 +164,54 @@ func get_guest_token(guest_uid:String) -> String:
 	var newJwtToken :JwtToken = JsonClassConverter.json_string_to_class(JwtToken,body_string)
 	return newJwtToken.token
 
-func setup_token(guest_uid:String) -> bool:
-	var new_token := await KClient._instance.get_guest_token(guest_uid)
+# func setup_token(guest_uid:String) -> bool:
+# 	var new_token := await KClient._instance.get_guest_token(guest_uid)
+# 	if new_token == "":
+# 		print_debug("new token is empty")
+# 		return false
+# 	KClient._instance.set_token(new_token)
+# 	get_tree().create_timer(InternalSetting.JWT_EXPIARY_DURATION / 2.0).timeout.connect(self.setup_token.bind(guest_uid))
+# 	return true
+#
+func get_telegram_token() -> String:
+	var console := JavaScriptBridge.get_interface("console")
+	
+	var parent_window := JavaScriptBridge.get_interface("parent")
+	var initdata : Variant= parent_window.getInitdata()
+	console.log(initdata)
+
+	var http_req_node := Katana.NewHttpRequest()
+	add_child(http_req_node)
+	var err := http_req_node.request(Katana._instance.CoreHttpUrl + Katana._instance.GetTelegramToken+"?"+initdata)
+	if err != OK:
+		Katana._instance.logger.error("telegram token request failed with error " + str(err))
+		return ""
+
+	var response:Variant = await http_req_node.request_completed
+	http_req_node.queue_free()
+
+	var result:int = response[0]
+	if result != OK:
+		Katana._instance.logger.error("telegram token response failed with error " + str(result))
+		return ""
+	var response_code:int = response[1]
+	if response_code != HTTPClient.RESPONSE_OK:
+		Katana._instance.logger.error("telegram token response is not ok " + str(response_code))
+		return ""
+	
+	# var _headers = response[2] # <-- not used
+	
+	var body_byte:PackedByteArray = response[3]
+
+	var jwtToken := JwtToken.new()
+	jwtToken = JsonClassConverter.json_string_to_class(JwtToken,body_byte.get_string_from_utf8())
+	return jwtToken.token
+
+func setup_telegram_token() -> bool:
+	var new_token := await KClient._instance.get_telegram_token()
 	if new_token == "":
-		print_debug("new token is empty")
+		Katana._instance.logger.error("empty token")
 		return false
 	KClient._instance.set_token(new_token)
-	get_tree().create_timer(InternalSetting.JWT_EXPIARY_DURATION / 2.0).timeout.connect(self.setup_token.bind(guest_uid))
+	get_tree().create_timer(InternalSetting.JWT_EXPIARY_DURATION / 2.0).timeout.connect(self.setup_telegram_token.bind())
 	return true

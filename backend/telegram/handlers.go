@@ -16,7 +16,11 @@ func (app *ApplicationTelegram) botRoutes(b *bot.Bot) {
 func (app *ApplicationTelegram) StartHandler(ctx context.Context, b *bot.Bot, update *models.Update) {
 	go func() {
 		if update.Message != nil {
-			app.Queries.InsertBotUser(context.Background(), strconv.Itoa(int(update.Message.From.ID)))
+			_, err := app.Queries.InsertBotUser(context.Background(), strconv.Itoa(int(update.Message.From.ID)))
+			if err != nil {
+				app.Logger.Error(err.Error())
+				return
+			}
 		}
 	}()
 	_, err := b.SendMessage(ctx, &bot.SendMessageParams{

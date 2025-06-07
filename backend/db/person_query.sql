@@ -11,8 +11,7 @@ INSERT INTO person (
   display_name,coin
 ) VALUES (
   $1,$2
-)
-RETURNING *;
+) RETURNING *;
 
 -- name: UpdatePersonDisplayName :exec
 UPDATE person

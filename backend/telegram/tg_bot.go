@@ -63,19 +63,7 @@ func (app *ApplicationTelegram) WebsiteRoutes() *chi.Mux {
 
 	mux.Use(app.CorsMiddlewareFunc)
 
-	// mux.HandleFunc("/api/open", app.handlerAPIOpen)
 	mux.Handle("/*", http.FileServer(http.FS(app.subbedFS)))
 
 	return mux
 }
-
-//
-// func (app *ApplicationTelegram) HandlerAPIOpen(rw http.ResponseWriter, req *http.Request) {
-// 	user, ok := bot.ValidateWebappRequest(req.URL.Query(), app.botToken)
-// 	if !ok {
-// 		http.Error(rw, "unauthorized", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	app.Logger.Error(fmt.Sprintf("%v", user))
-// }
