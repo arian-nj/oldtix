@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	globalStructs, poll, err := server.NewCommonGlobals("WEBAPP_HTTP_PORT")
+	globalStructs, poll, err := server.NewCommonGlobals("TELEGRAM_HTTP_PORT")
 	if err != nil {
 		log.Panic(err)
 	}
