@@ -110,11 +110,10 @@ services:
       - "traefik.http.middlewares.telegram-stripprefix.stripprefix.prefixes=/telegram"
       - "traefik.http.routers.telegram.middlewares=telegram-stripprefix"
 
-
     secrets:
       - secret-key
     environment:
-      - HOKM4_HTTP_PORT=4448
+      - TELEGRAM_HTTP_PORT=4448
       - BASE_URL=https://hokm4.filelord.ir
       - SECRET_KEY_FILE=/run/secrets/secret-key
       - DATABASE_URL=postgres://pgadmin:sdoi32dfEF03Rf3f3g@db:5432/game?sslmode=disable
