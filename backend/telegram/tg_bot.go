@@ -5,7 +5,10 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"mime"
 	"net/http"
+	"path/filepath"
+	"strings"
 
 	"github.com/arian-nj/master-card/back/internal/server"
 	"github.com/go-chi/chi/v5"
@@ -62,7 +65,27 @@ func (app *ApplicationTelegram) WebsiteRoutes() *chi.Mux {
 	mux.Use(app.RecoverPanic)
 
 	mux.Use(app.CorsMiddlewareFunc)
-
+	mux.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ext := strings.ToLower(filepath.Ext(r.URL.Path))
+			switch ext {
+			case ".js":
+				w.Header().Set("Content-Type", "application/javascript")
+			case ".css":
+				w.Header().Set("Content-Type", "text/css")
+			case ".html":
+				w.Header().Set("Content-Type", "text/html")
+			case ".wasm":
+				w.Header().Set("Content-Type", "application/wasm")
+			default:
+				// Try to use Go's built-in MIME type detection
+				if mtype := mime.TypeByExtension(ext); mtype != "" {
+					w.Header().Set("Content-Type", mtype)
+				}
+			}
+			next.ServeHTTP(w, r)
+		})
+	})
 	mux.Handle("/*", http.FileServer(http.FS(app.subbedFS)))
 
 	return mux
