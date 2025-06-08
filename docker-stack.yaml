@@ -40,7 +40,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.core_api.loadbalancer.server.port=4444"
-      - "traefik.http.routers.core_api.rule=PathPrefix(`/api/`)"
+      - "traefik.http.routers.core_api.rule=Host(`tix.filelord.ir`) && PathPrefix(`/api/`)"
       - "traefik.http.routers.core_api.entrypoints=websecure"
       - "traefik.http.routers.core_api.tls.certresolver=myresolver"
 
@@ -72,9 +72,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.hokm4_api.loadbalancer.server.port=4445"
-      - "traefik.http.routers.hokm4_api.rule=Host(`traefik.filelord.ir`)"
+      - "traefik.http.routers.hokm4_api.rule=Host(`tix.filelord.ir`) && PathPrefix(`/hokm4/`)"
       - "traefik.http.routers.hokm4_api.entrypoints=websecure"
       - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
+
+      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.prefixes=/hokm4"
+      - "traefik.http.routers.hokm4_api.middlewares=hokm4-stripprefix"
+
 
     secrets:
       - secret-key
