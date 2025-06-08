@@ -109,8 +109,8 @@ CheckErrors.gd::GDScript/GDScript::173152723635168857::1748112044::0::1::::Error
 SceneManager.tscn::PackedScene/PackedScene::6961388264156554493::1749212206::0::1::::<><><>0<>0<><>::uid://cp42g4to36wr::::res://GameContent/Scenes/SceneManager/CheckErrors.gd<>uid://doc3jv3q07w3o::::res://GameContent/Scenes/SceneManager/scene_manager.gd<>uid://diswtcr1glloo::::res://GameContent/Scenes/LoginMenu/LoginMenu.tscn<>uid://0t55dgj7g3jk::::res://GameContent/Scenes/ErrorBoard/error_board.tscn<>uid://bf84bce653ldw::::res://GameContent/DefaultTheme.tres<>uid://dge7c8h5xr51y::::res://GameContent/Katana/KatanaClient.gd<>uid://cv2gfqh3n3sbf::::res://GameContent/Katana/Katana.gd
 scene_level_base.gd::GDScript/GDScript::478533981260036959::1748112044::0::1::::SceneLevel<>Control<><>0<>0<><>::
 scene_manager.gd::GDScript/GDScript::8147751912469017134::1749017359::0::1::::SceneManager<>Node<><>0<>0<><>::
-::res://GameContent/Scenes/Shaders/::1749373411
-progress_shader.gdshader::Shader::6373717743291567330::1749373411::0::1::::<><><>0<>0<><>::
+::res://GameContent/Scenes/Shaders/::1749373430
+progress_shader.gdshader::Shader::6373717743291567330::1749373430::0::1::::<><><>0<>0<><>::
 ::res://GameContent/Scenes/StatesMachine/::1748112044
 State.gd::GDScript/GDScript::9029406661633924345::1748112044::0::1::::State<>Node<><>0<>0<><>::
 state_machine.gd::GDScript/GDScript::5797073104337380558::1748112044::0::1::::<>Node<><>0<>0<><>::
