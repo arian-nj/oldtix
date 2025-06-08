@@ -18,9 +18,9 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
 
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/traefik"
-      - "traefik.http.routers.traefik.middlewares=mid-stripprefix"
+      - "traefik.http.middlewares.tr-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.tr-stripprefix.stripprefix.prefixes=/traefik"
+      - "traefik.http.routers.traefik.middlewares=tr-stripprefix"
     ports:
       - mode: host
         protocol: tcp
@@ -46,9 +46,9 @@ services:
       - "traefik.http.routers.core_api.entrypoints=websecure"
       - "traefik.http.routers.core_api.tls.certresolver=myresolver"
 
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/api"
-      - "traefik.http.routers.core_api.middlewares=mid-stripprefix"
+      - "traefik.http.middlewares.core-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.core-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.core_api.middlewares=core-stripprefix"
 
     secrets:
       - secret-key
@@ -78,9 +78,9 @@ services:
       - "traefik.http.routers.hokm4_api.entrypoints=websecure"
       - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
 
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.forceslash=true"
-      - "traefik.http.middlewares.mid-stripprefix.stripprefix.prefixes=/hokm4"
-      - "traefik.http.routers.hokm4_api.middlewares=mid-stripprefix"
+      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.prefixes=/hokm4"
+      - "traefik.http.routers.hokm4_api.middlewares=hokm4-stripprefix"
 
 
     secrets:
