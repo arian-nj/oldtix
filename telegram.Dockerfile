@@ -27,7 +27,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 COPY --from=builder /code/build/telegram_server .
 
 # Change ownership of the application binary
-RUN chown appuser:appuser ./core_server
+RUN chown appuser:appuser ./telegram_server
 
 USER appuser
 
