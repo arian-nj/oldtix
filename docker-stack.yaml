@@ -14,13 +14,10 @@ services:
       - "--api.dashboard=true"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=PathPrefix(`/traefik/`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.filelord.ir`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
-
-      - "traefik.http.middlewares.tr-stripprefix.stripprefix.forceslash=true"
-      - "traefik.http.middlewares.tr-stripprefix.stripprefix.prefixes=/traefik"
-      - "traefik.http.routers.traefik.middlewares=tr-stripprefix"
+      - "traefik.http.routers.traefik.service=api@internal"
     ports:
       - mode: host
         protocol: tcp
