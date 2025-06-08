@@ -14,9 +14,13 @@ services:
       - "--api.dashboard=true"
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=PathPrefix(`/traefik/`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
 
+      - "traefik.http.middlewares.tr-stripprefix.stripprefix.forceslash=true"
+      - "traefik.http.middlewares.tr-stripprefix.stripprefix.prefixes=/traefik"
+      - "traefik.http.routers.traefik.middlewares=tr-stripprefix"
     ports:
       - mode: host
         protocol: tcp
@@ -70,14 +74,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.hokm4_api.loadbalancer.server.port=4445"
-      - "traefik.http.routers.hokm4_api.rule=PathPrefix(`/hokm4/`)"
+      - "traefik.http.routers.hokm4_api.rule=Host(`traefik.filelord.ir`)"
       - "traefik.http.routers.hokm4_api.entrypoints=websecure"
       - "traefik.http.routers.hokm4_api.tls.certresolver=myresolver"
-
-      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.forceslash=true"
-      - "traefik.http.middlewares.hokm4-stripprefix.stripprefix.prefixes=/hokm4"
-      - "traefik.http.routers.hokm4_api.middlewares=hokm4-stripprefix"
-
 
     secrets:
       - secret-key
