@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-	base: '/telegram/.',
+	base: '/telegram/',
 	build: {
 		emptyOutDir: true,
 		outDir: '../backend/telegram/static',
