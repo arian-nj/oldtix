@@ -29,7 +29,7 @@ func (app *ApplicationTelegram) StartHandler(ctx context.Context, b *bot.Bot, up
 		ReplyMarkup: models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					{Text: "بازی", WebApp: &models.WebAppInfo{URL: "https://127.0.0.1:8443"}},
+					{Text: "بازی", WebApp: &models.WebAppInfo{URL: "https://tix.filelord.ir/telegram/"}},
 				},
 			},
 		},
