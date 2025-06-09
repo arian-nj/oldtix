@@ -107,7 +107,7 @@ case $COMMAND in
 		generate_sqlc
 		echo "Starting Hokm Bacbkend"
 		cd ./backend/
-		WEBAPP_HTTP_PORT=3000 \
+		TELEGRAM_HTTP_PORT=3000 \
 		  go run ./cmd/telegram/.
 		echo "The End"
 		;;
