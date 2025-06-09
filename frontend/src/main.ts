@@ -5,7 +5,7 @@ WebApp.ready()
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 	<div class="game-container">
-	  <iframe src="/game/mini.html" frameborder="0"></iframe>
+	  <iframe src="/telegram/game/mini.html" frameborder="0"></iframe>
 	</div>
 `
 function getInitdata(message: String) {
